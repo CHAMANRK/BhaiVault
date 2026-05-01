@@ -1,0 +1,1268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+<title>BhaiVault 🔐</title>
+<meta name="theme-color" content="#050510"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<link rel="manifest" href="/manifest.json"/>
+<link rel="apple-touch-icon" href="/icon-192.png"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#050510;--bg2:#09091a;--surface:#0f0f22;--surface2:#161630;--surface3:#1e1e3a;
+  --border:#252548;--border2:#353568;
+  --accent:#7c6fff;--accent2:#ff5f7e;--accent3:#00e5a0;--accent4:#ffd166;
+  --text:#eeeeff;--text2:#8888bb;--text3:#555580;
+  --danger:#ff3a5c;--warn:#ffb347;
+  --radius:18px;--radius-sm:12px;
+  --font:'Syne',sans-serif;--mono:'DM Mono',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:var(--font);}
+::-webkit-scrollbar{width:3px;}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
+
+.screen{position:fixed;inset:0;display:none;flex-direction:column;overflow:hidden;}
+.screen.active{display:flex;}
+
+.ambient{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0;}
+.orb{position:absolute;border-radius:50%;filter:blur(80px);animation:orbDrift 8s ease-in-out infinite alternate;}
+.orb-1{width:350px;height:350px;background:rgba(124,111,255,0.13);top:-80px;left:-80px;}
+.orb-2{width:280px;height:280px;background:rgba(255,95,126,0.09);bottom:-60px;right:-60px;animation-delay:-4s;}
+.orb-3{width:200px;height:200px;background:rgba(0,229,160,0.07);top:40%;left:50%;transform:translate(-50%,-50%);animation-delay:-2s;}
+@keyframes orbDrift{0%{transform:translate(0,0) scale(1);}100%{transform:translate(20px,15px) scale(1.05);}}
+.grid{position:absolute;inset:0;background-image:linear-gradient(rgba(124,111,255,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(124,111,255,0.04) 1px,transparent 1px);background-size:40px 40px;mask-image:radial-gradient(ellipse at 50% 50%,black 30%,transparent 80%);}
+
+/* WELCOME */
+#welcomeScreen{background:var(--bg);align-items:center;justify-content:center;}
+.w-wrap{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;width:100%;max-width:420px;padding:0 28px;text-align:center;}
+.w-badge{display:inline-flex;align-items:center;gap:7px;padding:7px 16px;border-radius:30px;border:1px solid rgba(124,111,255,0.35);background:rgba(124,111,255,0.08);font-size:11px;font-family:var(--mono);color:var(--accent);letter-spacing:1px;margin-bottom:28px;animation:fadeUp 0.6s ease both;}
+.bdot{width:6px;height:6px;border-radius:50%;background:var(--accent3);box-shadow:0 0 6px var(--accent3);animation:pulse 1.8s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.3;}}
+.w-icon{width:96px;height:96px;border-radius:28px;background:linear-gradient(145deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:46px;margin-bottom:28px;box-shadow:0 12px 48px rgba(124,111,255,0.55);animation:heroIn 0.8s cubic-bezier(0.34,1.6,0.64,1) 0.15s both;}
+@keyframes heroIn{from{opacity:0;transform:scale(0.3) rotate(-20deg);}to{opacity:1;transform:scale(1) rotate(0);}}
+.w-title{font-size:36px;font-weight:800;letter-spacing:-1px;line-height:1.1;margin-bottom:14px;background:linear-gradient(150deg,#fff 40%,var(--accent) 80%,var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:fadeUp 0.7s ease 0.25s both;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:translateY(0);}}
+.w-sub{color:var(--text2);font-size:14px;line-height:1.65;margin-bottom:32px;animation:fadeUp 0.7s ease 0.35s both;}
+.w-pills{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:32px;animation:fadeUp 0.7s ease 0.42s both;}
+.w-pill{padding:6px 14px;border-radius:20px;border:1px solid var(--border2);background:var(--surface2);font-size:12px;font-family:var(--mono);color:var(--text2);}
+.btn-welcome{width:100%;padding:18px;border:none;border-radius:var(--radius);background:linear-gradient(135deg,var(--accent),#a78bff,var(--accent2));color:white;font-family:var(--font);font-size:17px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 6px 32px rgba(124,111,255,0.5);margin-bottom:14px;animation:fadeUp 0.7s ease 0.5s both;}
+.btn-welcome:active{transform:scale(0.97);}
+.w-login{font-size:13px;color:var(--text3);animation:fadeUp 0.7s ease 0.6s both;}
+.w-login a{color:var(--accent);text-decoration:none;cursor:pointer;}
+.stars-bg{position:absolute;inset:0;pointer-events:none;overflow:hidden;}
+.star{position:absolute;width:2px;height:2px;border-radius:50%;background:rgba(255,255,255,0.6);animation:twinkle var(--d,3s) var(--dl,0s) ease-in-out infinite alternate;}
+@keyframes twinkle{0%{opacity:0.05;}100%{opacity:0.6;}}
+
+/* SETUP */
+#setupScreen{background:var(--bg);overflow:hidden;}
+.setup-page{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:80px 24px 32px;opacity:0;pointer-events:none;transform:translateX(60px);transition:all 0.45s cubic-bezier(0.34,1.4,0.64,1);}
+.setup-page.active{opacity:1;pointer-events:all;transform:translateX(0);}
+.setup-page.exit{opacity:0;pointer-events:none;transform:translateX(-60px);}
+.s-topbar{position:absolute;top:0;left:0;right:0;z-index:10;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;}
+.back-btn{width:40px;height:40px;border-radius:12px;border:1px solid var(--border);background:rgba(255,255,255,0.04);color:var(--text2);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.prog-bar{display:flex;gap:6px;}
+.pdot{height:4px;border-radius:4px;background:var(--border2);transition:all 0.4s cubic-bezier(0.34,1.4,0.64,1);}
+.pdot.done{background:var(--accent3);width:20px;}
+.pdot.active{background:var(--accent);width:28px;}
+.pdot.todo{width:8px;}
+.page-icon{width:80px;height:80px;border-radius:24px;display:flex;align-items:center;justify-content:center;font-size:38px;margin-bottom:20px;background:var(--surface2);border:1px solid var(--border2);}
+.page-title{font-size:26px;font-weight:800;letter-spacing:-0.3px;margin-bottom:8px;text-align:center;}
+.page-sub{color:var(--text2);font-size:14px;text-align:center;margin-bottom:28px;line-height:1.5;max-width:320px;}
+.form-group{margin-bottom:16px;width:100%;max-width:360px;}
+.form-group label{display:block;color:var(--text3);font-size:11px;font-family:var(--mono);margin-bottom:6px;letter-spacing:1px;text-transform:uppercase;}
+.form-group input{width:100%;background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:15px 16px;border-radius:var(--radius-sm);font-family:var(--font);font-size:15px;outline:none;transition:border-color 0.2s;-webkit-appearance:none;}
+.form-group input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(124,111,255,0.12);}
+.form-group input::placeholder{color:var(--text3);}
+.btn-primary{width:100%;max-width:360px;padding:16px;border:none;border-radius:var(--radius);background:linear-gradient(135deg,var(--accent),#a78bff);color:white;font-family:var(--font);font-size:16px;font-weight:700;cursor:pointer;transition:all 0.2s;box-shadow:0 4px 20px rgba(124,111,255,0.35);}
+.btn-primary:active{transform:scale(0.97);}
+.btn-primary:disabled{opacity:0.4;cursor:not-allowed;}
+.btn-secondary{width:100%;max-width:360px;padding:14px;border:1px solid var(--border2);border-radius:var(--radius);background:transparent;color:var(--text2);font-family:var(--font);font-size:15px;cursor:pointer;transition:all 0.2s;margin-top:10px;}
+.btn-secondary:hover{border-color:var(--accent);color:var(--accent);}
+.pin-dots{display:flex;gap:14px;justify-content:center;margin-bottom:24px;}
+.pin-dot{width:14px;height:14px;border-radius:50%;border:2px solid var(--border2);transition:all 0.25s cubic-bezier(0.34,1.8,0.64,1);}
+.pin-dot.filled{background:var(--accent);border-color:var(--accent);box-shadow:0 0 10px rgba(124,111,255,0.7);transform:scale(1.2);}
+.pin-dot.ok{background:var(--accent3);border-color:var(--accent3);}
+.pin-dot.err{background:var(--danger);border-color:var(--danger);}
+.setup-numpad{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:280px;margin:0 auto;}
+.np-btn{background:var(--surface2);border:1px solid var(--border);color:var(--text);font-size:22px;font-weight:700;font-family:var(--mono);padding:18px;border-radius:var(--radius-sm);cursor:pointer;transition:all 0.15s;}
+.np-btn:active{transform:scale(0.93);background:rgba(124,111,255,0.15);}
+
+/* LOCK */
+#lockScreen{background:var(--bg);align-items:center;justify-content:center;}
+.lock-wrap{position:relative;z-index:1;text-align:center;width:100%;max-width:420px;padding:20px 24px;display:flex;flex-direction:column;align-items:center;}
+.lock-logo{width:72px;height:72px;border-radius:22px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:34px;margin:0 auto 12px;box-shadow:0 8px 32px rgba(124,111,255,0.4);animation:iconGlow 3s ease-in-out infinite;}
+@keyframes iconGlow{0%,100%{box-shadow:0 8px 32px rgba(124,111,255,0.4);}50%{box-shadow:0 8px 48px rgba(124,111,255,0.65),0 0 0 8px rgba(124,111,255,0.08);}}
+.lock-title{font-size:30px;font-weight:800;background:linear-gradient(135deg,#fff 30%,var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.lock-sub-txt{color:var(--text3);font-size:12px;margin:4px 0 28px;font-family:var(--mono);letter-spacing:1px;}
+.float-field{position:relative;width:100%;max-width:360px;height:260px;border:1px solid var(--border);border-radius:24px;background:linear-gradient(135deg,var(--surface),var(--surface2));overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.5),inset 0 1px 0 rgba(255,255,255,0.05);margin-bottom:20px;}
+.float-field::after{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 0%,rgba(124,111,255,0.08),transparent 60%);pointer-events:none;}
+.fnum{position:absolute;width:54px;height:54px;border-radius:15px;background:var(--surface2);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700;font-family:var(--mono);cursor:pointer;user-select:none;transition:background 0.15s,border-color 0.15s;will-change:transform;}
+.fnum:active{transform:scale(0.9) !important;}
+.fnum.sel{background:linear-gradient(135deg,var(--accent),#9b8fff);border-color:var(--accent);color:white;box-shadow:0 0 20px rgba(124,111,255,0.55);transform:scale(1.12) !important;animation:none !important;}
+.fnum.wrong{background:var(--danger);border-color:var(--danger);animation:shake 0.35s ease forwards !important;}
+@keyframes shake{0%,100%{transform:translateX(0);}20%{transform:translateX(-6px);}40%{transform:translateX(6px);}60%{transform:translateX(-4px);}80%{transform:translateX(4px);}}
+@keyframes flt1{0%{transform:translateY(0);}100%{transform:translateY(-10px);}}
+@keyframes flt2{0%{transform:translateY(0) rotate(-2deg);}100%{transform:translateY(-8px) rotate(2deg);}}
+@keyframes flt3{0%{transform:translateX(0);}100%{transform:translateX(8px) translateY(-6px);}}
+.lock-dots{display:flex;gap:12px;margin-bottom:8px;}
+.lock-dot{width:13px;height:13px;border-radius:50%;border:2px solid var(--border2);transition:all 0.25s cubic-bezier(0.34,1.8,0.64,1);}
+.lock-dot.filled{background:var(--accent);border-color:var(--accent);box-shadow:0 0 10px rgba(124,111,255,0.7);transform:scale(1.2);}
+.lock-dot.err{background:var(--danger);border-color:var(--danger);}
+.lock-hint{color:var(--text3);font-size:12px;font-family:var(--mono);margin-bottom:20px;}
+.lock-pills{display:flex;gap:10px;}
+.pill-btn{padding:8px 16px;border-radius:20px;border:1px solid var(--border2);background:transparent;color:var(--text2);font-family:var(--font);font-size:13px;cursor:pointer;transition:all 0.2s;}
+.pill-btn.red{border-color:rgba(255,95,126,0.4);color:var(--accent2);}
+
+/* MAIN */
+#mainScreen{background:var(--bg);}
+.app-header{padding:14px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);flex-shrink:0;background:rgba(5,5,16,0.92);backdrop-filter:blur(20px);position:relative;z-index:10;}
+.app-logo{display:flex;align-items:center;gap:10px;}
+.logo-icon{width:36px;height:36px;border-radius:11px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:18px;}
+.logo-txt{font-size:20px;font-weight:800;background:linear-gradient(135deg,#fff,var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.hdr-acts{display:flex;gap:8px;}
+.icon-btn{width:38px;height:38px;border-radius:11px;border:1px solid var(--border);background:rgba(255,255,255,0.04);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;transition:all 0.2s;position:relative;}
+.icon-btn:hover{border-color:var(--accent);}
+.nbadge{position:absolute;top:-4px;right:-4px;background:var(--danger);color:white;font-size:9px;font-weight:700;min-width:16px;height:16px;border-radius:8px;display:none;align-items:center;justify-content:center;font-family:var(--mono);padding:0 3px;}
+.nbadge.show{display:flex;}
+
+.tabs{display:flex;border-bottom:1px solid var(--border);flex-shrink:0;background:var(--bg);}
+.tab{flex:1;padding:12px 4px;text-align:center;font-size:11px;font-weight:600;color:var(--text3);cursor:pointer;position:relative;transition:color 0.2s;}
+.tab::after{content:'';position:absolute;bottom:-1px;left:20%;right:20%;height:2px;border-radius:2px;background:var(--accent);transform:scaleX(0);transition:transform 0.3s cubic-bezier(0.34,1.4,0.64,1);}
+.tab.active{color:var(--text);}
+.tab.active::after{transform:scaleX(1);}
+.tab-content{flex:1;overflow-y:auto;padding:16px 16px 80px;}
+
+.search-wrap{position:relative;margin-bottom:12px;}
+.search-wrap input{width:100%;background:var(--surface);border:1px solid var(--border);color:var(--text);padding:12px 16px 12px 40px;border-radius:var(--radius-sm);font-family:var(--font);font-size:14px;outline:none;transition:border-color 0.2s;}
+.search-wrap input:focus{border-color:var(--accent);}
+.search-wrap input::placeholder{color:var(--text3);}
+.si{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:16px;}
+
+@keyframes cardIn{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+.pw-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:10px;cursor:pointer;transition:all 0.2s;animation:cardIn 0.3s ease backwards;}
+.pw-card:hover{border-color:var(--border2);transform:translateY(-1px);}
+.card-head{display:flex;align-items:center;gap:14px;}
+.card-emoji{width:44px;height:44px;border-radius:13px;background:var(--surface2);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
+.card-info{flex:1;min-width:0;}
+.card-name{font-size:15px;font-weight:700;margin-bottom:3px;}
+.card-user{font-size:12px;color:var(--text2);font-family:var(--mono);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.card-badges{display:flex;gap:5px;flex-shrink:0;flex-wrap:wrap;justify-content:flex-end;}
+.badge{padding:3px 8px;border-radius:8px;font-size:10px;}
+.badge-fav{background:rgba(255,209,102,0.12);color:var(--accent4);border:1px solid rgba(255,209,102,0.25);}
+.badge-shared{background:rgba(0,229,160,0.1);color:var(--accent3);border:1px solid rgba(0,229,160,0.2);}
+.badge-lock{background:rgba(255,179,71,0.12);color:var(--warn);border:1px solid rgba(255,179,71,0.25);}
+.empty-state{text-align:center;padding:40px 20px;}
+.empty-state .ei{font-size:48px;margin-bottom:12px;}
+.empty-state h3{font-size:18px;font-weight:700;margin-bottom:6px;}
+.empty-state p{color:var(--text2);font-size:13px;}
+
+.fab{position:fixed;bottom:24px;right:20px;width:56px;height:56px;border-radius:18px;border:none;background:linear-gradient(135deg,var(--accent),var(--accent2));color:white;font-size:28px;cursor:pointer;box-shadow:0 6px 24px rgba(124,111,255,0.5);transition:all 0.2s;display:flex;align-items:center;justify-content:center;z-index:100;}
+.fab:active{transform:scale(0.95);}
+
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.78);backdrop-filter:blur(12px);z-index:200;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity 0.3s;}
+.modal-overlay.active{opacity:1;pointer-events:all;}
+.modal{background:var(--surface);border:1px solid var(--border2);border-radius:26px 26px 0 0;width:100%;max-width:520px;padding:20px 20px 44px;max-height:92vh;overflow-y:auto;transform:translateY(40px);transition:transform 0.4s cubic-bezier(0.34,1.2,0.64,1);}
+.modal-overlay.active .modal{transform:translateY(0);}
+.modal-handle{width:38px;height:4px;background:var(--border2);border-radius:4px;margin:0 auto 16px;}
+.modal-title{font-size:20px;font-weight:800;margin-bottom:16px;}
+.toggle-row{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--border);}
+.toggle-row:last-of-type{border-bottom:none;}
+.toggle-row label{font-size:13px;flex:1;cursor:pointer;}
+.toggle-row input[type=checkbox]{width:18px;height:18px;accent-color:var(--accent);cursor:pointer;}
+.pw-field-wrap{position:relative;}
+.pw-field-wrap input{padding-right:82px;}
+.field-acts{position:absolute;right:8px;top:50%;transform:translateY(-50%);display:flex;gap:4px;}
+.field-btn{background:var(--surface3);border:1px solid var(--border);color:var(--text2);padding:6px 8px;border-radius:8px;cursor:pointer;font-size:14px;}
+.emoji-picker{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:4px;}
+.emoji-opt{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;cursor:pointer;background:var(--surface2);border:2px solid transparent;transition:all 0.15s;}
+.emoji-opt.sel{border-color:var(--accent);background:rgba(124,111,255,0.1);}
+
+.detail-card{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:16px;}
+.detail-row{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid var(--border);}
+.detail-row:last-child{border-bottom:none;}
+.detail-label{font-size:11px;color:var(--text3);font-family:var(--mono);margin-bottom:4px;}
+.detail-val{font-size:15px;font-weight:600;word-break:break-all;}
+.detail-val.hidden{font-family:var(--mono);letter-spacing:2px;color:var(--text2);}
+.copy-btn{background:var(--surface3);border:1px solid var(--border);color:var(--text2);padding:8px 10px;border-radius:10px;cursor:pointer;font-size:14px;flex-shrink:0;margin-left:8px;}
+.copy-btn.copied{border-color:var(--accent3);color:var(--accent3);}
+.screenlock-badge{background:rgba(255,179,71,0.08);border:1px solid rgba(255,179,71,0.25);border-radius:10px;padding:10px 14px;margin-bottom:12px;color:var(--warn);font-size:13px;}
+
+/* NOMINEES */
+.code-card{background:linear-gradient(135deg,rgba(124,111,255,0.08),rgba(255,95,126,0.06));border:1px solid rgba(124,111,255,0.2);border-radius:var(--radius);padding:16px;margin-bottom:16px;}
+.code-label{font-size:11px;color:var(--text3);font-family:var(--mono);letter-spacing:1px;margin-bottom:8px;}
+.code-val{font-size:20px;font-weight:800;font-family:var(--mono);letter-spacing:2px;color:var(--accent);}
+.code-btns{display:flex;gap:8px;margin-top:10px;}
+.code-btns button{flex:1;padding:10px;border:1px solid var(--border2);border-radius:10px;background:transparent;color:var(--text2);font-family:var(--font);font-size:13px;cursor:pointer;transition:all 0.2s;}
+.code-btns button:hover{border-color:var(--accent);color:var(--accent);}
+.nominee-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px 16px;display:flex;align-items:center;gap:14px;margin-bottom:10px;}
+.nom-av{width:42px;height:42px;border-radius:13px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;color:white;flex-shrink:0;}
+.nom-av.green{background:linear-gradient(135deg,var(--accent3),#00b377);}
+.nom-info{flex:1;}
+.nom-name{font-size:15px;font-weight:700;}
+.nom-role{font-size:11px;color:var(--text3);font-family:var(--mono);margin-top:2px;}
+.nom-remove{background:rgba(255,58,92,0.08);border:1px solid rgba(255,58,92,0.2);color:var(--danger);padding:6px 10px;border-radius:8px;cursor:pointer;font-size:13px;}
+
+.req-card{background:var(--surface);border:1px solid rgba(124,111,255,0.25);border-radius:var(--radius-sm);padding:14px 16px;margin-bottom:10px;}
+.req-from{font-size:11px;color:var(--accent);font-family:var(--mono);margin-bottom:6px;}
+.req-name-txt{font-size:16px;font-weight:700;margin-bottom:4px;}
+.req-acts{display:flex;gap:8px;margin-top:10px;}
+.req-acts button{flex:1;padding:10px;border-radius:10px;border:none;font-family:var(--font);font-size:13px;font-weight:600;cursor:pointer;}
+.btn-approve{background:rgba(0,229,160,0.15);color:var(--accent3);}
+.btn-reject{background:rgba(255,58,92,0.1);color:var(--danger);}
+
+.shared-card{background:var(--surface);border:1px solid rgba(0,229,160,0.15);border-radius:var(--radius);padding:16px;margin-bottom:10px;}
+.shared-from{font-size:11px;color:var(--accent3);font-family:var(--mono);margin-bottom:8px;}
+.sec-label{font-size:11px;color:var(--text3);font-family:var(--mono);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;margin-top:4px;}
+
+.prof-section{margin-bottom:20px;}
+.prof-section h3{font-size:11px;color:var(--text3);font-family:var(--mono);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border);}
+.prof-item{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:16px;display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;cursor:pointer;}
+.prof-item-l{display:flex;align-items:center;gap:12px;}
+.prof-item-ico{font-size:20px;}
+.prof-item-txt h4{font-size:14px;font-weight:600;}
+.prof-item-txt p{font-size:12px;color:var(--text2);margin-top:2px;}
+.danger-btn{width:100%;padding:14px;border:1px solid rgba(255,58,92,0.3);border-radius:var(--radius-sm);background:rgba(255,58,92,0.05);color:var(--danger);font-family:var(--font);font-size:14px;font-weight:600;cursor:pointer;margin-bottom:8px;}
+
+.toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(16px);background:var(--surface2);border:1px solid var(--border2);color:var(--text);padding:12px 20px;border-radius:20px;font-size:14px;z-index:999;opacity:0;transition:all 0.3s cubic-bezier(0.34,1.4,0.64,1);white-space:nowrap;pointer-events:none;box-shadow:0 8px 24px rgba(0,0,0,0.4);max-width:90vw;text-overflow:ellipsis;overflow:hidden;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+#recoveryScreen{background:var(--bg);overflow-y:auto;}
+.rec-wrap{max-width:400px;width:100%;padding:60px 20px 40px;margin:0 auto;text-align:center;}
+
+#restoreScreen{background:var(--bg);align-items:center;justify-content:center;overflow-y:auto;}
+.restore-inner{position:relative;z-index:1;width:100%;max-width:420px;padding:40px 24px;text-align:center;}
+
+.loading-screen{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;}
+.spinner{width:48px;height:48px;border:3px solid var(--border2);border-top-color:var(--accent);border-radius:50%;animation:spin 0.8s linear infinite;margin-bottom:16px;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.loading-screen.gone{display:none;}
+
+#installBanner{position:fixed;inset:0;z-index:9999;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity 0.35s;}
+#installBanner.visible{opacity:1;pointer-events:all;}
+.install-backdrop{position:absolute;inset:0;background:rgba(0,0,0,0.72);backdrop-filter:blur(10px);}
+.install-sheet{position:relative;z-index:1;width:100%;max-width:480px;background:var(--surface);border:1px solid var(--border2);border-radius:28px 28px 0 0;padding:0 24px 44px;transform:translateY(110%);transition:transform 0.5s cubic-bezier(0.34,1.12,0.64,1);}
+#installBanner.visible .install-sheet{transform:translateY(0);}
+.install-handle{width:38px;height:4px;background:var(--border2);border-radius:4px;margin:16px auto 20px;}
+.btn-install{width:100%;padding:16px;border:none;border-radius:var(--radius);background:linear-gradient(135deg,var(--accent),#a88fff);color:white;font-family:var(--font);font-size:16px;font-weight:800;cursor:pointer;margin-bottom:10px;}
+.btn-install-skip{width:100%;padding:12px;border:1px solid var(--border);border-radius:var(--radius);background:transparent;color:var(--text3);font-family:var(--font);font-size:13px;cursor:pointer;}
+
+@media(min-width:500px){.modal{border-radius:26px;margin-bottom:20px;}}
+</style>
+</head>
+<body>
+
+<!-- LOADING -->
+<div class="loading-screen" id="loadingScreen">
+  <div class="spinner"></div>
+  <div style="color:var(--text2);font-size:14px;font-family:var(--mono);">Loading BhaiVault...</div>
+</div>
+
+<!-- WELCOME -->
+<div class="screen" id="welcomeScreen">
+  <div class="ambient"><div class="grid"></div><div class="orb orb-1"></div><div class="orb orb-2"></div><div class="orb orb-3"></div></div>
+  <div class="stars-bg" id="starsEl"></div>
+  <div class="w-wrap">
+    <div class="w-badge"><div class="bdot"></div>SECURE · CLOUD · NOMINEE SYSTEM</div>
+    <div class="w-icon">🔐</div>
+    <div class="w-title">BhaiVault</div>
+    <div class="w-sub">Passwords kabhi nahi jaayenge — Cloud mein safe, Nominees se recoverable, Bhaion ke liye banaya.</div>
+    <div class="w-pills"><div class="w-pill">🔒 Encrypted</div><div class="w-pill">☁️ Cloud</div><div class="w-pill">👥 Nominees</div><div class="w-pill">⚡ Fast</div></div>
+    <button class="btn-welcome" onclick="showSetup()"><span>✨</span><span>Naya Vault Banao</span><span>→</span></button>
+    <div class="w-login">Pehle se account hai? <a onclick="showRestore()">Restore karo →</a></div>
+  </div>
+</div>
+
+<!-- SETUP -->
+<div class="screen" id="setupScreen">
+  <div class="ambient" style="opacity:0.5;"><div class="grid"></div><div class="orb orb-1"></div><div class="orb orb-2"></div></div>
+  <div class="s-topbar">
+    <button class="back-btn" id="sBackBtn" onclick="setupBack()">←</button>
+    <div class="prog-bar">
+      <div class="pdot active" id="pd0"></div><div class="pdot todo" id="pd1"></div>
+      <div class="pdot todo" id="pd2"></div><div class="pdot todo" id="pd3"></div><div class="pdot todo" id="pd4"></div>
+    </div>
+    <div style="width:40px;"></div>
+  </div>
+  <div class="setup-page active" id="sp0">
+    <div class="page-icon">🔐</div>
+    <div class="page-title">BhaiVault mein Swagat!</div>
+    <div class="page-sub">Cloud mein safe, PIN se locked, Nominees se recoverable. Ek baar setup — hamesha ke liye.</div>
+    <button class="btn-primary" onclick="setupNext()">Shuru Karo →</button>
+  </div>
+  <div class="setup-page" id="sp1">
+    <div class="page-icon">👤</div>
+    <div class="page-title">Apna naam batao</div>
+    <div class="page-sub">Recovery ke waqt kaam aayega.</div>
+    <div class="form-group"><label>POORA NAAM</label><input type="text" id="sName" placeholder="Apna naam" oninput="checkP1()"/></div>
+    <button class="btn-primary" id="p1btn" onclick="goP1()" disabled>Aage →</button>
+  </div>
+  <div class="setup-page" id="sp2">
+    <div class="page-icon">🔑</div>
+    <div class="page-title">Recovery details</div>
+    <div class="page-sub">PIN bhool gaye toh ye kaam aayega. Dhyan se bharo!</div>
+    <div class="form-group"><label>DATE OF BIRTH</label><input type="date" id="sDob" oninput="checkP2()"/></div>
+    <div class="form-group"><label>SECRET WORD</label><input type="text" id="sSecret" placeholder="Jaise: pehli dost ka naam" oninput="checkP2()"/></div>
+    <button class="btn-primary" id="p2btn" onclick="setupNext()" disabled>Aage →</button>
+  </div>
+  <div class="setup-page" id="sp3">
+    <div class="page-icon">🔢</div>
+    <div class="page-title">4-digit PIN banao</div>
+    <div class="page-sub">Ye PIN vault kholne ke liye. Easy rakho — DOB wala mat rakho.</div>
+    <div>
+      <div class="pin-dots" style="margin-bottom:20px;"><div class="pin-dot" id="ss0"></div><div class="pin-dot" id="ss1"></div><div class="pin-dot" id="ss2"></div><div class="pin-dot" id="ss3"></div></div>
+      <div class="setup-numpad">
+        <button class="np-btn" onclick="sPinTap(1)">1</button><button class="np-btn" onclick="sPinTap(2)">2</button><button class="np-btn" onclick="sPinTap(3)">3</button>
+        <button class="np-btn" onclick="sPinTap(4)">4</button><button class="np-btn" onclick="sPinTap(5)">5</button><button class="np-btn" onclick="sPinTap(6)">6</button>
+        <button class="np-btn" onclick="sPinTap(7)">7</button><button class="np-btn" onclick="sPinTap(8)">8</button><button class="np-btn" onclick="sPinTap(9)">9</button>
+        <button class="np-btn" onclick="sPinClr()" style="font-size:14px;">Clear</button><button class="np-btn" onclick="sPinTap(0)">0</button><button class="np-btn" onclick="sPinClr()" style="font-size:18px;">⌫</button>
+      </div>
+    </div>
+  </div>
+  <div class="setup-page" id="sp4">
+    <div class="page-icon">✅</div>
+    <div class="page-title">PIN Confirm Karo</div>
+    <div class="page-sub" id="cPinSub">Same PIN dobara daalo</div>
+    <div>
+      <div class="pin-dots" style="margin-bottom:20px;"><div class="pin-dot" id="sc0"></div><div class="pin-dot" id="sc1"></div><div class="pin-dot" id="sc2"></div><div class="pin-dot" id="sc3"></div></div>
+      <div class="setup-numpad">
+        <button class="np-btn" onclick="cPinTap(1)">1</button><button class="np-btn" onclick="cPinTap(2)">2</button><button class="np-btn" onclick="cPinTap(3)">3</button>
+        <button class="np-btn" onclick="cPinTap(4)">4</button><button class="np-btn" onclick="cPinTap(5)">5</button><button class="np-btn" onclick="cPinTap(6)">6</button>
+        <button class="np-btn" onclick="cPinTap(7)">7</button><button class="np-btn" onclick="cPinTap(8)">8</button><button class="np-btn" onclick="cPinTap(9)">9</button>
+        <button class="np-btn" onclick="cPinClr()" style="font-size:14px;">Clear</button><button class="np-btn" onclick="cPinTap(0)">0</button><button class="np-btn" onclick="cPinClr()" style="font-size:18px;">⌫</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- LOCK -->
+<div class="screen" id="lockScreen">
+  <div class="ambient"><div class="grid"></div><div class="orb orb-1"></div><div class="orb orb-2"></div><div class="orb orb-3"></div></div>
+  <div class="lock-wrap">
+    <div class="lock-logo">🔐</div>
+    <div class="lock-title">BhaiVault</div>
+    <div class="lock-sub-txt">APNA PIN DAALO</div>
+    <div class="float-field" id="floatField"></div>
+    <div class="lock-dots">
+      <div class="lock-dot" id="ld0"></div><div class="lock-dot" id="ld1"></div>
+      <div class="lock-dot" id="ld2"></div><div class="lock-dot" id="ld3"></div>
+    </div>
+    <div class="lock-hint" id="lockHint">Koi bhi 4 number tap karo sequence mein</div>
+    <div class="lock-pills">
+      <button class="pill-btn" onclick="genFloatNums()">🔄 Badlo</button>
+      <button class="pill-btn red" onclick="showRecovery()">🆘 PIN Bhula?</button>
+    </div>
+  </div>
+</div>
+
+<!-- RESTORE (new phone) -->
+<div class="screen" id="restoreScreen">
+  <div class="ambient"><div class="grid"></div><div class="orb orb-1"></div><div class="orb orb-2"></div></div>
+  <div class="restore-inner">
+    <div style="font-size:48px;margin-bottom:16px;">📲</div>
+    <h2 style="font-size:28px;font-weight:800;margin-bottom:8px;">Account Restore</h2>
+    <p style="color:var(--text2);font-size:14px;margin-bottom:28px;line-height:1.6;">Link Code chahiye — agar phone dead ho toh nominee ki app se leke aao.</p>
+    <div class="form-group" style="text-align:left;max-width:360px;margin:0 auto 0;"><label>LINK CODE</label><input type="text" id="restCode" placeholder="BHAI-XXXX-XXXX" style="text-transform:uppercase;font-family:var(--mono);font-size:16px;letter-spacing:2px;" oninput="this.value=this.value.toUpperCase()"/></div>
+    <div class="form-group" style="text-align:left;max-width:360px;margin:0 auto 0;"><label>DATE OF BIRTH</label><input type="date" id="restDob"/></div>
+    <div class="form-group" style="text-align:left;max-width:360px;margin:0 auto 0;"><label>SECRET WORD</label><input type="text" id="restSecret" placeholder="Apna secret word"/></div>
+    <button class="btn-primary" onclick="doRestore()" style="display:block;margin:16px auto 0;">🔓 Restore Karo →</button>
+    <button class="btn-secondary" onclick="showScreen('welcomeScreen')" style="display:block;margin:0 auto;">← Wapas</button>
+  </div>
+</div>
+
+<!-- MAIN APP -->
+<div class="screen" id="mainScreen">
+  <div class="app-header">
+    <div class="app-logo">
+      <div class="logo-icon">🔐</div>
+      <div class="logo-txt">BhaiVault</div>
+    </div>
+    <div class="hdr-acts">
+      <button class="icon-btn" id="notifBtn" onclick="showTab('nominees')" title="Requests">
+        🔔<span class="nbadge" id="notifBadge">0</span>
+      </button>
+      <button class="icon-btn" onclick="confirmLogout()" title="Lock">🔒</button>
+    </div>
+  </div>
+  <div class="tabs">
+    <div class="tab active" id="tab-vault" onclick="showTab('vault')">🔑 Vault</div>
+    <div class="tab" id="tab-shared" onclick="showTab('shared')">🔗 Shared</div>
+    <div class="tab" id="tab-nominees" onclick="showTab('nominees')">👥 Nominees</div>
+    <div class="tab" id="tab-profile" onclick="showTab('profile')">👤 Profile</div>
+  </div>
+
+  <!-- VAULT -->
+  <div class="tab-content" id="content-vault">
+    <div class="search-wrap"><span class="si">🔍</span><input type="text" id="searchInput" placeholder="Search karo..." oninput="searchPw()"/></div>
+    <div id="pwList"></div>
+  </div>
+
+  <!-- SHARED -->
+  <div class="tab-content" id="content-shared" style="display:none;">
+    <div class="sec-label" style="margin-bottom:12px;">NOMINEES KE SHARED PASSWORDS</div>
+    <div id="sharedList"></div>
+  </div>
+
+  <!-- NOMINEES -->
+  <div class="tab-content" id="content-nominees" style="display:none;">
+    <div id="pendingSection" style="display:none;margin-bottom:16px;">
+      <div class="sec-label">⏳ PENDING REQUESTS</div>
+      <div id="pendingList"></div>
+    </div>
+    <div class="code-card">
+      <div class="code-label">MERA LINK CODE — Nominee ko do</div>
+      <div class="code-val" id="myCode">BHAI-????-????</div>
+      <div class="code-btns">
+        <button onclick="copyCode()">📋 Copy</button>
+        <button onclick="shareCode()" style="border-color:rgba(0,229,160,0.4);color:var(--accent3);">📤 Share</button>
+      </div>
+    </div>
+    <div class="sec-label">MERE NOMINEES</div>
+    <div id="nomList"></div>
+    <button class="btn-primary" id="addNomBtn" onclick="showAddNomModal()" style="margin-top:8px;">+ Nominee Add Karo</button>
+    <div id="nomForSec" style="margin-top:20px;display:none;">
+      <div class="sec-label">MAIN NOMINEE HUN IN KA</div>
+      <div id="nomForList"></div>
+    </div>
+  </div>
+
+  <!-- PROFILE -->
+  <div class="tab-content" id="content-profile" style="display:none;">
+    <div class="prof-section">
+      <h3>Account</h3>
+      <div class="prof-item" onclick="showProfInfo()">
+        <div class="prof-item-l"><div class="prof-item-ico">👤</div><div class="prof-item-txt"><h4 id="profName">—</h4><p id="profDob">—</p></div></div>
+        <div style="color:var(--text3);">›</div>
+      </div>
+      <div class="prof-item" onclick="showLinkCodeInfo()">
+        <div class="prof-item-l"><div class="prof-item-ico">🔗</div><div class="prof-item-txt"><h4>Link Code</h4><p id="profCode">—</p></div></div>
+        <div style="color:var(--text3);">›</div>
+      </div>
+    </div>
+    <div class="prof-section">
+      <h3>Backup</h3>
+      <div class="prof-item" onclick="exportVault()">
+        <div class="prof-item-l"><div class="prof-item-ico">📤</div><div class="prof-item-txt"><h4>Export Vault</h4><p>JSON backup download karo</p></div></div>
+        <div style="color:var(--text3);">›</div>
+      </div>
+      <div class="prof-item" onclick="importVault()">
+        <div class="prof-item-l"><div class="prof-item-ico">📥</div><div class="prof-item-txt"><h4>Import Vault</h4><p>Backup restore karo</p></div></div>
+        <div style="color:var(--text3);">›</div>
+      </div>
+    </div>
+    <div class="prof-section">
+      <h3>Recovery</h3>
+      <div class="prof-item" onclick="showRecovery()">
+        <div class="prof-item-l"><div class="prof-item-ico">🆘</div><div class="prof-item-txt"><h4>PIN Recovery</h4><p>PIN bhool gaye? Yahan jaao</p></div></div>
+        <div style="color:var(--text3);">›</div>
+      </div>
+    </div>
+    <div class="prof-section">
+      <h3>Danger Zone</h3>
+      <button class="danger-btn" onclick="confirmLogout()">🔒 App Lock Karo</button>
+      <button class="danger-btn" onclick="confirmDeleteAll()">🗑️ Sab Delete Karo</button>
+    </div>
+  </div>
+
+  <button class="fab" id="mainFab" onclick="showAddPwModal()">+</button>
+</div>
+
+<!-- RECOVERY -->
+<div class="screen" id="recoveryScreen">
+  <div class="ambient" style="opacity:0.4;"><div class="orb orb-1"></div><div class="orb orb-2"></div></div>
+  <div class="rec-wrap">
+    <div style="font-size:48px;margin-bottom:12px;">🆘</div>
+    <h2 style="font-size:26px;font-weight:800;margin-bottom:8px;">PIN Recovery</h2>
+    <p style="color:var(--text2);font-size:14px;margin-bottom:24px;">Apna naam, DOB aur secret word daalo.</p>
+    <div class="form-group" style="text-align:left;"><label>POORA NAAM</label><input type="text" id="recName" placeholder="Apna naam"/></div>
+    <div class="form-group" style="text-align:left;"><label>DATE OF BIRTH</label><input type="date" id="recDob"/></div>
+    <div class="form-group" style="text-align:left;"><label>SECRET WORD</label><input type="text" id="recSecret" placeholder="Secret word"/></div>
+    <div id="recStep2" style="display:none;margin-top:16px;">
+      <div style="color:var(--accent3);font-size:14px;margin-bottom:16px;">✅ Identity verify ho gayi! Naya PIN set karo:</div>
+      <div class="form-group" style="text-align:left;"><label>NAYA 4-DIGIT PIN</label><input type="number" id="newPin" placeholder="4 digits"/></div>
+      <button class="btn-primary" onclick="doResetPin()">✅ PIN Reset Karo</button>
+    </div>
+    <div id="recStep1Btns"><button class="btn-primary" onclick="startRecovery()">Verify Karo →</button></div>
+    <button class="btn-secondary" onclick="showLock()">← Wapas</button>
+  </div>
+</div>
+
+<!-- MODALS -->
+
+<!-- ADD/EDIT PW -->
+<div class="modal-overlay" id="addPwModal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">🔑 <span id="addPwTitle">Password Add Karo</span></div>
+    <div style="margin-bottom:12px;">
+      <label style="display:block;color:var(--text3);font-size:11px;font-family:var(--mono);margin-bottom:8px;letter-spacing:1px;">APP ICON</label>
+      <div class="emoji-picker" id="emojiPicker"></div>
+    </div>
+    <div class="form-group"><label>APP / WEBSITE NAAM</label><input type="text" id="pwApp" placeholder="Jaise: Instagram"/></div>
+    <div class="form-group"><label>USERNAME / EMAIL</label><input type="text" id="pwUser" placeholder="username ya email"/></div>
+    <div class="form-group"><label>PASSWORD</label>
+      <div class="pw-field-wrap">
+        <input type="password" id="pwPass" placeholder="Password"/>
+        <div class="field-acts">
+          <button class="field-btn" onclick="togglePwVis()" id="pwVisBtn">👁️</button>
+          <button class="field-btn" onclick="genPw()">🎲</button>
+        </div>
+      </div>
+    </div>
+    <div class="form-group"><label>NOTE (optional)</label><input type="text" id="pwNote" placeholder="Extra info..."/></div>
+    <div class="toggle-row"><input type="checkbox" id="pwScreenlock"/><label for="pwScreenlock" style="color:var(--warn);">📱 Phone ka Screen Lock hai</label></div>
+    <div class="toggle-row"><input type="checkbox" id="pwShared" style="accent-color:var(--accent3);"/><label for="pwShared" style="color:var(--accent3);">🔗 Nominees ke saath share karo (real-time)</label></div>
+    <div class="toggle-row" style="margin-bottom:20px;"><input type="checkbox" id="pwFav" style="accent-color:var(--accent4);"/><label for="pwFav" style="color:var(--accent4);">⭐ Favourite</label></div>
+    <button class="btn-primary" onclick="savePw()" style="max-width:100%;margin-bottom:8px;">💾 Save Karo</button>
+    <button class="btn-secondary" onclick="closeModal('addPwModal')" style="max-width:100%;">Cancel</button>
+  </div>
+</div>
+
+<!-- DETAIL -->
+<div class="modal-overlay" id="detailModal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title"><span id="detEmoji">🔑</span> <span id="detTitle">—</span></div>
+    <div class="detail-card">
+      <div class="detail-row"><div><div class="detail-label">App / Website</div><div class="detail-val" id="detApp">—</div></div></div>
+      <div class="detail-row">
+        <div style="flex:1;"><div class="detail-label">Username / Email</div><div class="detail-val" id="detUser">—</div></div>
+        <button class="copy-btn" id="copyUserBtn" onclick="copyFld('detUser','copyUserBtn')">📋</button>
+      </div>
+      <div class="detail-row">
+        <div style="flex:1;"><div class="detail-label">Password</div><div class="detail-val hidden" id="detPass">••••••••</div></div>
+        <button class="copy-btn" onclick="toggleDetPass()" id="togPassBtn" style="margin-right:4px;">👁️</button>
+        <button class="copy-btn" id="copyPassBtn" onclick="copyFld('detPass','copyPassBtn')">📋</button>
+      </div>
+      <div class="detail-row" id="detNoteRow"><div><div class="detail-label">Note</div><div class="detail-val" id="detNote">—</div></div></div>
+    </div>
+    <div id="detScreenBadge" class="screenlock-badge" style="display:none;">📱 Phone ka Screen Lock hai</div>
+    <div style="display:flex;gap:8px;margin-bottom:12px;">
+      <button class="btn-primary" style="flex:1;max-width:none;" onclick="editCurPw()">✏️ Edit</button>
+      <button class="danger-btn" style="width:auto;padding:14px 20px;margin:0;flex-shrink:0;" onclick="deleteCurPw()">🗑️</button>
+    </div>
+    <button class="btn-secondary" style="max-width:100%;" onclick="closeModal('detailModal')">Close</button>
+  </div>
+</div>
+
+<!-- ADD NOMINEE -->
+<div class="modal-overlay" id="addNomModal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">👥 Nominee Add Karo</div>
+    <p style="color:var(--text2);font-size:13px;margin-bottom:20px;">Nominee ka Link Code daalo. Wo accept karega toh linked ho jaayenge. 2-way confirmation!</p>
+    <div class="form-group"><label>NOMINEE KA NAAM (tumhare liye)</label><input type="text" id="nomName" placeholder="Nominee ka naam"/></div>
+    <div class="form-group"><label>NOMINEE KA LINK CODE</label><input type="text" id="nomCode" placeholder="BHAI-XXXX-XXXX" style="text-transform:uppercase;font-family:var(--mono);font-size:16px;letter-spacing:2px;" oninput="this.value=this.value.toUpperCase()"/></div>
+    <button class="btn-primary" onclick="sendNomReq()" style="max-width:100%;margin-bottom:8px;">📤 Request Bhejo</button>
+    <button class="btn-secondary" onclick="closeModal('addNomModal')" style="max-width:100%;">Cancel</button>
+  </div>
+</div>
+
+<!-- PWA INSTALL -->
+<div id="installBanner">
+  <div class="install-backdrop" onclick="dismissInstall()"></div>
+  <div class="install-sheet">
+    <div class="install-handle"></div>
+    <div style="font-size:48px;text-align:center;margin-bottom:12px;">🔐</div>
+    <div style="font-size:22px;font-weight:800;text-align:center;margin-bottom:6px;">BhaiVault Install Karo</div>
+    <div style="color:var(--text2);font-size:13px;text-align:center;margin-bottom:20px;">Phone pe install karo — offline bhi kaam karega!</div>
+    <button class="btn-install" onclick="triggerInstall()">📲 Install Karo</button>
+    <button class="btn-install-skip" onclick="dismissInstall()">Abhi nahi</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import {
+  getFirestore, doc, getDoc, setDoc, updateDoc, deleteDoc,
+  collection, addDoc, query, where, onSnapshot, getDocs,
+  arrayUnion, arrayRemove
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const FB = {
+  apiKey: "AIzaSyADbiNFo7OsQR2J4UGnwlb3tc0N_e-wIyA",
+  authDomain: "bhaivault-2b8c7.firebaseapp.com",
+  projectId: "bhaivault-2b8c7",
+  storageBucket: "bhaivault-2b8c7.firebasestorage.app",
+  messagingSenderId: "194611496571",
+  appId: "1:194611496571:web:2be1fc115cac7b3a0b84de"
+};
+const fbApp = initializeApp(FB);
+const db = getFirestore(fbApp);
+
+// ── STATE ──
+let CU = null; // current user
+let allPws = [];
+let editPwId = null;
+let selEmoji = '🔑';
+let detPassVis = false;
+let curDetail = null;
+let unsubPws = null, unsubReqs = null;
+const EMOJIS = ['🔑','📱','💳','📧','🎮','💼','🏦','🛒','📺','🎵','📷','🚗','🏠','✈️','💡','🎓','❤️','⭐','🔒','🌐','🎯','🛡️','🔥','💎'];
+
+// ── UTILS ──
+function toast(msg, dur=2800) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), dur);
+}
+function genId(n=12) { return Math.random().toString(36).substring(2,2+n).toUpperCase(); }
+function genLinkCode(uid) {
+  const s = uid.replace(/[^A-Z0-9]/gi,'').toUpperCase().padEnd(8,'X');
+  return `BHAI-${s.slice(0,4)}-${s.slice(4,8)}`;
+}
+function hash(str) {
+  let h = 0;
+  for (let c of str) h = ((h<<5)-h)+c.charCodeAt(0), h |= 0;
+  return Math.abs(h).toString(36).toUpperCase();
+}
+function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+function sl(k,v) { try{localStorage.setItem(k,JSON.stringify(v));}catch(e){} }
+function ll(k,d=null) { try{const v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch(e){return d;} }
+function loading(show) { document.getElementById('loadingScreen').classList.toggle('gone',!show); }
+
+window.showScreen = (id) => {
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+};
+const showScreen = window.showScreen;
+
+// ── BOOT ──
+window.addEventListener('DOMContentLoaded', async () => {
+  spawnStars();
+  const uid = ll('bv_uid');
+  if (!uid) { loading(false); showScreen('welcomeScreen'); return; }
+  try {
+    const udoc = await getDoc(doc(db,'users',uid));
+    if (udoc.exists()) {
+      CU = { uid, ...udoc.data() };
+      sl('bv_user_cache', CU);
+    } else {
+      // UID saved but user deleted? Try cache
+      CU = ll('bv_user_cache');
+      if (!CU) { loading(false); showScreen('welcomeScreen'); return; }
+    }
+  } catch(e) {
+    CU = ll('bv_user_cache');
+    if (!CU) { loading(false); showScreen('welcomeScreen'); return; }
+  }
+  loading(false);
+  showScreen('lockScreen');
+  requestAnimationFrame(()=>requestAnimationFrame(genFloatNums));
+});
+
+// ── STARS ──
+function spawnStars() {
+  const c = document.getElementById('starsEl');
+  for(let i=0;i<55;i++) {
+    const s=document.createElement('div'); s.className='star';
+    s.style.left=Math.random()*100+'%'; s.style.top=Math.random()*100+'%';
+    s.style.setProperty('--d',(2+Math.random()*4).toFixed(1)+'s');
+    s.style.setProperty('--dl',(Math.random()*4).toFixed(1)+'s');
+    c.appendChild(s);
+  }
+}
+
+// ── SETUP ──
+let sPage=0, sPin=[], cPin=[], savedPin=[];
+window.showSetup = () => { showScreen('setupScreen'); sPage=0; sPin=[];cPin=[];savedPin=[]; renderSetup(0); };
+window.setupNext = () => goSP(sPage+1);
+window.setupBack = () => { if(sPage<=0){showScreen('welcomeScreen');return;} goSP(sPage-1); };
+function renderSetup(p) {
+  document.querySelectorAll('.setup-page').forEach((el,i)=>{
+    el.classList.remove('active','exit');
+    if(i===p) setTimeout(()=>el.classList.add('active'),10);
+    else if(i<p) el.classList.add('exit');
+  });
+  document.getElementById('sBackBtn').style.visibility=p>0?'visible':'hidden';
+  for(let i=0;i<5;i++) {
+    const d=document.getElementById('pd'+i);
+    if(d) d.className='pdot '+(i<p?'done':i===p?'active':'todo');
+  }
+}
+function goSP(p) {
+  const curr=document.getElementById('sp'+sPage);
+  curr.classList.remove('active'); curr.classList.add('exit');
+  setTimeout(()=>{ sPage=p; const next=document.getElementById('sp'+p); next.classList.remove('exit'); requestAnimationFrame(()=>next.classList.add('active')); renderSetup(p); },50);
+}
+window.checkP1 = () => { document.getElementById('p1btn').disabled=!document.getElementById('sName').value.trim(); };
+window.checkP2 = () => { document.getElementById('p2btn').disabled=!(document.getElementById('sDob').value&&document.getElementById('sSecret').value.trim()); };
+window.goP1 = () => { if(!document.getElementById('sName').value.trim()){toast('⚠️ Naam daalo');return;} setupNext(); };
+
+window.sPinTap = (n) => {
+  if(sPin.length>=4) return; sPin.push(n); updSDots(sPin,'ss');
+  if(sPin.length===4){savedPin=[...sPin];setTimeout(()=>setupNext(),300);}
+};
+window.sPinClr = () => { sPin=[]; updSDots(sPin,'ss'); };
+window.cPinTap = (n) => {
+  if(cPin.length>=4) return; cPin.push(n); updSDots(cPin,'sc');
+  if(cPin.length===4) setTimeout(chkPinMatch,300);
+};
+window.cPinClr = () => { cPin=[]; updSDots(cPin,'sc'); document.getElementById('cPinSub').textContent='Same PIN dobara daalo'; };
+function updSDots(arr,pre) {
+  for(let i=0;i<4;i++){const d=document.getElementById(pre+i);if(d) d.className='pin-dot'+(i<arr.length?' filled':'');}
+}
+function chkPinMatch() {
+  if(savedPin.join('')===cPin.join('')) {
+    for(let i=0;i<4;i++){const c=document.getElementById('sc'+i);if(c) c.className='pin-dot ok';}
+    toast('✅ PIN match!'); setTimeout(completeSetup,500);
+  } else {
+    for(let i=0;i<4;i++){const c=document.getElementById('sc'+i);if(c) c.className='pin-dot err';}
+    document.getElementById('cPinSub').textContent='❌ Match nahi! Dobara try karo';
+    cPin=[]; setTimeout(()=>{updSDots([],'sc');document.getElementById('cPinSub').textContent='Same PIN dobara daalo';},900);
+  }
+}
+async function completeSetup() {
+  loading(true);
+  const name=document.getElementById('sName').value.trim();
+  const dob=document.getElementById('sDob').value;
+  const secret=document.getElementById('sSecret').value.trim();
+  const pinHash=hash(savedPin.join(''));
+  const uid='BV'+genId(12);
+  const linkCode=genLinkCode(uid);
+  const userData={uid,name,dob,secretHash:hash(secret.toLowerCase()),pinHash,linkCode,nominees:[],nomineeFor:[],createdAt:new Date().toISOString()};
+  try {
+    await setDoc(doc(db,'users',uid),userData);
+    sl('bv_uid',uid); sl('bv_user_cache',userData); CU=userData;
+    loading(false); toast('🎉 Welcome, '+name+'!'); setTimeout(showMain,400);
+  } catch(e) { loading(false); toast('❌ Setup fail: '+e.message); }
+}
+
+// ── LOCK ──
+let pinSeq=[], floatNums=[];
+window.genFloatNums = genFloatNums;
+function genFloatNums() {
+  const field=document.getElementById('floatField');
+  if(!field) return;
+  field.innerHTML=''; floatNums=[]; pinSeq=[];
+  updLockDots([]);
+  document.getElementById('lockHint').textContent='Koi bhi 4 number tap karo sequence mein';
+  const nums=[]; while(nums.length<18) nums.push(Math.floor(Math.random()*10));
+  const rect=field.getBoundingClientRect();
+  const W=rect.width||340, H=rect.height||260;
+  const anims=['flt1','flt2','flt3'];
+  nums.forEach((n,i)=>{
+    const el=document.createElement('div'); el.className='fnum'; el.textContent=n;
+    el.style.left=(12+Math.random()*(W-66))+'px';
+    el.style.top=(12+Math.random()*(H-66))+'px';
+    const a=anims[i%3], delay=(Math.random()*3).toFixed(2), dur=(2.5+Math.random()*2).toFixed(2);
+    el.style.animation=`${a} ${dur}s ${delay}s ease-in-out infinite alternate`;
+    el.addEventListener('click',()=>tapNum(el,n));
+    field.appendChild(el); floatNums.push({el,n});
+  });
+}
+function tapNum(el,n) {
+  if(pinSeq.length>=4) return;
+  el.style.animation='none'; el.classList.add('sel');
+  pinSeq.push(n); updLockDots(pinSeq);
+  if(pinSeq.length===4) setTimeout(chkLockPin,320);
+}
+function updLockDots(seq) {
+  for(let i=0;i<4;i++){const d=document.getElementById('ld'+i);if(d) d.className='lock-dot'+(i<seq.length?' filled':'');}
+}
+async function chkLockPin() {
+  const entered=pinSeq.join('');
+  const storedHash=CU?.pinHash||ll('bv_user_cache')?.pinHash;
+  if(!storedHash){genFloatNums();return;}
+  if(hash(entered)===storedHash) {
+    floatNums.forEach(({el})=>{el.style.background='linear-gradient(135deg,var(--accent3),#0be881)';el.style.borderColor='var(--accent3)';});
+    for(let i=0;i<4;i++){const d=document.getElementById('ld'+i);if(d){d.className='lock-dot filled';d.style.background='var(--accent3)';}}
+    document.getElementById('lockHint').textContent='✅ Sahi hai!';
+    if(!CU) CU=ll('bv_user_cache');
+    setTimeout(showMain,400);
+  } else {
+    floatNums.forEach(({el})=>el.classList.add('wrong'));
+    for(let i=0;i<4;i++){const d=document.getElementById('ld'+i);if(d) d.className='lock-dot err';}
+    document.getElementById('lockHint').textContent='❌ Galat PIN! Dobara try karo';
+    setTimeout(()=>genFloatNums(),900);
+  }
+}
+window.showLock = () => { showScreen('lockScreen'); requestAnimationFrame(()=>requestAnimationFrame(genFloatNums)); };
+
+// ── RESTORE (new phone) ──
+window.showRestore = () => showScreen('restoreScreen');
+window.doRestore = async () => {
+  const code=document.getElementById('restCode').value.trim().toUpperCase();
+  const dob=document.getElementById('restDob').value;
+  const secret=document.getElementById('restSecret').value.trim();
+  if(!code||!dob||!secret){toast('⚠️ Sab fields bharo');return;}
+  loading(true);
+  try {
+    const q=query(collection(db,'users'),where('linkCode','==',code));
+    const snap=await getDocs(q);
+    if(snap.empty){loading(false);toast('❌ Link Code nahi mila');return;}
+    const data=snap.docs[0].data();
+    if(data.dob!==dob||data.secretHash!==hash(secret.toLowerCase())){
+      loading(false);toast('❌ DOB ya Secret word galat hai');return;
+    }
+    loading(false);
+    const newPin=prompt('✅ Account mil gaya!\n\nNaya 4-digit PIN set karo:');
+    if(!newPin||newPin.length!==4||isNaN(newPin)){toast('⚠️ Valid 4-digit PIN chahiye');return;}
+    loading(true);
+    const pinHash=hash(newPin);
+    await updateDoc(doc(db,'users',data.uid),{pinHash});
+    const updated={...data,pinHash};
+    sl('bv_uid',data.uid); sl('bv_user_cache',updated); CU=updated;
+    loading(false); toast('✅ Account restore ho gaya!'); setTimeout(showMain,400);
+  } catch(e){loading(false);toast('❌ Error: '+e.message);}
+};
+
+// ── MAIN APP ──
+async function showMain() {
+  showScreen('mainScreen');
+  document.getElementById('myCode').textContent=CU.linkCode;
+  document.getElementById('profName').textContent=CU.name;
+  document.getElementById('profDob').textContent='DOB: '+CU.dob;
+  document.getElementById('profCode').textContent=CU.linkCode;
+  initEmojiPicker();
+  showTab('vault');
+  subscribePws();
+  subscribeReqs();
+}
+
+window.showTab = function showTab(tab) {
+  ['vault','shared','nominees','profile'].forEach(t=>{
+    document.getElementById('tab-'+t).className='tab'+(t===tab?' active':'');
+    document.getElementById('content-'+t).style.display=t===tab?'':'none';
+  });
+  document.getElementById('mainFab').style.display=tab==='vault'?'flex':'none';
+  if(tab==='nominees') loadNominees();
+  if(tab==='shared') loadShared();
+};
+
+// ── PASSWORDS ──
+function subscribePws() {
+  if(unsubPws) unsubPws();
+  const ref=collection(db,'users',CU.uid,'passwords');
+  unsubPws=onSnapshot(ref,snap=>{
+    allPws=snap.docs.map(d=>({id:d.id,...d.data()}));
+    allPws.sort((a,b)=>(b.fav?1:0)-(a.fav?1:0));
+    sl('bv_pws_'+CU.uid,allPws);
+    renderPws(allPws);
+  },()=>{
+    allPws=ll('bv_pws_'+CU.uid,[]);
+    renderPws(allPws);
+  });
+}
+
+function renderPws(list) {
+  const el=document.getElementById('pwList');
+  if(!list.length){el.innerHTML='<div class="empty-state"><div class="ei">🔑</div><h3>Koi password nahi</h3><p>Neeche + button dabao</p></div>';return;}
+  el.innerHTML=list.map((p,i)=>`
+    <div class="pw-card" onclick="openDetail('${p.id}')" style="animation-delay:${i*0.04}s">
+      <div class="card-head">
+        <div class="card-emoji">${p.emoji||'🔑'}</div>
+        <div class="card-info">
+          <div class="card-name">${escHtml(p.appName||'—')}</div>
+          <div class="card-user">${escHtml(p.username||'—')}</div>
+        </div>
+        <div class="card-badges">
+          ${p.fav?'<span class="badge badge-fav">⭐</span>':''}
+          ${p.shared?'<span class="badge badge-shared">🔗</span>':''}
+          ${p.screenlock?'<span class="badge badge-lock">📱</span>':''}
+        </div>
+      </div>
+    </div>`).join('');
+}
+function escHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+window.searchPw = () => {
+  const q=document.getElementById('searchInput').value.toLowerCase();
+  if(!q){renderPws(allPws);return;}
+  renderPws(allPws.filter(p=>(p.appName||'').toLowerCase().includes(q)||(p.username||'').toLowerCase().includes(q)||(p.note||'').toLowerCase().includes(q)));
+};
+
+function initEmojiPicker() {
+  const el=document.getElementById('emojiPicker'); if(!el) return;
+  el.innerHTML=EMOJIS.map(e=>`<div class="emoji-opt${e===selEmoji?' sel':''}" onclick="selEmojiFn('${e}')">${e}</div>`).join('');
+}
+window.selEmojiFn = (e) => {
+  selEmoji=e;
+  document.querySelectorAll('.emoji-opt').forEach(el=>{el.className='emoji-opt'+(el.textContent===e?' sel':'');});
+};
+
+window.showAddPwModal = () => {
+  editPwId=null;
+  document.getElementById('addPwTitle').textContent='Password Add Karo';
+  ['pwApp','pwUser','pwPass','pwNote'].forEach(id=>document.getElementById(id).value='');
+  ['pwScreenlock','pwShared','pwFav'].forEach(id=>document.getElementById(id).checked=false);
+  selEmoji='🔑'; initEmojiPicker();
+  document.getElementById('addPwModal').classList.add('active');
+};
+window.togglePwVis = () => {
+  const i=document.getElementById('pwPass');
+  i.type=i.type==='password'?'text':'password';
+  document.getElementById('pwVisBtn').textContent=i.type==='password'?'👁️':'🙈';
+};
+window.genPw = () => {
+  const c='ABCDEFGHJKMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789@#$!';
+  let p=''; for(let i=0;i<12;i++) p+=c[Math.floor(Math.random()*c.length)];
+  document.getElementById('pwPass').value=p; document.getElementById('pwPass').type='text';
+  document.getElementById('pwVisBtn').textContent='🙈'; toast('🎲 Password generated!');
+};
+window.savePw = async () => {
+  const appName=document.getElementById('pwApp').value.trim();
+  const password=document.getElementById('pwPass').value;
+  if(!appName||!password){toast('⚠️ App naam aur password zaroori');return;}
+  const data={appName,username:document.getElementById('pwUser').value.trim(),password,note:document.getElementById('pwNote').value.trim(),emoji:selEmoji,screenlock:document.getElementById('pwScreenlock').checked,shared:document.getElementById('pwShared').checked,fav:document.getElementById('pwFav').checked,ownerUid:CU.uid,ownerName:CU.name,updatedAt:new Date().toISOString()};
+  try {
+    const ref=collection(db,'users',CU.uid,'passwords');
+    if(editPwId){await updateDoc(doc(ref,editPwId),data);toast('✅ Update ho gaya!');}
+    else{data.createdAt=new Date().toISOString();await addDoc(ref,data);toast('✅ Save ho gaya!');}
+    closeModal('addPwModal');
+  } catch(e){toast('❌ Error: '+e.message);}
+};
+window.openDetail = (id) => {
+  curDetail=allPws.find(p=>p.id===id); if(!curDetail) return;
+  const e=curDetail;
+  document.getElementById('detEmoji').textContent=e.emoji||'🔑';
+  document.getElementById('detTitle').textContent=e.appName||'—';
+  document.getElementById('detApp').textContent=e.appName||'—';
+  document.getElementById('detUser').textContent=e.username||'—';
+  document.getElementById('detPass').textContent='••••••••';
+  document.getElementById('detPass').dataset.real=e.password;
+  document.getElementById('detNote').textContent=e.note||'—';
+  document.getElementById('detNoteRow').style.display=e.note?'':'none';
+  document.getElementById('detScreenBadge').style.display=e.screenlock?'':'none';
+  detPassVis=false; document.getElementById('togPassBtn').textContent='👁️';
+  document.getElementById('detailModal').classList.add('active');
+};
+window.toggleDetPass = () => {
+  const el=document.getElementById('detPass'); detPassVis=!detPassVis;
+  el.textContent=detPassVis?el.dataset.real:'••••••••';
+  el.className='detail-val'+(detPassVis?'':' hidden');
+  document.getElementById('togPassBtn').textContent=detPassVis?'🙈':'👁️';
+};
+window.copyFld = async (id,btnId) => {
+  const el=document.getElementById(id);
+  const text=el.dataset.real||el.textContent;
+  await navigator.clipboard.writeText(text);
+  const btn=document.getElementById(btnId);
+  btn.textContent='✅'; btn.classList.add('copied');
+  setTimeout(()=>{btn.textContent='📋';btn.classList.remove('copied');},1500);
+  toast('📋 Copied!');
+};
+window.editCurPw = () => {
+  if(!curDetail) return;
+  closeModal('detailModal'); editPwId=curDetail.id;
+  document.getElementById('addPwTitle').textContent='Password Edit Karo';
+  document.getElementById('pwApp').value=curDetail.appName||'';
+  document.getElementById('pwUser').value=curDetail.username||'';
+  document.getElementById('pwPass').value=curDetail.password||'';
+  document.getElementById('pwNote').value=curDetail.note||'';
+  document.getElementById('pwScreenlock').checked=curDetail.screenlock||false;
+  document.getElementById('pwShared').checked=curDetail.shared||false;
+  document.getElementById('pwFav').checked=curDetail.fav||false;
+  selEmoji=curDetail.emoji||'🔑'; initEmojiPicker();
+  document.getElementById('addPwModal').classList.add('active');
+};
+window.deleteCurPw = async () => {
+  if(!curDetail||!confirm(`"${curDetail.appName}" delete karo?`)) return;
+  await deleteDoc(doc(db,'users',CU.uid,'passwords',curDetail.id));
+  closeModal('detailModal'); toast('🗑️ Delete ho gaya');
+};
+
+// ── SHARED (real-time nominees passwords) ──
+async function loadShared() {
+  const el=document.getElementById('sharedList');
+  const user=CU||ll('bv_user_cache');
+  if(!user?.nomineeFor?.length){
+    el.innerHTML='<div class="empty-state"><div class="ei">🔗</div><h3>Koi shared password nahi</h3><p>Kisi ka nominee bano toh unke shared passwords yahan dikhenge real-time</p></div>';
+    return;
+  }
+  el.innerHTML='<div style="color:var(--text3);font-size:13px;font-family:var(--mono);text-align:center;padding:20px;">Loading...</div>';
+  try {
+    let html='';
+    for(const ownerUid of user.nomineeFor) {
+      const pwRef=collection(db,'users',ownerUid,'passwords');
+      const q=query(pwRef,where('shared','==',true));
+      const snap=await getDocs(q);
+      const oDoc=await getDoc(doc(db,'users',ownerUid));
+      const oName=oDoc.exists()?oDoc.data().name:'Unknown';
+      if(!snap.empty) {
+        html+=`<div class="sec-label" style="margin-top:0;">${oName} ke shared passwords</div>`;
+        snap.docs.forEach(d=>{
+          const p=d.data();
+          html+=`<div class="shared-card">
+            <div class="shared-from">🔗 ${escHtml(oName)} ka shared password</div>
+            <div style="display:flex;align-items:center;gap:12px;">
+              <div style="font-size:24px;">${p.emoji||'🔑'}</div>
+              <div style="flex:1;"><div style="font-size:15px;font-weight:700;">${escHtml(p.appName)}</div><div style="font-size:12px;color:var(--text2);font-family:var(--mono);">${escHtml(p.username||'—')}</div></div>
+              <button class="copy-btn" id="scb_${d.id}" onclick="copyShared('${d.id}','${(p.password||'').replace(/'/g,"\\'")}')">📋</button>
+            </div>
+          </div>`;
+        });
+      }
+    }
+    el.innerHTML=html||'<div class="empty-state"><div class="ei">🔗</div><h3>Koi shared password nahi</h3><p>Nominee ne abhi kuch share nahi kiya</p></div>';
+  } catch(e){el.innerHTML='<div class="empty-state"><div class="ei">⚠️</div><h3>Load nahi hua</h3><p>'+e.message+'</p></div>';}
+}
+window.copyShared = async (id,pass) => {
+  await navigator.clipboard.writeText(pass);
+  const btn=document.getElementById('scb_'+id);
+  if(btn){btn.textContent='✅';btn.classList.add('copied');setTimeout(()=>{btn.textContent='📋';btn.classList.remove('copied');},1500);}
+  toast('📋 Password copied!');
+};
+
+// ── NOMINEES ──
+window.copyCode = () => { navigator.clipboard.writeText(CU.linkCode).then(()=>toast('📋 Link Code copied!')); };
+window.shareCode = () => {
+  const msg=`Mera BhaiVault Link Code: ${CU.linkCode}\nBhaiVault app pe nominee add karo mujhe!`;
+  if(navigator.share) navigator.share({title:'BhaiVault Link Code',text:msg});
+  else { navigator.clipboard.writeText(msg).then(()=>toast('📋 Copy ho gaya! WhatsApp pe paste karo')); }
+};
+window.showLinkCodeInfo = () => {
+  toast(`🔗 ${CU.linkCode} — Ye code kisi ko do, wo tumhe nominee add kar sakta hai`,4000);
+};
+
+async function loadNominees() {
+  const nomList=document.getElementById('nomList');
+  const user=CU;
+  // My nominees
+  if(!user.nominees?.length){
+    nomList.innerHTML='<div class="empty-state" style="padding:20px;"><div class="ei">👥</div><h3>Koi nominee nahi</h3><p>Neeche se add karo (max 3)</p></div>';
+  } else {
+    let html=`<div style="color:var(--text3);font-size:12px;font-family:var(--mono);margin-bottom:8px;">${user.nominees.length}/3 nominees</div>`;
+    for(const nuid of user.nominees) {
+      try {
+        const ndoc=await getDoc(doc(db,'users',nuid));
+        const nd=ndoc.exists()?ndoc.data():{name:'Unknown',linkCode:'—'};
+        html+=`<div class="nominee-card">
+          <div class="nom-av">${nd.name[0].toUpperCase()}</div>
+          <div class="nom-info"><div class="nom-name">${escHtml(nd.name)}</div><div class="nom-role">Nominee · ${nd.linkCode}</div></div>
+          <button class="nom-remove" onclick="removeNom('${nuid}')">✕</button>
+        </div>`;
+      } catch(e){}
+    }
+    nomList.innerHTML=html;
+  }
+  document.getElementById('addNomBtn').style.display=user.nominees?.length>=3?'none':'block';
+  // I am nominee for
+  const sec=document.getElementById('nomForSec'), list=document.getElementById('nomForList');
+  if(user.nomineeFor?.length){
+    sec.style.display='block';
+    let h2='';
+    for(const ouid of user.nomineeFor){
+      try {
+        const od=await getDoc(doc(db,'users',ouid));
+        const odata=od.exists()?od.data():{name:'Unknown',linkCode:'—'};
+        h2+=`<div class="nominee-card">
+          <div class="nom-av green">${odata.name[0].toUpperCase()}</div>
+          <div class="nom-info"><div class="nom-name">${escHtml(odata.name)}</div><div class="nom-role">Main unka nominee hoon · ${odata.linkCode}</div></div>
+        </div>`;
+      } catch(e){}
+    }
+    list.innerHTML=h2;
+  } else { sec.style.display='none'; }
+}
+
+window.showAddNomModal = () => {
+  document.getElementById('nomName').value='';
+  document.getElementById('nomCode').value='';
+  document.getElementById('addNomModal').classList.add('active');
+};
+
+window.sendNomReq = async () => {
+  const name=document.getElementById('nomName').value.trim();
+  const code=document.getElementById('nomCode').value.trim().toUpperCase();
+  if(!name||!code){toast('⚠️ Naam aur code dono bharo');return;}
+  if(!code.startsWith('BHAI-')){toast('⚠️ Code BHAI- se shuru hona chahiye');return;}
+  if(code===CU.linkCode){toast('⚠️ Apna khud ka code nahi dal sakte');return;}
+  if((CU.nominees?.length||0)>=3){toast('⚠️ Max 3 nominees allowed');return;}
+  loading(true);
+  try {
+    const q=query(collection(db,'users'),where('linkCode','==',code));
+    const snap=await getDocs(q);
+    if(snap.empty){loading(false);toast('❌ Ye Link Code kisi ka nahi hai');return;}
+    const nomDoc=snap.docs[0]; const nomData=nomDoc.data(); const nomUid=nomDoc.id;
+    // Circular chain check
+    if(await isCircular(CU.uid,nomUid)){loading(false);toast('⚠️ Circular chain! Alag nominee chuno');return;}
+    // Already nominee?
+    if(CU.nominees?.includes(nomUid)){loading(false);toast('⚠️ Ye pehle se nominee hai');return;}
+    // Already pending?
+    const exQ=query(collection(db,'nomineeRequests'),where('fromUid','==',CU.uid),where('toUid','==',nomUid),where('status','==','pending'));
+    const exSnap=await getDocs(exQ);
+    if(!exSnap.empty){loading(false);toast('⚠️ Request pehle se bheji hai');return;}
+    await addDoc(collection(db,'nomineeRequests'),{
+      fromUid:CU.uid, fromName:CU.name, fromLinkCode:CU.linkCode,
+      toUid:nomUid, toName:nomData.name,
+      displayName:name, status:'pending', createdAt:new Date().toISOString()
+    });
+    loading(false); closeModal('addNomModal');
+    toast('✅ Request bheji! '+name+' accept kare toh linked ho jaoge.');
+  } catch(e){loading(false);toast('❌ Error: '+e.message);}
+};
+
+async function isCircular(fromUid,toUid) {
+  const visited=new Set(); let cur=toUid;
+  while(cur){
+    if(visited.has(cur)) break; visited.add(cur);
+    if(cur===fromUid) return true;
+    try{
+      const ud=await getDoc(doc(db,'users',cur));
+      if(!ud.exists()) break;
+      cur=(ud.data().nominees||[])[0];
+    }catch{break;}
+  }
+  return false;
+}
+
+window.removeNom = async (nomUid) => {
+  if(!confirm('Nominee remove karo?')) return;
+  try {
+    await updateDoc(doc(db,'users',CU.uid),{nominees:arrayRemove(nomUid)});
+    await updateDoc(doc(db,'users',nomUid),{nomineeFor:arrayRemove(CU.uid)});
+    CU.nominees=(CU.nominees||[]).filter(n=>n!==nomUid);
+    sl('bv_user_cache',CU); loadNominees(); toast('Nominee remove ho gaya');
+  } catch(e){toast('❌ Error: '+e.message);}
+};
+
+// ── REQUESTS (real-time) ──
+function subscribeReqs() {
+  if(unsubReqs) unsubReqs();
+  const q=query(collection(db,'nomineeRequests'),where('toUid','==',CU.uid),where('status','==','pending'));
+  unsubReqs=onSnapshot(q,snap=>{
+    const count=snap.size;
+    const badge=document.getElementById('notifBadge');
+    badge.textContent=count; badge.classList.toggle('show',count>0);
+    const sec=document.getElementById('pendingSection');
+    const list=document.getElementById('pendingList');
+    if(count>0){
+      sec.style.display='block';
+      list.innerHTML=snap.docs.map(d=>{
+        const r=d.data();
+        return `<div class="req-card">
+          <div class="req-from">📨 NOMINEE REQUEST</div>
+          <div class="req-name-txt">${escHtml(r.fromName)} <span style="color:var(--text3);font-size:12px;font-family:var(--mono);">${r.fromLinkCode}</span></div>
+          <div style="font-size:13px;color:var(--text2);">Ye tumhe apna nominee banana chahta hai</div>
+          <div class="req-acts">
+            <button class="btn-approve" onclick="approveReq('${d.id}','${r.fromUid}','${escHtml(r.fromName)}')">✅ Accept</button>
+            <button class="btn-reject" onclick="rejectReq('${d.id}')">❌ Reject</button>
+          </div>
+        </div>`;
+      }).join('');
+    } else { sec.style.display='none'; }
+  });
+}
+
+window.approveReq = async (reqId,fromUid,fromName) => {
+  loading(true);
+  try {
+    await updateDoc(doc(db,'nomineeRequests',reqId),{status:'approved'});
+    await updateDoc(doc(db,'users',fromUid),{nominees:arrayUnion(CU.uid)});
+    await updateDoc(doc(db,'users',CU.uid),{nomineeFor:arrayUnion(fromUid)});
+    if(!CU.nomineeFor) CU.nomineeFor=[];
+    if(!CU.nomineeFor.includes(fromUid)) CU.nomineeFor.push(fromUid);
+    sl('bv_user_cache',CU);
+    loading(false); toast('✅ '+fromName+' ka nominee ban gaye!'); loadNominees();
+  } catch(e){loading(false);toast('❌ Error: '+e.message);}
+};
+window.rejectReq = async (reqId) => {
+  await updateDoc(doc(db,'nomineeRequests',reqId),{status:'rejected'});
+  toast('Request reject ho gayi');
+};
+
+// ── RECOVERY ──
+window.showRecovery = () => {
+  document.getElementById('recStep2').style.display='none';
+  document.getElementById('recStep1Btns').style.display='block';
+  ['recName','recDob','recSecret','newPin'].forEach(id=>{try{document.getElementById(id).value='';}catch(e){}});
+  showScreen('recoveryScreen');
+};
+window.startRecovery = async () => {
+  const name=document.getElementById('recName').value.trim();
+  const dob=document.getElementById('recDob').value;
+  const secret=document.getElementById('recSecret').value.trim();
+  if(!name||!dob||!secret){toast('⚠️ Sab fields bharo');return;}
+  const user=CU||ll('bv_user_cache');
+  if(!user){toast('❌ Koi account nahi mila');return;}
+  if(user.name.toLowerCase()===name.toLowerCase()&&user.dob===dob&&user.secretHash===hash(secret.toLowerCase())){
+    document.getElementById('recStep2').style.display='block';
+    document.getElementById('recStep1Btns').style.display='none';
+    toast('✅ Identity verify ho gayi!');
+  } else { toast('❌ Details match nahi hua. Check karo.'); }
+};
+window.doResetPin = async () => {
+  const p=document.getElementById('newPin').value.trim();
+  if(p.length!==4||isNaN(p)){toast('⚠️ Exactly 4 digits');return;}
+  const pinHash=hash(p);
+  try {
+    if(!CU) CU=ll('bv_user_cache');
+    await updateDoc(doc(db,'users',CU.uid),{pinHash});
+    CU.pinHash=pinHash; sl('bv_user_cache',CU);
+    toast('✅ PIN reset ho gaya!'); setTimeout(showLock,1500);
+  } catch(e){toast('❌ Error: '+e.message);}
+};
+
+// ── PROFILE ──
+window.confirmLogout = () => {
+  if(confirm('App lock karo?')){
+    CU=null; if(unsubPws)unsubPws(); if(unsubReqs)unsubReqs();
+    showLock();
+  }
+};
+window.confirmDeleteAll = () => {
+  const c=prompt('Sab delete karne ke liye "DELETE" likho:');
+  if(c==='DELETE'){localStorage.clear();toast('Sab delete ho gaya');setTimeout(()=>location.reload(),1500);}
+};
+window.showProfInfo = () => toast(`👤 ${CU.name} · ${CU.dob}`);
+
+// ── EXPORT / IMPORT ──
+window.exportVault = () => {
+  const data={user:{name:CU.name,linkCode:CU.linkCode},passwords:allPws,exportedAt:new Date().toISOString()};
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='bhaivault_backup.json'; a.click();
+  toast('📤 Backup download ho gaya!');
+};
+window.importVault = () => {
+  const inp=document.createElement('input'); inp.type='file'; inp.accept='.json';
+  inp.onchange=async e=>{
+    const f=e.target.files[0]; if(!f) return;
+    const r=new FileReader();
+    r.onload=async ev=>{
+      try {
+        const data=JSON.parse(ev.target.result);
+        if(!data.passwords){toast('❌ Invalid backup file');return;}
+        if(!confirm(`${data.passwords.length} passwords import karo?`)) return;
+        const ref=collection(db,'users',CU.uid,'passwords');
+        for(const p of data.passwords){const{id,...rest}=p;await addDoc(ref,{...rest,ownerUid:CU.uid,importedAt:new Date().toISOString()});}
+        toast(`✅ ${data.passwords.length} passwords import ho gaye!`);
+      } catch(err){toast('❌ Import fail: '+err.message);}
+    };
+    r.readAsText(f);
+  };
+  inp.click();
+};
+
+// ── PWA ──
+let deferredInstall=null;
+window.addEventListener('beforeinstallprompt',e=>{
+  e.preventDefault(); deferredInstall=e;
+  setTimeout(()=>document.getElementById('installBanner').classList.add('visible'),3000);
+});
+window.triggerInstall = () => {
+  if(!deferredInstall){toast('📲 Browser menu → Install App');dismissInstall();return;}
+  deferredInstall.prompt();
+  deferredInstall.userChoice.then(r=>toast(r.outcome==='accepted'?'✅ Install ho gaya!':'Baad mein bhi kar sakte ho!'));
+  deferredInstall=null; dismissInstall();
+};
+window.dismissInstall = () => document.getElementById('installBanner').classList.remove('visible');
+
+// ── SW ──
+if('serviceWorker' in navigator) {
+  window.addEventListener('load',()=>{
+    navigator.serviceWorker.register('/sw.js')
+      .then(()=>console.log('[BhaiVault] SW ✅'))
+      .catch(e=>console.warn('[BhaiVault] SW fail:',e));
+  });
+}
+
+window.toast = toast;
+</script>
+</body>
+</html>
