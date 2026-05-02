@@ -976,6 +976,8 @@ async function completeSetup() {
   try {
     await setDoc(doc(db,'users',uid),userData);
     sl('bv_uid',uid); sl('bv_user_cache',userData); CU=userData;
+    // vaultKey set karo — fingerprint register immediately ke liye bhi kaam aaye
+    window._vaultKey = savedPin.join('') + uid;
     loading(false); toast('🎉 Welcome, '+name+'!'); setTimeout(showMain,400);
   } catch(e) { loading(false); toast('❌ Setup fail: '+e.message); }
 }
@@ -1023,7 +1025,10 @@ async function chkLockPin() {
     if(!CU) CU=ll('bv_user_cache');
     // ── AES key: PIN + uid — sirf memory mein, kabhi save nahi hoti ──
     window._vaultKey = entered + (CU.uid||'');
-    setTimeout(showMain,400);
+    setTimeout(async () => {
+      await completeDeferredFpWrap(); // agar prf-deferred mode tha toh wrap complete karo
+      showMain();
+    }, 400);
   } else {
     floatNums.forEach(({el})=>el.classList.add('wrong'));
     for(let i=0;i<4;i++){const d=document.getElementById('ld'+i);if(d) d.className='lock-dot err';}
@@ -1985,236 +1990,326 @@ async function checkNewPinMatch() {
 
 window.toast = toast;
 
-// ══════════════════════════════════════════════
-// FINGERPRINT (WebAuthn Platform Authenticator)
-// ══════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════════
+// FINGERPRINT — WebAuthn PRF + "Wrapped Key" Architecture
+//
+// Concept:
+//   Vault data HAMESHA PIN-derived key se encrypted rehta hai.
+//   PRF sirf us PIN-key ko wrap (encrypt) karke localStorage
+//   mein rakhta hai — "bv_fp_wrapped_key".
+//
+//   Register:  PRF → KEK → AES-GCM.encrypt(vaultKey) → localStorage
+//   Unlock:    PRF → KEK → AES-GCM.decrypt(wrappedKey) → vaultKey → RAM
+//
+//   PIN fallback hamesha kaam karta hai kyunki vault key kabhi
+//   nahi badli — sirf uska ek extra "envelope" bana diya.
+// ══════════════════════════════════════════════════════════════
 
-const FP_CRED_KEY = 'bv_fp_credId';   // localStorage: base64url credentialId
-const FP_FLAG_KEY = 'bv_fp_enabled';  // localStorage: 'true'/'false'
+const FP_CRED_KEY    = 'bv_fp_credId';       // base64url credentialId
+const FP_FLAG_KEY    = 'bv_fp_enabled';       // 'true'/'false'
+const FP_SALT_KEY    = 'bv_fp_prf_salt';      // PRF eval salt (b64url, 32 bytes)
+const FP_WRAPPED_KEY = 'bv_fp_wrapped_key';   // AES-GCM wrapped vaultKey (JSON)
+const FP_MODE_KEY    = 'bv_fp_prf_mode';      // 'prf' | 'basic'
 
-// ── Check support ──
+// ── b64url helpers ──
+function b64urlToUint8(b64url) {
+  const b64 = b64url.replace(/-/g,'+').replace(/_/g,'/');
+  return Uint8Array.from(atob(b64), c => c.charCodeAt(0));
+}
+function uint8ToB64url(arr) {
+  return btoa(String.fromCharCode(...new Uint8Array(arr)))
+    .replace(/\+/g,'-').replace(/\//g,'_').replace(/=/g,'');
+}
+
+// ── Platform authenticator check ──
 function fpSupported() {
   return !!(window.PublicKeyCredential &&
     typeof PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable === 'function');
 }
 
-// ── b64url helpers ──
-function b64urlToUint8(b64url) {
-  const b64 = b64url.replace(/-/g,'+').replace(/_/g,'/');
-  const bin = atob(b64);
-  return Uint8Array.from(bin, c => c.charCodeAt(0));
-}
-function uint8ToB64url(arr) {
-  return btoa(String.fromCharCode(...arr))
-    .replace(/\+/g,'-').replace(/\//g,'_').replace(/=/g,'');
+// ── PRF salt: ek baar random, hamesha same ──
+function getOrCreatePrfSalt() {
+  const stored = localStorage.getItem(FP_SALT_KEY);
+  if (stored) return b64urlToUint8(stored);
+  const salt = crypto.getRandomValues(new Uint8Array(32));
+  localStorage.setItem(FP_SALT_KEY, uint8ToB64url(salt));
+  return salt;
 }
 
-// ── Update lock screen fingerprint button visibility ──
+// ── PRF bytes → Key Encryption Key (AES-GCM 256) via HKDF ──
+// Ye KEK sirf vaultKey wrap/unwrap ke liye hai — vault data se direct contact nahi
+async function prfToKEK(prfBytes) {
+  const info    = new TextEncoder().encode('BhaiVault-KEK-v1');
+  const salt    = new TextEncoder().encode('BhaiVault-PRF-salt-v1');
+  const keyMat  = await crypto.subtle.importKey('raw', prfBytes, 'HKDF', false, ['deriveKey']);
+  return crypto.subtle.deriveKey(
+    { name: 'HKDF', hash: 'SHA-256', salt, info },
+    keyMat,
+    { name: 'AES-GCM', length: 256 },
+    false,                  // exportable nahi — sirf wrap/unwrap ke liye
+    ['encrypt', 'decrypt']
+  );
+}
+
+// ── vaultKey (string) → wrap → localStorage ──
+// vaultKey ko AES-GCM se encrypt karke JSON mein save karte hain
+async function wrapVaultKey(kek, vaultKeyStr) {
+  const iv        = crypto.getRandomValues(new Uint8Array(12));  // 96-bit IV
+  const encoded   = new TextEncoder().encode(vaultKeyStr);
+  const cipherBuf = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, kek, encoded);
+  const wrapped   = { iv: uint8ToB64url(iv), ct: uint8ToB64url(cipherBuf) };
+  localStorage.setItem(FP_WRAPPED_KEY, JSON.stringify(wrapped));
+}
+
+// ── localStorage → unwrap → vaultKey (string) ──
+async function unwrapVaultKey(kek) {
+  const raw = localStorage.getItem(FP_WRAPPED_KEY);
+  if (!raw) throw new Error('Wrapped key nahi mili localStorage mein');
+  const { iv, ct } = JSON.parse(raw);
+  const plainBuf = await crypto.subtle.decrypt(
+    { name: 'AES-GCM', iv: b64urlToUint8(iv) },
+    kek,
+    b64urlToUint8(ct)
+  );
+  return new TextDecoder().decode(plainBuf);
+}
+
+// ── Lock screen fingerprint button show/hide ──
 function updateFpLockBtn() {
   const btn = document.getElementById('fpUnlockBtn');
   const div = document.getElementById('fpDivider');
   if (!btn || !div) return;
-  const enabled = localStorage.getItem(FP_FLAG_KEY) === 'true';
-  const credId  = localStorage.getItem(FP_CRED_KEY);
-  const show = enabled && !!credId;
+  const show = localStorage.getItem(FP_FLAG_KEY) === 'true' && !!localStorage.getItem(FP_CRED_KEY);
   btn.classList.toggle('show', show);
   div.classList.toggle('show', show);
 }
 
-// ── Update profile toggle state ──
+// ── Profile toggle state ──
 async function updateFpProfileToggle() {
   const toggle = document.getElementById('fpToggle');
   const sub    = document.getElementById('fpToggleSub');
-  const item   = document.getElementById('fpToggleItem');
   if (!toggle || !sub) return;
-
-  // Check support
-  if (!fpSupported()) {
-    sub.textContent = 'Is device pe supported nahi';
-    toggle.disabled = true;
-    return;
-  }
+  if (!fpSupported()) { sub.textContent = 'Is device pe supported nahi'; toggle.disabled = true; return; }
   const avail = await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable().catch(()=>false);
-  if (!avail) {
-    sub.textContent = 'Fingerprint sensor nahi mila';
-    toggle.disabled = true;
-    return;
-  }
-
-  const enabled = localStorage.getItem(FP_FLAG_KEY) === 'true';
-  const credId  = localStorage.getItem(FP_CRED_KEY);
-  toggle.checked = enabled && !!credId;
-  sub.textContent = (enabled && credId)
-    ? 'Fingerprint se unlock hoga 👆'
-    : 'PIN ke saath fingerprint bhi use karo';
+  if (!avail) { sub.textContent = 'Fingerprint sensor nahi mila'; toggle.disabled = true; return; }
+  const enabled = localStorage.getItem(FP_FLAG_KEY) === 'true' && !!localStorage.getItem(FP_CRED_KEY);
+  toggle.checked = enabled;
+  sub.textContent = enabled
+    ? 'Fingerprint se unlock hoga — PIN ki zaroorat nahi 🔓'
+    : 'Enable karo — sirf fingerprint se vault kholega';
 }
 
 // ── Toggle handler ──
 window.onFpToggleChange = async (checked) => {
-  if (checked) {
-    await registerFingerprint();
-  } else {
-    disableFingerprint();
-  }
+  if (checked) { await registerFingerprint(); }
+  else         { disableFingerprint(); }
   updateFpProfileToggle();
   updateFpLockBtn();
 };
 
-// ── Register fingerprint (ek baar) ──
+// ── REGISTER ──────────────────────────────────────────────────
 async function registerFingerprint() {
   const toggle = document.getElementById('fpToggle');
   const sub    = document.getElementById('fpToggleSub');
-  if (!CU) { toast('❌ Pehle login karo'); toggle.checked=false; return; }
+
+  if (!CU)               { toast('❌ Pehle login karo'); toggle.checked = false; return; }
+  if (!window._vaultKey) { toast('❌ Pehle PIN se unlock karo, phir fingerprint register karo'); toggle.checked = false; return; }
 
   sub.textContent = '⏳ Fingerprint register ho raha hai...';
+  const prfSalt = getOrCreatePrfSalt();
+
   try {
-    // Challenge: user ke uid + random bytes
-    const challenge = new Uint8Array(32);
-    crypto.getRandomValues(challenge);
-
-    const userId = new TextEncoder().encode(CU.uid);
-
     const cred = await navigator.credentials.create({
       publicKey: {
-        challenge,
-        rp: {
-          name: 'BhaiVault',
-          id: window.location.hostname
-        },
-        user: {
-          id: userId,
-          name: CU.name || CU.uid,
-          displayName: CU.name || 'BhaiVault User'
-        },
-        pubKeyCredParams: [
-          { type: 'public-key', alg: -7  },  // ES256
-          { type: 'public-key', alg: -257 }  // RS256
-        ],
-        authenticatorSelection: {
-          authenticatorAttachment: 'platform',  // device ka sensor only
-          userVerification: 'required',          // fingerprint zaroori
-          residentKey: 'preferred'
-        },
+        challenge: crypto.getRandomValues(new Uint8Array(32)),
+        rp: { name: 'BhaiVault', id: window.location.hostname },
+        user: { id: new TextEncoder().encode(CU.uid), name: CU.name || CU.uid, displayName: CU.name || 'BhaiVault User' },
+        pubKeyCredParams: [{ type:'public-key', alg:-7 }, { type:'public-key', alg:-257 }],
+        authenticatorSelection: { authenticatorAttachment:'platform', userVerification:'required', residentKey:'preferred' },
         timeout: 60000,
-        attestation: 'none'
+        attestation: 'none',
+        extensions: { prf: { eval: { first: prfSalt } } }
       }
     });
-
     if (!cred) throw new Error('Credential nahi bana');
 
-    // credentialId store karo
-    const credId = uint8ToB64url(new Uint8Array(cred.rawId));
+    const credId    = uint8ToB64url(new Uint8Array(cred.rawId));
+    const prfResult = cred.getClientExtensionResults()?.prf;
+    const prfBytes  = prfResult?.results?.first;
+    const prfOk     = !!(prfResult?.enabled || prfBytes);
+
+    // CredId hamesha save karo
     localStorage.setItem(FP_CRED_KEY, credId);
     localStorage.setItem(FP_FLAG_KEY, 'true');
 
-    // Firestore mein flag save karo (optional — agar wipe ho toh re-register)
-    try {
-      await updateDoc(doc(db,'users',CU.uid), { fpEnabled: true });
-      CU.fpEnabled = true; sl('bv_user_cache', CU);
-    } catch(e) {}
+    if (prfOk && prfBytes) {
+      // ✅ PRF available + result mila — vaultKey wrap karo
+      const kek = await prfToKEK(prfBytes);
+      await wrapVaultKey(kek, window._vaultKey);
+      localStorage.setItem(FP_MODE_KEY, 'prf');
+      try { await updateDoc(doc(db,'users',CU.uid), { fpEnabled:true, fpMode:'prf' }); CU.fpEnabled=true; sl('bv_user_cache',CU); } catch(e) {}
+      toast('✅ Fingerprint register ho gaya! Ab sirf fingerprint se khulega — PIN kabhi nahi maangega 🎉');
+      sub.textContent = 'Fingerprint se unlock hoga — PIN ki zaroorat nahi 🔓';
 
-    toast('✅ Fingerprint register ho gaya! Ab lock screen pe use karo 👆');
-    sub.textContent = 'Fingerprint se unlock hoga 👆';
+    } else if (prfOk && !prfBytes) {
+      // PRF enabled hai lekin create() pe result nahi aaya — kuch browsers mein get() pe milta hai
+      // Wrapped key baad mein pehle unlock pe banayenge — flag mark karo
+      localStorage.setItem(FP_MODE_KEY, 'prf-deferred');
+      try { await updateDoc(doc(db,'users',CU.uid), { fpEnabled:true, fpMode:'prf-deferred' }); CU.fpEnabled=true; sl('bv_user_cache',CU); } catch(e) {}
+      toast('✅ Fingerprint register ho gaya! Pehle unlock pe wrap complete hoga.');
+      sub.textContent = 'Fingerprint se unlock hoga — PIN ki zaroorat nahi 🔓';
+
+    } else {
+      // PRF support nahi — basic mode: sirf identity verify, vaultKey ke liye PIN chahiye
+      localStorage.setItem(FP_MODE_KEY, 'basic');
+      localStorage.removeItem(FP_SALT_KEY);
+      try { await updateDoc(doc(db,'users',CU.uid), { fpEnabled:true, fpMode:'basic' }); CU.fpEnabled=true; sl('bv_user_cache',CU); } catch(e) {}
+      toast('⚠️ Fingerprint register hua! (Tera browser PRF support nahi karta — unlock pe PIN bhi lagega)');
+      sub.textContent = 'Fingerprint verify karega + PIN bhi maangega (browser limitation)';
+    }
+
     toggle.checked = true;
+
   } catch(err) {
     console.error('FP register:', err);
     toggle.checked = false;
-    if (err.name === 'NotAllowedError') {
-      toast('❌ Fingerprint cancel kiya ya allow nahi kiya');
-    } else {
-      toast('❌ Register fail: ' + (err.message || err.name));
-    }
-    sub.textContent = 'PIN ke saath fingerprint bhi use karo';
     localStorage.removeItem(FP_FLAG_KEY);
+    localStorage.removeItem(FP_CRED_KEY);
+    localStorage.removeItem(FP_WRAPPED_KEY);
+    toast(err.name === 'NotAllowedError' ? '❌ Fingerprint cancel kiya' : '❌ Register fail: ' + (err.message||err.name));
+    sub.textContent = 'Enable karo — sirf fingerprint se vault kholega';
   }
 }
 
-// ── Disable fingerprint ──
+// ── DISABLE ───────────────────────────────────────────────────
 function disableFingerprint() {
-  localStorage.removeItem(FP_CRED_KEY);
+  [FP_CRED_KEY, FP_SALT_KEY, FP_WRAPPED_KEY, FP_MODE_KEY].forEach(k => localStorage.removeItem(k));
   localStorage.setItem(FP_FLAG_KEY, 'false');
-  try {
-    updateDoc(doc(db,'users',CU.uid), { fpEnabled: false }).catch(()=>{});
-    if(CU) { CU.fpEnabled = false; sl('bv_user_cache', CU); }
-  } catch(e) {}
+  try { updateDoc(doc(db,'users',CU.uid), { fpEnabled:false }).catch(()=>{}); if(CU){CU.fpEnabled=false; sl('bv_user_cache',CU);} } catch(e) {}
   toast('Fingerprint unlock band kar diya');
 }
 
-// ── Lock screen: fingerprint se unlock ──
+// ── UNLOCK ────────────────────────────────────────────────────
 window.doFpUnlock = async () => {
-  const btn   = document.getElementById('fpUnlockBtn');
-  const hint  = document.getElementById('lockHint');
+  const btn    = document.getElementById('fpUnlockBtn');
+  const hint   = document.getElementById('lockHint');
   const credId = localStorage.getItem(FP_CRED_KEY);
   if (!credId) { toast('❌ Fingerprint register nahi hai'); return; }
+
+  const fpMode  = localStorage.getItem(FP_MODE_KEY) || 'basic';
+  const prfSalt = localStorage.getItem(FP_SALT_KEY) ? b64urlToUint8(localStorage.getItem(FP_SALT_KEY)) : null;
 
   btn.classList.add('scanning');
   if (hint) hint.textContent = '👆 Finger rakh do...';
 
   try {
-    const challenge = new Uint8Array(32);
-    crypto.getRandomValues(challenge);
-
-    const assertion = await navigator.credentials.get({
+    const getOpts = {
       publicKey: {
-        challenge,
+        challenge: crypto.getRandomValues(new Uint8Array(32)),
         rpId: window.location.hostname,
-        allowCredentials: [{
-          type: 'public-key',
-          id: b64urlToUint8(credId),
-          transports: ['internal']
-        }],
+        allowCredentials: [{ type:'public-key', id: b64urlToUint8(credId), transports:['internal'] }],
         userVerification: 'required',
         timeout: 60000
       }
-    });
+    };
+    // PRF mode mein salt ke saath request karo
+    if ((fpMode === 'prf' || fpMode === 'prf-deferred') && prfSalt) {
+      getOpts.publicKey.extensions = { prf: { eval: { first: prfSalt } } };
+    }
 
+    const assertion = await navigator.credentials.get(getOpts);
     if (!assertion) throw new Error('No assertion');
+    if (!CU) CU = ll('bv_user_cache');
 
-    // ✅ Verify locally — challenge match (browser ne already verify kiya)
+    const prfResult = assertion.getClientExtensionResults()?.prf;
+    const prfBytes  = prfResult?.results?.first;
+
     btn.classList.remove('scanning');
     btn.classList.add('success');
-    if (hint) hint.textContent = '✅ Fingerprint verified!';
 
-    if (!CU) CU = ll('bv_user_cache');
-    // ── FP unlock: vaultKey nahi hai toh PIN se set nahi ho sakta — PIN dalna hoga ──
-    // Fingerprint ke case mein PIN unknown hai, so vaultKey unavailable
-    // Agar vaultKey pehle se set hai (same session), use karo; warna PIN maango
-    if (!window._vaultKey) {
-      btn.classList.remove('scanning'); btn.classList.add('success');
-      if (hint) hint.textContent = '🔑 Fingerprint verified! PIN bhi daalo for decryption...';
+    if ((fpMode === 'prf' || fpMode === 'prf-deferred') && prfBytes) {
+      // ── PRF path: KEK se vaultKey unwrap karo ──────────────
+      if (hint) hint.textContent = '🔑 Key unlock ho rahi hai...';
+      const kek = await prfToKEK(prfBytes);
+
+      if (fpMode === 'prf-deferred' || !localStorage.getItem(FP_WRAPPED_KEY)) {
+        // Deferred wrap: pehla unlock — abhi wrap karo (RAM mein vaultKey hona chahiye)
+        // Yahan vaultKey nahi hogi (fresh lock) — PIN maango ek baar, phir wrap
+        if (!window._vaultKey) {
+          if (hint) hint.textContent = '🔑 Ek baar PIN daalo (setup complete karne ke liye)';
+          setTimeout(() => {
+            btn.classList.remove('success');
+            document.getElementById('lockHint').textContent = '🔑 Ek baar PIN daalo — phir hamesha fingerprint kaafi hoga';
+            // PIN ke baad wrap trigger karo
+            window._pendingFpKek = kek;
+            showScreen('lockScreen');
+            requestAnimationFrame(()=>requestAnimationFrame(genFloatNums));
+          }, 600);
+          return;
+        }
+        // vaultKey RAM mein hai — wrap karo aur mode upgrade karo
+        await wrapVaultKey(kek, window._vaultKey);
+        localStorage.setItem(FP_MODE_KEY, 'prf');
+        toast('✅ Fingerprint setup complete! Ab PIN ki zaroorat nahi 🎉');
+      } else {
+        // Normal PRF unlock: wrapped key se vaultKey nikalo
+        const vaultKey = await unwrapVaultKey(kek);
+        window._vaultKey = vaultKey;
+      }
+
+      if (hint) hint.textContent = '✅ Fingerprint se unlock ho gaya!';
+      setTimeout(() => { btn.classList.remove('success'); showMain(); }, 500);
+
+    } else if ((fpMode === 'prf' || fpMode === 'prf-deferred') && !prfBytes) {
+      // PRF expected tha lekin mila nahi — PIN fallback
+      // Vault data PIN-key se hi hai — PIN se normal unlock hoga ✅
+      if (hint) hint.textContent = '⚠️ PRF unavailable — PIN se try karo';
       setTimeout(() => {
         btn.classList.remove('success');
-        // Lock screen show karo PIN ke liye — message ke saath
-        document.getElementById('lockHint').textContent = '👆 FP OK — Ab PIN daalo (decrypt ke liye)';
+        document.getElementById('lockHint').textContent = 'PRF unavailable — PIN daalo (data safe hai)';
         showScreen('lockScreen');
         requestAnimationFrame(()=>requestAnimationFrame(genFloatNums));
       }, 800);
-      return;
+
+    } else {
+      // Basic mode — sirf identity verify hua, vaultKey ke liye PIN chahiye
+      // Vault PIN-key se encrypted hai, PIN dene par normal kaam karega ✅
+      if (hint) hint.textContent = '✅ Identity verified — PIN daalo';
+      setTimeout(() => {
+        btn.classList.remove('success');
+        document.getElementById('lockHint').textContent = '👆 FP verified — PIN daalo (vault ko unlock karne ke liye)';
+        showScreen('lockScreen');
+        requestAnimationFrame(()=>requestAnimationFrame(genFloatNums));
+      }, 800);
     }
-    setTimeout(() => {
-      btn.classList.remove('success');
-      showMain();
-    }, 500);
 
   } catch(err) {
     btn.classList.remove('scanning');
     btn.classList.add('error');
     console.error('FP unlock:', err);
-    if (err.name === 'NotAllowedError') {
-      if (hint) hint.textContent = '❌ Cancel kiya — PIN se try karo';
-      toast('Fingerprint cancel — PIN use karo');
-    } else {
-      if (hint) hint.textContent = '❌ Match nahi hua — PIN se try karo';
-      toast('❌ Fingerprint fail — PIN se try karo');
-    }
-    setTimeout(() => {
-      btn.classList.remove('error');
-      if (hint) hint.textContent = 'Koi bhi 4 number tap karo sequence mein';
-    }, 2000);
+    const msg = err.name === 'NotAllowedError' ? 'Fingerprint cancel — PIN use karo' : '❌ Fingerprint fail — PIN se try karo';
+    if (hint) hint.textContent = '❌ Fail — PIN se try karo';
+    toast(msg);
+    setTimeout(() => { btn.classList.remove('error'); if(hint) hint.textContent = 'Koi bhi 4 number tap karo sequence mein'; }, 2000);
   }
 };
 
-// ── showLock patch: fingerprint button update karo ──
+// ── PIN unlock ke baad deferred wrap complete karo ──
+// chkLockPin ke baad call hoga agar _pendingFpKek set hai
+async function completeDeferredFpWrap() {
+  if (!window._pendingFpKek || !window._vaultKey) return;
+  try {
+    await wrapVaultKey(window._pendingFpKek, window._vaultKey);
+    localStorage.setItem(FP_MODE_KEY, 'prf');
+    toast('✅ Fingerprint fully setup! Agla unlock sirf fingerprint se hoga 🎉');
+  } catch(e) {
+    console.error('Deferred wrap fail:', e);
+  } finally {
+    window._pendingFpKek = null;
+  }
+}
+
+// ── showLock patch ──
 const _origShowLock = window.showLock;
 window.showLock = () => {
   _origShowLock();
