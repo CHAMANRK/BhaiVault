@@ -1,0 +1,2900 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+<title>BhaiVault 🔐</title>
+<meta name="theme-color" content="#050510"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<link rel="manifest" href="/manifest.json"/>
+<link rel="apple-touch-icon" href="/icon-192.png"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&family=Instrument+Serif:ital@0;1&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"></script>
+<style>
+:root{
+  --bg:#050510;--surface:#0f0f22;--surface2:#161630;--surface3:#1e1e3a;
+  --border:#252548;--border2:#353568;
+  --accent:#7c6fff;--accent2:#ff5f7e;--accent3:#00e5a0;--accent4:#ffd166;
+  --text:#eeeeff;--text2:#8888bb;--text3:#555580;
+  --danger:#ff3a5c;--warn:#ffb347;
+  --radius:18px;--radius-sm:12px;
+  --font:'Syne',sans-serif;--mono:'DM Mono',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:var(--font);}
+::-webkit-scrollbar{width:3px;}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
+
+.screen{position:fixed;inset:0;display:none;flex-direction:column;overflow:hidden;}
+.screen.active{display:flex;}
+
+.ambient{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0;}
+.orb{position:absolute;border-radius:50%;filter:blur(80px);animation:orbDrift 8s ease-in-out infinite alternate;}
+.orb-1{width:350px;height:350px;background:rgba(124,111,255,0.13);top:-80px;left:-80px;}
+.orb-2{width:280px;height:280px;background:rgba(255,95,126,0.09);bottom:-60px;right:-60px;animation-delay:-4s;}
+.orb-3{width:200px;height:200px;background:rgba(0,229,160,0.07);top:40%;left:50%;transform:translate(-50%,-50%);animation-delay:-2s;}
+@keyframes orbDrift{0%{transform:translate(0,0) scale(1);}100%{transform:translate(20px,15px) scale(1.05);}}
+.grid{position:absolute;inset:0;background-image:linear-gradient(rgba(124,111,255,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(124,111,255,0.04) 1px,transparent 1px);background-size:40px 40px;mask-image:radial-gradient(ellipse at 50% 50%,black 30%,transparent 80%);}
+
+/* WELCOME */
+#welcomeScreen{background:var(--bg);align-items:center;justify-content:center;}
+.w-wrap{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;width:100%;max-width:420px;padding:0 28px;text-align:center;}
+.w-badge{display:inline-flex;align-items:center;gap:7px;padding:7px 16px;border-radius:30px;border:1px solid rgba(124,111,255,0.35);background:rgba(124,111,255,0.08);font-size:11px;font-family:var(--mono);color:var(--accent);letter-spacing:1px;margin-bottom:28px;animation:fadeUp 0.6s ease both;}
+.bdot{width:6px;height:6px;border-radius:50%;background:var(--accent3);box-shadow:0 0 6px var(--accent3);animation:pulse 1.8s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.3;}}
+.w-icon{width:96px;height:96px;border-radius:28px;background:linear-gradient(145deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:46px;margin-bottom:28px;box-shadow:0 12px 48px rgba(124,111,255,0.55);animation:heroIn 0.8s cubic-bezier(0.34,1.6,0.64,1) 0.15s both;}
+@keyframes heroIn{from{opacity:0;transform:scale(0.3) rotate(-20deg);}to{opacity:1;transform:scale(1) rotate(0);}}
+.w-title{font-size:36px;font-weight:800;letter-spacing:-1px;line-height:1.1;margin-bottom:14px;background:linear-gradient(150deg,#fff 40%,var(--accent) 80%,var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:fadeUp 0.7s ease 0.25s both;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:translateY(0);}}
+.w-sub{color:var(--text2);font-size:14px;line-height:1.65;margin-bottom:32px;animation:fadeUp 0.7s ease 0.35s both;}
+.w-pills{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:32px;animation:fadeUp 0.7s ease 0.42s both;}
+.w-pill{padding:6px 14px;border-radius:20px;border:1px solid var(--border2);background:var(--surface2);font-size:12px;font-family:var(--mono);color:var(--text2);}
+.btn-welcome{width:100%;padding:17px 20px;border:none;border-radius:9999px;background:linear-gradient(135deg,rgba(124,111,255,0.8),rgba(167,139,255,0.7),rgba(255,95,126,0.6));color:white;font-family:'Barlow',var(--font);font-size:16px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 6px 32px rgba(124,111,255,0.45),inset 0 1px 1px rgba(255,255,255,0.25);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);margin-bottom:14px;animation:fadeUp 0.7s ease 0.5s both;position:relative;overflow:hidden;}
+.btn-welcome::before{content:"";position:absolute;inset:0;border-radius:inherit;padding:1px;background:linear-gradient(180deg,rgba(255,255,255,0.5) 0%,rgba(255,255,255,0) 60%,rgba(255,255,255,0.2) 100%);-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;}
+.btn-welcome:active{transform:scale(0.97);}
+.w-login{font-size:13px;color:var(--text3);animation:fadeUp 0.7s ease 0.6s both;}
+.w-login a{color:var(--accent);text-decoration:none;cursor:pointer;}
+.stars-bg{position:absolute;inset:0;pointer-events:none;overflow:hidden;}
+.star{position:absolute;width:2px;height:2px;border-radius:50%;background:rgba(255,255,255,0.6);animation:twinkle var(--d,3s) var(--dl,0s) ease-in-out infinite alternate;}
+@keyframes twinkle{0%{opacity:0.05;}100%{opacity:0.6;}}
+
+/* SETUP */
+#setupScreen{background:var(--bg);overflow:hidden;}
+.setup-page{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:80px 24px 32px;opacity:0;pointer-events:none;transform:translateX(60px);transition:all 0.45s cubic-bezier(0.34,1.4,0.64,1);}
+.setup-page.active{opacity:1;pointer-events:all;transform:translateX(0);}
+.setup-page.exit{opacity:0;pointer-events:none;transform:translateX(-60px);}
+.s-topbar{position:absolute;top:0;left:0;right:0;z-index:10;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;}
+.back-btn{width:40px;height:40px;border-radius:12px;border:1px solid var(--border);background:rgba(255,255,255,0.04);color:var(--text2);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.prog-bar{display:flex;gap:6px;}
+.pdot{height:4px;border-radius:4px;background:var(--border2);transition:all 0.4s cubic-bezier(0.34,1.4,0.64,1);}
+.pdot.done{background:var(--accent3);width:20px;}
+.pdot.active{background:var(--accent);width:28px;}
+.pdot.todo{width:8px;}
+.page-icon{width:80px;height:80px;border-radius:24px;display:flex;align-items:center;justify-content:center;font-size:38px;margin-bottom:20px;background:var(--surface2);border:1px solid var(--border2);}
+.page-title{font-size:26px;font-weight:800;letter-spacing:-0.3px;margin-bottom:8px;text-align:center;}
+.page-sub{color:var(--text2);font-size:14px;text-align:center;margin-bottom:28px;line-height:1.5;max-width:320px;}
+.form-group{margin-bottom:16px;width:100%;max-width:360px;}
+.form-group label{display:block;color:var(--text3);font-size:11px;font-family:var(--mono);margin-bottom:6px;letter-spacing:1px;text-transform:uppercase;}
+.form-group input{width:100%;background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:15px 16px;border-radius:var(--radius-sm);font-family:var(--font);font-size:15px;outline:none;transition:border-color 0.2s;-webkit-appearance:none;}
+.form-group input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(124,111,255,0.12);}
+.form-group input::placeholder{color:var(--text3);}
+.btn-primary{width:100%;max-width:360px;padding:15px 20px;border:none;border-radius:9999px;background:linear-gradient(135deg,rgba(124,111,255,0.75),rgba(167,139,255,0.65));color:white;font-family:'Barlow',var(--font);font-size:15px;font-weight:600;cursor:pointer;transition:all 0.2s;box-shadow:0 4px 20px rgba(124,111,255,0.35),inset 0 1px 1px rgba(255,255,255,0.2);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);position:relative;overflow:hidden;}
+.btn-primary::before{content:"";position:absolute;inset:0;border-radius:inherit;padding:1px;background:linear-gradient(180deg,rgba(255,255,255,0.5) 0%,rgba(255,255,255,0) 60%,rgba(255,255,255,0.2) 100%);-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;}
+.btn-primary:active{transform:scale(0.97);}
+.btn-primary:disabled{opacity:0.4;cursor:not-allowed;}
+.btn-secondary{width:100%;max-width:360px;padding:13px 20px;border:none;border-radius:9999px;background:rgba(255,255,255,0.06);color:var(--text2);font-family:'Barlow',var(--font);font-size:14px;cursor:pointer;transition:all 0.2s;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:inset 0 1px 1px rgba(255,255,255,0.1),0 2px 8px rgba(0,0,0,0.2);margin-top:10px;position:relative;overflow:hidden;z-index:1;}
+.btn-secondary::before{content:"";position:absolute;inset:0;border-radius:inherit;padding:1px;background:linear-gradient(180deg,rgba(255,255,255,0.25) 0%,rgba(255,255,255,0) 60%,rgba(255,255,255,0.1) 100%);-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;z-index:-1;}
+.btn-secondary:hover{color:var(--accent);}
+.btn-secondary:active{transform:scale(0.97);}
+/* Fix all glass button pseudo elements - pointer-events none properly */
+.btn-primary::before,.btn-welcome::before,.btn-glass::before{pointer-events:none;z-index:-1;}
+.btn-primary{z-index:1;}.btn-welcome{z-index:1;}
+.pin-dots{display:flex;gap:14px;justify-content:center;margin-bottom:24px;}
+.pin-dot{width:14px;height:14px;border-radius:50%;border:2px solid var(--border2);transition:all 0.25s cubic-bezier(0.34,1.8,0.64,1);}
+.pin-dot.filled{background:var(--accent);border-color:var(--accent);box-shadow:0 0 10px rgba(124,111,255,0.7);transform:scale(1.2);}
+.pin-dot.ok{background:var(--accent3);border-color:var(--accent3);}
+.pin-dot.err{background:var(--danger);border-color:var(--danger);}
+.setup-numpad{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:280px;margin:0 auto;}
+.np-btn{background:var(--surface2);border:1px solid var(--border);color:var(--text);font-size:22px;font-weight:700;font-family:var(--mono);padding:18px;border-radius:var(--radius-sm);cursor:pointer;transition:all 0.15s;}
+.np-btn:active{transform:scale(0.93);background:rgba(124,111,255,0.15);}
+
+/* LOCK */
+#lockScreen{background:var(--bg);align-items:center;justify-content:center;}
+.lock-wrap{position:relative;z-index:1;text-align:center;width:100%;max-width:420px;padding:20px 24px;display:flex;flex-direction:column;align-items:center;}
+.lock-logo{width:72px;height:72px;border-radius:22px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:34px;margin:0 auto 12px;box-shadow:0 8px 32px rgba(124,111,255,0.4);animation:iconGlow 3s ease-in-out infinite;}
+@keyframes iconGlow{0%,100%{box-shadow:0 8px 32px rgba(124,111,255,0.4);}50%{box-shadow:0 8px 48px rgba(124,111,255,0.65),0 0 0 8px rgba(124,111,255,0.08);}}
+.lock-title{font-size:30px;font-weight:800;background:linear-gradient(135deg,#fff 30%,var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.lock-sub-txt{color:var(--text3);font-size:12px;margin:4px 0 28px;font-family:var(--mono);letter-spacing:1px;}
+.float-field{position:relative;width:100%;max-width:360px;height:260px;border:1px solid var(--border);border-radius:24px;background:linear-gradient(135deg,var(--surface),var(--surface2));overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.5),inset 0 1px 0 rgba(255,255,255,0.05);margin-bottom:20px;}
+.float-field::after{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 0%,rgba(124,111,255,0.08),transparent 60%);pointer-events:none;}
+.fnum{position:absolute;width:54px;height:54px;border-radius:15px;background:var(--surface2);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700;font-family:var(--mono);cursor:pointer;user-select:none;transition:background 0.15s,border-color 0.15s;will-change:transform;}
+.fnum:active{transform:scale(0.9) !important;}
+.fnum.sel{background:linear-gradient(135deg,var(--accent),#9b8fff);border-color:var(--accent);color:white;box-shadow:0 0 20px rgba(124,111,255,0.55);transform:scale(1.12) !important;animation:none !important;}
+.fnum.wrong{background:var(--danger);border-color:var(--danger);animation:shake 0.35s ease forwards !important;}
+@keyframes shake{0%,100%{transform:translateX(0);}20%{transform:translateX(-6px);}40%{transform:translateX(6px);}60%{transform:translateX(-4px);}80%{transform:translateX(4px);}}
+@keyframes flt1{0%{transform:translateY(0);}100%{transform:translateY(-10px);}}
+@keyframes flt2{0%{transform:translateY(0) rotate(-2deg);}100%{transform:translateY(-8px) rotate(2deg);}}
+@keyframes flt3{0%{transform:translateX(0);}100%{transform:translateX(8px) translateY(-6px);}}
+.lock-dots{display:flex;gap:12px;margin-bottom:8px;}
+.lock-dot{width:13px;height:13px;border-radius:50%;border:2px solid var(--border2);transition:all 0.25s cubic-bezier(0.34,1.8,0.64,1);}
+.lock-dot.filled{background:var(--accent);border-color:var(--accent);box-shadow:0 0 10px rgba(124,111,255,0.7);transform:scale(1.2);}
+.lock-dot.err{background:var(--danger);border-color:var(--danger);}
+.lock-hint{color:var(--text3);font-size:12px;font-family:var(--mono);margin-bottom:20px;}
+.lock-pills{display:flex;gap:10px;}
+.pill-btn{padding:8px 16px;border-radius:20px;border:1px solid var(--border2);background:transparent;color:var(--text2);font-family:var(--font);font-size:13px;cursor:pointer;transition:all 0.2s;}
+.pill-btn.red{border-color:rgba(255,95,126,0.4);color:var(--accent2);}
+
+/* MAIN */
+#mainScreen{background:var(--bg);}
+.app-header{padding:14px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);flex-shrink:0;background:rgba(5,5,16,0.92);backdrop-filter:blur(20px);position:relative;z-index:10;}
+.app-logo{display:flex;align-items:center;gap:10px;}
+.logo-icon{width:36px;height:36px;border-radius:11px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:18px;}
+.logo-txt{font-size:20px;font-weight:800;background:linear-gradient(135deg,#fff,var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.hdr-acts{display:flex;gap:8px;}
+.icon-btn{width:38px;height:38px;border-radius:11px;border:1px solid var(--border);background:rgba(255,255,255,0.04);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;transition:all 0.2s;position:relative;}
+.icon-btn:hover{border-color:var(--accent);}
+.nbadge{position:absolute;top:-4px;right:-4px;background:var(--danger);color:white;font-size:9px;font-weight:700;min-width:16px;height:16px;border-radius:8px;display:none;align-items:center;justify-content:center;font-family:var(--mono);padding:0 3px;}
+.nbadge.show{display:flex;}
+
+.tabs{display:none;}
+.tab{display:none;}
+.tab::after{display:none;}
+.tab-content{flex:1;overflow-y:auto;padding:16px 16px 80px;}
+
+.search-wrap{position:relative;margin-bottom:12px;}
+.search-wrap input{width:100%;background:var(--surface);border:1px solid var(--border);color:var(--text);padding:12px 16px 12px 40px;border-radius:var(--radius-sm);font-family:var(--font);font-size:14px;outline:none;transition:border-color 0.2s;}
+.search-wrap input:focus{border-color:var(--accent);}
+.search-wrap input::placeholder{color:var(--text3);}
+.si{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:16px;}
+
+@keyframes cardIn{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+.pw-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:10px;cursor:pointer;transition:all 0.2s;animation:cardIn 0.3s ease backwards;}
+.pw-card:hover{border-color:var(--border2);transform:translateY(-1px);}
+.card-head{display:flex;align-items:center;gap:14px;}
+.card-emoji{width:44px;height:44px;border-radius:13px;background:var(--surface2);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
+.card-info{flex:1;min-width:0;}
+.card-name{font-size:15px;font-weight:700;margin-bottom:3px;}
+.card-user{font-size:12px;color:var(--text2);font-family:var(--mono);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.card-badges{display:flex;gap:5px;flex-shrink:0;flex-wrap:wrap;justify-content:flex-end;}
+.badge{padding:3px 8px;border-radius:8px;font-size:10px;}
+.badge-fav{background:rgba(255,209,102,0.12);color:var(--accent4);border:1px solid rgba(255,209,102,0.25);}
+.badge-shared{background:rgba(0,229,160,0.1);color:var(--accent3);border:1px solid rgba(0,229,160,0.2);}
+.badge-lock{background:rgba(255,179,71,0.12);color:var(--warn);border:1px solid rgba(255,179,71,0.25);}
+.empty-state{text-align:center;padding:40px 20px;}
+.empty-state .ei{font-size:48px;margin-bottom:12px;}
+.empty-state h3{font-size:18px;font-weight:700;margin-bottom:6px;}
+.empty-state p{color:var(--text2);font-size:13px;}
+
+.fab{position:fixed;bottom:90px;right:20px;width:54px;height:54px;border-radius:50%;border:none;background:linear-gradient(135deg,rgba(124,111,255,0.8),rgba(255,95,126,0.7));color:white;font-size:26px;cursor:pointer;box-shadow:0 6px 24px rgba(124,111,255,0.45),inset 0 1px 1px rgba(255,255,255,0.2);transition:all 0.2s;display:flex;align-items:center;justify-content:center;z-index:100;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);}
+.fab:active{transform:scale(0.95);}
+
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.78);backdrop-filter:blur(12px);z-index:200;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity 0.3s;}
+.modal-overlay.active{opacity:1;pointer-events:all;}
+.modal{background:var(--surface);border:1px solid var(--border2);border-radius:26px 26px 0 0;width:100%;max-width:520px;padding:20px 20px 44px;max-height:92vh;overflow-y:auto;transform:translateY(40px);transition:transform 0.4s cubic-bezier(0.34,1.2,0.64,1);}
+.modal-overlay.active .modal{transform:translateY(0);}
+.modal-handle{width:38px;height:4px;background:var(--border2);border-radius:4px;margin:0 auto 16px;}
+.modal-title{font-size:20px;font-weight:800;margin-bottom:16px;}
+.toggle-row{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--border);}
+.toggle-row:last-of-type{border-bottom:none;}
+.toggle-row label{font-size:13px;flex:1;cursor:pointer;}
+.toggle-row input[type=checkbox]{width:18px;height:18px;accent-color:var(--accent);cursor:pointer;}
+.pw-field-wrap{position:relative;}
+.pw-field-wrap input{padding-right:82px;}
+.field-acts{position:absolute;right:8px;top:50%;transform:translateY(-50%);display:flex;gap:4px;}
+.field-btn{background:var(--surface3);border:1px solid var(--border);color:var(--text2);padding:6px 8px;border-radius:8px;cursor:pointer;font-size:14px;}
+.emoji-picker{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:4px;}
+.emoji-opt{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;cursor:pointer;background:var(--surface2);border:2px solid transparent;transition:all 0.15s;}
+.emoji-opt.sel{border-color:var(--accent);background:rgba(124,111,255,0.1);}
+
+.detail-card{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:16px;}
+.detail-row{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid var(--border);}
+.detail-row:last-child{border-bottom:none;}
+.detail-label{font-size:11px;color:var(--text3);font-family:var(--mono);margin-bottom:4px;}
+.detail-val{font-size:15px;font-weight:600;word-break:break-all;}
+.detail-val.hidden{font-family:var(--mono);letter-spacing:2px;color:var(--text2);}
+.copy-btn{background:var(--surface3);border:1px solid var(--border);color:var(--text2);padding:8px 10px;border-radius:10px;cursor:pointer;font-size:14px;flex-shrink:0;margin-left:8px;}
+.copy-btn.copied{border-color:var(--accent3);color:var(--accent3);}
+.screenlock-badge{background:rgba(255,179,71,0.08);border:1px solid rgba(255,179,71,0.25);border-radius:10px;padding:10px 14px;margin-bottom:12px;color:var(--warn);font-size:13px;}
+
+/* NOMINEES */
+.code-card{background:linear-gradient(135deg,rgba(124,111,255,0.08),rgba(255,95,126,0.06));border:1px solid rgba(124,111,255,0.2);border-radius:var(--radius);padding:16px;margin-bottom:16px;}
+.code-label{font-size:11px;color:var(--text3);font-family:var(--mono);letter-spacing:1px;margin-bottom:8px;}
+.code-val{font-size:20px;font-weight:800;font-family:var(--mono);letter-spacing:2px;color:var(--accent);}
+.code-btns{display:flex;gap:8px;margin-top:10px;}
+.code-btns button{flex:1;padding:10px;border:1px solid var(--border2);border-radius:10px;background:transparent;color:var(--text2);font-family:var(--font);font-size:13px;cursor:pointer;transition:all 0.2s;}
+.code-btns button:hover{border-color:var(--accent);color:var(--accent);}
+.nominee-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px 16px;display:flex;align-items:center;gap:14px;margin-bottom:10px;}
+.nom-av{width:42px;height:42px;border-radius:13px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;color:white;flex-shrink:0;}
+.nom-av.green{background:linear-gradient(135deg,var(--accent3),#00b377);}
+.nom-info{flex:1;}
+.shared-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:10px;}
+.shared-from{font-size:11px;color:var(--accent3);font-family:var(--mono);letter-spacing:1px;margin-bottom:10px;}
+.req-card{background:var(--surface);border:1px solid rgba(124,111,255,0.25);border-radius:var(--radius);padding:16px;margin-bottom:10px;}
+.req-from{font-size:10px;color:var(--accent);font-family:var(--mono);letter-spacing:1px;margin-bottom:6px;}
+.req-name-txt{font-size:16px;font-weight:700;margin-bottom:4px;}
+.req-acts{display:flex;gap:8px;margin-top:12px;}
+.btn-approve{flex:1;padding:11px;border:none;border-radius:var(--radius-sm);background:linear-gradient(135deg,var(--accent3),#00b377);color:white;font-family:var(--font);font-size:14px;font-weight:700;cursor:pointer;}
+.btn-reject{flex:1;padding:11px;border:1px solid rgba(255,58,92,0.4);border-radius:var(--radius-sm);background:transparent;color:var(--danger);font-family:var(--font);font-size:14px;cursor:pointer;}
+.nom-remove{background:transparent;border:1px solid rgba(255,58,92,0.3);color:var(--danger);width:30px;height:30px;border-radius:8px;cursor:pointer;font-size:14px;flex-shrink:0;}
+.nom-name{font-size:15px;font-weight:700;}
+.nom-role{font-size:11px;color:var(--text3);font-family:var(--mono);margin-top:2px;}
+.nom-remove{background:rgba(255,58,92,0.08);border:1px solid rgba(255,58,92,0.2);color:var(--danger);padding:6px 10px;border-radius:8px;cursor:pointer;font-size:13px;}
+
+.req-card{background:var(--surface);border:1px solid rgba(124,111,255,0.25);border-radius:var(--radius-sm);padding:14px 16px;margin-bottom:10px;}
+.req-from{font-size:11px;color:var(--accent);font-family:var(--mono);margin-bottom:6px;}
+.req-name-txt{font-size:16px;font-weight:700;margin-bottom:4px;}
+.req-acts{display:flex;gap:8px;margin-top:10px;}
+.req-acts button{flex:1;padding:10px;border-radius:10px;border:none;font-family:var(--font);font-size:13px;font-weight:600;cursor:pointer;}
+.btn-approve{background:rgba(0,229,160,0.15);color:var(--accent3);}
+.btn-reject{background:rgba(255,58,92,0.1);color:var(--danger);}
+
+.shared-card{background:var(--surface);border:1px solid rgba(0,229,160,0.15);border-radius:var(--radius);padding:16px;margin-bottom:10px;}
+.shared-from{font-size:11px;color:var(--accent3);font-family:var(--mono);margin-bottom:8px;}
+.sec-label{font-size:11px;color:var(--text3);font-family:var(--mono);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;margin-top:4px;}
+
+.prof-section{margin-bottom:20px;}
+.prof-section h3{font-size:11px;color:var(--text3);font-family:var(--mono);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border);}
+.prof-item{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:16px;display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;cursor:pointer;}
+.prof-item-l{display:flex;align-items:center;gap:12px;}
+.prof-item-ico{font-size:20px;}
+.prof-item-txt h4{font-size:14px;font-weight:600;}
+.prof-item-txt p{font-size:12px;color:var(--text2);margin-top:2px;}
+.danger-btn{width:100%;padding:14px;border:1px solid rgba(255,58,92,0.3);border-radius:var(--radius-sm);background:rgba(255,58,92,0.05);color:var(--danger);font-family:var(--font);font-size:14px;font-weight:600;cursor:pointer;margin-bottom:8px;}
+
+.toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(16px);background:var(--surface2);border:1px solid var(--border2);color:var(--text);padding:12px 20px;border-radius:20px;font-size:14px;z-index:999;opacity:0;transition:all 0.3s cubic-bezier(0.34,1.4,0.64,1);white-space:nowrap;pointer-events:none;box-shadow:0 8px 24px rgba(0,0,0,0.4);max-width:90vw;text-overflow:ellipsis;overflow:hidden;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+#recoveryScreen{background:var(--bg);overflow-y:auto;}
+.rec-wrap{max-width:400px;width:100%;padding:60px 20px 40px;margin:0 auto;text-align:center;}
+
+#restoreScreen{background:var(--bg);align-items:center;justify-content:center;overflow-y:auto;}
+.restore-inner{position:relative;z-index:1;width:100%;max-width:420px;padding:40px 24px;text-align:center;}
+
+.loading-screen{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;}
+.spinner{width:48px;height:48px;border:3px solid var(--border2);border-top-color:var(--accent);border-radius:50%;animation:spin 0.8s linear infinite;margin-bottom:16px;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.loading-screen.gone{display:none;}
+
+#installBanner{position:fixed;inset:0;z-index:9999;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity 0.35s;}
+#installBanner.visible{opacity:1;pointer-events:all;}
+.install-backdrop{position:absolute;inset:0;background:rgba(0,0,0,0.72);backdrop-filter:blur(10px);}
+.install-sheet{position:relative;z-index:1;width:100%;max-width:480px;background:var(--surface);border:1px solid var(--border2);border-radius:28px 28px 0 0;padding:0 24px 44px;transform:translateY(110%);transition:transform 0.5s cubic-bezier(0.34,1.12,0.64,1);}
+#installBanner.visible .install-sheet{transform:translateY(0);}
+.install-handle{width:38px;height:4px;background:var(--border2);border-radius:4px;margin:16px auto 20px;}
+.btn-install{width:100%;padding:16px;border:none;border-radius:var(--radius);background:linear-gradient(135deg,var(--accent),#a88fff);color:white;font-family:var(--font);font-size:16px;font-weight:800;cursor:pointer;margin-bottom:10px;}
+.btn-install-skip{width:100%;padding:12px;border:1px solid var(--border);border-radius:var(--radius);background:transparent;color:var(--text3);font-family:var(--font);font-size:13px;cursor:pointer;}
+
+@media(min-width:500px){.modal{border-radius:26px;margin-bottom:20px;}}
+
+/* CHANGE PIN */
+.cp-step{display:none;}
+.cp-step.active{display:block;}
+.mini-numpad{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;max-width:220px;margin:0 auto 12px;}
+.mini-numpad .np-btn{padding:15px;font-size:20px;}
+.mini-dots{display:flex;gap:10px;justify-content:center;margin-bottom:16px;}
+.mini-dot{width:12px;height:12px;border-radius:50%;border:2px solid var(--border2);transition:all 0.2s cubic-bezier(0.34,1.8,0.64,1);}
+.mini-dot.filled{background:var(--accent);border-color:var(--accent);transform:scale(1.2);}
+.mini-dot.ok{background:var(--accent3);border-color:var(--accent3);}
+.mini-dot.err{background:var(--danger);border-color:var(--danger);}
+
+/* NOMINEE APPROVAL OVERLAY (nominee ke phone pe) */
+#nomApprovalOverlay{position:fixed;inset:0;background:rgba(0,0,0,0.88);backdrop-filter:blur(16px);z-index:10000;display:none;align-items:center;justify-content:center;padding:20px;}
+#nomApprovalOverlay.active{display:flex;}
+.nom-approval-box{background:var(--surface);border:1px solid rgba(124,111,255,0.4);border-radius:28px;width:100%;max-width:380px;padding:28px 24px;box-shadow:0 20px 60px rgba(0,0,0,0.7),0 0 0 1px rgba(124,111,255,0.1);animation:approvalIn 0.5s cubic-bezier(0.34,1.4,0.64,1);}
+@keyframes approvalIn{from{opacity:0;transform:scale(0.85) translateY(20px);}to{opacity:1;transform:scale(1) translateY(0);}}
+.nom-approval-icon{width:64px;height:64px;border-radius:20px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:30px;margin:0 auto 16px;box-shadow:0 8px 24px rgba(124,111,255,0.5);}
+.nom-approval-title{font-size:18px;font-weight:800;text-align:center;margin-bottom:6px;}
+.nom-approval-sub{color:var(--text2);font-size:13px;text-align:center;margin-bottom:8px;line-height:1.5;}
+.nom-approval-user{background:rgba(124,111,255,0.08);border:1px solid rgba(124,111,255,0.2);border-radius:12px;padding:10px 14px;text-align:center;margin-bottom:20px;}
+.nom-approval-user span{font-size:16px;font-weight:700;color:var(--accent);}
+.nom-select-label{font-size:11px;color:var(--text3);font-family:var(--mono);letter-spacing:1px;text-align:center;margin-bottom:12px;text-transform:uppercase;}
+.nom-options-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;}
+.nom-opt-btn{padding:18px 10px;border-radius:16px;border:2px solid var(--border2);background:var(--surface2);color:var(--text);font-size:22px;font-weight:800;font-family:var(--mono);cursor:pointer;transition:all 0.2s;letter-spacing:2px;text-align:center;}
+.nom-opt-btn:active{transform:scale(0.95);}
+.nom-opt-btn:hover{border-color:var(--accent);background:rgba(124,111,255,0.1);}
+.nom-opt-btn.correct{border-color:var(--accent3);background:rgba(0,229,160,0.15);color:var(--accent3);animation:correctPulse 0.4s ease;}
+.nom-opt-btn.wrong{border-color:var(--danger);background:rgba(255,58,92,0.1);color:var(--danger);animation:shake 0.35s ease forwards;}
+@keyframes correctPulse{0%{transform:scale(1);}50%{transform:scale(1.08);}100%{transform:scale(1);}}
+.nom-approval-dismiss{width:100%;padding:12px;border:1px solid var(--border);border-radius:var(--radius-sm);background:transparent;color:var(--text3);font-family:var(--font);font-size:13px;cursor:pointer;}
+
+/* WAITING APPROVAL (naye phone pe) */
+#waitingApprovalScreen{background:var(--bg);align-items:center;justify-content:center;}
+.waiting-wrap{position:relative;z-index:1;text-align:center;width:100%;max-width:400px;padding:40px 28px;display:flex;flex-direction:column;align-items:center;}
+.waiting-pulse-ring{width:96px;height:96px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:44px;margin-bottom:28px;position:relative;box-shadow:0 8px 32px rgba(124,111,255,0.4);}
+.waiting-pulse-ring::before,.waiting-pulse-ring::after{content:'';position:absolute;inset:-8px;border-radius:50%;border:2px solid rgba(124,111,255,0.3);animation:waitPulse 2s ease-in-out infinite;}
+.waiting-pulse-ring::after{inset:-16px;animation-delay:0.5s;border-color:rgba(124,111,255,0.15);}
+@keyframes waitPulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.3;transform:scale(1.05);}}
+.waiting-code-box{background:linear-gradient(135deg,rgba(124,111,255,0.1),rgba(255,95,126,0.07));border:1px solid rgba(124,111,255,0.3);border-radius:20px;padding:20px 28px;margin:20px 0;}
+.waiting-code-label{font-size:11px;color:var(--text3);font-family:var(--mono);letter-spacing:1px;margin-bottom:8px;}
+.waiting-code-val{font-size:38px;font-weight:800;font-family:var(--mono);letter-spacing:6px;color:var(--accent);text-shadow:0 0 20px rgba(124,111,255,0.4);}
+.waiting-hint{color:var(--text2);font-size:13px;line-height:1.6;margin-bottom:24px;}
+.waiting-cancel-btn{padding:12px 24px;border:1px solid var(--border2);border-radius:var(--radius-sm);background:transparent;color:var(--text3);font-family:var(--font);font-size:13px;cursor:pointer;}
+
+/* FINGERPRINT BUTTON */
+.fp-unlock-btn{display:none;flex-direction:column;align-items:center;gap:8px;background:none;border:none;cursor:pointer;margin-top:4px;}
+.fp-unlock-btn.show{display:flex;}
+.fp-circle{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(124,111,255,0.5);transition:all 0.2s;position:relative;}
+.fp-circle:active{transform:scale(0.93);}
+.fp-circle svg path{transition:stroke 0.3s;}
+.fp-unlock-btn.scanning .fp-circle{box-shadow:0 0 0 0 rgba(124,111,255,0.5);animation:fpPulse 1.2s ease-in-out infinite;}
+.fp-unlock-btn.scanning .fp-circle svg path{stroke:white;}
+@keyframes fpPulse{0%{box-shadow:0 0 0 0 rgba(124,111,255,0.6);}70%{box-shadow:0 0 0 18px rgba(124,111,255,0);}100%{box-shadow:0 0 0 0 rgba(124,111,255,0);}}
+.fp-unlock-btn.success .fp-circle{background:linear-gradient(135deg,var(--accent3),#00b377);}
+.fp-unlock-btn.error .fp-circle{background:linear-gradient(135deg,var(--danger),#c0392b);}
+.fp-label{font-size:11px;color:var(--text3);font-family:var(--mono);letter-spacing:1px;}
+.fp-divider{display:none;align-items:center;gap:10px;margin:10px 0 2px;width:100%;}
+.fp-divider.show{display:flex;}
+.fp-divider::before,.fp-divider::after{content:'';flex:1;height:1px;background:var(--border);}
+.fp-divider span{font-size:11px;color:var(--text3);font-family:var(--mono);}
+
+/* Profile toggle for fingerprint */
+.toggle-switch{position:relative;width:44px;height:24px;flex-shrink:0;}
+.toggle-switch input{opacity:0;width:0;height:0;}
+.toggle-slider{position:absolute;inset:0;background:var(--border2);border-radius:24px;cursor:pointer;transition:0.3s;}
+.toggle-slider::before{content:'';position:absolute;width:18px;height:18px;left:3px;top:3px;background:white;border-radius:50%;transition:0.3s;}
+.toggle-switch input:checked+.toggle-slider{background:var(--accent);}
+.toggle-switch input:checked+.toggle-slider::before{transform:translateX(20px);}
+
+/* ── LIQUID-GLASS SYSTEM ── */
+.liquid-glass{
+  background:rgba(255,255,255,0.04);
+  background-blend-mode:luminosity;
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+  border:none;
+  box-shadow:inset 0 1px 1px rgba(255,255,255,0.1);
+  position:relative;
+  overflow:hidden;
+}
+.liquid-glass::before{
+  content:"";
+  position:absolute;inset:0;
+  border-radius:inherit;
+  padding:1.4px;
+  background:linear-gradient(180deg,
+    rgba(255,255,255,0.45) 0%,
+    rgba(255,255,255,0.15) 20%,
+    rgba(255,255,255,0) 40%,
+    rgba(255,255,255,0) 60%,
+    rgba(255,255,255,0.15) 80%,
+    rgba(255,255,255,0.45) 100%);
+  -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+  -webkit-mask-composite:xor;
+  mask-composite:exclude;
+  pointer-events:none;
+}
+.liquid-glass-strong{
+  background:rgba(255,255,255,0.06);
+  background-blend-mode:luminosity;
+  backdrop-filter:blur(50px);
+  -webkit-backdrop-filter:blur(50px);
+  border:none;
+  box-shadow:4px 4px 4px rgba(0,0,0,0.08),inset 0 1px 1px rgba(255,255,255,0.18);
+  position:relative;
+  overflow:hidden;
+}
+.liquid-glass-strong::before{
+  content:"";
+  position:absolute;inset:0;
+  border-radius:inherit;
+  padding:1.4px;
+  background:linear-gradient(180deg,
+    rgba(255,255,255,0.5) 0%,
+    rgba(255,255,255,0.2) 20%,
+    rgba(255,255,255,0) 40%,
+    rgba(255,255,255,0) 60%,
+    rgba(255,255,255,0.2) 80%,
+    rgba(255,255,255,0.5) 100%);
+  -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+  -webkit-mask-composite:xor;
+  mask-composite:exclude;
+  pointer-events:none;
+}
+
+/* ── GLASS BOTTOM NAVBAR ── */
+.glass-navbar{
+  position:fixed;
+  bottom:16px;
+  left:50%;
+  transform:translateX(-50%);
+  z-index:100;
+  display:flex;
+  align-items:center;
+  gap:2px;
+  padding:5px;
+  border-radius:9999px;
+  background:rgba(10,10,28,0.72);
+  backdrop-filter:blur(30px);
+  -webkit-backdrop-filter:blur(30px);
+  box-shadow:0 8px 32px rgba(0,0,0,0.45),inset 0 1px 1px rgba(255,255,255,0.1),0 0 0 1px rgba(255,255,255,0.08);
+  width:calc(100% - 32px);
+  max-width:420px;
+}
+.glass-navbar::before{
+  content:"";
+  position:absolute;inset:0;
+  border-radius:9999px;
+  padding:1px;
+  background:linear-gradient(180deg,rgba(255,255,255,0.3) 0%,rgba(255,255,255,0.05) 50%,rgba(255,255,255,0.15) 100%);
+  -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+  -webkit-mask-composite:xor;
+  mask-composite:exclude;
+  pointer-events:none;
+}
+.gnav-pill{
+  position:absolute;
+  top:5px;
+  height:calc(100% - 10px);
+  border-radius:9999px;
+  background:rgba(124,111,255,0.22);
+  box-shadow:0 2px 12px rgba(124,111,255,0.3),inset 0 1px 1px rgba(255,255,255,0.15);
+  transition:left 0.38s cubic-bezier(0.34,1.4,0.64,1),width 0.38s cubic-bezier(0.34,1.4,0.64,1);
+  pointer-events:none;
+  z-index:0;
+}
+.gnav-pill::before{
+  content:"";
+  position:absolute;inset:0;
+  border-radius:inherit;
+  padding:1px;
+  background:linear-gradient(180deg,rgba(255,255,255,0.45) 0%,rgba(255,255,255,0) 60%,rgba(255,255,255,0.2) 100%);
+  -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+  -webkit-mask-composite:xor;
+  mask-composite:exclude;
+  pointer-events:none;
+}
+.gnav-item{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:3px;
+  padding:8px 4px;
+  cursor:pointer;
+  position:relative;
+  z-index:1;
+  border-radius:9999px;
+  transition:all 0.2s;
+  -webkit-tap-highlight-color:transparent;
+  user-select:none;
+}
+.gnav-icon{font-size:17px;line-height:1;transition:transform 0.3s cubic-bezier(0.34,1.6,0.64,1);}
+.gnav-label{font-size:9.5px;font-weight:600;color:rgba(255,255,255,0.45);font-family:'Barlow',sans-serif;letter-spacing:0.3px;transition:color 0.25s;}
+.gnav-item.active .gnav-icon{transform:scale(1.15);}
+.gnav-item.active .gnav-label{color:rgba(255,255,255,0.95);}
+
+/* ── GLASS BUTTONS ── */
+.btn-glass{
+  width:100%;max-width:360px;
+  padding:15px 20px;
+  border:none;
+  border-radius:9999px;
+  color:white;
+  font-family:'Barlow',sans-serif;
+  font-size:15px;font-weight:600;
+  cursor:pointer;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  transition:transform 0.15s,box-shadow 0.15s;
+  background:linear-gradient(135deg,rgba(124,111,255,0.7),rgba(167,139,255,0.6));
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  box-shadow:0 4px 20px rgba(124,111,255,0.35),inset 0 1px 1px rgba(255,255,255,0.2);
+  position:relative;overflow:hidden;
+}
+.btn-glass::before{
+  content:"";position:absolute;inset:0;border-radius:inherit;padding:1px;
+  background:linear-gradient(180deg,rgba(255,255,255,0.5) 0%,rgba(255,255,255,0) 60%,rgba(255,255,255,0.2) 100%);
+  -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;
+}
+.btn-glass:active{transform:scale(0.97);}
+
+/* ── GLASS CARDS (override pw-card, prof-item) ── */
+.pw-card{
+  background:rgba(255,255,255,0.04) !important;
+  border:none !important;
+  border-radius:18px !important;
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+  box-shadow:0 4px 16px rgba(0,0,0,0.3),inset 0 1px 1px rgba(255,255,255,0.08) !important;
+  position:relative;overflow:hidden;
+}
+.pw-card::before{
+  content:"";position:absolute;inset:0;border-radius:inherit;padding:1px;
+  background:linear-gradient(180deg,rgba(255,255,255,0.22) 0%,rgba(255,255,255,0.04) 50%,rgba(255,255,255,0.1) 100%);
+  -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;
+}
+.pw-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,0.4),inset 0 1px 1px rgba(255,255,255,0.1) !important;}
+
+.prof-item{
+  background:rgba(255,255,255,0.04) !important;
+  border:none !important;
+  border-radius:16px !important;
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+  box-shadow:0 4px 16px rgba(0,0,0,0.25),inset 0 1px 1px rgba(255,255,255,0.08);
+  position:relative;overflow:hidden;
+  transition:transform 0.2s,box-shadow 0.2s;
+}
+.prof-item::before{
+  content:"";position:absolute;inset:0;border-radius:inherit;padding:1px;
+  background:linear-gradient(180deg,rgba(255,255,255,0.2) 0%,rgba(255,255,255,0.03) 50%,rgba(255,255,255,0.1) 100%);
+  -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;
+}
+.prof-item:active{transform:scale(0.99);}
+
+.code-card{
+  background:rgba(124,111,255,0.08) !important;
+  border:none !important;
+  border-radius:20px !important;
+  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
+  box-shadow:0 4px 20px rgba(124,111,255,0.15),inset 0 1px 1px rgba(255,255,255,0.1);
+  position:relative;overflow:hidden;
+}
+.code-card::before{
+  content:"";position:absolute;inset:0;border-radius:inherit;padding:1px;
+  background:linear-gradient(180deg,rgba(255,255,255,0.3) 0%,rgba(255,255,255,0.05) 50%,rgba(255,255,255,0.15) 100%);
+  -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;
+}
+
+.nominee-card, .shared-card, .req-card{
+  background:rgba(255,255,255,0.04) !important;
+  border:none !important;
+  border-radius:18px !important;
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+  box-shadow:0 4px 16px rgba(0,0,0,0.25),inset 0 1px 1px rgba(255,255,255,0.08);
+  position:relative;overflow:hidden;
+}
+.nominee-card::before,.shared-card::before,.req-card::before{
+  content:"";position:absolute;inset:0;border-radius:inherit;padding:1px;
+  background:linear-gradient(180deg,rgba(255,255,255,0.2) 0%,rgba(255,255,255,0.03) 50%,rgba(255,255,255,0.1) 100%);
+  -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;
+}
+
+/* App header glass */
+.app-header{
+  background:rgba(5,5,16,0.75) !important;
+  backdrop-filter:blur(30px) !important;
+  -webkit-backdrop-filter:blur(30px) !important;
+  border-bottom:1px solid rgba(255,255,255,0.07) !important;
+}
+
+/* icon-btn glass */
+.icon-btn{
+  border-radius:50% !important;
+  background:rgba(255,255,255,0.06) !important;
+  border:1px solid rgba(255,255,255,0.1) !important;
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+}
+
+/* pill-btn glass */
+.pill-btn{
+  border-radius:9999px !important;
+  background:rgba(255,255,255,0.06) !important;
+  border:1px solid rgba(255,255,255,0.1) !important;
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+  color:var(--text2) !important;
+}
+.pill-btn.red{
+  background:rgba(255,58,92,0.08) !important;
+  border-color:rgba(255,95,126,0.25) !important;
+  color:var(--accent2) !important;
+}
+
+/* np-btn (numpad) glass style */
+.np-btn{
+  background:rgba(255,255,255,0.06) !important;
+  border:1px solid rgba(255,255,255,0.08) !important;
+  border-radius:16px !important;
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+  color:var(--text) !important;
+}
+.np-btn:active{background:rgba(124,111,255,0.2) !important;transform:scale(0.93);}
+
+/* modal glass */
+.modal{
+  background:rgba(15,15,34,0.82) !important;
+  border:none !important;
+  border-radius:28px 28px 0 0 !important;
+  backdrop-filter:blur(40px);
+  -webkit-backdrop-filter:blur(40px);
+  box-shadow:0 -8px 40px rgba(0,0,0,0.5),inset 0 1px 1px rgba(255,255,255,0.1);
+}
+@media(min-width:500px){.modal{border-radius:28px !important;}}
+
+/* detail card glass */
+.detail-card{
+  background:rgba(255,255,255,0.04) !important;
+  border:none !important;
+  border-radius:20px !important;
+  backdrop-filter:blur(12px);
+  box-shadow:0 4px 16px rgba(0,0,0,0.25),inset 0 1px 1px rgba(255,255,255,0.08);
+  overflow:hidden;
+}
+
+/* Tab content scroll fix for glass navbar */
+.tab-content{padding-bottom:96px !important;}
+</style>
+</head>
+<body>
+
+<!-- LOADING -->
+<div class="loading-screen" id="loadingScreen">
+  <div class="spinner"></div>
+  <div style="color:var(--text2);font-size:14px;font-family:var(--mono);">Loading BhaiVault...</div>
+</div>
+
+<!-- WELCOME -->
+<div class="screen" id="welcomeScreen">
+  <div class="ambient"><div class="grid"></div><div class="orb orb-1"></div><div class="orb orb-2"></div><div class="orb orb-3"></div></div>
+  <div class="stars-bg" id="starsEl"></div>
+  <div class="w-wrap">
+    <div class="w-badge"><div class="bdot"></div>SECURE · CLOUD · NOMINEE SYSTEM</div>
+    <div class="w-icon">🔐</div>
+    <div class="w-title">BhaiVault</div>
+    <div class="w-sub">Passwords kabhi nahi jaayenge — Cloud mein safe, Nominees se recoverable, Bhaion ke liye banaya.</div>
+    <div class="w-pills"><div class="w-pill">🔒 Encrypted</div><div class="w-pill">☁️ Cloud</div><div class="w-pill">👥 Nominees</div><div class="w-pill">⚡ Fast</div></div>
+    <button class="btn-welcome" onclick="showSetup()"><span>✨</span><span>Naya Vault Banao</span><span>→</span></button>
+    <div class="w-login">Pehle se account hai? <a onclick="showRestore()">Restore karo →</a></div>
+    <div style="margin-top:28px;font-size:12px;font-family:var(--mono);color:var(--text3);letter-spacing:0.5px;animation:fadeUp 0.7s ease 0.7s both;">Made with <span style="color:#ff5f7e;font-size:14px;">♥</span> by <span style="background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:700;">Chaman</span></div>
+  </div>
+</div>
+
+<!-- SETUP -->
+<div class="screen" id="setupScreen">
+  <div class="ambient" style="opacity:0.5;"><div class="grid"></div><div class="orb orb-1"></div><div class="orb orb-2"></div></div>
+  <div class="s-topbar">
+    <button class="back-btn" id="sBackBtn" onclick="setupBack()">←</button>
+    <div class="prog-bar">
+      <div class="pdot active" id="pd0"></div><div class="pdot todo" id="pd1"></div>
+      <div class="pdot todo" id="pd2"></div><div class="pdot todo" id="pd3"></div><div class="pdot todo" id="pd4"></div>
+    </div>
+    <div style="width:40px;"></div>
+  </div>
+  <div class="setup-page active" id="sp0">
+    <div class="page-icon">🔐</div>
+    <div class="page-title">BhaiVault mein Swagat!</div>
+    <div class="page-sub">Cloud mein safe, PIN se locked, Nominees se recoverable. Ek baar setup — hamesha ke liye.</div>
+    <button class="btn-primary" onclick="setupNext()">Shuru Karo →</button>
+  </div>
+  <div class="setup-page" id="sp1">
+    <div class="page-icon">👤</div>
+    <div class="page-title">Apna naam batao</div>
+    <div class="page-sub">Recovery ke waqt kaam aayega.</div>
+    <div class="form-group"><label>POORA NAAM</label><input type="text" id="sName" placeholder="Apna naam" oninput="checkP1()"/></div>
+    <button class="btn-primary" id="p1btn" onclick="goP1()" disabled>Aage →</button>
+  </div>
+  <div class="setup-page" id="sp2">
+    <div class="page-icon">🔑</div>
+    <div class="page-title">Recovery details</div>
+    <div class="page-sub">PIN bhool gaye toh ye kaam aayega. Dhyan se bharo!</div>
+    <div class="form-group"><label>DATE OF BIRTH</label><input type="date" id="sDob" oninput="checkP2()"/></div>
+    <div class="form-group"><label>SECRET WORD</label><input type="text" id="sSecret" placeholder="Jaise: pehli dost ka naam" oninput="checkP2()"/></div>
+    <button class="btn-primary" id="p2btn" onclick="setupNext()" disabled>Aage →</button>
+  </div>
+  <div class="setup-page" id="sp3">
+    <div class="page-icon">🔢</div>
+    <div class="page-title">4-digit PIN banao</div>
+    <div class="page-sub">Ye PIN vault kholne ke liye. Easy rakho — DOB wala mat rakho.</div>
+    <div>
+      <div class="pin-dots" style="margin-bottom:20px;"><div class="pin-dot" id="ss0"></div><div class="pin-dot" id="ss1"></div><div class="pin-dot" id="ss2"></div><div class="pin-dot" id="ss3"></div></div>
+      <div class="setup-numpad">
+        <button class="np-btn" onclick="sPinTap(1)">1</button><button class="np-btn" onclick="sPinTap(2)">2</button><button class="np-btn" onclick="sPinTap(3)">3</button>
+        <button class="np-btn" onclick="sPinTap(4)">4</button><button class="np-btn" onclick="sPinTap(5)">5</button><button class="np-btn" onclick="sPinTap(6)">6</button>
+        <button class="np-btn" onclick="sPinTap(7)">7</button><button class="np-btn" onclick="sPinTap(8)">8</button><button class="np-btn" onclick="sPinTap(9)">9</button>
+        <button class="np-btn" onclick="sPinClr()" style="font-size:14px;">Clear</button><button class="np-btn" onclick="sPinTap(0)">0</button><button class="np-btn" onclick="sPinClr()" style="font-size:18px;">⌫</button>
+      </div>
+    </div>
+  </div>
+  <div class="setup-page" id="sp4">
+    <div class="page-icon">✅</div>
+    <div class="page-title">PIN Confirm Karo</div>
+    <div class="page-sub" id="cPinSub">Same PIN dobara daalo</div>
+    <div>
+      <div class="pin-dots" style="margin-bottom:20px;"><div class="pin-dot" id="sc0"></div><div class="pin-dot" id="sc1"></div><div class="pin-dot" id="sc2"></div><div class="pin-dot" id="sc3"></div></div>
+      <div class="setup-numpad">
+        <button class="np-btn" onclick="cPinTap(1)">1</button><button class="np-btn" onclick="cPinTap(2)">2</button><button class="np-btn" onclick="cPinTap(3)">3</button>
+        <button class="np-btn" onclick="cPinTap(4)">4</button><button class="np-btn" onclick="cPinTap(5)">5</button><button class="np-btn" onclick="cPinTap(6)">6</button>
+        <button class="np-btn" onclick="cPinTap(7)">7</button><button class="np-btn" onclick="cPinTap(8)">8</button><button class="np-btn" onclick="cPinTap(9)">9</button>
+        <button class="np-btn" onclick="cPinClr()" style="font-size:14px;">Clear</button><button class="np-btn" onclick="cPinTap(0)">0</button><button class="np-btn" onclick="cPinClr()" style="font-size:18px;">⌫</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- LOCK -->
+<div class="screen" id="lockScreen">
+  <div class="ambient"><div class="grid"></div><div class="orb orb-1"></div><div class="orb orb-2"></div><div class="orb orb-3"></div></div>
+  <div class="lock-wrap">
+    <div class="lock-logo">🔐</div>
+    <div class="lock-title">BhaiVault</div>
+    <div class="lock-sub-txt">APNA PIN DAALO</div>
+    <div class="float-field" id="floatField"></div>
+    <div class="lock-dots">
+      <div class="lock-dot" id="ld0"></div><div class="lock-dot" id="ld1"></div>
+      <div class="lock-dot" id="ld2"></div><div class="lock-dot" id="ld3"></div>
+    </div>
+    <div class="lock-hint" id="lockHint">Koi bhi 4 number tap karo sequence mein</div>
+    <div class="fp-divider" id="fpDivider"><span>YA</span></div>
+    <button class="fp-unlock-btn" id="fpUnlockBtn" onclick="doFpUnlock()">
+      <div class="fp-circle">
+        <svg width="32" height="32" viewBox="0 0 100 100" fill="none">
+          <path d="M50 15 C30 15 15 30 15 50" stroke="white" stroke-width="5" stroke-linecap="round"/>
+          <path d="M50 15 C70 15 85 30 85 50" stroke="white" stroke-width="5" stroke-linecap="round"/>
+          <path d="M25 68 C20 60 18 55 20 45 C22 35 30 26 42 22" stroke="white" stroke-width="5" stroke-linecap="round"/>
+          <path d="M75 68 C80 60 82 55 80 45 C78 35 70 26 58 22" stroke="white" stroke-width="5" stroke-linecap="round"/>
+          <path d="M35 72 C28 65 26 57 30 48 C34 39 42 33 50 33 C58 33 66 39 70 48 C74 57 72 65 65 72" stroke="white" stroke-width="5" stroke-linecap="round"/>
+          <path d="M42 76 C38 71 36 64 40 56 C43 49 50 45 57 47 C64 49 67 56 65 64 C63 70 58 74 52 75" stroke="white" stroke-width="5" stroke-linecap="round"/>
+          <path d="M50 78 C46 75 44 70 46 64 C48 58 53 55 58 57" stroke="white" stroke-width="5" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="fp-label">FINGERPRINT SE KHOLО</div>
+    </button>
+    <div class="lock-pills">
+      <button class="pill-btn" onclick="genFloatNums()">🔄 Badlo</button>
+      <button class="pill-btn red" onclick="showRecovery()">🆘 PIN Bhula?</button>
+    </div>
+  </div>
+</div>
+
+<!-- RESTORE (new phone) -->
+<div class="screen" id="restoreScreen">
+  <div class="ambient"><div class="grid"></div><div class="orb orb-1"></div><div class="orb orb-2"></div></div>
+  <div class="restore-inner">
+    <div style="font-size:48px;margin-bottom:16px;">📲</div>
+    <h2 style="font-size:28px;font-weight:800;margin-bottom:8px;">Account Restore</h2>
+    <p style="color:var(--text2);font-size:14px;margin-bottom:20px;line-height:1.6;">Naam, DOB aur Secret Word se account dhundho. Link Code yaad ho toh bharo — warna khaali chhod do.</p>
+    <div class="form-group" style="text-align:left;max-width:360px;margin:0 auto 0;">
+      <label>POORA NAAM <span style="color:var(--danger);">*</span></label>
+      <input type="text" id="restName" placeholder="Apna poora naam"/>
+    </div>
+    <div class="form-group" style="text-align:left;max-width:360px;margin:0 auto 0;">
+      <label>DATE OF BIRTH <span style="color:var(--danger);">*</span></label>
+      <input type="date" id="restDob"/>
+    </div>
+    <div class="form-group" style="text-align:left;max-width:360px;margin:0 auto 0;">
+      <label>SECRET WORD <span style="color:var(--danger);">*</span></label>
+      <input type="text" id="restSecret" placeholder="Apna secret word"/>
+    </div>
+    <div class="form-group" style="text-align:left;max-width:360px;margin:0 auto 0;">
+      <label style="color:var(--text3);">LINK CODE <span style="color:var(--text3);font-weight:400;">(optional — yaad ho toh)</span></label>
+      <input type="text" id="restCode" placeholder="BHAI-XXXX-XXXX (optional)" style="text-transform:uppercase;font-family:var(--mono);font-size:15px;letter-spacing:1px;" oninput="this.value=this.value.toUpperCase()"/>
+    </div>
+    <button class="btn-primary" onclick="doRestore()" style="display:block;margin:16px auto 0;">🔓 Restore Karo →</button>
+    <button class="btn-secondary" onclick="showScreen('welcomeScreen')" style="display:block;margin:8px auto 0;">← Wapas</button>
+  </div>
+</div>
+
+<!-- WAITING FOR NOMINEE APPROVAL (naya phone) -->
+<div class="screen" id="waitingApprovalScreen">
+  <div class="ambient"><div class="grid"></div><div class="orb orb-1"></div><div class="orb orb-2"></div><div class="orb orb-3"></div></div>
+  <div class="waiting-wrap">
+    <div class="waiting-pulse-ring">🔐</div>
+    <div style="font-size:24px;font-weight:800;margin-bottom:8px;">Nominee Approval Pending</div>
+    <div class="waiting-hint">Ye 4-digit code apne nominee ko batao. Unke phone pe popup aayega — sahi number select karte hi yahan unlock ho jaayega!</div>
+    <div class="waiting-code-box">
+      <div class="waiting-code-label">NOMINEE KO YE CODE BATAO</div>
+      <div class="waiting-code-val" id="waitingCodeVal">----</div>
+    </div>
+    <!-- Timer -->
+    <div style="margin-bottom:20px;width:100%;max-width:300px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+        <span style="color:var(--text3);font-size:11px;font-family:var(--mono);">TIME REMAINING</span>
+        <span id="timerDisplay" style="color:var(--accent4);font-size:14px;font-weight:700;font-family:var(--mono);">5:00</span>
+      </div>
+      <div style="height:4px;background:var(--border);border-radius:4px;overflow:hidden;">
+        <div id="timerBar" style="height:100%;background:linear-gradient(90deg,var(--accent3),var(--accent4));border-radius:4px;width:100%;transition:width 1s linear;"></div>
+      </div>
+      <div style="color:var(--text3);font-size:11px;font-family:var(--mono);margin-top:6px;text-align:center;" id="timerHint">Time khatam hone pe naya code auto-generate hoga</div>
+    </div>
+    <button class="waiting-cancel-btn" onclick="cancelWaitingApproval()">✕ Cancel</button>
+  </div>
+</div>
+
+<!-- MAIN APP -->
+<div class="screen" id="mainScreen">
+  <div class="app-header">
+    <div class="app-logo">
+      <div class="logo-icon">🔐</div>
+      <div class="logo-txt">BhaiVault</div>
+    </div>
+    <div class="hdr-acts">
+      <button class="icon-btn" id="notifBtn" onclick="showTab('nominees')" title="Requests">
+        🔔<span class="nbadge" id="notifBadge">0</span>
+      </button>
+      <button class="icon-btn" onclick="confirmLogout()" title="Lock">🔒</button>
+    </div>
+  </div>
+  <!-- GLASS BOTTOM NAVBAR -->
+  <div class="glass-navbar" id="glassNavbar">
+    <div class="gnav-pill" id="gnavPill"></div>
+    <div class="gnav-item active" id="tab-vault" onclick="showTab('vault')" data-tab="vault">
+      <div class="gnav-icon">🔑</div>
+      <div class="gnav-label">Vault</div>
+    </div>
+    <div class="gnav-item" id="tab-shared" onclick="showTab('shared')" data-tab="shared">
+      <div class="gnav-icon">🔗</div>
+      <div class="gnav-label">Shared</div>
+    </div>
+    <div class="gnav-item" id="tab-nominees" onclick="showTab('nominees')" data-tab="nominees">
+      <div class="gnav-icon">👥</div>
+      <div class="gnav-label">Nominees</div>
+    </div>
+    <div class="gnav-item" id="tab-profile" onclick="showTab('profile')" data-tab="profile">
+      <div class="gnav-icon">👤</div>
+      <div class="gnav-label">Profile</div>
+    </div>
+  </div>
+
+  <!-- VAULT -->
+  <div class="tab-content" id="content-vault">
+    <div class="search-wrap"><span class="si">🔍</span><input type="text" id="searchInput" placeholder="Search karo..." oninput="searchPw()"/></div>
+    <div id="pwList"></div>
+  </div>
+
+  <!-- SHARED -->
+  <div class="tab-content" id="content-shared" style="display:none;">
+    <div class="sec-label" style="margin-bottom:12px;">NOMINEES KE SHARED PASSWORDS</div>
+    <div id="sharedList"></div>
+  </div>
+
+  <!-- NOMINEES -->
+  <div class="tab-content" id="content-nominees" style="display:none;">
+    <div id="pendingSection" style="display:none;margin-bottom:16px;">
+      <div class="sec-label">⏳ PENDING REQUESTS</div>
+      <div id="pendingList"></div>
+    </div>
+    <div class="code-card">
+      <div class="code-label">MERA LINK CODE — Nominee ko do</div>
+      <div class="code-val" id="myCode">BHAI-????-????</div>
+      <div class="code-btns">
+        <button onclick="copyCode()">📋 Copy</button>
+        <button onclick="shareCode()" style="border-color:rgba(0,229,160,0.4);color:var(--accent3);">📤 Share</button>
+      </div>
+    </div>
+    <div class="sec-label">MERE NOMINEES</div>
+    <div id="nomList"></div>
+    <button class="btn-primary" id="addNomBtn" onclick="showAddNomModal()" style="margin-top:8px;">+ Nominee Add Karo</button>
+    <div id="nomForSec" style="margin-top:20px;display:none;">
+      <div class="sec-label">MAIN NOMINEE HUN IN KA</div>
+      <div id="nomForList"></div>
+    </div>
+  </div>
+
+  <!-- PROFILE -->
+  <div class="tab-content" id="content-profile" style="display:none;">
+    <div class="prof-section">
+      <h3>Account</h3>
+      <div class="prof-item" onclick="showProfInfo()">
+        <div class="prof-item-l"><div class="prof-item-ico">👤</div><div class="prof-item-txt"><h4 id="profName">—</h4><p id="profDob">—</p></div></div>
+        <div style="color:var(--text3);">›</div>
+      </div>
+      <div class="prof-item" onclick="showLinkCodeInfo()">
+        <div class="prof-item-l"><div class="prof-item-ico">🔗</div><div class="prof-item-txt"><h4>Link Code</h4><p id="profCode">—</p></div></div>
+        <div style="color:var(--text3);">›</div>
+      </div>
+    </div>
+    <div class="prof-section">
+      <h3>Security</h3>
+      <div class="prof-item" onclick="showChangePinModal()">
+        <div class="prof-item-l"><div class="prof-item-ico">🔢</div><div class="prof-item-txt"><h4>PIN Change Karo</h4><p>Purana PIN verify karke naya set karo</p></div></div>
+        <div style="color:var(--text3);">›</div>
+      </div>
+      <div class="prof-item" id="fpToggleItem" style="cursor:default;">
+        <div class="prof-item-l"><div class="prof-item-ico">👆</div><div class="prof-item-txt"><h4>Fingerprint Unlock</h4><p id="fpToggleSub">Loading...</p></div></div>
+        <label class="toggle-switch" onclick="event.stopPropagation()">
+          <input type="checkbox" id="fpToggle" onchange="onFpToggleChange(this.checked)">
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+    </div>
+    <div class="prof-section">
+      <h3>Backup</h3>
+      <div class="prof-item" onclick="exportVault()">
+        <div class="prof-item-l"><div class="prof-item-ico">📤</div><div class="prof-item-txt"><h4>Export Vault</h4><p>JSON backup download karo</p></div></div>
+        <div style="color:var(--text3);">›</div>
+      </div>
+      <div class="prof-item" onclick="importVault()">
+        <div class="prof-item-l"><div class="prof-item-ico">📥</div><div class="prof-item-txt"><h4>Import Vault</h4><p>Backup restore karo</p></div></div>
+        <div style="color:var(--text3);">›</div>
+      </div>
+    </div>
+    <div class="prof-section">
+      <h3>Recovery</h3>
+      <div class="prof-item" onclick="showRecovery()">
+        <div class="prof-item-l"><div class="prof-item-ico">🆘</div><div class="prof-item-txt"><h4>PIN Recovery</h4><p>PIN bhool gaye? Yahan jaao</p></div></div>
+        <div style="color:var(--text3);">›</div>
+      </div>
+    </div>
+    <div class="prof-section">
+      <h3>Notifications</h3>
+      <div class="prof-item" id="notifPermItem" onclick="requestNotifPermission()">
+        <div class="prof-item-l"><div class="prof-item-ico" id="notifPermIco">🔔</div><div class="prof-item-txt"><h4 id="notifPermTitle">Notifications Enable Karo</h4><p id="notifPermSub">Nominee approval alerts ke liye zaroori hai</p></div></div>
+        <div style="color:var(--text3);" id="notifPermArrow">›</div>
+      </div>
+    </div>
+    <div class="prof-section">
+      <h3>Danger Zone</h3>
+      <button class="danger-btn" onclick="confirmLogout()">🔒 App Lock Karo</button>
+      <button class="danger-btn" onclick="confirmDeleteAll()">🗑️ Sab Delete Karo</button>
+    </div>
+    <div style="text-align:center;padding:24px 0 8px;font-size:12px;font-family:var(--mono);color:var(--text3);letter-spacing:0.5px;">Made with <span style="color:#ff5f7e;font-size:14px;">♥</span> by <span style="background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:700;">Chaman</span></div>
+  </div>
+
+  <button class="fab" id="mainFab" onclick="showAddPwModal()">+</button>
+</div>
+
+<!-- RECOVERY -->
+<div class="screen" id="recoveryScreen">
+  <div class="ambient" style="opacity:0.4;"><div class="orb orb-1"></div><div class="orb orb-2"></div></div>
+  <div class="rec-wrap">
+    <div style="font-size:48px;margin-bottom:12px;">🆘</div>
+    <h2 style="font-size:26px;font-weight:800;margin-bottom:8px;">PIN Recovery</h2>
+    <p style="color:var(--text2);font-size:14px;margin-bottom:24px;">Apna naam, DOB aur secret word daalo.</p>
+    <div class="form-group" style="text-align:left;"><label>POORA NAAM</label><input type="text" id="recName" placeholder="Apna naam"/></div>
+    <div class="form-group" style="text-align:left;"><label>DATE OF BIRTH</label><input type="date" id="recDob"/></div>
+    <div class="form-group" style="text-align:left;"><label>SECRET WORD</label><input type="text" id="recSecret" placeholder="Secret word"/></div>
+    <div id="recStep2" style="display:none;margin-top:16px;">
+      <div style="color:var(--accent3);font-size:14px;margin-bottom:16px;">✅ Identity verify ho gayi! Naya PIN set karo:</div>
+      <div class="form-group" style="text-align:left;"><label>NAYA 4-DIGIT PIN</label><input type="text" inputmode="numeric" maxlength="4" id="newPin" placeholder="4 digits"/></div>
+      <button class="btn-primary" onclick="doResetPin()">✅ PIN Reset Karo</button>
+    </div>
+    <div id="recStep1Btns"><button class="btn-primary" onclick="startRecovery()">Verify Karo →</button></div>
+    <button class="btn-secondary" onclick="showLock()">← Wapas</button>
+  </div>
+</div>
+
+<!-- MODALS -->
+
+<!-- ADD/EDIT PW -->
+<div class="modal-overlay" id="addPwModal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">🔑 <span id="addPwTitle">Password Add Karo</span></div>
+    <div style="margin-bottom:12px;">
+      <label style="display:block;color:var(--text3);font-size:11px;font-family:var(--mono);margin-bottom:8px;letter-spacing:1px;">APP ICON</label>
+      <div class="emoji-picker" id="emojiPicker"></div>
+    </div>
+    <div class="form-group"><label>APP / WEBSITE NAAM</label><input type="text" id="pwApp" placeholder="Jaise: Instagram"/></div>
+    <div class="form-group"><label>USERNAME / EMAIL</label><input type="text" id="pwUser" placeholder="username ya email"/></div>
+    <div class="form-group"><label>PASSWORD</label>
+      <div class="pw-field-wrap">
+        <input type="password" id="pwPass" placeholder="Password"/>
+        <div class="field-acts">
+          <button class="field-btn" onclick="togglePwVis()" id="pwVisBtn">👁️</button>
+          <button class="field-btn" onclick="genPw()">🎲</button>
+        </div>
+      </div>
+    </div>
+    <div class="form-group"><label>NOTE (optional)</label><input type="text" id="pwNote" placeholder="Extra info..."/></div>
+    <div class="toggle-row"><input type="checkbox" id="pwScreenlock"/><label for="pwScreenlock" style="color:var(--warn);">📱 Phone ka Screen Lock hai</label></div>
+    <div class="toggle-row"><input type="checkbox" id="pwShared" style="accent-color:var(--accent3);"/><label for="pwShared" style="color:var(--accent3);">🔗 Nominees ke saath share karo (real-time)</label></div>
+    <div class="toggle-row" style="margin-bottom:20px;"><input type="checkbox" id="pwFav" style="accent-color:var(--accent4);"/><label for="pwFav" style="color:var(--accent4);">⭐ Favourite</label></div>
+    <button class="btn-primary" onclick="savePw()" style="max-width:100%;margin-bottom:8px;">💾 Save Karo</button>
+    <button class="btn-secondary" onclick="closeModal('addPwModal')" style="max-width:100%;">Cancel</button>
+  </div>
+</div>
+
+<!-- DETAIL -->
+<div class="modal-overlay" id="detailModal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title"><span id="detEmoji">🔑</span> <span id="detTitle">—</span></div>
+    <div class="detail-card">
+      <div class="detail-row"><div><div class="detail-label">App / Website</div><div class="detail-val" id="detApp">—</div></div></div>
+      <div class="detail-row">
+        <div style="flex:1;"><div class="detail-label">Username / Email</div><div class="detail-val" id="detUser">—</div></div>
+        <button class="copy-btn" id="copyUserBtn" onclick="copyFld('detUser','copyUserBtn')">📋</button>
+      </div>
+      <div class="detail-row">
+        <div style="flex:1;"><div class="detail-label">Password</div><div class="detail-val hidden" id="detPass">••••••••</div></div>
+        <button class="copy-btn" onclick="toggleDetPass()" id="togPassBtn" style="margin-right:4px;">👁️</button>
+        <button class="copy-btn" id="copyPassBtn" onclick="copyFld('detPass','copyPassBtn')">📋</button>
+      </div>
+      <div class="detail-row" id="detNoteRow"><div><div class="detail-label">Note</div><div class="detail-val" id="detNote">—</div></div></div>
+    </div>
+    <div id="detScreenBadge" class="screenlock-badge" style="display:none;">📱 Phone ka Screen Lock hai</div>
+    <div style="display:flex;gap:8px;margin-bottom:12px;">
+      <button class="btn-primary" style="flex:1;max-width:none;" onclick="editCurPw()">✏️ Edit</button>
+      <button class="danger-btn" style="width:auto;padding:14px 20px;margin:0;flex-shrink:0;" onclick="deleteCurPw()">🗑️</button>
+    </div>
+    <button class="btn-secondary" style="max-width:100%;" onclick="closeModal('detailModal')">Close</button>
+  </div>
+</div>
+
+<!-- ADD NOMINEE -->
+<div class="modal-overlay" id="addNomModal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">👥 Nominee Add Karo</div>
+    <p style="color:var(--text2);font-size:13px;margin-bottom:20px;">Nominee ka Link Code daalo. Wo accept karega toh linked ho jaayenge. 2-way confirmation!</p>
+    <div class="form-group"><label>NOMINEE KA NAAM (tumhare liye)</label><input type="text" id="nomName" placeholder="Nominee ka naam"/></div>
+    <div class="form-group"><label>NOMINEE KA LINK CODE</label><input type="text" id="nomCode" placeholder="BHAI-XXXX-XXXX" style="text-transform:uppercase;font-family:var(--mono);font-size:16px;letter-spacing:2px;" oninput="this.value=this.value.toUpperCase()"/></div>
+    <button class="btn-primary" onclick="sendNomReq()" style="max-width:100%;margin-bottom:8px;">📤 Request Bhejo</button>
+    <button class="btn-secondary" onclick="closeModal('addNomModal')" style="max-width:100%;">Cancel</button>
+  </div>
+</div>
+
+<!-- PWA INSTALL -->
+<div id="installBanner">
+  <div class="install-backdrop" onclick="dismissInstall()"></div>
+  <div class="install-sheet">
+    <div class="install-handle"></div>
+    <div style="font-size:48px;text-align:center;margin-bottom:12px;">🔐</div>
+    <div style="font-size:22px;font-weight:800;text-align:center;margin-bottom:6px;">BhaiVault Install Karo</div>
+    <div style="color:var(--text2);font-size:13px;text-align:center;margin-bottom:20px;">Phone pe install karo — offline bhi kaam karega!</div>
+    <button class="btn-install" onclick="triggerInstall()">📲 Install Karo</button>
+    <button class="btn-install-skip" onclick="dismissInstall()">Abhi nahi</button>
+  </div>
+</div>
+
+<!-- CHANGE PIN MODAL -->
+<div class="modal-overlay" id="changePinModal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">🔢 PIN Change Karo</div>
+    <div class="cp-step active" id="cpStep1">
+      <p style="color:var(--text2);font-size:13px;margin-bottom:16px;">Pehle purana PIN verify karo</p>
+      <div class="mini-dots"><div class="mini-dot" id="op0"></div><div class="mini-dot" id="op1"></div><div class="mini-dot" id="op2"></div><div class="mini-dot" id="op3"></div></div>
+      <div class="mini-numpad">
+        <button class="np-btn" onclick="opTap(1)">1</button><button class="np-btn" onclick="opTap(2)">2</button><button class="np-btn" onclick="opTap(3)">3</button>
+        <button class="np-btn" onclick="opTap(4)">4</button><button class="np-btn" onclick="opTap(5)">5</button><button class="np-btn" onclick="opTap(6)">6</button>
+        <button class="np-btn" onclick="opTap(7)">7</button><button class="np-btn" onclick="opTap(8)">8</button><button class="np-btn" onclick="opTap(9)">9</button>
+        <button class="np-btn" onclick="opClr()" style="font-size:12px;">Clear</button><button class="np-btn" onclick="opTap(0)">0</button><button class="np-btn" onclick="opClr()" style="font-size:16px;">⌫</button>
+      </div>
+      <p style="color:var(--text3);font-size:12px;text-align:center;font-family:var(--mono);" id="cpHint1">Apna current 4-digit PIN daalo</p>
+    </div>
+    <div class="cp-step" id="cpStep2">
+      <p style="color:var(--accent3);font-size:13px;margin-bottom:16px;">✅ Verified! Ab naya PIN set karo</p>
+      <div class="mini-dots"><div class="mini-dot" id="np0"></div><div class="mini-dot" id="np1"></div><div class="mini-dot" id="np2"></div><div class="mini-dot" id="np3"></div></div>
+      <div class="mini-numpad">
+        <button class="np-btn" onclick="npTap(1)">1</button><button class="np-btn" onclick="npTap(2)">2</button><button class="np-btn" onclick="npTap(3)">3</button>
+        <button class="np-btn" onclick="npTap(4)">4</button><button class="np-btn" onclick="npTap(5)">5</button><button class="np-btn" onclick="npTap(6)">6</button>
+        <button class="np-btn" onclick="npTap(7)">7</button><button class="np-btn" onclick="npTap(8)">8</button><button class="np-btn" onclick="npTap(9)">9</button>
+        <button class="np-btn" onclick="npClr()" style="font-size:12px;">Clear</button><button class="np-btn" onclick="npTap(0)">0</button><button class="np-btn" onclick="npClr()" style="font-size:16px;">⌫</button>
+      </div>
+    </div>
+    <div class="cp-step" id="cpStep3">
+      <p style="color:var(--text2);font-size:13px;margin-bottom:16px;" id="cpStep3Sub">Naya PIN confirm karo</p>
+      <div class="mini-dots"><div class="mini-dot" id="cnp0"></div><div class="mini-dot" id="cnp1"></div><div class="mini-dot" id="cnp2"></div><div class="mini-dot" id="cnp3"></div></div>
+      <div class="mini-numpad">
+        <button class="np-btn" onclick="cnpTap(1)">1</button><button class="np-btn" onclick="cnpTap(2)">2</button><button class="np-btn" onclick="cnpTap(3)">3</button>
+        <button class="np-btn" onclick="cnpTap(4)">4</button><button class="np-btn" onclick="cnpTap(5)">5</button><button class="np-btn" onclick="cnpTap(6)">6</button>
+        <button class="np-btn" onclick="cnpTap(7)">7</button><button class="np-btn" onclick="cnpTap(8)">8</button><button class="np-btn" onclick="cnpTap(9)">9</button>
+        <button class="np-btn" onclick="cnpClr()" style="font-size:12px;">Clear</button><button class="np-btn" onclick="cnpTap(0)">0</button><button class="np-btn" onclick="cnpClr()" style="font-size:16px;">⌫</button>
+      </div>
+    </div>
+    <button class="btn-secondary" style="max-width:100%;" onclick="closeModal('changePinModal')">Cancel</button>
+  </div>
+</div>
+
+<!-- NOMINEE APPROVAL OVERLAY (nominee ke phone pe floating popup) -->
+<div id="nomApprovalOverlay">
+  <div class="nom-approval-box">
+    <div class="nom-approval-icon">🔐</div>
+    <div class="nom-approval-title">Nominee Approval</div>
+    <div class="nom-approval-sub">Ye user naye phone pe login karna chahta hai. Sahi code select karke approve karo:</div>
+    <div class="nom-approval-user"><span id="nomApprovalUserName">—</span></div>
+    <div class="nom-select-label">Sahi 4-digit code select karo</div>
+    <div class="nom-options-grid" id="nomOptionsGrid"></div>
+    <button class="nom-approval-dismiss" onclick="dismissNomApproval()">Ye mera nominee nahi — Dismiss</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import {
+  getFirestore, doc, getDoc, setDoc, updateDoc, deleteDoc,
+  collection, addDoc, query, where, onSnapshot, getDocs,
+  arrayUnion, arrayRemove, serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import {
+  getDatabase, ref as rtRef, set as rtSet, onValue as rtOnValue,
+  remove as rtRemove, off as rtOff, push as rtPush
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+const FB = {
+  apiKey: "AIzaSyADbiNFo7OsQR2J4UGnwlb3tc0N_e-wIyA",
+  authDomain: "bhaivault-2b8c7.firebaseapp.com",
+  projectId: "bhaivault-2b8c7",
+  storageBucket: "bhaivault-2b8c7.firebasestorage.app",
+  messagingSenderId: "194611496571",
+  appId: "1:194611496571:web:2be1fc115cac7b3a0b84de",
+  databaseURL: "https://bhaivault-2b8c7-default-rtdb.asia-southeast1.firebasedatabase.app"
+};
+const fbApp = initializeApp(FB);
+const db = getFirestore(fbApp);
+const rtdb = getDatabase(fbApp);
+
+// ── STATE ──
+let CU = null; // current user
+let allPws = [];
+let editPwId = null;
+let selEmoji = '🔑';
+let detPassVis = false;
+let curDetail = null;
+let unsubPws = null, unsubReqs = null;
+const sharedPwMap = new Map(); // id → password, XSS-safe shared pw store
+const EMOJIS = ['🔑','📱','💳','📧','🎮','💼','🏦','🛒','📺','🎵','📷','🚗','🏠','✈️','💡','🎓','❤️','⭐','🔒','🌐','🎯','🛡️','🔥','💎'];
+
+// ── UTILS ──
+let _toastTimer = null;
+function toast(msg, dur=2800) {
+  const t = document.getElementById('toast');
+  if(_toastTimer) clearTimeout(_toastTimer);
+  t.classList.remove('show');
+  // micro delay taaki remove → add transition kaam kare
+  requestAnimationFrame(()=>{
+    t.textContent = msg; t.classList.add('show');
+    _toastTimer = setTimeout(() => { t.classList.remove('show'); _toastTimer=null; }, dur);
+  });
+}
+function genId(n=12) { return Math.random().toString(36).substring(2,2+n).toUpperCase(); }
+function genLinkCode(uid) {
+  const s = uid.replace(/[^A-Z0-9]/gi,'').toUpperCase().padEnd(8,'X');
+  return `BHAI-${s.slice(0,4)}-${s.slice(4,8)}`;
+}
+// ⚠️ NOTE: Ye hash function PIN verify ke liye hai — passwords is se hash nahi hote.
+// Passwords Firestore mein store hain (encryption future improvement hai).
+// PIN brute force limited hai kyunki: float numpad random positions pe hai + 4-digit only.
+// Production mein crypto.subtle.digest('SHA-256') use karna chahiye.
+function hash(str) {
+  let h = 0;
+  for (let c of str) h = ((h<<5)-h)+c.charCodeAt(0), h |= 0;
+  return Math.abs(h).toString(36).toUpperCase();
+}
+
+// ── AES-256 ENCRYPTION (CryptoJS) ──
+// _vaultKey = PIN + uid — sirf RAM mein, kabhi Firestore/localStorage nahi jaata
+function aesEncrypt(plaintext) {
+  if(!window._vaultKey) return plaintext; // fallback (should not happen)
+  if(!plaintext) return '';
+  try {
+    return 'ENC:' + CryptoJS.AES.encrypt(plaintext, window._vaultKey).toString();
+  } catch(e) { return plaintext; }
+}
+function aesDecrypt(ciphertext) {
+  if(!window._vaultKey || !ciphertext) return ciphertext||'';
+  if(!ciphertext.startsWith('ENC:')) return ciphertext; // purana plaintext — as-is
+  try {
+    const bytes = CryptoJS.AES.decrypt(ciphertext.slice(4), window._vaultKey);
+    const dec = bytes.toString(CryptoJS.enc.Utf8);
+    return dec || '❌ Decrypt fail';
+  } catch(e) { return '❌ Decrypt fail'; }
+}
+function closeModal(id) { 
+  const el = document.getElementById(id);
+  if(!el) return;
+  SFX.close();
+  const modal = el.querySelector('.modal');
+  if(modal) {
+    modal.style.transition = 'transform 0.3s cubic-bezier(0.4,0,1,1)';
+    modal.style.transform = 'translateY(100%)';
+    setTimeout(()=>{
+      el.classList.remove('active');
+      modal.style.transform = '';
+      modal.style.transition = '';
+    }, 280);
+  } else {
+    el.classList.remove('active');
+  }
+}
+
+// ── Modal backdrop click + swipe down to close ──
+(function initModalClose() {
+  const MODAL_IDS = ['addPwModal','detailModal','addNomModal','changePinModal'];
+  
+  MODAL_IDS.forEach(id => {
+    const overlay = document.getElementById(id);
+    if(!overlay) return;
+    const modal = overlay.querySelector('.modal');
+    if(!modal) return;
+
+    // 1. Backdrop tap — click on overlay but NOT on modal content
+    overlay.addEventListener('click', function(e) {
+      if(e.target === overlay) closeModal(id);
+    });
+
+    // 2 & 3. Swipe down to close
+    let startY = 0, startX = 0, isDragging = false, currentY = 0;
+
+    modal.addEventListener('touchstart', function(e) {
+      // Only start drag from handle area or top 60px of modal
+      const touch = e.touches[0];
+      const modalRect = modal.getBoundingClientRect();
+      const relativeY = touch.clientY - modalRect.top;
+      if(relativeY > 80) return; // Only swipe from top area
+      startY = touch.clientY;
+      startX = touch.clientX;
+      isDragging = false;
+      currentY = 0;
+      modal.style.transition = 'none';
+    }, {passive: true});
+
+    modal.addEventListener('touchmove', function(e) {
+      if(startY === 0) return;
+      const touch = e.touches[0];
+      const dy = touch.clientY - startY;
+      const dx = touch.clientX - startX;
+      // Only vertical swipe
+      if(!isDragging && Math.abs(dy) < 8) return;
+      if(!isDragging && Math.abs(dx) > Math.abs(dy)) { startY = 0; return; }
+      isDragging = true;
+      currentY = Math.max(0, dy); // Only allow downward
+      modal.style.transform = `translateY(${currentY}px)`;
+      if(currentY > 20) {
+        overlay.style.opacity = Math.max(0.2, 1 - currentY/250);
+      }
+    }, {passive: true});
+
+    modal.addEventListener('touchend', function() {
+      if(!isDragging) { startY = 0; return; }
+      modal.style.transition = 'transform 0.3s cubic-bezier(0.34,1.2,0.64,1)';
+      overlay.style.transition = 'opacity 0.3s';
+      if(currentY > 100) {
+        // Swipe enough — close karo
+        closeModal(id);
+      } else {
+        // Snap back
+        modal.style.transform = 'translateY(0)';
+        overlay.style.opacity = '1';
+      }
+      startY = 0; isDragging = false; currentY = 0;
+    }, {passive: true});
+  });
+})();
+function sl(k,v) { try{localStorage.setItem(k,JSON.stringify(v));}catch(e){} }
+function ll(k,d=null) { try{const v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch(e){return d;} }
+function loading(show) { document.getElementById('loadingScreen').classList.toggle('gone',!show); }
+
+window.showScreen = (id) => {
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+};
+// showScreen alias — module scope mein use ke liye
+const showScreen = (id) => window.showScreen(id);
+
+// ── BOOT ──
+window.addEventListener('DOMContentLoaded', async () => {
+  spawnStars();
+  const uid = ll('bv_uid');
+  if (!uid) { loading(false); showScreen('welcomeScreen'); return; }
+  try {
+    const udoc = await getDoc(doc(db,'users',uid));
+    if (udoc.exists()) {
+      CU = { uid, ...udoc.data() };
+      sl('bv_user_cache', CU);
+    } else {
+      // UID saved but user deleted? Try cache
+      CU = ll('bv_user_cache');
+      if (!CU) { loading(false); showScreen('welcomeScreen'); return; }
+    }
+  } catch(e) {
+    CU = ll('bv_user_cache');
+    if (!CU) { loading(false); showScreen('welcomeScreen'); return; }
+  }
+  loading(false);
+  showScreen('lockScreen');
+  requestAnimationFrame(()=>requestAnimationFrame(genFloatNums));
+  setTimeout(updateFpLockBtn, 200);
+});
+
+// ── STARS ──
+function spawnStars() {
+  const c = document.getElementById('starsEl');
+  for(let i=0;i<55;i++) {
+    const s=document.createElement('div'); s.className='star';
+    s.style.left=Math.random()*100+'%'; s.style.top=Math.random()*100+'%';
+    s.style.setProperty('--d',(2+Math.random()*4).toFixed(1)+'s');
+    s.style.setProperty('--dl',(Math.random()*4).toFixed(1)+'s');
+    c.appendChild(s);
+  }
+}
+
+// ── SETUP ──
+let sPage=0, sPin=[], cPin=[], savedPin=[];
+window.showSetup = () => { showScreen('setupScreen'); sPage=0; sPin=[];cPin=[];savedPin=[]; renderSetup(0); };
+window.setupNext = () => goSP(sPage+1);
+window.setupBack = () => { if(sPage<=0){showScreen('welcomeScreen');return;} goSP(sPage-1); };
+function renderSetup(p) {
+  document.querySelectorAll('.setup-page').forEach((el,i)=>{
+    el.classList.remove('active','exit');
+    if(i===p) setTimeout(()=>el.classList.add('active'),10);
+    else if(i<p) el.classList.add('exit');
+  });
+  document.getElementById('sBackBtn').style.visibility=p>0?'visible':'hidden';
+  for(let i=0;i<5;i++) {
+    const d=document.getElementById('pd'+i);
+    if(d) d.className='pdot '+(i<p?'done':i===p?'active':'todo');
+  }
+}
+function goSP(p) {
+  const curr=document.getElementById('sp'+sPage);
+  curr.classList.remove('active'); curr.classList.add('exit');
+  setTimeout(()=>{ sPage=p; const next=document.getElementById('sp'+p); next.classList.remove('exit'); requestAnimationFrame(()=>next.classList.add('active')); renderSetup(p); },50);
+}
+window.checkP1 = () => { document.getElementById('p1btn').disabled=!document.getElementById('sName').value.trim(); };
+window.checkP2 = () => { document.getElementById('p2btn').disabled=!(document.getElementById('sDob').value&&document.getElementById('sSecret').value.trim()); };
+window.goP1 = () => { if(!document.getElementById('sName').value.trim()){toast('⚠️ Naam daalo');return;} setupNext(); };
+
+window.sPinTap = (n) => {
+  if(sPin.length>=4) return; sPin.push(n); updSDots(sPin,'ss');
+  if(sPin.length===4){savedPin=[...sPin];setTimeout(()=>setupNext(),300);}
+};
+window.sPinClr = () => { sPin=[]; updSDots(sPin,'ss'); };
+window.cPinTap = (n) => {
+  if(cPin.length>=4) return; cPin.push(n); updSDots(cPin,'sc');
+  if(cPin.length===4) setTimeout(chkPinMatch,300);
+};
+window.cPinClr = () => { cPin=[]; updSDots(cPin,'sc'); document.getElementById('cPinSub').textContent='Same PIN dobara daalo'; };
+function updSDots(arr,pre) {
+  for(let i=0;i<4;i++){const d=document.getElementById(pre+i);if(d) d.className='pin-dot'+(i<arr.length?' filled':'');}
+}
+function chkPinMatch() {
+  if(savedPin.join('')===cPin.join('')) {
+    for(let i=0;i<4;i++){const c=document.getElementById('sc'+i);if(c) c.className='pin-dot ok';}
+    toast('✅ PIN match!'); setTimeout(completeSetup,500);
+  } else {
+    for(let i=0;i<4;i++){const c=document.getElementById('sc'+i);if(c) c.className='pin-dot err';}
+    document.getElementById('cPinSub').textContent='❌ Match nahi! Dobara try karo';
+    cPin=[]; setTimeout(()=>{updSDots([],'sc');document.getElementById('cPinSub').textContent='Same PIN dobara daalo';},900);
+  }
+}
+async function completeSetup() {
+  loading(true);
+  const name=document.getElementById('sName').value.trim();
+  const dob=document.getElementById('sDob').value;
+  const secret=document.getElementById('sSecret').value.trim();
+  const pinHash=hash(savedPin.join(''));
+  const uid='BV'+genId(12);
+  const linkCode=genLinkCode(uid);
+  const userData={uid,name,dob,secretHash:hash(secret.toLowerCase()),pinHash,linkCode,nominees:[],nomineeFor:[],createdAt:new Date().toISOString()};
+  try {
+    await setDoc(doc(db,'users',uid),userData);
+    sl('bv_uid',uid); sl('bv_user_cache',userData); CU=userData;
+    // vaultKey set karo — fingerprint register immediately ke liye bhi kaam aaye
+    window._vaultKey = savedPin.join('') + uid;
+    loading(false); toast('🎉 Welcome, '+name+'!'); setTimeout(showMain,400);
+  } catch(e) { loading(false); toast('❌ Setup fail: '+e.message); }
+}
+
+// ── LOCK ──
+let pinSeq=[], floatNums=[];
+window.genFloatNums = genFloatNums;
+function genFloatNums() {
+  const field=document.getElementById('floatField');
+  if(!field) return;
+  field.innerHTML=''; floatNums=[]; pinSeq=[];
+  updLockDots([]);
+  document.getElementById('lockHint').textContent='Koi bhi 4 number tap karo sequence mein';
+  const nums=[]; while(nums.length<18) nums.push(Math.floor(Math.random()*10));
+  const rect=field.getBoundingClientRect();
+  const W=rect.width||340, H=rect.height||260;
+  const anims=['flt1','flt2','flt3'];
+  nums.forEach((n,i)=>{
+    const el=document.createElement('div'); el.className='fnum'; el.textContent=n;
+    el.style.left=(12+Math.random()*(W-66))+'px';
+    el.style.top=(12+Math.random()*(H-66))+'px';
+    const a=anims[i%3], delay=(Math.random()*3).toFixed(2), dur=(2.5+Math.random()*2).toFixed(2);
+    el.style.animation=`${a} ${dur}s ${delay}s ease-in-out infinite alternate`;
+    el.addEventListener('click',()=>tapNum(el,n));
+    field.appendChild(el); floatNums.push({el,n});
+  });
+}
+function tapNum(el,n) {
+  if(pinSeq.length>=4) return;
+  el.style.animation='none'; el.classList.add('sel');
+  pinSeq.push(n); updLockDots(pinSeq);
+  if(pinSeq.length===4) setTimeout(chkLockPin,320);
+}
+function updLockDots(seq) {
+  for(let i=0;i<4;i++){const d=document.getElementById('ld'+i);if(d) d.className='lock-dot'+(i<seq.length?' filled':'');}
+}
+async function chkLockPin() {
+  const entered=pinSeq.join('');
+  const storedHash=CU?.pinHash||ll('bv_user_cache')?.pinHash;
+  if(!storedHash){genFloatNums();return;}
+  if(hash(entered)===storedHash) {
+    floatNums.forEach(({el})=>{el.style.background='linear-gradient(135deg,var(--accent3),#0be881)';el.style.borderColor='var(--accent3)';});
+    for(let i=0;i<4;i++){const d=document.getElementById('ld'+i);if(d){d.className='lock-dot filled';d.style.background='var(--accent3)';}}
+    document.getElementById('lockHint').textContent='✅ Sahi hai!';
+    if(!CU) CU=ll('bv_user_cache');
+    // ── AES key: PIN + uid — sirf memory mein, kabhi save nahi hoti ──
+    window._vaultKey = entered + (CU.uid||'');
+    SFX.unlock();
+    setTimeout(async () => {
+      await completeDeferredFpWrap(); // agar prf-deferred mode tha toh wrap complete karo
+      showMain();
+    }, 400);
+  } else {
+    SFX.error();
+    floatNums.forEach(({el})=>el.classList.add('wrong'));
+    for(let i=0;i<4;i++){const d=document.getElementById('ld'+i);if(d) d.className='lock-dot err';}
+    document.getElementById('lockHint').textContent='❌ Galat PIN! Dobara try karo';
+    setTimeout(()=>genFloatNums(),900);
+  }
+}
+window.showLock = () => { showScreen('lockScreen'); requestAnimationFrame(()=>requestAnimationFrame(genFloatNums)); };
+
+// ── RESTORE (new phone) ──
+window.showRestore = () => showScreen('restoreScreen');
+window.doRestore = async () => {
+  const name = document.getElementById('restName').value.trim();
+  const dob  = document.getElementById('restDob').value;
+  const secret = document.getElementById('restSecret').value.trim();
+  const code = document.getElementById('restCode').value.trim().toUpperCase();
+  if(!name||!dob||!secret){toast('⚠️ Naam, DOB aur Secret Word zaroori hain');return;}
+  loading(true);
+  try {
+    let snap = null;
+    // Link Code diya? → usse dhundho
+    if(code && code.startsWith('BHAI-')){
+      snap = await getDocs(query(collection(db,'users'),where('linkCode','==',code)));
+    }
+    // Link Code nahi ya nahi mila → Naam+DOB+Secret se dhundho (less precise)
+    if(!snap||snap.empty){
+      if(!code) toast('⚠️ Link Code nahi diya — naam se dhundh rahe hain, time lagega...', 3000);
+      snap = await getDocs(query(collection(db,'users'),where('name','==',name)));
+    }
+    if(!snap||snap.empty){loading(false);toast('❌ Koi account nahi mila');return;}
+    // Multiple results mein sahi wala dhundho
+    let matchDoc = null;
+    for(const d of snap.docs){
+      const dd = d.data();
+      const nameMatch = dd.name.toLowerCase()===name.toLowerCase();
+      const dobMatch  = dd.dob===dob;
+      const secretMatch = dd.secretHash===hash(secret.toLowerCase());
+      if(nameMatch&&dobMatch&&secretMatch){matchDoc=dd;break;}
+    }
+    if(!matchDoc){loading(false);toast('❌ Details match nahi hua. Naam, DOB ya Secret check karo.');return;}
+    loading(false);
+    // Nominee hai? → HAMESHA nominee approval zaroori
+    if(matchDoc.nominees&&matchDoc.nominees.length>0){
+      startNomineeApprovalFlow(matchDoc);
+    } else {
+      // Koi nominee nahi → direct PIN set (proper UI, no prompt)
+      window._pendingRestoreUser = matchDoc;
+      showScreen('recoveryScreen');
+      document.getElementById('recStep2').style.display='block';
+      document.getElementById('recStep1Btns').style.display='none';
+      document.getElementById('recStep2').querySelector('div').textContent='✅ Account mil gaya! Naya PIN set karo:';
+    }
+  } catch(e){loading(false);toast('❌ Error: '+e.message);}
+};
+
+// ── NOMINEE APPROVAL FLOW — RTDB based ──
+let _approvalUnsub  = null;   // RTDB listener off fn
+let _approvalReqId  = null;   // RTDB key
+let _approvalTimer  = null;   // setInterval handle
+let _approvalUserData = null;
+const APPROVAL_TIMEOUT = 5 * 60; // 5 minutes in seconds
+
+async function startNomineeApprovalFlow(userData) {
+  _approvalUserData = userData;
+  await _launchApprovalRequest(userData);
+}
+
+async function _launchApprovalRequest(userData) {
+  // Purana cleanup
+  if(_approvalUnsub){_approvalUnsub();_approvalUnsub=null;}
+  if(_approvalTimer){clearInterval(_approvalTimer);_approvalTimer=null;}
+  if(_approvalReqId){
+    try{await rtRemove(rtRef(rtdb,`loginApproval/${_approvalReqId}`));}catch(e){}
+  }
+
+  // Fresh code generate karo
+  const approvalCode = String(Math.floor(1000+Math.random()*9000));
+  const fakes=[];
+  while(fakes.length<3){
+    const f=String(Math.floor(1000+Math.random()*9000));
+    if(f!==approvalCode&&!fakes.includes(f)) fakes.push(f);
+  }
+  const allOptions=[approvalCode,...fakes].sort(()=>Math.random()-0.5);
+
+  loading(true);
+  try {
+    // RTDB mein write karo
+    const reqPayload = {
+      uid: userData.uid,
+      userName: userData.name,
+      nominees: userData.nominees,      // array
+      approvalCode,
+      allOptions,
+      status: 'pending',
+      createdAt: Date.now(),
+      expiresAt: Date.now() + APPROVAL_TIMEOUT*1000
+    };
+    const newRef = rtPush(rtRef(rtdb,'loginApproval'), reqPayload);
+    _approvalReqId = newRef.key;
+    // Set karo (push sirf ref deta hai, set se data jaata hai)
+    await rtSet(rtRef(rtdb,`loginApproval/${_approvalReqId}`), reqPayload);
+
+    // Nominee ko push notification bhejo
+    _sendApprovalPushToNominees(userData, approvalCode, allOptions, _approvalReqId);
+
+    loading(false);
+
+    // Waiting screen show karo
+    document.getElementById('waitingCodeVal').textContent = approvalCode;
+    showScreen('waitingApprovalScreen');
+    _startApprovalTimer(userData);
+
+    // RTDB real-time listen
+    const listenRef = rtRef(rtdb,`loginApproval/${_approvalReqId}`);
+    _approvalUnsub = () => rtOff(listenRef);
+    rtOnValue(listenRef, snap=>{
+      if(!snap.exists()) return;
+      const d = snap.val();
+      if(d.status==='approved'){
+        if(_approvalUnsub){_approvalUnsub();_approvalUnsub=null;}
+        if(_approvalTimer){clearInterval(_approvalTimer);_approvalTimer=null;}
+        toast('✅ Nominee ne approve kar diya!');
+        setTimeout(()=>_showPinSetupAfterApproval(userData), 600);
+      } else if(d.status==='rejected'){
+        if(_approvalUnsub){_approvalUnsub();_approvalUnsub=null;}
+        if(_approvalTimer){clearInterval(_approvalTimer);_approvalTimer=null;}
+        toast('❌ Nominee ne reject kar diya');
+        showScreen('restoreScreen');
+      }
+    });
+  } catch(e){loading(false);toast('❌ Error: '+e.message);}
+}
+
+function _startApprovalTimer(userData) {
+  let secsLeft = APPROVAL_TIMEOUT;
+  const bar = document.getElementById('timerBar');
+  const disp = document.getElementById('timerDisplay');
+  const hint = document.getElementById('timerHint');
+  if(_approvalTimer) clearInterval(_approvalTimer);
+  _approvalTimer = setInterval(async ()=>{
+    secsLeft--;
+    const pct = (secsLeft/APPROVAL_TIMEOUT)*100;
+    if(bar) bar.style.width = pct+'%';
+    // Color warn karo last 60 sec
+    if(bar){
+      if(secsLeft<=60) bar.style.background='linear-gradient(90deg,var(--danger),var(--warn))';
+      else if(secsLeft<=120) bar.style.background='linear-gradient(90deg,var(--warn),var(--accent4))';
+    }
+    const mins = Math.floor(secsLeft/60);
+    const secs = secsLeft%60;
+    if(disp) disp.textContent = `${mins}:${secs.toString().padStart(2,'0')}`;
+    if(secsLeft<=0){
+      clearInterval(_approvalTimer); _approvalTimer=null;
+      if(hint) hint.textContent='⏳ Time khatam! Naya code generate ho raha hai...';
+      // Auto new code generate karo
+      setTimeout(()=>_launchApprovalRequest(userData), 800);
+    }
+  }, 1000);
+}
+
+function _showPinSetupAfterApproval(userData) {
+  window._pendingRestoreUser = userData;
+  showScreen('recoveryScreen');
+  document.getElementById('recStep2').style.display='block';
+  document.getElementById('recStep1Btns').style.display='none';
+  document.getElementById('recStep2').querySelector('div').textContent='✅ Nominee ne approve kiya! Naya PIN set karo:';
+}
+
+window.cancelWaitingApproval = async () => {
+  if(_approvalUnsub){_approvalUnsub();_approvalUnsub=null;}
+  if(_approvalTimer){clearInterval(_approvalTimer);_approvalTimer=null;}
+  if(_approvalReqId){
+    try{await rtRemove(rtRef(rtdb,`loginApproval/${_approvalReqId}`));}catch(e){}
+    _approvalReqId=null;
+  }
+  showScreen('restoreScreen');
+};
+
+// ── PUSH NOTIFICATION — nominee ke liye ──
+async function _sendApprovalPushToNominees(userData, approvalCode, allOptions, reqId) {
+  // RTDB mein har nominee ke liye ek notification node likho
+  // Nominee ka app is node ko listen karega
+  for(const nomUid of (userData.nominees||[])){
+    try{
+      await rtSet(rtRef(rtdb,`nomineeNotifs/${nomUid}/${reqId}`),{
+        type: 'LOGIN_APPROVAL',
+        fromUid: userData.uid,
+        fromName: userData.name,
+        allOptions,
+        approvalCode,
+        reqId,
+        ts: Date.now()
+      });
+    }catch(e){}
+  }
+}
+
+// ── NOMINEE: SUBSCRIBE RTDB NOTIFICATIONS ──
+let _nomNotifUnsub = null;
+function subscribeNomApprovalRequests() {
+  if(!CU||!CU.uid) return;
+  if(_nomNotifUnsub){_nomNotifUnsub();_nomNotifUnsub=null;}
+  const notifRef = rtRef(rtdb,`nomineeNotifs/${CU.uid}`);
+  _nomNotifUnsub = () => rtOff(notifRef);
+  rtOnValue(notifRef, snap=>{
+    if(!snap.exists()) return;
+    const notifs = snap.val();
+    Object.entries(notifs).forEach(([reqId, data])=>{
+      if(data.type==='LOGIN_APPROVAL'){
+        // Already dismissed check (local)
+        const dismissed = ll('bv_dismissed_notifs',[]);
+        if(dismissed.includes(reqId)) return;
+        showNomApprovalPopup(reqId, data);
+      }
+    });
+  });
+}
+
+function showNomApprovalPopup(reqId, data) {
+  document.getElementById('nomApprovalUserName').textContent = `${data.fromName}`;
+  const grid = document.getElementById('nomOptionsGrid');
+  grid.innerHTML = data.allOptions.map(opt=>`
+    <button class="nom-opt-btn" onclick="nomSelectOption('${reqId}','${opt}','${data.approvalCode}',this)">${opt}</button>
+  `).join('');
+  // Store current reqId on overlay for dismiss
+  window._nomWrongTries = 0; // Reset tries on each new popup
+  document.getElementById('nomApprovalOverlay').dataset.reqId = reqId;
+  document.getElementById('nomApprovalOverlay').classList.add('active');
+
+  // Browser push notification agar app background mein ho
+  if(document.hidden && 'Notification' in window && Notification.permission==='granted'){
+    new Notification(`🔐 BhaiVault — ${data.fromName} login approval maang raha hai!`,{
+      body: 'App kholo aur sahi code select karo.',
+      icon: '/icon-192.png'
+    });
+  }
+}
+
+window._nomWrongTries = 0;
+window.nomSelectOption = async (reqId, selected, correctCode, btn) => {
+  document.querySelectorAll('.nom-opt-btn').forEach(b=>b.style.pointerEvents='none');
+  if(selected===correctCode){
+    btn.classList.add('correct');
+    SFX.success();
+    setTimeout(async()=>{
+      try{
+        await rtSet(rtRef(rtdb,`loginApproval/${reqId}/status`),'approved');
+        await rtSet(rtRef(rtdb,`loginApproval/${reqId}/approvedBy`),CU.uid);
+        await rtRemove(rtRef(rtdb,`nomineeNotifs/${CU.uid}/${reqId}`));
+        toast('✅ Approve kar diya!');
+        setTimeout(()=>document.getElementById('nomApprovalOverlay').classList.remove('active'),800);
+      }catch(e){toast('❌ Error: '+e.message);}
+    },500);
+  } else {
+    SFX.error();
+    window._nomWrongTries = (window._nomWrongTries||0) + 1;
+    btn.classList.add('wrong');
+    if(window._nomWrongTries >= 3){
+      // 3 galat tries → auto dismiss, nominee ko alert
+      setTimeout(()=>{
+        toast('⚠️ 3 galat tries! Approval automatically dismiss ho gayi.', 4000);
+        dismissNomApproval();
+        window._nomWrongTries = 0;
+      }, 800);
+    } else {
+      setTimeout(()=>{
+        document.querySelectorAll('.nom-opt-btn').forEach(b=>{b.style.pointerEvents='';});
+        btn.classList.remove('wrong');
+        toast('❌ Galat code! Dobara try karo (' + (3 - window._nomWrongTries) + ' tries baaki)');
+      }, 800);
+    }
+  }
+};
+
+window.dismissNomApproval = async () => {
+  const overlay = document.getElementById('nomApprovalOverlay');
+  const reqId = overlay.dataset.reqId;
+  if(reqId){
+    // Mark dismissed locally
+    const dismissed = ll('bv_dismissed_notifs',[]);
+    dismissed.push(reqId);
+    // Max 100 IDs rakho — purane purge karo taaki localStorage bloat na ho
+    if(dismissed.length > 100) dismissed.splice(0, dismissed.length - 100);
+    sl('bv_dismissed_notifs', dismissed);
+    // Notification node saaf karo
+    try{await rtRemove(rtRef(rtdb,`nomineeNotifs/${CU.uid}/${reqId}`));}catch(e){}
+  }
+  overlay.classList.remove('active');
+  toast('Dismiss kar diya');
+};
+
+// doResetPin — handles both normal recovery + post-approval restore
+window.doResetPin = async () => {
+  const p=document.getElementById('newPin').value.trim();
+  if(!/^\d{4}$/.test(p)){toast('⚠️ Exactly 4 digits chahiye');return;}
+  const pinHash=hash(p);
+  try {
+    if(window._pendingRestoreUser){
+      const userData = window._pendingRestoreUser;
+      loading(true);
+      await updateDoc(doc(db,'users',userData.uid),{pinHash});
+      const updated={...userData,pinHash};
+      sl('bv_uid',userData.uid); sl('bv_user_cache',updated); CU=updated;
+      window._vaultKey = p + userData.uid; // Naya key set (restore pe passwords unencrypted hain)
+      window._pendingRestoreUser=null;
+      if(_approvalReqId){
+        try{await rtRemove(rtRef(rtdb,`loginApproval/${_approvalReqId}`));}catch(e){}
+        _approvalReqId=null;
+      }
+      loading(false); toast('✅ Account restore ho gaya!'); setTimeout(showMain,400);
+    } else {
+      if(!CU) CU=ll('bv_user_cache');
+      // ── PIN change: purana key se decrypt, naya key se re-encrypt ──
+      const oldKey = window._vaultKey;
+      const newKey = p + CU.uid;
+      loading(true);
+      try {
+        const pwSnap = await getDocs(collection(db,'users',CU.uid,'passwords'));
+        for(const d of pwSnap.docs) {
+          const pw = d.data();
+          if(!pw.shared && pw.password && pw.password.startsWith('ENC:')) {
+            // Purane key se decrypt
+            const bytes = CryptoJS.AES.decrypt(pw.password.slice(4), oldKey);
+            const plain = bytes.toString(CryptoJS.enc.Utf8);
+            if(plain) {
+              // Naye key se encrypt
+              const reEnc = 'ENC:' + CryptoJS.AES.encrypt(plain, newKey).toString();
+              await updateDoc(doc(db,'users',CU.uid,'passwords',d.id), {password: reEnc});
+            }
+          }
+        }
+      } catch(e) { console.warn('Re-encrypt fail:', e); }
+      window._vaultKey = newKey;
+      await updateDoc(doc(db,'users',CU.uid),{pinHash});
+      CU.pinHash=pinHash; sl('bv_user_cache',CU);
+      loading(false);
+      SFX.success();
+      toast('✅ PIN change ho gaya! Saare passwords re-encrypt ho gaye 🔐'); setTimeout(showLock,1500);
+    }
+  } catch(e){loading(false);SFX.error();toast('❌ Error: '+e.message);}
+};
+
+// ── MAIN APP ──
+async function showMain() {
+  showScreen('mainScreen');
+  document.getElementById('myCode').textContent=CU.linkCode;
+  document.getElementById('profName').textContent=CU.name;
+  document.getElementById('profDob').textContent='DOB: '+CU.dob;
+  document.getElementById('profCode').textContent=CU.linkCode;
+  initEmojiPicker();
+  showTab('vault');
+  // Init glass navbar pill position after render
+  requestAnimationFrame(()=>requestAnimationFrame(()=>showTab('vault')));
+  subscribePws();
+  subscribeReqs();
+  subscribeNomApprovalRequests();
+  updateNotifBtnState();
+  setTimeout(updateFpProfileToggle, 200);
+  // 🔐 Encryption status
+  if(window._vaultKey) toast('🔐 Vault unlocked — AES-256 encryption active', 2200);
+}
+
+window.showTab = function showTab(tab) {
+  const tabs = ['vault','shared','nominees','profile'];
+  tabs.forEach(t=>{
+    const el = document.getElementById('tab-'+t);
+    el.className = 'gnav-item' + (t===tab?' active':'');
+    document.getElementById('content-'+t).style.display=t===tab?'':'none';
+  });
+  document.getElementById('mainFab').style.display=tab==='vault'?'flex':'none';
+  if(tab==='nominees') loadNominees();
+  if(tab==='shared') loadShared();
+  // Move sliding pill
+  const activeEl = document.getElementById('tab-'+tab);
+  const navbar = document.getElementById('glassNavbar');
+  const pill = document.getElementById('gnavPill');
+  if(activeEl && navbar && pill) {
+    const navRect = navbar.getBoundingClientRect();
+    const itemRect = activeEl.getBoundingClientRect();
+    pill.style.left = (itemRect.left - navRect.left + 5) + 'px';
+    pill.style.width = (itemRect.width - 10) + 'px';
+  }
+};
+
+// ── PASSWORDS ──
+function subscribePws() {
+  if(unsubPws) unsubPws();
+  const ref=collection(db,'users',CU.uid,'passwords');
+  unsubPws=onSnapshot(ref,snap=>{
+    allPws=snap.docs.map(d=>({id:d.id,...d.data()}));
+    allPws.sort((a,b)=>(b.fav?1:0)-(a.fav?1:0));
+    sl('bv_pws_'+CU.uid,allPws);
+    renderPws(allPws);
+  },(err)=>{
+    console.warn('[BhaiVault] Firestore snapshot error:', err.message);
+    allPws=ll('bv_pws_'+CU.uid,[]);
+    renderPws(allPws);
+    unsubPws=null;
+  });
+}
+
+function renderPws(list) {
+  const el=document.getElementById('pwList');
+  if(!list.length){el.innerHTML='<div class="empty-state"><div class="ei">🔑</div><h3>Koi password nahi</h3><p>Neeche + button dabao</p></div>';return;}
+  el.innerHTML=list.map((p,i)=>`
+    <div class="pw-card" onclick="openDetail('${p.id}')" style="animation-delay:${i*0.04}s">
+      <div class="card-head">
+        <div class="card-emoji">${p.emoji||'🔑'}</div>
+        <div class="card-info">
+          <div class="card-name">${escHtml(p.appName||'—')}</div>
+          <div class="card-user">${escHtml(p.username||'—')}</div>
+        </div>
+        <div class="card-badges">
+          ${p.fav?'<span class="badge badge-fav">⭐</span>':''}
+          ${p.shared?'<span class="badge badge-shared">🔗</span>':''}
+          ${p.screenlock?'<span class="badge badge-lock">📱</span>':''}
+        </div>
+      </div>
+    </div>`).join('');
+}
+function escHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+window.searchPw = () => {
+  const q=document.getElementById('searchInput').value.toLowerCase();
+  if(!q){renderPws(allPws);return;}
+  renderPws(allPws.filter(p=>(p.appName||'').toLowerCase().includes(q)||(p.username||'').toLowerCase().includes(q)||(p.note||'').toLowerCase().includes(q)));
+};
+
+function initEmojiPicker() {
+  const el=document.getElementById('emojiPicker'); if(!el) return;
+  el.innerHTML=EMOJIS.map(e=>`<div class="emoji-opt${e===selEmoji?' sel':''}" onclick="selEmojiFn('${e}')">${e}</div>`).join('');
+}
+window.selEmojiFn = (e) => {
+  selEmoji=e;
+  document.querySelectorAll('.emoji-opt').forEach(el=>{el.className='emoji-opt'+(el.textContent===e?' sel':'');});
+};
+
+window.showAddPwModal = () => {
+  editPwId=null;
+  document.getElementById('addPwTitle').textContent='Password Add Karo';
+  ['pwApp','pwUser','pwPass','pwNote'].forEach(id=>document.getElementById(id).value='');
+  ['pwScreenlock','pwShared','pwFav'].forEach(id=>document.getElementById(id).checked=false);
+  selEmoji='🔑'; initEmojiPicker();
+  document.getElementById('addPwModal').classList.add('active');
+};
+window.togglePwVis = () => {
+  const i=document.getElementById('pwPass');
+  i.type=i.type==='password'?'text':'password';
+  document.getElementById('pwVisBtn').textContent=i.type==='password'?'👁️':'🙈';
+};
+window.genPw = () => {
+  const c='ABCDEFGHJKMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789@#$!';
+  let p=''; for(let i=0;i<16;i++) p+=c[Math.floor(Math.random()*c.length)]; // 16 chars — stronger
+  document.getElementById('pwPass').value=p; document.getElementById('pwPass').type='text';
+  document.getElementById('pwVisBtn').textContent='🙈'; toast('🎲 Password generated!');
+};
+window.savePw = async () => {
+  const appName=document.getElementById('pwApp').value.trim();
+  const password=document.getElementById('pwPass').value;
+  if(!appName||!password){toast('⚠️ App naam aur password zaroori');return;}
+  const isShared = document.getElementById('pwShared').checked;
+  const data={appName,username:document.getElementById('pwUser').value.trim(),password: isShared ? password : aesEncrypt(password),note:document.getElementById('pwNote').value.trim(),emoji:selEmoji,screenlock:document.getElementById('pwScreenlock').checked,shared:isShared,fav:document.getElementById('pwFav').checked,ownerUid:CU.uid,ownerName:CU.name,updatedAt:new Date().toISOString()};
+  try {
+    const ref=collection(db,'users',CU.uid,'passwords');
+    if(editPwId){await updateDoc(doc(ref,editPwId),data);SFX.success();toast('✅ Update ho gaya!');}
+    else{data.createdAt=new Date().toISOString();await addDoc(ref,data);SFX.success();toast('✅ Save ho gaya!');}
+    closeModal('addPwModal');
+  } catch(e){SFX.error();toast('❌ Error: '+e.message);}
+};
+window.openDetail = (id) => {
+  curDetail=allPws.find(p=>p.id===id); if(!curDetail) return;
+  const e=curDetail;
+  document.getElementById('detEmoji').textContent=e.emoji||'🔑';
+  document.getElementById('detTitle').textContent=e.appName||'—';
+  document.getElementById('detApp').textContent=e.appName||'—';
+  document.getElementById('detUser').textContent=e.username||'—';
+  document.getElementById('detPass').textContent='••••••••';
+  // Shared passwords plaintext hain (nominee access ke liye), private wale encrypted hain
+  document.getElementById('detPass').dataset.real = e.shared ? (e.password||'') : aesDecrypt(e.password);
+  document.getElementById('detNote').textContent=e.note||'—';
+  document.getElementById('detNoteRow').style.display=e.note?'':'none';
+  document.getElementById('detScreenBadge').style.display=e.screenlock?'':'none';
+  detPassVis=false; document.getElementById('togPassBtn').textContent='👁️';
+  document.getElementById('detailModal').classList.add('active');
+};
+window.toggleDetPass = () => {
+  const el=document.getElementById('detPass'); detPassVis=!detPassVis;
+  el.textContent=detPassVis?el.dataset.real:'••••••••';
+  el.className='detail-val'+(detPassVis?'':' hidden');
+  document.getElementById('togPassBtn').textContent=detPassVis?'🙈':'👁️';
+};
+window.copyFld = async (id,btnId) => {
+  const el=document.getElementById(id);
+  const text=el.dataset.real||el.textContent;
+  try {
+    await navigator.clipboard.writeText(text);
+    const btn=document.getElementById(btnId);
+    btn.textContent='✅'; btn.classList.add('copied');
+    setTimeout(()=>{btn.textContent='📋';btn.classList.remove('copied');},1500);
+    toast('📋 Copied!');
+  } catch(e) { toast('❌ Copy fail — manually select karo'); }
+};
+window.editCurPw = () => {
+  if(!curDetail) return;
+  closeModal('detailModal'); editPwId=curDetail.id;
+  document.getElementById('addPwTitle').textContent='Password Edit Karo';
+  document.getElementById('pwApp').value=curDetail.appName||'';
+  document.getElementById('pwUser').value=curDetail.username||'';
+  document.getElementById('pwPass').value = curDetail.shared ? (curDetail.password||'') : aesDecrypt(curDetail.password)||'';
+  document.getElementById('pwNote').value=curDetail.note||'';
+  document.getElementById('pwScreenlock').checked=curDetail.screenlock||false;
+  document.getElementById('pwShared').checked=curDetail.shared||false;
+  document.getElementById('pwFav').checked=curDetail.fav||false;
+  selEmoji=curDetail.emoji||'🔑'; initEmojiPicker();
+  document.getElementById('addPwModal').classList.add('active');
+};
+window.deleteCurPw = async () => {
+  if(!curDetail||!confirm(`"${curDetail.appName}" delete karo?`)) return;
+  await deleteDoc(doc(db,'users',CU.uid,'passwords',curDetail.id));
+  SFX.success();
+  closeModal('detailModal'); toast('🗑️ Delete ho gaya');
+};
+
+// ── SHARED (real-time nominees passwords) ──
+async function loadShared() {
+  const el=document.getElementById('sharedList');
+  const user=CU||ll('bv_user_cache');
+  if(!user?.nomineeFor?.length){
+    el.innerHTML='<div class="empty-state"><div class="ei">🔗</div><h3>Koi shared password nahi</h3><p>Kisi ka nominee bano toh unke shared passwords yahan dikhenge real-time</p></div>';
+    return;
+  }
+  el.innerHTML='<div style="color:var(--text3);font-size:13px;font-family:var(--mono);text-align:center;padding:20px;">Loading...</div>';
+  try {
+    let html='';
+    for(const ownerUid of user.nomineeFor) {
+      const pwRef=collection(db,'users',ownerUid,'passwords');
+      const q=query(pwRef,where('shared','==',true));
+      const snap=await getDocs(q);
+      const oDoc=await getDoc(doc(db,'users',ownerUid));
+      const oName=oDoc.exists()?oDoc.data().name:'Unknown';
+      if(!snap.empty) {
+        html+=`<div class="sec-label" style="margin-top:0;">${oName} ke shared passwords</div>`;
+        snap.docs.forEach(d=>{
+          const p=d.data();
+          sharedPwMap.set(d.id, p.password||''); // encrypted ciphertext store — copyShared mein decrypt hoga
+          html+=`<div class="shared-card">
+            <div class="shared-from">🔗 ${escHtml(oName)} ka shared password</div>
+            <div style="display:flex;align-items:center;gap:12px;">
+              <div style="font-size:24px;">${p.emoji||'🔑'}</div>
+              <div style="flex:1;"><div style="font-size:15px;font-weight:700;">${escHtml(p.appName)}</div><div style="font-size:12px;color:var(--text2);font-family:var(--mono);">${escHtml(p.username||'—')}</div></div>
+              <button class="copy-btn" id="scb_${d.id}" onclick="copyShared('${d.id}',this)">📋</button>
+            </div>
+          </div>`;
+        });
+      }
+    }
+    el.innerHTML=html||'<div class="empty-state"><div class="ei">🔗</div><h3>Koi shared password nahi</h3><p>Nominee ne abhi kuch share nahi kiya</p></div>';
+  } catch(e){el.innerHTML='<div class="empty-state"><div class="ei">⚠️</div><h3>Load nahi hua</h3><p>'+e.message+'</p></div>';}
+}
+window.copyShared = async (id, btn) => {
+  // sharedPwMap se password lo — HTML inline nahi (XSS-safe)
+  const pass = sharedPwMap.get(id) || '';
+  if(!pass){toast('❌ Password nahi mila');return;}
+  try {
+    await navigator.clipboard.writeText(pass);
+    if(btn){btn.textContent='✅';btn.classList.add('copied');setTimeout(()=>{btn.textContent='📋';btn.classList.remove('copied');},1500);}
+    toast('📋 Password copied!');
+  } catch(e) { toast('❌ Copy fail: '+e.message); }
+};
+
+// ── NOMINEES ──
+window.copyCode = () => { navigator.clipboard.writeText(CU.linkCode).then(()=>toast('📋 Link Code copied!')); };
+window.shareCode = () => {
+  const msg=`Mera BhaiVault Link Code: ${CU.linkCode}\nBhaiVault app pe nominee add karo mujhe!`;
+  if(navigator.share) navigator.share({title:'BhaiVault Link Code',text:msg});
+  else { navigator.clipboard.writeText(msg).then(()=>toast('📋 Copy ho gaya! WhatsApp pe paste karo')); }
+};
+window.showLinkCodeInfo = () => {
+  toast(`🔗 ${CU.linkCode} — Ye code kisi ko do, wo tumhe nominee add kar sakta hai`,4000);
+};
+
+async function loadNominees() {
+  const nomList=document.getElementById('nomList');
+  const user=CU;
+  // My nominees
+  if(!user.nominees?.length){
+    nomList.innerHTML='<div class="empty-state" style="padding:20px;"><div class="ei">👥</div><h3>Koi nominee nahi</h3><p>Neeche se add karo (max 3)</p></div>';
+  } else {
+    // Parallel fetch — sequential await nahi, Promise.all se ek saath
+    const nomDocs = await Promise.all(
+      user.nominees.map(nuid => getDoc(doc(db,'users',nuid)).catch(()=>null))
+    );
+    let html=`<div style="color:var(--text3);font-size:12px;font-family:var(--mono);margin-bottom:8px;">${user.nominees.length}/3 nominees</div>`;
+    user.nominees.forEach((nuid, i) => {
+      const ndoc = nomDocs[i];
+      const nd = (ndoc&&ndoc.exists()) ? ndoc.data() : {name:'Unknown',linkCode:'—'};
+      html+=`<div class="nominee-card">
+        <div class="nom-av">${nd.name[0].toUpperCase()}</div>
+        <div class="nom-info"><div class="nom-name">${escHtml(nd.name)}</div><div class="nom-role">Nominee · ${nd.linkCode}</div></div>
+        <button class="nom-remove" onclick="removeNom('${nuid}')">✕</button>
+      </div>`;
+    });
+    nomList.innerHTML=html;
+  }
+  document.getElementById('addNomBtn').style.display=user.nominees?.length>=3?'none':'block';
+  // I am nominee for — parallel fetch
+  const sec=document.getElementById('nomForSec'), list=document.getElementById('nomForList');
+  if(user.nomineeFor?.length){
+    sec.style.display='block';
+    const forDocs = await Promise.all(
+      user.nomineeFor.map(ouid => getDoc(doc(db,'users',ouid)).catch(()=>null))
+    );
+    let h2='';
+    user.nomineeFor.forEach((ouid, i) => {
+      const od = forDocs[i];
+      const odata = (od&&od.exists()) ? od.data() : {name:'Unknown',linkCode:'—'};
+      h2+=`<div class="nominee-card">
+        <div class="nom-av green">${odata.name[0].toUpperCase()}</div>
+        <div class="nom-info"><div class="nom-name">${escHtml(odata.name)}</div><div class="nom-role">Main unka nominee hoon · ${odata.linkCode}</div></div>
+      </div>`;
+    });
+    list.innerHTML=h2;
+  } else { sec.style.display='none'; }
+}
+
+window.showAddNomModal = () => {
+  document.getElementById('nomName').value='';
+  document.getElementById('nomCode').value='';
+  document.getElementById('addNomModal').classList.add('active');
+};
+
+window.sendNomReq = async () => {
+  const name=document.getElementById('nomName').value.trim();
+  const code=document.getElementById('nomCode').value.trim().toUpperCase();
+  if(!name||!code){toast('⚠️ Naam aur code dono bharo');return;}
+  if(!code.startsWith('BHAI-')){toast('⚠️ Code BHAI- se shuru hona chahiye');return;}
+  if(code===CU.linkCode){toast('⚠️ Apna khud ka code nahi dal sakte');return;}
+  if((CU.nominees?.length||0)>=3){toast('⚠️ Max 3 nominees allowed');return;}
+  loading(true);
+  try {
+    const q=query(collection(db,'users'),where('linkCode','==',code));
+    const snap=await getDocs(q);
+    if(snap.empty){loading(false);toast('❌ Ye Link Code kisi ka nahi hai');return;}
+    const nomDoc=snap.docs[0]; const nomData=nomDoc.data(); const nomUid=nomDoc.id;
+    // Circular chain check
+    if(await isCircular(CU.uid,nomUid)){loading(false);toast('⚠️ Circular chain! Alag nominee chuno');return;}
+    // Already nominee?
+    if(CU.nominees?.includes(nomUid)){loading(false);toast('⚠️ Ye pehle se nominee hai');return;}
+    // Already pending?
+    const exQ=query(collection(db,'nomineeRequests'),where('fromUid','==',CU.uid),where('toUid','==',nomUid),where('status','==','pending'));
+    const exSnap=await getDocs(exQ);
+    if(!exSnap.empty){loading(false);toast('⚠️ Request pehle se bheji hai');return;}
+    await addDoc(collection(db,'nomineeRequests'),{
+      fromUid:CU.uid, fromName:CU.name, fromLinkCode:CU.linkCode,
+      toUid:nomUid, toName:nomData.name,
+      displayName:name, status:'pending', createdAt:new Date().toISOString()
+    });
+    loading(false); closeModal('addNomModal');
+    toast('✅ Request bheji! '+name+' accept kare toh linked ho jaoge.');
+    // User ne nominee add kiya — yeh ek meaningful user action hai.
+    // Isi moment mein notification permission maango taaki approval alert kaam kare.
+    requestNotifPermission(true);
+  } catch(e){loading(false);toast('❌ Error: '+e.message);}
+};
+
+async function isCircular(fromUid,toUid) {
+  // BFS — saare nominees traverse karo, sirf [0] nahi
+  const visited=new Set();
+  const queue=[toUid];
+  while(queue.length){
+    const cur=queue.shift();
+    if(!cur||visited.has(cur)) continue;
+    visited.add(cur);
+    if(cur===fromUid) return true;
+    try{
+      const ud=await getDoc(doc(db,'users',cur));
+      if(!ud.exists()) continue;
+      for(const n of (ud.data().nominees||[])) queue.push(n);
+    }catch{ continue; }
+  }
+  return false;
+}
+
+window.removeNom = async (nomUid) => {
+  if(!confirm('Nominee remove karo?')) return;
+  try {
+    await updateDoc(doc(db,'users',CU.uid),{nominees:arrayRemove(nomUid)});
+    await updateDoc(doc(db,'users',nomUid),{nomineeFor:arrayRemove(CU.uid)});
+    CU.nominees=(CU.nominees||[]).filter(n=>n!==nomUid);
+    sl('bv_user_cache',CU); loadNominees(); toast('Nominee remove ho gaya');
+  } catch(e){toast('❌ Error: '+e.message);}
+};
+
+// ── REQUESTS (real-time) ──
+function subscribeReqs() {
+  if(unsubReqs) unsubReqs();
+  const q=query(collection(db,'nomineeRequests'),where('toUid','==',CU.uid),where('status','==','pending'));
+  unsubReqs=onSnapshot(q,snap=>{
+    const count=snap.size;
+    const badge=document.getElementById('notifBadge');
+    badge.textContent=count; badge.classList.toggle('show',count>0);
+    const sec=document.getElementById('pendingSection');
+    const list=document.getElementById('pendingList');
+    if(count>0){
+      sec.style.display='block';
+      list.innerHTML=snap.docs.map(d=>{
+        const r=d.data();
+        return `<div class="req-card">
+          <div class="req-from">📨 NOMINEE REQUEST</div>
+          <div class="req-name-txt">${escHtml(r.fromName)} <span style="color:var(--text3);font-size:12px;font-family:var(--mono);">${r.fromLinkCode}</span></div>
+          <div style="font-size:13px;color:var(--text2);">Ye tumhe apna nominee banana chahta hai</div>
+          <div class="req-acts">
+            <button class="btn-approve" onclick="approveReq('${d.id}','${r.fromUid}','${escHtml(r.fromName)}')">✅ Accept</button>
+            <button class="btn-reject" onclick="rejectReq('${d.id}')">❌ Reject</button>
+          </div>
+        </div>`;
+      }).join('');
+    } else { sec.style.display='none'; }
+  });
+}
+
+window.approveReq = async (reqId,fromUid,fromName) => {
+  loading(true);
+  try {
+    await updateDoc(doc(db,'nomineeRequests',reqId),{status:'approved'});
+    await updateDoc(doc(db,'users',fromUid),{nominees:arrayUnion(CU.uid)});
+    await updateDoc(doc(db,'users',CU.uid),{nomineeFor:arrayUnion(fromUid)});
+    if(!CU.nomineeFor) CU.nomineeFor=[];
+    if(!CU.nomineeFor.includes(fromUid)) CU.nomineeFor.push(fromUid);
+    sl('bv_user_cache',CU);
+    loading(false); toast('✅ '+fromName+' ka nominee ban gaye!'); loadNominees();
+  } catch(e){loading(false);toast('❌ Error: '+e.message);}
+};
+window.rejectReq = async (reqId) => {
+  await updateDoc(doc(db,'nomineeRequests',reqId),{status:'rejected'});
+  toast('Request reject ho gayi');
+};
+
+// ── RECOVERY ──
+window.showRecovery = () => {
+  window._pendingRestoreUser = null; // clear any pending restore
+  document.getElementById('recStep2').style.display='none';
+  document.getElementById('recStep1Btns').style.display='block';
+  ['recName','recDob','recSecret','newPin'].forEach(id=>{try{document.getElementById(id).value='';}catch(e){}});
+  showScreen('recoveryScreen');
+};
+window.startRecovery = async () => {
+  const name=document.getElementById('recName').value.trim();
+  const dob=document.getElementById('recDob').value;
+  const secret=document.getElementById('recSecret').value.trim();
+  if(!name||!dob||!secret){toast('⚠️ Sab fields bharo');return;}
+  const user=CU||ll('bv_user_cache');
+  if(!user){toast('❌ Koi account nahi mila');return;}
+  if(user.name.toLowerCase()===name.toLowerCase()&&user.dob===dob&&user.secretHash===hash(secret.toLowerCase())){
+    document.getElementById('recStep2').style.display='block';
+    document.getElementById('recStep1Btns').style.display='none';
+    toast('✅ Identity verify ho gayi!');
+  } else { toast('❌ Details match nahi hua. Check karo.'); }
+};
+
+// ── PROFILE ──
+window.confirmLogout = () => {
+  if(confirm('App lock karo?')){
+    CU=null;
+    window._vaultKey = null; // 🔐 Key RAM se saaf — ab decrypt nahi ho sakta
+    if(unsubPws){unsubPws();unsubPws=null;}
+    if(unsubReqs){unsubReqs();unsubReqs=null;}
+    if(_nomNotifUnsub){_nomNotifUnsub();_nomNotifUnsub=null;}
+    if(_approvalUnsub){_approvalUnsub();_approvalUnsub=null;}
+    if(_approvalTimer){clearInterval(_approvalTimer);_approvalTimer=null;}
+    showLock();
+  }
+};
+window.confirmDeleteAll = async () => {
+  const c=prompt('Sab delete karne ke liye "DELETE" likho:');
+  if(c!=='DELETE') return;
+  loading(true);
+  try {
+    if(CU) {
+      // Firestore passwords delete karo
+      const pwSnap = await getDocs(collection(db,'users',CU.uid,'passwords'));
+      for(const d of pwSnap.docs) await deleteDoc(doc(db,'users',CU.uid,'passwords',d.id));
+      // User document delete karo
+      await deleteDoc(doc(db,'users',CU.uid));
+    }
+  } catch(e){ console.warn('[BhaiVault] Cloud delete partial:', e.message); }
+  loading(false);
+  localStorage.clear();
+  toast('🗑️ Sab kuch delete ho gaya — cloud + local');
+  setTimeout(()=>location.reload(), 1500);
+};
+window.showProfInfo = () => toast(`👤 ${CU.name} · ${CU.dob}`);
+
+// ── EXPORT / IMPORT ──
+window.exportVault = () => {
+  // Export mein passwords decrypted honi chahiye (warna backup useless hoga)
+  const decryptedPws = allPws.map(p => ({
+    ...p,
+    password: p.shared ? (p.password||'') : aesDecrypt(p.password)
+  }));
+  const data={user:{name:CU.name,linkCode:CU.linkCode},passwords:decryptedPws,exportedAt:new Date().toISOString()};
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='bhaivault_backup.json'; a.click();
+  toast('📤 Backup download ho gaya! (Decrypted — safe jagah rakho)');
+};
+window.importVault = () => {
+  const inp=document.createElement('input'); inp.type='file'; inp.accept='.json';
+  inp.onchange=async e=>{
+    const f=e.target.files[0]; if(!f) return;
+    const r=new FileReader();
+    r.onload=async ev=>{
+      try {
+        const data=JSON.parse(ev.target.result);
+        if(!data.passwords){toast('❌ Invalid backup file');return;}
+        if(!confirm(`${data.passwords.length} passwords import karo?`)) return;
+        const ref=collection(db,'users',CU.uid,'passwords');
+        for(const p of data.passwords){
+          const{id,...rest}=p;
+          // Import pe re-encrypt karo current user ke PIN se
+          const reEncrypted = {...rest, password: rest.shared ? (rest.password||'') : aesEncrypt(rest.password||''), ownerUid:CU.uid, importedAt:new Date().toISOString()};
+          await addDoc(ref, reEncrypted);
+        }
+        toast(`✅ ${data.passwords.length} passwords import ho gaye!`);
+      } catch(err){toast('❌ Import fail: '+err.message);}
+    };
+    r.readAsText(f);
+  };
+  inp.click();
+};
+
+// ── PWA ──
+let deferredInstall=null;
+window.addEventListener('beforeinstallprompt',e=>{
+  e.preventDefault(); deferredInstall=e;
+  setTimeout(()=>document.getElementById('installBanner').classList.add('visible'),3000);
+});
+window.triggerInstall = () => {
+  if(!deferredInstall){toast('📲 Browser menu → Install App');dismissInstall();return;}
+  deferredInstall.prompt();
+  deferredInstall.userChoice.then(r=>toast(r.outcome==='accepted'?'✅ Install ho gaya!':'Baad mein bhi kar sakte ho!'));
+  deferredInstall=null; dismissInstall();
+};
+window.dismissInstall = () => document.getElementById('installBanner').classList.remove('visible');
+
+// ── SW ──
+if('serviceWorker' in navigator) {
+  window.addEventListener('load',()=>{
+    navigator.serviceWorker.register('/sw.js')
+      .then(()=>console.log('[BhaiVault] SW ✅'))
+      .catch(e=>console.warn('[BhaiVault] SW fail:',e));
+  });
+}
+
+// ── NOTIFICATIONS ──
+// silent=true matlab koi UI prompt nahi dikhana — seedha browser permission maango (nominee add flow mein)
+// silent=false (default) matlab profile button tap hua — sab cases handle karo
+window.requestNotifPermission = async (silent=false) => {
+  if(!('Notification' in window)){
+    if(!silent) toast('❌ Ye browser notifications support nahi karta');
+    return;
+  }
+  const perm = Notification.permission;
+  if(perm === 'granted'){
+    if(!silent) toast('✅ Notifications pehle se enabled hain!');
+    updateNotifBtnState();
+    return;
+  }
+  if(perm === 'denied'){
+    if(!silent) toast('⚠️ Notifications blocked hain! Browser settings mein jaake manually allow karo.', 4000);
+    updateNotifBtnState();
+    return;
+  }
+  // 'default' — abhi tak user ne decide nahi kiya, browser prompt dikhao
+  try {
+    const result = await Notification.requestPermission();
+    if(result === 'granted'){
+      toast('✅ Notifications enable ho gayi! Ab nominee alerts milenge.');
+    } else {
+      if(!silent) toast('⚠️ Notifications allow nahi ki. Alerts nahi milenge.', 3500);
+    }
+  } catch(e) {
+    if(!silent) toast('❌ Permission error: ' + e.message);
+  }
+  updateNotifBtnState();
+};
+
+function updateNotifBtnState() {
+  const title  = document.getElementById('notifPermTitle');
+  const sub    = document.getElementById('notifPermSub');
+  const ico    = document.getElementById('notifPermIco');
+  const arrow  = document.getElementById('notifPermArrow');
+  const item   = document.getElementById('notifPermItem');
+  if(!title || !('Notification' in window)) return;
+
+  const perm = Notification.permission;
+  if(perm === 'granted'){
+    ico.textContent   = '✅';
+    title.textContent = 'Notifications Enabled';
+    sub.textContent   = 'Nominee approval alerts milenge';
+    if(arrow) arrow.textContent = '';
+    if(item)  item.style.cursor = 'default';
+  } else if(perm === 'denied'){
+    ico.textContent   = '🚫';
+    title.textContent = 'Notifications Blocked';
+    sub.textContent   = 'Browser settings mein jaake allow karo';
+    if(arrow) arrow.textContent = '';
+    if(item)  item.style.cursor = 'default';
+  } else {
+    ico.textContent   = '🔔';
+    title.textContent = 'Notifications Enable Karo';
+    sub.textContent   = 'Nominee approval alerts ke liye zaroori hai';
+    if(arrow) arrow.textContent = '›';
+    if(item)  item.style.cursor = 'pointer';
+  }
+}
+
+// ── CHANGE PIN ──
+let opArr=[], npArr=[], cnpArr=[], savedNewPin=[];
+window.showChangePinModal = () => {
+  opArr=[];npArr=[];cnpArr=[];savedNewPin=[];
+  ['cpStep1','cpStep2','cpStep3'].forEach((id,i)=>document.getElementById(id).className='cp-step'+(i===0?' active':''));
+  updMiniDots([],'op');updMiniDots([],'np');updMiniDots([],'cnp');
+  document.getElementById('cpHint1').textContent='Apna current 4-digit PIN daalo';
+  document.getElementById('cpStep3Sub').textContent='Naya PIN confirm karo';
+  document.getElementById('changePinModal').classList.add('active');
+};
+function updMiniDots(arr,pre) {
+  for(let i=0;i<4;i++){const d=document.getElementById(pre+i);if(d) d.className='mini-dot'+(i<arr.length?' filled':'');}
+}
+window.opTap = (n) => {
+  if(opArr.length>=4) return; opArr.push(n); updMiniDots(opArr,'op');
+  if(opArr.length===4) setTimeout(verifyOldPin,300);
+};
+window.opClr = () => { opArr=[]; updMiniDots([],'op'); };
+function verifyOldPin() {
+  const entered=opArr.join('');
+  const stored=CU?.pinHash||ll('bv_user_cache')?.pinHash;
+  if(hash(entered)===stored) {
+    for(let i=0;i<4;i++){const d=document.getElementById('op'+i);if(d) d.className='mini-dot ok';}
+    toast('✅ Purana PIN sahi!');
+    setTimeout(()=>{document.getElementById('cpStep1').className='cp-step';document.getElementById('cpStep2').className='cp-step active';},400);
+  } else {
+    for(let i=0;i<4;i++){const d=document.getElementById('op'+i);if(d) d.className='mini-dot err';}
+    document.getElementById('cpHint1').textContent='❌ Galat PIN! Dobara try karo';
+    opArr=[];
+    setTimeout(()=>{updMiniDots([],'op');document.getElementById('cpHint1').textContent='Apna current 4-digit PIN daalo';},900);
+  }
+}
+window.npTap = (n) => {
+  if(npArr.length>=4) return; npArr.push(n); updMiniDots(npArr,'np');
+  if(npArr.length===4){savedNewPin=[...npArr];setTimeout(()=>{document.getElementById('cpStep2').className='cp-step';document.getElementById('cpStep3').className='cp-step active';},300);}
+};
+window.npClr = () => { npArr=[]; updMiniDots([],'np'); };
+window.cnpTap = (n) => {
+  if(cnpArr.length>=4) return; cnpArr.push(n); updMiniDots(cnpArr,'cnp');
+  if(cnpArr.length===4) setTimeout(checkNewPinMatch,300);
+};
+window.cnpClr = () => { cnpArr=[]; updMiniDots([],'cnp'); };
+async function checkNewPinMatch() {
+  if(savedNewPin.join('')===cnpArr.join('')) {
+    for(let i=0;i<4;i++){const d=document.getElementById('cnp'+i);if(d) d.className='mini-dot ok';}
+    const newHash=hash(savedNewPin.join(''));
+    try {
+      if(CU) { await updateDoc(doc(db,'users',CU.uid),{pinHash:newHash}); CU.pinHash=newHash; sl('bv_user_cache',CU); }
+      toast('✅ PIN successfully change ho gaya!');
+      setTimeout(()=>closeModal('changePinModal'),800);
+    } catch(e) { toast('❌ Save fail: '+e.message); }
+  } else {
+    for(let i=0;i<4;i++){const d=document.getElementById('cnp'+i);if(d) d.className='mini-dot err';}
+    document.getElementById('cpStep3Sub').textContent='❌ PIN match nahi! Dobara daalo';
+    cnpArr=[];
+    setTimeout(()=>{updMiniDots([],'cnp');document.getElementById('cpStep3Sub').textContent='Naya PIN confirm karo';},900);
+  }
+}
+
+window.toast = toast;
+
+// ══════════════════════════════════════════════════════════════
+// FINGERPRINT — WebAuthn PRF + "Wrapped Key" Architecture
+//
+// Concept:
+//   Vault data HAMESHA PIN-derived key se encrypted rehta hai.
+//   PRF sirf us PIN-key ko wrap (encrypt) karke localStorage
+//   mein rakhta hai — "bv_fp_wrapped_key".
+//
+//   Register:  PRF → KEK → AES-GCM.encrypt(vaultKey) → localStorage
+//   Unlock:    PRF → KEK → AES-GCM.decrypt(wrappedKey) → vaultKey → RAM
+//
+//   PIN fallback hamesha kaam karta hai kyunki vault key kabhi
+//   nahi badli — sirf uska ek extra "envelope" bana diya.
+// ══════════════════════════════════════════════════════════════
+
+const FP_CRED_KEY    = 'bv_fp_credId';       // base64url credentialId
+const FP_FLAG_KEY    = 'bv_fp_enabled';       // 'true'/'false'
+const FP_SALT_KEY    = 'bv_fp_prf_salt';      // PRF eval salt (b64url, 32 bytes)
+const FP_WRAPPED_KEY = 'bv_fp_wrapped_key';   // AES-GCM wrapped vaultKey (JSON)
+const FP_MODE_KEY    = 'bv_fp_prf_mode';      // 'prf' | 'basic'
+
+// ── b64url helpers ──
+function b64urlToUint8(b64url) {
+  const b64 = b64url.replace(/-/g,'+').replace(/_/g,'/');
+  return Uint8Array.from(atob(b64), c => c.charCodeAt(0));
+}
+function uint8ToB64url(arr) {
+  return btoa(String.fromCharCode(...new Uint8Array(arr)))
+    .replace(/\+/g,'-').replace(/\//g,'_').replace(/=/g,'');
+}
+
+// ── Platform authenticator check ──
+function fpSupported() {
+  return !!(window.PublicKeyCredential &&
+    typeof PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable === 'function');
+}
+
+// ── PRF salt: ek baar random, hamesha same ──
+function getOrCreatePrfSalt() {
+  const stored = localStorage.getItem(FP_SALT_KEY);
+  if (stored) return b64urlToUint8(stored);
+  const salt = crypto.getRandomValues(new Uint8Array(32));
+  localStorage.setItem(FP_SALT_KEY, uint8ToB64url(salt));
+  return salt;
+}
+
+// ── PRF bytes → Key Encryption Key (AES-GCM 256) via HKDF ──
+// Ye KEK sirf vaultKey wrap/unwrap ke liye hai — vault data se direct contact nahi
+async function prfToKEK(prfBytes) {
+  const info    = new TextEncoder().encode('BhaiVault-KEK-v1');
+  const salt    = new TextEncoder().encode('BhaiVault-PRF-salt-v1');
+  const keyMat  = await crypto.subtle.importKey('raw', prfBytes, 'HKDF', false, ['deriveKey']);
+  return crypto.subtle.deriveKey(
+    { name: 'HKDF', hash: 'SHA-256', salt, info },
+    keyMat,
+    { name: 'AES-GCM', length: 256 },
+    false,                  // exportable nahi — sirf wrap/unwrap ke liye
+    ['encrypt', 'decrypt']
+  );
+}
+
+// ── vaultKey (string) → wrap → localStorage ──
+// vaultKey ko AES-GCM se encrypt karke JSON mein save karte hain
+async function wrapVaultKey(kek, vaultKeyStr) {
+  const iv        = crypto.getRandomValues(new Uint8Array(12));  // 96-bit IV
+  const encoded   = new TextEncoder().encode(vaultKeyStr);
+  const cipherBuf = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, kek, encoded);
+  const wrapped   = { iv: uint8ToB64url(iv), ct: uint8ToB64url(cipherBuf) };
+  localStorage.setItem(FP_WRAPPED_KEY, JSON.stringify(wrapped));
+}
+
+// ── localStorage → unwrap → vaultKey (string) ──
+async function unwrapVaultKey(kek) {
+  const raw = localStorage.getItem(FP_WRAPPED_KEY);
+  if (!raw) throw new Error('Wrapped key nahi mili localStorage mein');
+  const { iv, ct } = JSON.parse(raw);
+  const plainBuf = await crypto.subtle.decrypt(
+    { name: 'AES-GCM', iv: b64urlToUint8(iv) },
+    kek,
+    b64urlToUint8(ct)
+  );
+  return new TextDecoder().decode(plainBuf);
+}
+
+// ── Lock screen fingerprint button show/hide ──
+function updateFpLockBtn() {
+  const btn = document.getElementById('fpUnlockBtn');
+  const div = document.getElementById('fpDivider');
+  if (!btn || !div) return;
+  const show = localStorage.getItem(FP_FLAG_KEY) === 'true' && !!localStorage.getItem(FP_CRED_KEY);
+  btn.classList.toggle('show', show);
+  div.classList.toggle('show', show);
+}
+
+// ── Profile toggle state ──
+async function updateFpProfileToggle() {
+  const toggle = document.getElementById('fpToggle');
+  const sub    = document.getElementById('fpToggleSub');
+  if (!toggle || !sub) return;
+  if (!fpSupported()) { sub.textContent = 'Is device pe supported nahi'; toggle.disabled = true; return; }
+  const avail = await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable().catch(()=>false);
+  if (!avail) { sub.textContent = 'Fingerprint sensor nahi mila'; toggle.disabled = true; return; }
+  const enabled = localStorage.getItem(FP_FLAG_KEY) === 'true' && !!localStorage.getItem(FP_CRED_KEY);
+  toggle.checked = enabled;
+  sub.textContent = enabled
+    ? 'Fingerprint se unlock hoga — PIN ki zaroorat nahi 🔓'
+    : 'Enable karo — sirf fingerprint se vault kholega';
+}
+
+// ── Toggle handler ──
+window.onFpToggleChange = async (checked) => {
+  if (checked) { await registerFingerprint(); }
+  else         { disableFingerprint(); }
+  updateFpProfileToggle();
+  updateFpLockBtn();
+};
+
+// ── REGISTER ──────────────────────────────────────────────────
+async function registerFingerprint() {
+  const toggle = document.getElementById('fpToggle');
+  const sub    = document.getElementById('fpToggleSub');
+
+  if (!CU)               { toast('❌ Pehle login karo'); toggle.checked = false; return; }
+  if (!window._vaultKey) { toast('❌ Pehle PIN se unlock karo, phir fingerprint register karo'); toggle.checked = false; return; }
+
+  sub.textContent = '⏳ Fingerprint register ho raha hai...';
+  const prfSalt = getOrCreatePrfSalt();
+
+  try {
+    const cred = await navigator.credentials.create({
+      publicKey: {
+        challenge: crypto.getRandomValues(new Uint8Array(32)),
+        rp: { name: 'BhaiVault', id: window.location.hostname },
+        user: { id: new TextEncoder().encode(CU.uid), name: CU.name || CU.uid, displayName: CU.name || 'BhaiVault User' },
+        pubKeyCredParams: [{ type:'public-key', alg:-7 }, { type:'public-key', alg:-257 }],
+        authenticatorSelection: { authenticatorAttachment:'platform', userVerification:'required', residentKey:'preferred' },
+        timeout: 60000,
+        attestation: 'none',
+        extensions: { prf: { eval: { first: prfSalt } } }
+      }
+    });
+    if (!cred) throw new Error('Credential nahi bana');
+
+    const credId    = uint8ToB64url(new Uint8Array(cred.rawId));
+    const prfResult = cred.getClientExtensionResults()?.prf;
+    const prfBytes  = prfResult?.results?.first;
+    const prfOk     = !!(prfResult?.enabled || prfBytes);
+
+    // CredId hamesha save karo
+    localStorage.setItem(FP_CRED_KEY, credId);
+    localStorage.setItem(FP_FLAG_KEY, 'true');
+
+    if (prfOk && prfBytes) {
+      // ✅ PRF available + result mila — vaultKey wrap karo
+      const kek = await prfToKEK(prfBytes);
+      await wrapVaultKey(kek, window._vaultKey);
+      localStorage.setItem(FP_MODE_KEY, 'prf');
+      try { await updateDoc(doc(db,'users',CU.uid), { fpEnabled:true, fpMode:'prf' }); CU.fpEnabled=true; sl('bv_user_cache',CU); } catch(e) {}
+      toast('✅ Fingerprint register ho gaya! Ab sirf fingerprint se khulega — PIN kabhi nahi maangega 🎉');
+      sub.textContent = 'Fingerprint se unlock hoga — PIN ki zaroorat nahi 🔓';
+
+    } else if (prfOk && !prfBytes) {
+      // PRF enabled hai lekin create() pe result nahi aaya — kuch browsers mein get() pe milta hai
+      // Wrapped key baad mein pehle unlock pe banayenge — flag mark karo
+      localStorage.setItem(FP_MODE_KEY, 'prf-deferred');
+      try { await updateDoc(doc(db,'users',CU.uid), { fpEnabled:true, fpMode:'prf-deferred' }); CU.fpEnabled=true; sl('bv_user_cache',CU); } catch(e) {}
+      toast('✅ Fingerprint register ho gaya! Pehle unlock pe wrap complete hoga.');
+      sub.textContent = 'Fingerprint se unlock hoga — PIN ki zaroorat nahi 🔓';
+
+    } else {
+      // PRF support nahi — basic mode: sirf identity verify, vaultKey ke liye PIN chahiye
+      localStorage.setItem(FP_MODE_KEY, 'basic');
+      localStorage.removeItem(FP_SALT_KEY);
+      try { await updateDoc(doc(db,'users',CU.uid), { fpEnabled:true, fpMode:'basic' }); CU.fpEnabled=true; sl('bv_user_cache',CU); } catch(e) {}
+      toast('⚠️ Fingerprint register hua! (Tera browser PRF support nahi karta — unlock pe PIN bhi lagega)');
+      sub.textContent = 'Fingerprint verify karega + PIN bhi maangega (browser limitation)';
+    }
+
+    toggle.checked = true;
+
+  } catch(err) {
+    console.error('FP register:', err);
+    toggle.checked = false;
+    localStorage.removeItem(FP_FLAG_KEY);
+    localStorage.removeItem(FP_CRED_KEY);
+    localStorage.removeItem(FP_WRAPPED_KEY);
+    toast(err.name === 'NotAllowedError' ? '❌ Fingerprint cancel kiya' : '❌ Register fail: ' + (err.message||err.name));
+    sub.textContent = 'Enable karo — sirf fingerprint se vault kholega';
+  }
+}
+
+// ── DISABLE ───────────────────────────────────────────────────
+function disableFingerprint() {
+  [FP_CRED_KEY, FP_SALT_KEY, FP_WRAPPED_KEY, FP_MODE_KEY].forEach(k => localStorage.removeItem(k));
+  localStorage.setItem(FP_FLAG_KEY, 'false');
+  try { updateDoc(doc(db,'users',CU.uid), { fpEnabled:false }).catch(()=>{}); if(CU){CU.fpEnabled=false; sl('bv_user_cache',CU);} } catch(e) {}
+  toast('Fingerprint unlock band kar diya');
+}
+
+// ── UNLOCK ────────────────────────────────────────────────────
+window.doFpUnlock = async () => {
+  const btn    = document.getElementById('fpUnlockBtn');
+  const hint   = document.getElementById('lockHint');
+  const credId = localStorage.getItem(FP_CRED_KEY);
+  if (!credId) { toast('❌ Fingerprint register nahi hai'); return; }
+
+  const fpMode  = localStorage.getItem(FP_MODE_KEY) || 'basic';
+  const prfSalt = localStorage.getItem(FP_SALT_KEY) ? b64urlToUint8(localStorage.getItem(FP_SALT_KEY)) : null;
+
+  btn.classList.add('scanning');
+  if (hint) hint.textContent = '👆 Finger rakh do...';
+
+  try {
+    const getOpts = {
+      publicKey: {
+        challenge: crypto.getRandomValues(new Uint8Array(32)),
+        rpId: window.location.hostname,
+        allowCredentials: [{ type:'public-key', id: b64urlToUint8(credId), transports:['internal'] }],
+        userVerification: 'required',
+        timeout: 60000
+      }
+    };
+    // PRF mode mein salt ke saath request karo
+    if ((fpMode === 'prf' || fpMode === 'prf-deferred') && prfSalt) {
+      getOpts.publicKey.extensions = { prf: { eval: { first: prfSalt } } };
+    }
+
+    const assertion = await navigator.credentials.get(getOpts);
+    if (!assertion) throw new Error('No assertion');
+    if (!CU) CU = ll('bv_user_cache');
+
+    const prfResult = assertion.getClientExtensionResults()?.prf;
+    const prfBytes  = prfResult?.results?.first;
+
+    btn.classList.remove('scanning');
+    btn.classList.add('success');
+
+    if ((fpMode === 'prf' || fpMode === 'prf-deferred') && prfBytes) {
+      // ── PRF path: KEK se vaultKey unwrap karo ──────────────
+      if (hint) hint.textContent = '🔑 Key unlock ho rahi hai...';
+      const kek = await prfToKEK(prfBytes);
+
+      if (fpMode === 'prf-deferred' || !localStorage.getItem(FP_WRAPPED_KEY)) {
+        // Deferred wrap: pehla unlock — abhi wrap karo (RAM mein vaultKey hona chahiye)
+        // Yahan vaultKey nahi hogi (fresh lock) — PIN maango ek baar, phir wrap
+        if (!window._vaultKey) {
+          if (hint) hint.textContent = '🔑 Ek baar PIN daalo (setup complete karne ke liye)';
+          setTimeout(() => {
+            btn.classList.remove('success');
+            document.getElementById('lockHint').textContent = '🔑 Ek baar PIN daalo — phir hamesha fingerprint kaafi hoga';
+            // PIN ke baad wrap trigger karo
+            window._pendingFpKek = kek;
+            showScreen('lockScreen');
+            requestAnimationFrame(()=>requestAnimationFrame(genFloatNums));
+          }, 600);
+          return;
+        }
+        // vaultKey RAM mein hai — wrap karo aur mode upgrade karo
+        await wrapVaultKey(kek, window._vaultKey);
+        localStorage.setItem(FP_MODE_KEY, 'prf');
+        toast('✅ Fingerprint setup complete! Ab PIN ki zaroorat nahi 🎉');
+      } else {
+        // Normal PRF unlock: wrapped key se vaultKey nikalo
+        const vaultKey = await unwrapVaultKey(kek);
+        window._vaultKey = vaultKey;
+      }
+
+      if (hint) hint.textContent = '✅ Fingerprint se unlock ho gaya!';
+      setTimeout(() => { btn.classList.remove('success'); showMain(); }, 500);
+
+    } else if ((fpMode === 'prf' || fpMode === 'prf-deferred') && !prfBytes) {
+      // PRF expected tha lekin mila nahi — PIN fallback
+      // Vault data PIN-key se hi hai — PIN se normal unlock hoga ✅
+      if (hint) hint.textContent = '⚠️ PRF unavailable — PIN se try karo';
+      setTimeout(() => {
+        btn.classList.remove('success');
+        document.getElementById('lockHint').textContent = 'PRF unavailable — PIN daalo (data safe hai)';
+        showScreen('lockScreen');
+        requestAnimationFrame(()=>requestAnimationFrame(genFloatNums));
+      }, 800);
+
+    } else {
+      // Basic mode — sirf identity verify hua, vaultKey ke liye PIN chahiye
+      // Vault PIN-key se encrypted hai, PIN dene par normal kaam karega ✅
+      if (hint) hint.textContent = '✅ Identity verified — PIN daalo';
+      setTimeout(() => {
+        btn.classList.remove('success');
+        document.getElementById('lockHint').textContent = '👆 FP verified — PIN daalo (vault ko unlock karne ke liye)';
+        showScreen('lockScreen');
+        requestAnimationFrame(()=>requestAnimationFrame(genFloatNums));
+      }, 800);
+    }
+
+  } catch(err) {
+    btn.classList.remove('scanning');
+    btn.classList.add('error');
+    console.error('FP unlock:', err);
+    const msg = err.name === 'NotAllowedError' ? 'Fingerprint cancel — PIN use karo' : '❌ Fingerprint fail — PIN se try karo';
+    if (hint) hint.textContent = '❌ Fail — PIN se try karo';
+    toast(msg);
+    setTimeout(() => { btn.classList.remove('error'); if(hint) hint.textContent = 'Koi bhi 4 number tap karo sequence mein'; }, 2000);
+  }
+};
+
+// ── PIN unlock ke baad deferred wrap complete karo ──
+// chkLockPin ke baad call hoga agar _pendingFpKek set hai
+async function completeDeferredFpWrap() {
+  if (!window._pendingFpKek || !window._vaultKey) return;
+  try {
+    await wrapVaultKey(window._pendingFpKek, window._vaultKey);
+    localStorage.setItem(FP_MODE_KEY, 'prf');
+    toast('✅ Fingerprint fully setup! Agla unlock sirf fingerprint se hoga 🎉');
+  } catch(e) {
+    console.error('Deferred wrap fail:', e);
+  } finally {
+    window._pendingFpKek = null;
+  }
+}
+
+// ══════════════════════════════════════════════
+// 🔊 BHAIVAULT SOUND ENGINE (Web Audio API)
+// ══════════════════════════════════════════════
+const SFX = (() => {
+  let ctx = null;
+  function getCtx() {
+    if (!ctx) ctx = new (window.AudioContext || window.webkitAudioContext)();
+    if (ctx.state === 'suspended') ctx.resume();
+    return ctx;
+  }
+
+  function play(fn) {
+    try { fn(getCtx()); } catch(e) {}
+  }
+
+  // ── 1. TOUCH / TAP effect (soft click, everywhere) ──
+  function touch() {
+    play(c => {
+      const o = c.createOscillator();
+      const g = c.createGain();
+      o.connect(g); g.connect(c.destination);
+      o.type = 'sine';
+      o.frequency.setValueAtTime(800, c.currentTime);
+      o.frequency.exponentialRampToValueAtTime(600, c.currentTime + 0.06);
+      g.gain.setValueAtTime(0.08, c.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.07);
+      o.start(c.currentTime);
+      o.stop(c.currentTime + 0.07);
+    });
+  }
+
+  // ── 2. TYPING effect (soft keyboard tick) ──
+  function type() {
+    play(c => {
+      const buf = c.createBuffer(1, c.sampleRate * 0.03, c.sampleRate);
+      const data = buf.getChannelData(0);
+      for (let i = 0; i < data.length; i++) {
+        data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / data.length, 4) * 0.18;
+      }
+      const src = c.createBufferSource();
+      const g = c.createGain();
+      const f = c.createBiquadFilter();
+      f.type = 'bandpass'; f.frequency.value = 3500; f.Q.value = 1.5;
+      src.buffer = buf;
+      src.connect(f); f.connect(g); g.connect(c.destination);
+      g.gain.setValueAtTime(0.5, c.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.03);
+      src.start(c.currentTime);
+    });
+  }
+
+  // ── 3. SUCCESS effect (pleasant 3-tone chime) ──
+  function success() {
+    play(c => {
+      [[523, 0], [659, 0.1], [784, 0.2]].forEach(([freq, delay]) => {
+        const o = c.createOscillator();
+        const g = c.createGain();
+        o.connect(g); g.connect(c.destination);
+        o.type = 'sine';
+        o.frequency.value = freq;
+        const t = c.currentTime + delay;
+        g.gain.setValueAtTime(0, t);
+        g.gain.linearRampToValueAtTime(0.18, t + 0.02);
+        g.gain.exponentialRampToValueAtTime(0.001, t + 0.35);
+        o.start(t); o.stop(t + 0.35);
+      });
+    });
+  }
+
+  // ── 4. ERROR / FAIL effect (low double buzz) ──
+  function error() {
+    play(c => {
+      [0, 0.13].forEach(delay => {
+        const o = c.createOscillator();
+        const g = c.createGain();
+        o.connect(g); g.connect(c.destination);
+        o.type = 'sawtooth';
+        o.frequency.setValueAtTime(180, c.currentTime + delay);
+        o.frequency.exponentialRampToValueAtTime(120, c.currentTime + delay + 0.1);
+        g.gain.setValueAtTime(0.15, c.currentTime + delay);
+        g.gain.exponentialRampToValueAtTime(0.001, c.currentTime + delay + 0.12);
+        o.start(c.currentTime + delay);
+        o.stop(c.currentTime + delay + 0.13);
+      });
+    });
+  }
+
+  // ── 5. UNLOCK effect (rising whoosh + chime) ──
+  function unlock() {
+    play(c => {
+      // Whoosh
+      const buf = c.createBuffer(1, c.sampleRate * 0.4, c.sampleRate);
+      const data = buf.getChannelData(0);
+      for (let i = 0; i < data.length; i++) {
+        data[i] = (Math.random() * 2 - 1) * (i / data.length) * 0.06;
+      }
+      const src = c.createBufferSource();
+      const bpf = c.createBiquadFilter();
+      bpf.type = 'bandpass';
+      bpf.frequency.setValueAtTime(400, c.currentTime);
+      bpf.frequency.exponentialRampToValueAtTime(2000, c.currentTime + 0.35);
+      bpf.Q.value = 2;
+      const wg = c.createGain();
+      wg.gain.setValueAtTime(0.5, c.currentTime);
+      wg.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.4);
+      src.buffer = buf;
+      src.connect(bpf); bpf.connect(wg); wg.connect(c.destination);
+      src.start(c.currentTime);
+      // Chime
+      [[880, 0.15],[1046, 0.25],[1318, 0.32]].forEach(([freq, delay]) => {
+        const o = c.createOscillator();
+        const g = c.createGain();
+        o.connect(g); g.connect(c.destination);
+        o.type = 'sine'; o.frequency.value = freq;
+        const t = c.currentTime + delay;
+        g.gain.setValueAtTime(0.12, t);
+        g.gain.exponentialRampToValueAtTime(0.001, t + 0.4);
+        o.start(t); o.stop(t + 0.4);
+      });
+    });
+  }
+
+  // ── 6. NUMPAD tap (PIN entry) ──
+  function numpad() {
+    play(c => {
+      const o = c.createOscillator();
+      const g = c.createGain();
+      o.connect(g); g.connect(c.destination);
+      o.type = 'triangle';
+      o.frequency.setValueAtTime(1200, c.currentTime);
+      o.frequency.exponentialRampToValueAtTime(900, c.currentTime + 0.05);
+      g.gain.setValueAtTime(0.1, c.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.06);
+      o.start(c.currentTime); o.stop(c.currentTime + 0.06);
+    });
+  }
+
+  // ── 7. CLOSE / DISMISS effect ──
+  function close() {
+    play(c => {
+      const o = c.createOscillator();
+      const g = c.createGain();
+      o.connect(g); g.connect(c.destination);
+      o.type = 'sine';
+      o.frequency.setValueAtTime(500, c.currentTime);
+      o.frequency.exponentialRampToValueAtTime(300, c.currentTime + 0.12);
+      g.gain.setValueAtTime(0.08, c.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.13);
+      o.start(c.currentTime); o.stop(c.currentTime + 0.13);
+    });
+  }
+
+  return { touch, type, success, error, unlock, numpad, close };
+})();
+
+// ── Global touch sound on all buttons/tappable elements ──
+document.addEventListener('touchstart', function(e) {
+  const t = e.target.closest('button, .tab, .gnav-item, .pw-card, .prof-item, .emoji-opt, .np-btn, .fnum, .nom-opt-btn, .pill-btn, .icon-btn, .copy-btn, .field-btn, .code-btns button, .req-acts button, .nom-remove, .back-btn');
+  if (t) {
+    // Numpad buttons get special sound
+    if (t.classList.contains('np-btn') || t.classList.contains('fnum') || t.classList.contains('nom-opt-btn')) {
+      SFX.numpad();
+    } else {
+      SFX.touch();
+    }
+  }
+}, { passive: true });
+
+// ── Typing sound on all inputs ──
+document.addEventListener('input', function(e) {
+  if (e.target.matches('input, textarea')) SFX.type();
+}, { passive: true });
+
+
+window.showLock = () => {
+  _origShowLock();
+  setTimeout(updateFpLockBtn, 100);
+};
+
+</script>
+</body>
+</html>
