@@ -10,7 +10,6 @@
 </head>
 <body>
 
-<!-- ─── SPLASH SCREEN ─── -->
 <div id="splash">
   <div class="splash-logo">
     <div class="logo-icon">
@@ -30,7 +29,6 @@
   <p class="splash-tagline">Bhai log, baat karo!</p>
 </div>
 
-<!-- ─── AUTH SCREEN ─── -->
 <div id="auth-screen" class="screen hidden">
   <div class="auth-container">
     <div class="auth-logo">
@@ -50,18 +48,11 @@
       <p>Bhai log se connect karo</p>
     </div>
 
-    <!-- Step 1: Email -->
     <div id="email-step">
       <div class="auth-card">
         <h2>Email Dalo</h2>
         <p class="auth-hint">Magic link bhejenge — password ka jhanjhat nahi! 🪄</p>
-        <input
-          type="email"
-          id="email-input"
-          placeholder="bhai@gmail.com"
-          class="text-input"
-          style="width:100%;margin-bottom:16px;box-sizing:border-box"
-        />
+        <input type="email" id="email-input" placeholder="bhai@gmail.com" class="text-input" style="width:100%;margin-bottom:16px;box-sizing:border-box" />
         <button id="send-link-btn" class="btn-primary" onclick="sendMagicLink()">
           <span>Magic Link Bhejo</span>
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
@@ -69,37 +60,22 @@
       </div>
     </div>
 
-    <!-- Step 2: Waiting for magic link click -->
     <div id="waiting-step" class="hidden">
       <div class="auth-card" style="text-align:center">
         <div style="font-size:3.5rem;margin-bottom:16px">📬</div>
         <h2>Email Check Karo!</h2>
-        <p class="auth-hint">
-          Magic link bhej diya hai Gmail pe.<br/>
-          Email mein link pe click karo — app automatically open ho jaayega!
-        </p>
-        <p style="font-size:0.8rem;color:var(--text-muted);margin-top:12px">
-          Gmail ka Spam/Promotions folder bhi check karo agar nahi aaya 👀
-        </p>
-        <button class="btn-ghost" style="margin-top:20px" onclick="backToEmail()">
-          ← Dobara Bhejo
-        </button>
+        <p class="auth-hint">Magic link bhej diya hai Gmail pe.<br/>Email mein link pe click karo!</p>
+        <button class="btn-ghost" style="margin-top:20px" onclick="backToEmail()">← Dobara Bhejo</button>
       </div>
     </div>
 
-    <!-- Step 3: Profile Setup -->
     <div id="profile-step" class="hidden">
       <div class="auth-card">
         <h2>Profile Banao</h2>
-        <p class="auth-hint">Ek baar karo, phir set!</p>
         <div class="avatar-picker">
-          <div class="avatar-preview" id="avatar-preview">
-            <span id="avatar-initials">?</span>
-          </div>
+          <div class="avatar-preview" id="avatar-preview"><span id="avatar-initials">?</span></div>
           <button class="avatar-change-btn" onclick="pickAvatar()">Emoji Choose Karo</button>
-          <div id="emoji-picker" class="emoji-picker hidden">
-            <div class="emoji-grid" id="emoji-grid"></div>
-          </div>
+          <div id="emoji-picker" class="emoji-picker hidden"><div class="emoji-grid" id="emoji-grid"></div></div>
         </div>
         <input type="text" id="name-input" placeholder="Tera naam kya hai bhai?" class="text-input" />
         <div class="phone-input-group" style="margin-bottom:12px">
@@ -107,40 +83,29 @@
           <input type="tel" id="phone-number-input" placeholder="9876543210" maxlength="10" />
         </div>
         <input type="text" id="status-input" placeholder="Status (e.g. Busy hun yaar 😅)" class="text-input" />
-        <button class="btn-primary" onclick="saveProfile()">
-          <span>Chalo Shuru Karte Hain!</span>
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </button>
+        <button class="btn-primary" onclick="saveProfile()"><span>Chalo Shuru Karte Hain!</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ─── MAIN APP ─── -->
 <div id="app-screen" class="screen hidden">
   <div class="app-layout">
-
-    <!-- SIDEBAR -->
     <aside class="sidebar" id="sidebar">
       <div class="sidebar-header">
         <div class="sidebar-logo">
-          <svg width="28" height="28" viewBox="0 0 52 52" fill="none">
-            <circle cx="26" cy="26" r="26" fill="url(#lgS)"/>
-            <path d="M14 20c0-2.2 1.8-4 4-4h16c2.2 0 4 1.8 4 4v10c0 2.2-1.8 4-4 4H24l-6 4v-4h-4c-2.2 0-4-1.8-4-4V20z" fill="white" fill-opacity="0.9"/>
-            <defs><linearGradient id="lgS" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop stop-color="#00E5A0"/><stop offset="1" stop-color="#00B4D8"/></linearGradient></defs>
-          </svg>
+          <svg width="28" height="28" viewBox="0 0 52 52" fill="none"><circle cx="26" cy="26" r="26" fill="url(#lgS)"/><path d="M14 20c0-2.2 1.8-4 4-4h16c2.2 0 4 1.8 4 4v10c0 2.2-1.8 4-4 4H24l-6 4v-4h-4c-2.2 0-4-1.8-4-4V20z" fill="white" fill-opacity="0.9"/><defs><linearGradient id="lgS" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop stop-color="#00E5A0"/><stop offset="1" stop-color="#00B4D8"/></linearGradient></defs></svg>
           <span>BhaiChara</span>
         </div>
         <div class="sidebar-actions">
-          <button class="icon-btn" onclick="openNewChat()" title="New Chat">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+          <button class="icon-btn" onclick="openNewChat()" title="New Chat"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg></button>
+          <button class="icon-btn" onclick="openNewGroup()" title="New Group"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg></button>
+          
+          <button class="icon-btn" onclick="openSettings()" title="Settings">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
           </button>
-          <button class="icon-btn" onclick="openNewGroup()" title="New Group">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
-          </button>
-          <button class="icon-btn" onclick="openProfile()" id="my-avatar-btn" title="Profile">
-            <div class="avatar-tiny" id="sidebar-avatar">?</div>
-          </button>
+
+          <button class="icon-btn" onclick="openProfile()" title="Profile"><div class="avatar-tiny" id="sidebar-avatar">?</div></button>
         </div>
       </div>
 
@@ -154,16 +119,9 @@
         <button class="tab" onclick="switchTab('groups', this)">Groups</button>
       </div>
 
-      <div class="chat-list" id="chat-list">
-        <div class="empty-state">
-          <span>💬</span>
-          <p>Koi baat nahi shuru hui</p>
-          <button class="btn-sm" onclick="openNewChat()">New Chat Shuru Karo</button>
-        </div>
-      </div>
+      <div class="chat-list" id="chat-list"></div>
     </aside>
 
-    <!-- CHAT AREA -->
     <main class="chat-area" id="chat-area">
       <div class="welcome-screen" id="welcome-screen">
         <div class="welcome-content">
@@ -173,12 +131,9 @@
         </div>
       </div>
 
-      <!-- Chat View -->
       <div id="chat-view" class="hidden">
         <div class="chat-header" id="chat-header">
-          <button class="back-btn" onclick="backToList()">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-          </button>
+          <button class="back-btn" onclick="backToList()"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
           <div class="chat-header-info" onclick="openChatInfo()">
             <div class="avatar-sm" id="chat-avatar">?</div>
             <div>
@@ -187,30 +142,19 @@
             </div>
           </div>
           <div class="chat-header-actions">
-            <button class="icon-btn" onclick="openChatInfo()">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
-            </button>
+            <button class="icon-btn" onclick="openChatInfo()"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg></button>
           </div>
         </div>
 
         <div class="messages-area" id="messages-area">
           <div id="messages-list"></div>
-          <div id="typing-indicator" class="typing-indicator hidden">
-            <div class="typing-bubble">
-              <span></span><span></span><span></span>
-            </div>
-            <span class="typing-text">likh raha hai...</span>
-          </div>
+          <div id="typing-indicator" class="typing-indicator hidden"><div class="typing-bubble"><span></span><span></span><span></span></div><span class="typing-text">likh raha hai...</span></div>
         </div>
 
         <div class="message-input-area">
           <button class="icon-btn emoji-btn" onclick="toggleEmojiKeyboard()">😊</button>
-          <div class="message-input-wrapper">
-            <textarea id="message-input" placeholder="Message likho..." rows="1" oninput="autoResize(this); handleTyping()" onkeydown="handleKeyDown(event)"></textarea>
-          </div>
-          <button class="send-btn" id="send-btn" onclick="sendMessage()">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
-          </button>
+          <div class="message-input-wrapper"><textarea id="message-input" placeholder="Message likho..." rows="1" oninput="autoResize(this); handleTyping()" onkeydown="handleKeyDown(event)"></textarea></div>
+          <button class="send-btn" id="send-btn" onclick="sendMessage()"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg></button>
         </div>
         <div id="emoji-keyboard" class="emoji-keyboard hidden"></div>
       </div>
@@ -218,42 +162,56 @@
   </div>
 </div>
 
-<!-- ─── MODALS ─── -->
+<div id="settings-modal" class="modal hidden">
+  <div class="modal-overlay" onclick="closeModal('settings-modal')"></div>
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3>Meri Settings ⚙️</h3>
+      <button onclick="closeModal('settings-modal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="settings-input-group">
+        <label>Name (Changable)</label>
+        <input type="text" id="setting-name-input" class="text-input" placeholder="Tera naam?" />
+      </div>
+      <div class="settings-input-group">
+        <label>Mood/Status (Changable)</label>
+        <input type="text" id="setting-status-input" class="text-input" placeholder="Kaisa mood hai aaj?" />
+      </div>
+      <div class="settings-input-group">
+        <label>Phone Number (Not Changable)</label>
+        <div class="readonly-text" id="setting-phone-display">...</div>
+      </div>
+      <div class="settings-input-group">
+        <label>Email ID (Not Changable)</label>
+        <div class="readonly-text" id="setting-email-display">...</div>
+      </div>
+      <button class="btn-primary" onclick="saveSettings()" style="margin-top:20px">
+        <span>Save Changes</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+  </div>
+</div>
 
-<!-- New Chat Modal -->
 <div id="new-chat-modal" class="modal hidden">
   <div class="modal-overlay" onclick="closeModal('new-chat-modal')"></div>
   <div class="modal-box">
-    <div class="modal-header">
-      <h3>New Chat</h3>
-      <button onclick="closeModal('new-chat-modal')">✕</button>
-    </div>
+    <div class="modal-header"><h3>New Chat</h3><button onclick="closeModal('new-chat-modal')">✕</button></div>
     <div class="modal-body">
-      <p class="hint-text">Phone number se bhai ko dhundo</p>
-      <div class="phone-input-group">
-        <span class="country-code">+91</span>
-        <input type="tel" id="search-phone" placeholder="9876543210" maxlength="10" oninput="searchUserByPhone()" />
-      </div>
+      <div class="phone-input-group"><span class="country-code">+91</span><input type="tel" id="search-phone" placeholder="9876543210" maxlength="10" oninput="searchUserByPhone()" /></div>
       <div id="user-search-result" class="user-search-result"></div>
     </div>
   </div>
 </div>
 
-<!-- New Group Modal -->
 <div id="new-group-modal" class="modal hidden">
   <div class="modal-overlay" onclick="closeModal('new-group-modal')"></div>
   <div class="modal-box">
-    <div class="modal-header">
-      <h3>New Group Banao</h3>
-      <button onclick="closeModal('new-group-modal')">✕</button>
-    </div>
+    <div class="modal-header"><h3>New Group Banao</h3><button onclick="closeModal('new-group-modal')">✕</button></div>
     <div class="modal-body">
       <input type="text" id="group-name-input" placeholder="Group ka naam..." class="text-input" />
-      <p class="hint-text">Members add karo (phone se):</p>
-      <div class="phone-input-group">
-        <span class="country-code">+91</span>
-        <input type="tel" id="group-search-phone" placeholder="9876543210" maxlength="10" oninput="searchGroupMember()" />
-      </div>
+      <div class="phone-input-group"><span class="country-code">+91</span><input type="tel" id="group-search-phone" placeholder="9876543210" maxlength="10" oninput="searchGroupMember()" /></div>
       <div id="group-search-result" class="user-search-result"></div>
       <div id="group-members-list" class="group-members-list"></div>
       <button class="btn-primary" onclick="createGroup()" style="margin-top:12px">Group Banao</button>
@@ -261,26 +219,20 @@
   </div>
 </div>
 
-<!-- Profile Modal -->
 <div id="profile-modal" class="modal hidden">
   <div class="modal-overlay" onclick="closeModal('profile-modal')"></div>
   <div class="modal-box">
-    <div class="modal-header">
-      <h3>Mera Profile</h3>
-      <button onclick="closeModal('profile-modal')">✕</button>
-    </div>
+    <div class="modal-header"><h3>Mera Profile</h3><button onclick="closeModal('profile-modal')">✕</button></div>
     <div class="modal-body" style="text-align:center">
       <div class="avatar-preview" id="profile-avatar-big" style="margin:0 auto 16px;font-size:2rem;width:80px;height:80px;line-height:80px">?</div>
-      <div class="profile-name"   id="profile-name-display">...</div>
-      <div class="profile-phone"  id="profile-phone-display">...</div>
-      <div class="profile-phone"  id="profile-email-display" style="font-size:0.8rem;opacity:0.7">...</div>
+      <div class="profile-name" id="profile-name-display">...</div>
+      <div class="profile-phone" id="profile-phone-display">...</div>
       <div class="profile-status" id="profile-status-display">...</div>
       <button class="btn-ghost" style="margin-top:16px" onclick="logout()">🚪 Logout</button>
     </div>
   </div>
 </div>
 
-<!-- Toast -->
 <div id="toast" class="toast hidden"></div>
 
 <script type="module" src="app.js"></script>
