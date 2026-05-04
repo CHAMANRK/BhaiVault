@@ -1507,7 +1507,7 @@ window.showScreen = (id) => {
 const showScreen = (id) => window.showScreen(id);
 
 // ── BOOT ──
-window.addEventListener('DOMContentLoaded', async () => {
+  window.addEventListener('DOMContentLoaded', async () => {
   spawnStars();
   const uid = ll('bv_uid');
   if (!uid) { loading(false); showScreen('welcomeScreen'); return; }
@@ -1525,6 +1525,14 @@ window.addEventListener('DOMContentLoaded', async () => {
     if (!CU) { loading(false); showScreen('welcomeScreen'); return; }
   }
   loading(false);
+
+  // ✅ APK mein nativeFpUnlock 800ms mein aayega — loading screen pe raho
+  if (window.AndroidBridge) {
+    showScreen('loadingScreen');
+    return;
+  }
+
+  // Browser mein normal lockScreen dikhao
   showScreen('lockScreen');
   requestAnimationFrame(()=>requestAnimationFrame(genFloatNums));
   setTimeout(updateFpLockBtn, 200);
