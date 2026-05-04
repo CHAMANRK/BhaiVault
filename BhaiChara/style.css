@@ -245,8 +245,11 @@ html, body {
 
 /* ─── APP LAYOUT ─── */
 .app-layout {
-  display: flex; height: 100vh; overflow: hidden;
+  display: flex; 
+  height: 100%; /* 100vh ko 100% kar diya */
+  overflow: hidden;
 }
+
 
 /* ─── SIDEBAR ─── */
 .sidebar {
