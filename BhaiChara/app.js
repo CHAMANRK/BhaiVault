@@ -740,16 +740,25 @@ window.openChatInfo = async function() {
   modal.classList.remove("hidden");
 };
 
+// ────────────────────────────────────────────────────────
 // ─────────────────────────────────────────────────────────
 //  LOGOUT
 // ─────────────────────────────────────────────────────────
 window.logout = async function() {
-  if (presenceRef) set(presenceRef, false);
-  await signOut(auth);
+  if (presenceRef) set(presenceRef, false); // User ko turant offline dikhao
+  await signOut(auth); // Firebase se logout
+  
+  // Dono modal band kar do (chahe jahan se bhi logout dabaya ho)
   closeModal("profile-modal");
-  currentUser = null; currentChat = null;
+  closeModal("settings-modal"); 
+  
+  currentUser = null; 
+  currentChat = null;
+  
   showToast("Phir milenge bhai! 👋");
+  // Note: onAuthStateChanged automatically 'auth' screen (email wala) dikha dega
 };
+
 
 // ─────────────────────────────────────────────────────────
 //  EMOJI
