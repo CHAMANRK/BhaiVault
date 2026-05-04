@@ -694,3 +694,16 @@ textarea#message-input::placeholder { color: var(--text-muted); }
     max-width: 85% !important;
   }
 }
+/* ─── ANONYMOUS MODE STYLES ─── */
+.anonymous-btn {
+  font-size: 1.3rem;
+  transition: all 0.2s;
+}
+.anonymous-btn.active {
+  background: rgba(248, 81, 73, 0.2); 
+  border-radius: var(--radius-sm);
+  filter: drop-shadow(0 0 6px var(--danger));
+}
+.msg-bubble.anonymous {
+  border-left: 3px solid var(--danger); /* Secret message ki pehchan */
+}
