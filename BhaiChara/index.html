@@ -232,6 +232,28 @@
     </div>
   </div>
 </div>
+  <div id="chat-info-modal" class="modal hidden">
+  <div class="modal-overlay" onclick="closeModal('chat-info-modal')"></div>
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3>Chat Details ℹ️</h3>
+      <button onclick="closeModal('chat-info-modal')">✕</button>
+    </div>
+    <div class="modal-body" style="text-align:center">
+      <div class="avatar-preview" id="info-avatar-big" style="margin:0 auto 16px;font-size:2rem;width:80px;height:80px;line-height:80px; box-shadow: var(--shadow-md);">?</div>
+      <div class="profile-name" id="info-name-display" style="font-size: 1.4rem;">...</div>
+      
+      <div class="profile-phone" id="info-extra-display" style="color: var(--text-secondary); margin-top: 8px; font-size: 0.95rem;">...</div>
+      <div class="profile-status" id="info-status-display" style="color: var(--accent); margin-top: 8px; font-size: 0.85rem; font-weight: 600;">...</div>
+      
+      <div id="info-group-members" class="group-members-list hidden" style="margin-top: 24px; text-align: left; background: var(--bg-input); padding: 12px; border-radius: var(--radius-md); border: 1px solid var(--border);">
+        <h4 style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 12px; border-bottom: 1px solid var(--border-light); padding-bottom: 6px;">Group Members</h4>
+        <div id="info-members-list-container" style="max-height: 200px; overflow-y: auto;"></div>
+      </div>
+    </div>
+  </div>
+  </div>
+  
 
 <div id="toast" class="toast hidden"></div>
 
