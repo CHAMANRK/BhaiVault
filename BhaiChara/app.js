@@ -778,6 +778,53 @@ function insertEmoji(emoji) {
   input.focus();
 }
 
+
+// ─────────────────────────────────────────────────────────
+//  QUICK SETTINGS (CLEAR CHAT)
+// ─────────────────────────────────────────────────────────
+window.openChatQuickSettings = function() {
+  if (!currentChat) return;
+  document.getElementById("chat-quick-settings-modal").classList.remove("hidden");
+};
+
+window.clearChat = async function() {
+  if (!currentChat) return;
+  
+  // Browser ka default confirm dialog use karenge
+  const confirmClear = window.confirm("Sach mein saare messages clear karne hain? (Dono ki taraf se chat saaf ho jayegi)");
+  
+  if (!confirmClear) return;
+
+  const chatId = currentChat.id;
+  
+  try {
+    // 1. Firebase se messages node delete karo
+    await set(ref(db, `messages/${chatId}`), null);
+    
+    // 2. Chat list preview mein "Chat cleared" update karo (Taki empty na lage)
+    const clearPreview = {
+      lastMessage: "🚫 Chat cleared",
+      lastMessageTime: Date.now()
+    };
+
+    if (currentChat.type === "private" && currentChat.peerId) {
+       await update(ref(db, `user_chats/${currentUser.uid}/${chatId}`), clearPreview);
+       await update(ref(db, `user_chats/${currentChat.peerId}/${chatId}`), clearPreview);
+    } else if (currentChat.type === "group") {
+       const membersSnap = await get(ref(db, `groups/${chatId}/members`));
+       const members = membersSnap.val() || [];
+       for(let mId of members) {
+          await update(ref(db, `user_chats/${mId}/${chatId}`), clearPreview);
+       }
+    }
+
+    closeModal('chat-quick-settings-modal');
+    showToast("Chat saaf kar di gayi! 🧹");
+  } catch (e) {
+    showToast("Error: " + e.message);
+  }
+};
+
 // ─────────────────────────────────────────────────────────
 //  SETTINGS MODAL LOGIC
 // ─────────────────────────────────────────────────────────
@@ -898,3 +945,5 @@ window.createGroup        = window.createGroup;
 window.openChatInfo       = window.openChatInfo;
 window.openSettings    = window.openSettings;
 window.saveSettings    = window.saveSettings;
+window.openChatQuickSettings = window.openChatQuickSettings;
+window.clearChat             = window.clearChat;
