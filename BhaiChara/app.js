@@ -721,6 +721,52 @@ function insertEmoji(emoji) {
 }
 
 // ─────────────────────────────────────────────────────────
+//  SETTINGS MODAL LOGIC
+// ─────────────────────────────────────────────────────────
+window.openSettings = function() {
+  const u = currentUser;
+  
+  // Pehle se set values ko inputs mein daalo
+  document.getElementById("setting-name-input").value   = u.name || "";
+  document.getElementById("setting-status-input").value = u.status || "";
+  
+  // Read-only info update karo
+  document.getElementById("setting-phone-display").textContent = u.phone || "Number nahi hai";
+  document.getElementById("setting-email-display").textContent = u.email || "Email nahi hai";
+  
+  // Modal open karo
+  document.getElementById("settings-modal").classList.remove("hidden");
+};
+
+window.saveSettings = async function() {
+  const newName   = document.getElementById("setting-name-input").value.trim();
+  const newStatus = document.getElementById("setting-status-input").value.trim();
+
+  if (!newName) { 
+    showToast("Naam khali nahi chhod sakte bhai!"); 
+    return; 
+  }
+
+  try {
+    // Firebase mein update
+    await update(ref(db, `users/${currentUser.uid}`), {
+      name: newName,
+      status: newStatus
+    });
+
+    // Local state update
+    currentUser.name   = newName;
+    currentUser.status = newStatus;
+
+    showToast("Settings save ho gayi! 🔥");
+    closeModal("settings-modal");
+  } catch (error) {
+    showToast("Error aaya yaar: " + error.message);
+  }
+};
+
+
+// ─────────────────────────────────────────────────────────
 //  UI HELPERS
 // ─────────────────────────────────────────────────────────
 window.autoResize = function(el) {
@@ -792,3 +838,5 @@ window.addGroupMember     = window.addGroupMember;
 window.removeGroupMember  = window.removeGroupMember;
 window.createGroup        = window.createGroup;
 window.openChatInfo       = window.openChatInfo;
+window.openSettings    = window.openSettings;
+window.saveSettings    = window.saveSettings;
