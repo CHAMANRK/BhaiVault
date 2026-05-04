@@ -317,8 +317,9 @@ window.openChat = async function(chatId, type) {
     updateChatHeader(currentChat.name, currentChat.avatar, `${(g.members||[]).length} members`, false);
   }
 
+  // 👇 BUG FIXED HERE 👇
   document.getElementById("welcome-screen").style.display = "none";
-  document.getElementById("chat-view").style.display = "flex";
+  document.getElementById("chat-view").classList.remove("hidden");
 
   if (window.innerWidth <= 700) {
     document.getElementById("sidebar").classList.add("hidden-mobile");
@@ -337,8 +338,9 @@ function updateChatHeader(name, avatar, status, online) {
 }
 
 window.backToList = function() {
+  // 👇 BUG FIXED HERE 👇
   document.getElementById("sidebar").classList.remove("hidden-mobile");
-  document.getElementById("chat-view").style.display = "none";
+  document.getElementById("chat-view").classList.add("hidden"); 
   document.getElementById("welcome-screen").style.display = "";
   currentChat = null;
 };
@@ -764,7 +766,7 @@ function esc(str) {
   return String(str).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
 }
 
-// Global exports (already set via window.X = function above — keeping for clarity)
+// Global exports 
 window.sendMagicLink   = window.sendMagicLink;
 window.backToEmail     = window.backToEmail;
 window.saveProfile     = window.saveProfile;
