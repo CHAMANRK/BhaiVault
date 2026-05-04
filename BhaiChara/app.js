@@ -37,6 +37,7 @@ let activeTab           = "chats";
 let typingTimer         = null;
 let chatListeners       = {};
 let presenceRef         = null;
+let previousChatsState = {}; // Naye messages track karne ke liye
 
 // ── EMOJI LIST ───────────────────────────────────────────
 const EMOJIS = ["😎","🤙","🔥","💪","🤘","😂","🥳","👊","🙏","❤️","💯","👍","😊","🤣","😅","🫡","🤝","🎉","⚡","💀","🐐","🦁","🌟","🎯","🚀","👑","🤑","😤","😏","🫠","🧠","🤟","✌️","👻","🐺","🦊","🎮","💎","🍕","🌙"];
@@ -119,6 +120,7 @@ function showApp() {
   updateSidebarAvatar();
   setupPresence();
   loadChatList();
+  askNotificationPermission();
 }
 
 // ─────────────────────────────────────────────────────────
@@ -213,6 +215,13 @@ function setupPresence() {
 // ─────────────────────────────────────────────────────────
 //  CHAT LIST
 // ─────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────
+//  CHAT LIST
+// ─────────────────────────────────────────────────────────
+
+// Naye messages track karne ke liye (Agar upar add nahi kiya tha toh yahan sahi rahega)
+let previousChatsState = {}; 
+
 function loadChatList() {
   const uid = currentUser.uid;
 
@@ -221,6 +230,18 @@ function loadChatList() {
     const items = [];
 
     for (const [chatId, meta] of Object.entries(chats)) {
+      
+      // 🚨 NEW NOTIFICATION LOGIC START 🚨
+      const prev = previousChatsState[chatId];
+      const isChatOpen = (currentChat && currentChat.id === chatId);
+      
+      // Agar purana state tha, time change hua, unread count badha, aur chat open nahi hai
+      if (prev && meta.lastMessageTime > prev.lastMessageTime && meta.unread > (prev.unread || 0) && !isChatOpen) {
+          triggerBhaiNotification(meta.name || "Bhai", meta.lastMessage);
+      }
+      previousChatsState[chatId] = meta;
+      // 🚨 NEW NOTIFICATION LOGIC END 🚨
+
       if (meta.type === "group"   && activeTab !== "groups") continue;
       if (meta.type === "private" && activeTab !== "chats")  continue;
       items.push({ chatId, ...meta });
@@ -274,6 +295,8 @@ window.switchTab = function(tab, el) {
   el.classList.add("active");
   loadChatList();
 };
+
+
 
 // ─────────────────────────────────────────────────────────
 //  OPEN CHAT
@@ -925,6 +948,46 @@ function esc(str) {
   if (!str) return "";
   return String(str).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
 }
+
+// ─────────────────────────────────────────────────────────
+//  BHAI NOTIFICATIONS (SOUND + PUSH)
+// ─────────────────────────────────────────────────────────
+window.askNotificationPermission = function() {
+  if ("Notification" in window && Notification.permission === "default") {
+    Notification.requestPermission();
+  }
+};
+
+window.triggerBhaiNotification = function(title, body) {
+  // 1. Futuristic Blip Sound (Bina kisi .mp3 file ke) 🎵
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(800, ctx.currentTime); // Base pitch
+    osc.frequency.exponentialRampToValueAtTime(1200, ctx.currentTime + 0.1); // Slide up
+    gain.gain.setValueAtTime(0.5, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.1); // Fade out
+    osc.start();
+    osc.stop(ctx.currentTime + 0.1);
+  } catch (e) {
+    console.log("Sound bajne me issue: ", e);
+  }
+
+  // 2. Browser Push Notification with Random Emoji 🤙
+  if ("Notification" in window && Notification.permission === "granted") {
+    const emojis = ["🤙", "🔥", "😎", "💪", "⚡", "🚀", "🎯"];
+    const randEmoji = emojis[Math.floor(Math.random() * emojis.length)];
+    
+    new Notification(`${randEmoji} ${title} bola:`, {
+      body: body,
+      vibrate: [200, 100, 200] // Phone vibrate hoga
+    });
+  }
+};
 
 // Global exports 
 window.sendMagicLink   = window.sendMagicLink;
