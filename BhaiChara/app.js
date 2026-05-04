@@ -566,3 +566,4 @@ window.openChat = window.openChat; window.backToList = window.backToList; window
 window.openChatInfo = window.openChatInfo; window.openSettings = window.openSettings; window.saveSettings = window.saveSettings;
 window.openChatQuickSettings = window.openChatQuickSettings; window.clearChat = window.clearChat; window.askNotificationPermission = window.askNotificationPermission;
 window.triggerBhaiNotification = window.triggerBhaiNotification;
+window.toggleAnonymous = window.toggleAnonymous;
