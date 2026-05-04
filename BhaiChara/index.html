@@ -164,9 +164,16 @@
   <div class="modal-overlay" onclick="closeModal('settings-modal')"></div>
   <div class="modal-box">
     <div class="modal-header">
+          <div class="modal-header">
       <h3>Meri Settings ⚙️</h3>
-      <button onclick="closeModal('settings-modal')">✕</button>
-    </div>
+      <div style="display: flex; gap: 8px;">
+        <button onclick="askNotificationPermission()" title="Notifications ON karo" style="color: var(--accent);">
+          🔔
+        </button>
+        <button onclick="closeModal('settings-modal')">✕</button>
+      </div>
+          </div>
+      
     <div class="modal-body">
       <div class="settings-input-group">
         <label>Name (Changable)</label>
