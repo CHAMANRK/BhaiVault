@@ -6,48 +6,8 @@
   <title>BhaiChara</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css?v=new1" />
-
-    <style>
-    @media screen and (max-width: 700px) {
-      .app-layout {
-        display: block !important;
-        position: relative !important;
-      }
-      .sidebar {
-        position: absolute !important;
-        top: 0 !important;
-        left: 0 !important;
-        width: 100% !important;
-        height: 100% !important;
-        z-index: 50 !important;
-        transform: translateX(0) !important;
-        transition: transform 0.3s ease !important;
-        background: var(--bg-card) !important;
-      }
-      .sidebar.hidden-mobile {
-        transform: translateX(-100%) !important;
-      }
-      .chat-area {
-        position: absolute !important;
-        top: 0 !important;
-        left: 0 !important;
-        width: 100% !important;
-        height: 100% !important;
-        z-index: 10 !important;
-        flex: none !important;
-        display: block !important;
-      }
-      .back-btn {
-        display: flex !important;
-      }
-      .msg-bubble {
-        max-width: 85% !important;
-      }
-    }
-  </style>
+  <link rel="stylesheet" href="style.css?v=v2" />
 </head>
-  
 <body>
 
 <div id="splash">
@@ -140,11 +100,9 @@
         <div class="sidebar-actions">
           <button class="icon-btn" onclick="openNewChat()" title="New Chat"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg></button>
           <button class="icon-btn" onclick="openNewGroup()" title="New Group"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg></button>
-          
           <button class="icon-btn" onclick="openSettings()" title="Settings">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
           </button>
-
           <button class="icon-btn" onclick="openProfile()" title="Profile"><div class="avatar-tiny" id="sidebar-avatar">?</div></button>
         </div>
       </div>
@@ -181,14 +139,12 @@
               <div class="chat-status" id="chat-status">...</div>
             </div>
           </div>
-                    <div class="chat-header-actions">
+          <div class="chat-header-actions">
             <button class="icon-btn" onclick="openChatQuickSettings()">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
             </button>
-                    </div>
-          
-
-        <div class="messages-area" id="messages-area">
+          </div>
+        </div> <div class="messages-area" id="messages-area">
           <div id="messages-list"></div>
           <div id="typing-indicator" class="typing-indicator hidden"><div class="typing-bubble"><span></span><span></span><span></span></div><span class="typing-text">likh raha hai...</span></div>
         </div>
@@ -274,7 +230,8 @@
     </div>
   </div>
 </div>
-  <div id="chat-info-modal" class="modal hidden">
+
+<div id="chat-info-modal" class="modal hidden">
   <div class="modal-overlay" onclick="closeModal('chat-info-modal')"></div>
   <div class="modal-box">
     <div class="modal-header">
@@ -294,9 +251,9 @@
       </div>
     </div>
   </div>
-  </div>
+</div>
 
-  <div id="chat-quick-settings-modal" class="modal hidden">
+<div id="chat-quick-settings-modal" class="modal hidden">
   <div class="modal-overlay" onclick="closeModal('chat-quick-settings-modal')"></div>
   <div class="modal-box" style="max-width: 320px;">
     <div class="modal-header">
@@ -318,10 +275,8 @@
       </div>
     </div>
   </div>
-  </div>
+</div>
   
-  
-
 <div id="toast" class="toast hidden"></div>
 
 <script type="module" src="app.js"></script>
