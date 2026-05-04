@@ -166,8 +166,23 @@ function setupPresence() {
 //  BHAI NOTIFICATIONS (SOUND + PUSH)
 // ─────────────────────────────────────────────────────────
 window.askNotificationPermission = function() {
-  if ("Notification" in window && Notification.permission === "default") {
-    Notification.requestPermission();
+  if (!("Notification" in window)) {
+    showToast("Tera browser notifications support nahi karta bhai! 😢");
+    return;
+  }
+  
+  if (Notification.permission === "granted") {
+    showToast("Notifications pehle se ON hain bhai! 🔔");
+  } else if (Notification.permission !== "denied") {
+    Notification.requestPermission().then(permission => {
+      if (permission === "granted") {
+        showToast("Bhai notifications ON ho gaye! 🚀");
+      } else {
+        showToast("Tune notifications allow nahi kiye! 🚫");
+      }
+    });
+  } else {
+    showToast("Notifications blocked hain. Browser ki site settings check kar! 🔒");
   }
 };
 
@@ -183,7 +198,9 @@ window.triggerBhaiNotification = function(title, body) {
     gain.gain.setValueAtTime(0.5, ctx.currentTime);
     gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.1);
     osc.start(); osc.stop(ctx.currentTime + 0.1);
-  } catch (e) {}
+  } catch (e) {
+    console.log("Sound bajne me issue: ", e);
+  }
 
   if ("Notification" in window && Notification.permission === "granted") {
     const emojis = ["🤙", "🔥", "😎", "💪", "⚡", "🚀", "🎯"];
@@ -191,6 +208,7 @@ window.triggerBhaiNotification = function(title, body) {
     new Notification(`${randEmoji} ${title} bola:`, { body: body, vibrate: [200, 100, 200] });
   }
 };
+
 
 // ─────────────────────────────────────────────────────────
 //  CHAT LIST
