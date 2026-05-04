@@ -141,10 +141,12 @@
               <div class="chat-status" id="chat-status">...</div>
             </div>
           </div>
-          <div class="chat-header-actions">
-            <button class="icon-btn" onclick="openChatInfo()"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg></button>
-          </div>
-        </div>
+                    <div class="chat-header-actions">
+            <button class="icon-btn" onclick="openChatQuickSettings()">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
+            </button>
+                    </div>
+          
 
         <div class="messages-area" id="messages-area">
           <div id="messages-list"></div>
@@ -253,6 +255,31 @@
     </div>
   </div>
   </div>
+
+  <div id="chat-quick-settings-modal" class="modal hidden">
+  <div class="modal-overlay" onclick="closeModal('chat-quick-settings-modal')"></div>
+  <div class="modal-box" style="max-width: 320px;">
+    <div class="modal-header">
+      <h3>Quick Actions ⚡</h3>
+      <button onclick="closeModal('chat-quick-settings-modal')">✕</button>
+    </div>
+    <div class="modal-body" style="text-align: center;">
+      <button class="btn-primary" style="background: var(--danger); color: white; width: 100%;" onclick="clearChat()">
+        <span>🗑️ Clear Chat</span>
+      </button>
+      
+      <div style="margin-top: 16px; padding: 10px; background: rgba(0, 229, 160, 0.1); border: 1px solid rgba(0, 229, 160, 0.2); border-radius: var(--radius-md);">
+        <p style="font-size: 0.85rem; color: var(--accent); font-weight: 600;">
+          🚫 Block Option Nahi Hai!
+        </p>
+        <p style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 4px;">
+          Bhai log block nahi karte, baat karke matter solve karte hain. 🤙
+        </p>
+      </div>
+    </div>
+  </div>
+  </div>
+  
   
 
 <div id="toast" class="toast hidden"></div>
