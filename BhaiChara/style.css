@@ -697,40 +697,39 @@ textarea#message-input::placeholder { color: var(--text-muted); }
   font-family: var(--font-body);
 }
 /* ═══════════════════════════════════════
-   ULTIMATE MOBILE RESPONSIVE FIX
+   MOBILE RESPONSIVE FIX (CACHE-BUSTED)
 ═══════════════════════════════════════ */
 @media (max-width: 700px) {
   .app-layout {
-    display: block !important;
+    display: block !important; 
   }
   
-  /* Sidebar poori screen cover karega */
+  /* Sidebar upar rahega */
   .sidebar {
     position: fixed !important;
     top: 0 !important;
     left: 0 !important;
-    width: 100vw !important;
-    max-width: 100vw !important;
-    height: 100dvh !important;
-    z-index: 100 !important;
+    width: 100% !important;
+    height: 100% !important;
+    z-index: 99 !important;
+    background: var(--bg-card) !important;
     transform: translateX(0);
-    transition: transform 0.3s ease-in-out !important;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
   }
   
-  /* Jab chat open ho toh sidebar left me slide ho jaye */
+  /* Chat click karne pe sidebar left bhagega */
   .sidebar.hidden-mobile {
     transform: translateX(-100%) !important;
   }
   
-  /* Chat area bhi poori screen cover karega (sidebar ke peeche) */
+  /* Chat area peeche full screen lega */
   .chat-area {
     position: fixed !important;
     top: 0 !important;
     left: 0 !important;
-    width: 100vw !important;
-    max-width: 100vw !important;
-    height: 100dvh !important;
-    z-index: 50 !important;
+    width: 100% !important;
+    height: 100% !important;
+    z-index: 10 !important;
   }
   
   .back-btn {
