@@ -39,7 +39,7 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 html, body {
-  height: 100dvh; /* dvh = Dynamic Viewport Height (Mobile UI ke hisaab se adjust hota hai) */
+  height: 100dvh;
   width: 100%;
   background: var(--bg-deep);
   color: var(--text-primary);
@@ -48,13 +48,13 @@ html, body {
   line-height: 1.5;
   overflow: hidden;
   -webkit-font-smoothing: antialiased;
-  position: fixed; /* Ye mobile screen ko bilkul lock kar dega taaki kuch bhi niche na chhuke */
+  position: fixed;
   inset: 0;
 }
 
 /* ─── UTILS ─── */
 .hidden { display: none !important; }
-.screen { width: 100%; height: 100%; } /* Yahan 100vh ko 100% kar diya */
+.screen { width: 100%; height: 100%; }
 
 /* ─── APP LAYOUT ─── */
 .app-layout {
@@ -108,9 +108,7 @@ html, body {
               var(--bg-deep);
 }
 .auth-container { width: 100%; max-width: 420px; padding: 24px; }
-.auth-logo {
-  text-align: center; margin-bottom: 36px;
-}
+.auth-logo { text-align: center; margin-bottom: 36px; }
 .auth-logo h1 {
   font-family: var(--font-display);
   font-size: 2rem; font-weight: 800;
@@ -166,23 +164,6 @@ html, body {
   font-family: var(--font-body);
 }
 
-/* OTP Inputs */
-.otp-inputs { display: flex; gap: 8px; margin-bottom: 20px; justify-content: center; }
-.otp-box {
-  width: 46px; height: 54px; flex-shrink: 0;
-  background: var(--bg-input);
-  border: 2px solid var(--border);
-  border-radius: var(--radius-sm);
-  text-align: center;
-  font-size: 1.4rem; font-weight: 700;
-  color: var(--text-primary);
-  outline: none;
-  transition: border-color 0.2s, transform 0.1s;
-}
-.otp-box:focus { border-color: var(--accent); transform: scale(1.05); }
-.otp-box.filled { border-color: var(--accent-dim); color: var(--accent); }
-
-/* Avatar Picker */
 .avatar-picker { text-align: center; margin-bottom: 20px; }
 .avatar-preview {
   width: 80px; height: 80px; border-radius: 50%;
@@ -223,7 +204,6 @@ html, body {
 .text-input:focus { border-color: var(--accent); }
 .text-input::placeholder { color: var(--text-muted); }
 
-/* Buttons */
 .btn-primary {
   width: 100%; padding: 14px 20px;
   background: linear-gradient(135deg, var(--accent), var(--accent-dim));
@@ -253,13 +233,6 @@ html, body {
   transition: all 0.2s;
 }
 .btn-sm:hover { background: var(--accent-dim); transform: scale(1.03); }
-
-/* ─── APP LAYOUT ─── */
-.app-layout {
-  display: flex; 
-  height: 100%; /* 100vh ko 100% kar diya */
-  overflow: hidden;
-}
 
 
 /* ─── SIDEBAR ─── */
@@ -430,7 +403,13 @@ html, body {
 .messages-area::-webkit-scrollbar { width: 3px; }
 .messages-area::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
 
-#messages-list { display: flex; flex-direction: column; gap: 2px; min-height: 100%; justify-content: flex-end; }
+#messages-list { 
+  display: flex; 
+  flex-direction: column; 
+  gap: 2px; 
+  min-height: 100%; 
+  justify-content: flex-start;
+}
 
 .msg-group { margin-bottom: 12px; }
 .msg-date-divider {
@@ -628,6 +607,28 @@ textarea#message-input::placeholder { color: var(--text-muted); }
 .profile-phone { color: var(--text-secondary); font-size: 0.875rem; margin-top: 4px; }
 .profile-status { color: var(--text-muted); font-size: 0.82rem; margin-top: 6px; }
 
+/* ─── SETTINGS MODAL STYLES ─── */
+.settings-input-group {
+  margin-bottom: 16px;
+  text-align: left;
+}
+.settings-input-group label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+}
+.settings-input-group .readonly-text {
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  font-family: var(--font-body);
+}
+
 /* ─── TOAST ─── */
 .toast {
   position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
@@ -651,51 +652,6 @@ textarea#message-input::placeholder { color: var(--text-muted); }
 }
 @keyframes spin { to { transform: rotate(360deg); } }
 
-/* ─── RECAPTCHA ─── */
-#recaptcha-container { margin-bottom: 16px; }
-#recaptcha-container > div { border-radius: var(--radius-sm) !important; }
-
-/* ─── RESPONSIVE ─── */
-@media (max-width: 700px) {
-  .sidebar {
-    position: absolute; left: 0; top: 0; bottom: 0; z-index: 50;
-    width: 100%; transform: translateX(0);
-    transition: transform 0.3s ease;
-  }
-  .sidebar.hidden-mobile { transform: translateX(-100%); }
-  .back-btn { display: flex !important; }
-  .chat-area { width: 100%; }
-}
-/* --- SCROLL FIX --- */
-#messages-list { 
-  display: flex; 
-  flex-direction: column; 
-  gap: 2px; 
-  min-height: 100%; 
-  justify-content: flex-start; /* Ye default hona chahiye scroll ke liye */
-}
-
-/* --- SETTINGS MODAL STYLES --- */
-.settings-input-group {
-  margin-bottom: 16px;
-  text-align: left;
-}
-.settings-input-group label {
-  display: block;
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: var(--text-secondary);
-  margin-bottom: 6px;
-}
-.settings-input-group .readonly-text {
-  padding: 12px 16px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid var(--border-light);
-  border-radius: var(--radius-md);
-  color: var(--text-muted);
-  font-size: 0.95rem;
-  font-family: var(--font-body);
-}
 /* ═══════════════════════════════════════
    MOBILE RESPONSIVE FIX (CACHE-BUSTED)
 ═══════════════════════════════════════ */
@@ -704,7 +660,6 @@ textarea#message-input::placeholder { color: var(--text-muted); }
     display: block !important; 
   }
   
-  /* Sidebar upar rahega */
   .sidebar {
     position: fixed !important;
     top: 0 !important;
@@ -717,12 +672,10 @@ textarea#message-input::placeholder { color: var(--text-muted); }
     transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
   }
   
-  /* Chat click karne pe sidebar left bhagega */
   .sidebar.hidden-mobile {
     transform: translateX(-100%) !important;
   }
   
-  /* Chat area peeche full screen lega */
   .chat-area {
     position: fixed !important;
     top: 0 !important;
