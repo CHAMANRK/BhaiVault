@@ -47,19 +47,22 @@ window.addEventListener("DOMContentLoaded", async () => {
   });
   populateEmojiGrid("emoji-keyboard", KEYBOARD_EMOJIS, insertEmoji);
 
+  // 🚨 RELOAD POPUP LOOP FIX 🚨
   if (isSignInWithEmailLink(auth, window.location.href)) {
     let email = localStorage.getItem("emailForSignIn");
     if (!email) email = window.prompt("Confirm karo — kaun sa email use kiya tha?");
+    
     if (email) {
       try {
         await signInWithEmailLink(auth, email, window.location.href);
         localStorage.removeItem("emailForSignIn");
-        window.history.replaceState({}, document.title, window.location.pathname);
         showToast("Login ho gaya! 🎉");
       } catch (e) {
-        showToast("Link invalid ya expire ho gaya yaar 😕");
+        showToast("Link invalid ya use ho chuka hai 😕");
       }
     }
+    // Ye line URL ko turant clean kar degi, taaki reload karne par prompt wapas na aaye!
+    window.history.replaceState({}, document.title, window.location.pathname);
   }
 
   onAuthStateChanged(auth, async (user) => {
@@ -82,6 +85,7 @@ window.addEventListener("DOMContentLoaded", async () => {
     document.getElementById("splash").style.display = "none";
   }, 2400);
 });
+
 
 function showScreen(name) {
   document.getElementById("auth-screen").classList.toggle("hidden", name !== "auth");
