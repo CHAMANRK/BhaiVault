@@ -1525,14 +1525,6 @@ window.addEventListener('DOMContentLoaded', async () => {
     if (!CU) { loading(false); showScreen('welcomeScreen'); return; }
   }
   loading(false);
-  // Android fingerprint se aa raha hai — URL hash check karo
-  const fpHash = window.location.hash && window.location.hash.startsWith('#fp=')
-    ? window.location.hash.slice(4) : null;
-  if (fpHash) {
-    // Loading screen dikhao — nativeFpUnlock call aane do
-    showScreen('loadingScreen');
-    return;
-  }
   showScreen('lockScreen');
   requestAnimationFrame(()=>requestAnimationFrame(genFloatNums));
   setTimeout(updateFpLockBtn, 200);
