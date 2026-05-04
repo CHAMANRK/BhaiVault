@@ -39,7 +39,8 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 html, body {
-  height: 100%;
+  height: 100dvh; /* dvh = Dynamic Viewport Height (Mobile UI ke hisaab se adjust hota hai) */
+  width: 100%;
   background: var(--bg-deep);
   color: var(--text-primary);
   font-family: var(--font-body);
@@ -47,11 +48,21 @@ html, body {
   line-height: 1.5;
   overflow: hidden;
   -webkit-font-smoothing: antialiased;
+  position: fixed; /* Ye mobile screen ko bilkul lock kar dega taaki kuch bhi niche na chhuke */
+  inset: 0;
 }
 
 /* ─── UTILS ─── */
 .hidden { display: none !important; }
-.screen { width: 100%; height: 100vh; }
+.screen { width: 100%; height: 100%; } /* Yahan 100vh ko 100% kar diya */
+
+/* ─── APP LAYOUT ─── */
+.app-layout {
+  display: flex; 
+  height: 100%; 
+  width: 100%;
+  overflow: hidden;
+}
 
 /* ─── SPLASH ─── */
 #splash {
