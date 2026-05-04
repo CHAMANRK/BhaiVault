@@ -678,8 +678,66 @@ function updateSidebarAvatar() {
   document.getElementById("sidebar-avatar").textContent = currentUser?.avatar || "?";
 }
 
-window.openChatInfo = function() {
-  showToast("Chat info coming soon! 🔧");
+window.openChatInfo = async function() {
+  if (!currentChat) return;
+  
+  const modal           = document.getElementById("chat-info-modal");
+  const nameDisp        = document.getElementById("info-name-display");
+  const avatarDisp      = document.getElementById("info-avatar-big");
+  const extraDisp       = document.getElementById("info-extra-display");
+  const statusDisp      = document.getElementById("info-status-display");
+  const groupMemSection = document.getElementById("info-group-members");
+  const groupMemList    = document.getElementById("info-members-list-container");
+
+  // Basic Info set karo
+  nameDisp.textContent   = currentChat.name;
+  avatarDisp.textContent = currentChat.avatar;
+  
+  // Reset purana data
+  extraDisp.textContent  = "Loading...";
+  statusDisp.textContent = "";
+  groupMemSection.classList.add("hidden");
+  groupMemList.innerHTML = "";
+
+  if (currentChat.type === "private" && currentChat.peerId) {
+    // PRIVATE CHAT LOGIC
+    const peerSnap = await get(ref(db, `users/${currentChat.peerId}`));
+    const peer     = peerSnap.val() || {};
+    
+    extraDisp.textContent  = peer.phone || "Number hidden";
+    statusDisp.textContent = peer.status ? `"${peer.status}"` : "Hey, BhaiChara pe hoon!";
+    
+  } else if (currentChat.type === "group") {
+    // GROUP CHAT LOGIC
+    const groupSnap = await get(ref(db, `groups/${currentChat.id}`));
+    const group     = groupSnap.val() || {};
+    const members   = group.members || [];
+    
+    extraDisp.textContent  = `${members.length} Members`;
+    statusDisp.textContent = "👥 Group Chat";
+    
+    groupMemSection.classList.remove("hidden");
+    
+    let membersHtml = "";
+    for (const uid of members) {
+      const userSnap = await get(ref(db, `users/${uid}`));
+      const user     = userSnap.val() || { name: "Unknown", avatar: "👤" };
+      const role     = (uid === group.createdBy) ? `<span style="font-size:0.7rem; background:rgba(0,229,160,0.15); color:var(--accent); padding:2px 6px; border-radius:10px; margin-left:6px;">Admin</span>` : "";
+      const isMe     = (uid === currentUser.uid) ? " (You)" : "";
+      
+      membersHtml += `
+        <div class="user-found-card" style="margin-bottom:8px; padding:10px; background: var(--bg-elevated); border: none;">
+          <div class="avatar-sm" style="width:36px; height:36px; font-size:1rem;">${user.avatar}</div>
+          <div class="user-found-info">
+            <strong style="font-size:0.9rem; color: var(--text-primary);">${esc(user.name)}${isMe}</strong>
+            ${role}
+          </div>
+        </div>`;
+    }
+    groupMemList.innerHTML = membersHtml;
+  }
+  
+  modal.classList.remove("hidden");
 };
 
 // ─────────────────────────────────────────────────────────
