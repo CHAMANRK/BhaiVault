@@ -1526,11 +1526,14 @@ const showScreen = (id) => window.showScreen(id);
   }
   loading(false);
 
-  // ✅ APK mein nativeFpUnlock 800ms mein aayega — loading screen pe raho
-  if (window.AndroidBridge) {
+  
+  // ✅ APK + saved PIN dono hone chahiye — tabhi nativeFpUnlock ka wait karo
+  if (window.AndroidBridge && window.AndroidBridge.hasSavedPin()) {
     showScreen('loadingScreen');
     return;
   }
+
+ 
 
   // Browser mein normal lockScreen dikhao
   showScreen('lockScreen');
