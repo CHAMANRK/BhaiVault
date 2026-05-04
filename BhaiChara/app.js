@@ -31,6 +31,8 @@ let typingTimer         = null;
 let chatListeners       = {};
 let presenceRef         = null;
 let previousChatsState  = {}; // 🔔 Notifications track karne ke liye
+let isAnonymousMode = false; // 🎭 Secret mode track karne ke liye
+
 
 // ── EMOJI LIST ───────────────────────────────────────────
 const EMOJIS = ["😎","🤙","🔥","💪","🤘","😂","🥳","👊","🙏","❤️","💯","👍","😊","🤣","😅","🫡","🤝","🎉","⚡","💀","🐐","🦁","🌟","🎯","🚀","👑","🤑","😤","😏","🫠","🧠","🤟","✌️","👻","🐺","🦊","🎮","💎","🍕","🌙"];
@@ -282,6 +284,18 @@ window.openChat = async function(chatId, type) {
   if (chatListeners.messages) off(chatListeners.messages.ref);
   currentChat = { id: chatId, type };
 
+  // 🎭 Reset Anonymous Mode aur Button Visibility
+  isAnonymousMode = false;
+  const anonBtn = document.getElementById("anonymous-btn");
+  if (anonBtn) {
+    if (type === "group") {
+      anonBtn.classList.remove("hidden");
+      anonBtn.classList.remove("active");
+    } else {
+      anonBtn.classList.add("hidden");
+    }
+  }
+
   const metaSnap = await get(ref(db, `user_chats/${currentUser.uid}/${chatId}`));
   const meta = metaSnap.val() || {};
   currentChat.name = meta.name || "Chat";
@@ -316,6 +330,17 @@ window.openChat = async function(chatId, type) {
   loadMessages(chatId, type);
 };
 
+window.toggleAnonymous = function() {
+  isAnonymousMode = !isAnonymousMode;
+  document.getElementById("anonymous-btn").classList.toggle("active", isAnonymousMode);
+  if (isAnonymousMode) {
+    showToast("🤫 Secret Mode ON! Tera asli naam kisi ko nahi dikhega.");
+  } else {
+    showToast("Secret Mode OFF.");
+  }
+};
+
+
 function updateChatHeader(name, avatar, status, online) {
   document.getElementById("chat-name").textContent = name;
   document.getElementById("chat-status").textContent = status;
@@ -333,43 +358,24 @@ window.backToList = function() {
 // ─────────────────────────────────────────────────────────
 //  MESSAGES
 // ─────────────────────────────────────────────────────────
-function loadMessages(chatId, type) {
-  const msgRef = ref(db, `messages/${chatId}`);
-  chatListeners.messages = { ref: msgRef };
-  const container = document.getElementById("messages-list");
-  
-  onValue(msgRef, (snap) => {
-    const msgs = snap.val() || {};
-    const arr = Object.entries(msgs).map(([id, m]) => ({ id, ...m })).sort((a, b) => a.timestamp - b.timestamp);
-    const area = document.getElementById("messages-area");
-    const atBottom = area.scrollHeight - area.scrollTop - area.clientHeight < 60;
-    container.innerHTML = "";
-    let lastDate = "";
-
-    arr.forEach(msg => {
-      const msgDate = new Date(msg.timestamp).toLocaleDateString("en-IN", { weekday:"long", day:"numeric", month:"short" });
-      if (msgDate !== lastDate) {
-        lastDate = msgDate;
-        const div = document.createElement("div"); div.className = "msg-date-divider"; div.innerHTML = `<span>${msgDate}</span>`;
-        container.appendChild(div);
-      }
-      container.appendChild(buildMessageEl(msg, type));
-      if (msg.senderId !== currentUser.uid && msg.status !== "seen") update(ref(db, `messages/${chatId}/${msg.id}`), { status: "seen" });
-    });
-    if (atBottom || arr.length <= 20) setTimeout(() => area.scrollTop = area.scrollHeight, 50);
-  });
-
-  if (type === "private" && currentChat.peerId) {
-    onValue(ref(db, `typing/${chatId}/${currentChat.peerId}`), (s) => document.getElementById("typing-indicator").classList.toggle("hidden", !s.val()));
-  }
-}
-
+ 
 function buildMessageEl(msg, type) {
   const isOut = msg.senderId === currentUser.uid;
   const div = document.createElement("div"); div.className = `message ${isOut ? "outgoing" : "incoming"}`;
   const ticks = isOut ? (msg.status==="seen" ? `<span class="msg-ticks seen">✓✓</span>` : msg.status==="delivered" ? `<span class="msg-ticks delivered">✓✓</span>` : `<span class="msg-ticks">✓</span>`) : "";
-  const senderName = (!isOut && type === "group" && msg.senderName) ? `<div class="msg-sender-name">${esc(msg.senderName)}</div>` : "";
-  div.innerHTML = `<div class="msg-bubble">${senderName}<div class="msg-text">${esc(msg.text).replace(/\n/g, "<br>")}</div><div class="msg-meta"><span class="msg-time">${formatTime(msg.timestamp)}</span>${ticks}</div></div>`;
+  
+  // 🎭 ANONYMOUS LOGIC
+  let senderNameHtml = "";
+  let bubbleClass = "msg-bubble";
+  if (msg.isAnonymous) bubbleClass += " anonymous";
+
+  if (!isOut && type === "group" && msg.senderName) {
+    senderNameHtml = `<div class="msg-sender-name" style="${msg.isAnonymous ? 'color: var(--danger)' : ''}">${esc(msg.senderName)}</div>`;
+  } else if (isOut && msg.isAnonymous) {
+    senderNameHtml = `<div class="msg-sender-name" style="color: var(--danger); text-align: right; opacity: 0.8; font-size: 0.7rem;">🤫 Tune secret bheja</div>`;
+  }
+
+  div.innerHTML = `<div class="${bubbleClass}">${senderNameHtml}<div class="msg-text">${esc(msg.text).replace(/\n/g, "<br>")}</div><div class="msg-meta"><span class="msg-time">${formatTime(msg.timestamp)}</span>${ticks}</div></div>`;
   return div;
 }
 
@@ -383,7 +389,16 @@ window.sendMessage = async function() {
   const uid = currentUser.uid;
   const msgKey = push(ref(db, `messages/${chatId}`)).key;
   const ts = Date.now();
-  await set(ref(db, `messages/${chatId}/${msgKey}`), { text, senderId: uid, senderName: currentUser.name, timestamp: ts, status: "sent" });
+  
+  // 🎭 Message object mein isAnonymous flag add kiya
+  await set(ref(db, `messages/${chatId}/${msgKey}`), { 
+    text, 
+    senderId: uid, 
+    senderName: isAnonymousMode ? "Secret Bhai 🎭" : currentUser.name, 
+    timestamp: ts, 
+    status: "sent",
+    isAnonymous: isAnonymousMode 
+  });
 
   const membersSnap = await get(ref(db, currentChat.type === "group" ? `groups/${chatId}/members` : `chats/${chatId}/members`));
   const members = membersSnap.val() || [];
@@ -400,6 +415,9 @@ window.sendMessage = async function() {
     await update(ref(db, `user_chats/${mId}/${chatId}`), updateData);
   }
   setTimeout(() => update(ref(db, `messages/${chatId}/${msgKey}`), { status: "delivered" }), 800);
+  
+  // Message bhejte hi secret mode wapas normal kar do (Optional, par safe rehta hai)
+  if(isAnonymousMode) window.toggleAnonymous(); 
 };
 
 // ─────────────────────────────────────────────────────────
