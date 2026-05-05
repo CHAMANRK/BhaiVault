@@ -2,7 +2,7 @@
   "name": "BhaiChara",
   "short_name": "BhaiChara",
   "description": "Bhai log, baat karo! — Apne bhai log se connect karo",
-  "start_url": "/",
+  "start_url": "/BhaiChara/",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#0d1117",
