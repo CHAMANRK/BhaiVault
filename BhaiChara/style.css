@@ -2055,6 +2055,10 @@ textarea#message-input::placeholder { color: var(--text-ghost); }
    BHAICHARA — Game System Styles
    style.css ke END mein paste karo
 ═══════════════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════
+   BHAICHARA — Game System Styles
+   style.css ke END mein paste karo
+═══════════════════════════════════════════════════════ */
 
 /* ── Game Chat Button ────────────────────────────────── */
 .game-btn-chat {
@@ -2497,4 +2501,85 @@ textarea#message-input::placeholder { color: var(--text-ghost); }
   font-size: 0.68rem;
   color: var(--text-low);
   font-weight: 400;
-   }
+}
+
+/* ═══════════════════════════════════════════════════════
+   TOUCH POLISH — Mobile pe better feel
+═══════════════════════════════════════════════════════ */
+
+/* TTT cell — touch active state (mobile pe :hover kaam nahi karta properly) */
+.ttt-cell.clickable:active {
+  background: rgba(200, 215, 240, 0.12) !important;
+  border-color: var(--chrome-flat) !important;
+  transform: scale(0.92) !important;
+  transition: transform 0.08s, background 0.08s !important;
+}
+
+/* RPS buttons — satisfying tap feedback */
+.rps-choice-btn:active {
+  transform: translateY(-1px) scale(0.93) !important;
+  background: rgba(200, 215, 240, 0.1) !important;
+  border-color: var(--chrome-flat) !important;
+  transition: transform 0.08s !important;
+}
+
+/* Game invite Accept/Decline — clear tap state */
+.gi-accept:active {
+  opacity: 0.75;
+  transform: scale(0.96);
+}
+.gi-decline:active {
+  opacity: 0.75;
+  transform: scale(0.96);
+}
+
+/* Game primary/ghost buttons */
+.game-btn:active {
+  transform: scale(0.96) !important;
+  opacity: 0.85;
+  transition: transform 0.08s !important;
+}
+
+/* Turn indicator — pulsing glow jab tera turn ho */
+.game-status.myturn {
+  text-shadow: 0 0 12px rgba(200, 215, 240, 0.4);
+  border-left: 3px solid var(--chrome-flat);
+  padding-left: 13px;
+}
+
+/* Prevent text selection on tap (important for mobile game UI) */
+.ttt-board,
+.rps-choices,
+.game-actions,
+.gi-actions {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
+/* TTT board — clickable cells highlight karo jab tera turn ho */
+.ttt-cell.clickable {
+  position: relative;
+  overflow: hidden;
+}
+.ttt-cell.clickable::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle, rgba(200,215,240,0.15) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.ttt-cell.clickable:hover::after,
+.ttt-cell.clickable:active::after {
+  opacity: 1;
+}
+
+/* Waiting state — subtle dimming */
+.rps-waiting {
+  background: rgba(200, 215, 240, 0.04);
+  border-radius: var(--r-sm);
+  border: 1px dashed var(--glass-border);
+  margin: 8px 16px;
+                   }
+   
