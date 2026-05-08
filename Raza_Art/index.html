@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <meta name="theme-color" content="#0a0f1e" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="WorkTrack" />
+  <title>WorkTrack — Login</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* ── Login Page Specific ── */
+    .login-page {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Glow orbs in background */
+    .login-page::after {
+      content: '';
+      position: fixed;
+      top: -100px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(0,212,255,0.08) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .login-box {
+      width: 100%;
+      max-width: 380px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── Brand ── */
+    .brand-wrap {
+      text-align: center;
+      margin-bottom: 36px;
+    }
+
+    .brand-logo {
+      width: 72px;
+      height: 72px;
+      background: linear-gradient(135deg, rgba(0,212,255,0.2), rgba(168,85,247,0.2));
+      border: 2px solid rgba(0,212,255,0.4);
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px;
+      font-size: 32px;
+      box-shadow: 0 0 30px rgba(0,212,255,0.15);
+      position: relative;
+    }
+
+    .brand-logo::before {
+      content: '';
+      position: absolute;
+      inset: -1px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, rgba(0,212,255,0.5), rgba(168,85,247,0.5));
+      z-index: -1;
+      opacity: 0.5;
+    }
+
+    .brand-name {
+      font-family: var(--font-display);
+      font-size: 30px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      color: var(--text-primary);
+    }
+
+    .brand-name span { color: var(--accent-cyan); }
+
+    .brand-tagline {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-top: 4px;
+      letter-spacing: 0.5px;
+    }
+
+    /* ── Login Card ── */
+    .login-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: 28px 24px;
+      box-shadow: var(--shadow-card), 0 0 40px rgba(0,212,255,0.05);
+    }
+
+    .login-card-title {
+      font-family: var(--font-display);
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      color: var(--text-secondary);
+      text-align: center;
+      margin-bottom: 24px;
+      text-transform: uppercase;
+    }
+
+    /* ── Input with icon ── */
+    .input-wrap {
+      position: relative;
+      margin-bottom: 14px;
+    }
+
+    .input-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 16px;
+      color: var(--text-muted);
+      pointer-events: none;
+      transition: var(--transition);
+    }
+
+    .input-wrap .form-control {
+      padding-left: 42px;
+    }
+
+    .input-wrap .form-control:focus ~ .input-icon,
+    .input-wrap:focus-within .input-icon {
+      color: var(--accent-cyan);
+    }
+
+    .toggle-pw {
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 16px;
+      padding: 4px;
+      line-height: 1;
+      transition: var(--transition);
+    }
+
+    .toggle-pw:hover { color: var(--accent-cyan); }
+
+    /* ── Error message ── */
+    .error-msg {
+      display: none;
+      background: rgba(255,68,102,0.1);
+      border: 1px solid rgba(255,68,102,0.3);
+      border-radius: var(--radius-md);
+      padding: 10px 14px;
+      font-size: 13px;
+      color: var(--accent-red);
+      margin-bottom: 14px;
+      text-align: center;
+    }
+
+    .error-msg.show { display: block; }
+
+    /* ── Login button ── */
+    .btn-login {
+      width: 100%;
+      padding: 14px;
+      font-size: 16px;
+      letter-spacing: 1px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-login .btn-shimmer {
+      position: absolute;
+      top: 0; left: -100%;
+      width: 60%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+      animation: shimmer 2.5s infinite;
+    }
+
+    @keyframes shimmer {
+      0%   { left: -100%; }
+      100% { left: 200%;  }
+    }
+
+    /* ── Loading state ── */
+    .btn-login.loading .btn-text { opacity: 0; }
+    .btn-login.loading::after {
+      content: '';
+      position: absolute;
+      width: 20px; height: 20px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: var(--bg-primary);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+
+    /* ── Divider ── */
+    .login-divider {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 11px;
+      letter-spacing: 1px;
+      margin: 18px 0;
+      position: relative;
+    }
+
+    .login-divider::before,
+    .login-divider::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      width: 38%;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .login-divider::before { left: 0; }
+    .login-divider::after  { right: 0; }
+
+    /* ── Shift info pill at bottom ── */
+    .shift-pills {
+      display: flex;
+      gap: 8px;
+      margin-top: 28px;
+      justify-content: center;
+    }
+
+    .shift-pill {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 6px 12px;
+      font-size: 11px;
+      font-family: var(--font-mono);
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .shift-pill .dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--accent-cyan);
+      flex-shrink: 0;
+    }
+
+    /* ── Offline badge ── */
+    .offline-badge {
+      display: none;
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(255,140,0,0.15);
+      border: 1px solid var(--accent-orange);
+      color: var(--accent-orange);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 8px 16px;
+      border-radius: 20px;
+      z-index: 999;
+    }
+
+    .offline-badge.show { display: block; }
+
+    /* ── Version ── */
+    .app-version {
+      text-align: center;
+      font-size: 10px;
+      color: var(--text-muted);
+      margin-top: 20px;
+      letter-spacing: 1px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Loading overlay -->
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="spinner"></div>
+  <p>INITIALIZING...</p>
+</div>
+
+<!-- Toast container -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- Offline badge -->
+<div class="offline-badge" id="offlineBadge">📡 No Internet Connection</div>
+
+<!-- ── Login Page ── -->
+<div class="login-page">
+  <div class="login-box">
+
+    <!-- Brand -->
+    <div class="brand-wrap">
+      <div class="brand-logo">⏱</div>
+      <div class="brand-name">WORK<span>TRACK</span></div>
+      <div class="brand-tagline">Smart Attendance Management</div>
+    </div>
+
+    <!-- Card -->
+    <div class="login-card">
+      <div class="login-card-title">Sign In to Continue</div>
+
+      <!-- Error -->
+      <div class="error-msg" id="errorMsg"></div>
+
+      <!-- Email -->
+      <div class="input-wrap">
+        <input
+          type="email"
+          id="emailInput"
+          class="form-control"
+          placeholder="Email address"
+          autocomplete="email"
+          inputmode="email"
+        />
+        <span class="input-icon">✉</span>
+      </div>
+
+      <!-- Password -->
+      <div class="input-wrap">
+        <input
+          type="password"
+          id="passwordInput"
+          class="form-control"
+          placeholder="Password"
+          autocomplete="current-password"
+        />
+        <span class="input-icon">🔒</span>
+        <button class="toggle-pw" id="togglePw" type="button" aria-label="Toggle password">👁</button>
+      </div>
+
+      <!-- Login Button -->
+      <button class="btn btn-primary btn-login" id="loginBtn" type="button">
+        <div class="btn-shimmer"></div>
+        <span class="btn-text">SIGN IN</span>
+      </button>
+
+      <div class="login-divider">WORKTRACK v1.0</div>
+
+      <p style="text-align:center; font-size:12px; color:var(--text-muted);">
+        Contact your admin if you don't have an account.
+      </p>
+    </div>
+
+    <!-- Shift pills -->
+    <div class="shift-pills">
+      <div class="shift-pill"><span class="dot"></span>Shift 1 · 8:00 AM</div>
+      <div class="shift-pill"><span class="dot"></span>Shift 2 · 4:00 PM</div>
+    </div>
+
+    <div class="app-version">WORKTRACK · BUILD 1.0 · FIREBASE RTDB</div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     Firebase SDKs
+════════════════════════════════════════ -->
+<script type="module">
+import { initializeApp }                        from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getAuth, signInWithEmailAndPassword,
+         onAuthStateChanged, setPersistence,
+         browserLocalPersistence }              from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+import { getDatabase, ref, get, onValue }       from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js';
+
+// ── Config ──
+const firebaseConfig = {
+  apiKey:            "AIzaSyDXPi8I8U-kZzHTjyKz6mMVvYXS5iyJiA8",
+  authDomain:        "attendance-3f53f.firebaseapp.com",
+  databaseURL:       "https://attendance-3f53f-default-rtdb.asia-southeast1.firebasedatabase.app/",
+  projectId:         "attendance-3f53f",
+  storageBucket:     "attendance-3f53f.firebasestorage.app",
+  messagingSenderId: "216445422563",
+  appId:             "1:216445422563:web:b7b7aadf09a1b92d16aed6"
+};
+
+const app      = initializeApp(firebaseConfig);
+const auth     = getAuth(app);
+const database = getDatabase(app);
+
+// ── DOM refs ──
+const loadingOverlay = document.getElementById('loadingOverlay');
+const loginBtn       = document.getElementById('loginBtn');
+const emailInput     = document.getElementById('emailInput');
+const passwordInput  = document.getElementById('passwordInput');
+const togglePw       = document.getElementById('togglePw');
+const errorMsg       = document.getElementById('errorMsg');
+const offlineBadge   = document.getElementById('offlineBadge');
+const toastContainer = document.getElementById('toastContainer');
+
+// ── Offline detection ──
+window.addEventListener('online',  () => offlineBadge.classList.remove('show'));
+window.addEventListener('offline', () => offlineBadge.classList.add('show'));
+if (!navigator.onLine) offlineBadge.classList.add('show');
+
+// ── Service Worker registration ──
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/Raza_Art/firebase-messaging-sw.js', { scope: '/Raza_Art/' })
+    .then(reg => console.log('[App] SW registered:', reg.scope))
+    .catch(err => console.warn('[App] SW registration failed:', err));
+}
+
+// ── Auth state — redirect if already logged in ──
+// Flag: prevent onAuthStateChanged from redirecting during active doLogin()
+let _loginInProgress = false;
+
+onAuthStateChanged(auth, async (user) => {
+  if (user) {
+    // If doLogin() is running, let it handle the redirect — don't interfere
+    if (_loginInProgress) return;
+
+    // Existing session on page load — redirect immediately
+    loadingOverlay.style.opacity = '0';
+    loadingOverlay.style.transition = 'opacity 0.2s ease';
+    try {
+      const snap = await get(ref(database, `users/${user.uid}`));
+      const data = snap.val();
+      if (data?.role === 'owner') {
+        window.location.replace('owner.html');
+      } else {
+        window.location.replace('staff.html');
+      }
+    } catch (e) {
+      // RTDB read failed — permission issue, sign out and show login
+      console.warn('[Login] Could not read user profile:', e.message);
+      import('https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js')
+        .then(({ signOut }) => signOut(auth));
+      loadingOverlay.style.opacity = '0';
+      setTimeout(() => loadingOverlay.style.display = 'none', 300);
+    }
+  } else {
+    // Not logged in — show login form
+    loadingOverlay.style.opacity = '0';
+    setTimeout(() => loadingOverlay.style.display = 'none', 300);
+  }
+});
+
+// ── Toggle password visibility ──
+togglePw.addEventListener('click', () => {
+  const isPassword = passwordInput.type === 'password';
+  passwordInput.type = isPassword ? 'text' : 'password';
+  togglePw.textContent = isPassword ? '🙈' : '👁';
+});
+
+// ── Login ──
+async function doLogin() {
+  const email    = emailInput.value.trim();
+  const password = passwordInput.value;
+
+  // Validate
+  if (!email) { showError('Please enter your email address'); emailInput.focus(); return; }
+  if (!password) { showError('Please enter your password'); passwordInput.focus(); return; }
+  if (!isValidEmail(email)) { showError('Please enter a valid email address'); emailInput.focus(); return; }
+
+  setLoading(true);
+  hideError();
+  _loginInProgress = true; // Block onAuthStateChanged from interfering
+
+  try {
+    // Persist login across sessions
+    await setPersistence(auth, browserLocalPersistence);
+    const credential = await signInWithEmailAndPassword(auth, email, password);
+    const user       = credential.user;
+
+    // Fetch role from RTDB
+    let userData = null;
+    try {
+      const snap = await get(ref(database, `users/${user.uid}`));
+      userData = snap.val();
+    } catch (dbErr) {
+      console.warn('[Login] RTDB read failed:', dbErr.message);
+      // Could be a rules/network issue — try redirecting based on no role (staff default)
+    }
+
+    if (!userData) {
+      showToast('⚠️ Profile not found. Contact admin.', 'warning');
+      setLoading(false);
+      _loginInProgress = false;
+      return;
+    }
+
+    showToast('✅ Welcome back!', 'success');
+
+    setTimeout(() => {
+      _loginInProgress = false;
+      if (userData.role === 'owner') {
+        window.location.replace('owner.html');
+      } else {
+        window.location.replace('staff.html');
+      }
+    }, 600);
+
+  } catch (err) {
+    console.error('[Login] Error:', err.code, err.message);
+    setLoading(false);
+    _loginInProgress = false;
+    showError(getErrorMessage(err.code));
+  }
+}
+
+// ── Enter key support ──
+emailInput.addEventListener('keydown',    e => { if (e.key === 'Enter') passwordInput.focus(); });
+passwordInput.addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+loginBtn.addEventListener('click', doLogin);
+
+// ── Helpers ──
+function setLoading(on) {
+  loginBtn.disabled = on;
+  loginBtn.classList.toggle('loading', on);
+}
+
+function showError(msg) {
+  errorMsg.textContent = msg;
+  errorMsg.classList.add('show');
+}
+
+function hideError() {
+  errorMsg.classList.remove('show');
+}
+
+function isValidEmail(email) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
+function getErrorMessage(code) {
+  switch (code) {
+    case 'auth/user-not-found':
+    case 'auth/wrong-password':
+    case 'auth/invalid-credential':
+      return '❌ Incorrect email or password';
+    case 'auth/invalid-email':
+      return '❌ Invalid email address';
+    case 'auth/user-disabled':
+      return '❌ This account has been disabled. Contact admin.';
+    case 'auth/too-many-requests':
+      return '⏳ Too many attempts. Please try again later.';
+    case 'auth/network-request-failed':
+      return '📡 No internet connection. Please check your network.';
+    default:
+      return '❌ Login failed. Please try again.';
+  }
+}
+
+function showToast(msg, type = 'info') {
+  const toast = document.createElement('div');
+  toast.className = `toast toast-${type}`;
+  toast.textContent = msg;
+  toastContainer.appendChild(toast);
+  setTimeout(() => toast.remove(), 3000);
+}
+</script>
+</body>
+</html>
