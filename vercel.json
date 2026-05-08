@@ -1,5 +1,9 @@
 {
   "rewrites": [
+    { "source": "/Raza_Art/(.*)\\.html", "destination": "/Raza_Art/$1.html" },
+    { "source": "/Raza_Art/(.*)\\.js",   "destination": "/Raza_Art/$1.js"   },
+    { "source": "/Raza_Art/(.*)\\.css",  "destination": "/Raza_Art/$1.css"  },
+    { "source": "/Raza_Art/icons/(.*)",  "destination": "/Raza_Art/icons/$1" },
     { "source": "/(.*)", "destination": "/index.html" }
   ],
   "headers": [
@@ -11,7 +15,21 @@
       ]
     },
     {
+      "source": "/Raza_Art/firebase-messaging-sw.js",
+      "headers": [
+        { "key": "Content-Type",          "value": "application/javascript" },
+        { "key": "Cache-Control",         "value": "no-cache" },
+        { "key": "Service-Worker-Allowed","value": "/Raza_Art/" }
+      ]
+    },
+    {
       "source": "/manifest.json",
+      "headers": [
+        { "key": "Content-Type", "value": "application/manifest+json" }
+      ]
+    },
+    {
+      "source": "/Raza_Art/manifest.json",
       "headers": [
         { "key": "Content-Type", "value": "application/manifest+json" }
       ]
