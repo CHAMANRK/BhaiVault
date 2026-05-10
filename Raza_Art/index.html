@@ -488,7 +488,9 @@ async function doLogin() {
     }
 
     if (!userData) {
-      showToast('⚠️ Profile not found. Contact admin.', 'warning');
+  showToast('UID: ' + user.uid, 'warning'); // temporary
+  return;
+    }
       setLoading(false);
       _loginInProgress = false;
       return;
