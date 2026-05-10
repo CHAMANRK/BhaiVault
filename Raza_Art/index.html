@@ -488,12 +488,10 @@ async function doLogin() {
     }
 
     if (!userData) {
-  showToast('UID: ' + user.uid, 'warning'); // temporary
+  showToast('UID: ' + user.uid, 'warning');
+  setLoading(false);
+  _loginInProgress = false;
   return;
-    }
-      setLoading(false);
-      _loginInProgress = false;
-      return;
     }
 
     showToast('✅ Welcome back!', 'success');
