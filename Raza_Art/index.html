@@ -487,12 +487,12 @@ async function doLogin() {
       // Could be a rules/network issue — try redirecting based on no role (staff default)
     }
 
-    if (!userData) {
-  showToast('UID: ' + user.uid, 'warning');
+  if (!userData) {
+  showToast('⚠️ Profile not found. Contact admin.', 'warning');
   setLoading(false);
   _loginInProgress = false;
   return;
-    }
+  }
 
     showToast('✅ Welcome back!', 'success');
 
