@@ -31,18 +31,20 @@ const CACHE_ASSETS  = [
   '/Raza_Art/app.js',
   '/Raza_Art/notifications.js',
   '/Raza_Art/manifest.json',
+  '/Raza_Art/icon-192.png',
+  '/Raza_Art/icon-512.png',
   'https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Space+Mono:wght@400;700&family=Nunito:wght@400;500;600;700&display=swap'
 ];
 
 // ── Notification Icons by Type ──
 const NOTIF_CONFIG = {
-  checkin_reminder : { icon: '/icons/icon-192x192.png', badge: '/icons/icon-72x72.png', color: '#00d4ff' },
-  late_warning     : { icon: '/icons/icon-192x192.png', badge: '/icons/icon-72x72.png', color: '#ff8c00' },
-  work_pressure    : { icon: '/icons/icon-192x192.png', badge: '/icons/icon-72x72.png', color: '#ff4466' },
-  holiday          : { icon: '/icons/icon-192x192.png', badge: '/icons/icon-72x72.png', color: '#a855f7' },
-  leave_update     : { icon: '/icons/icon-192x192.png', badge: '/icons/icon-72x72.png', color: '#00ff88' },
-  broadcast        : { icon: '/icons/icon-192x192.png', badge: '/icons/icon-72x72.png', color: '#ffd700' },
-  default          : { icon: '/icons/icon-192x192.png', badge: '/icons/icon-72x72.png', color: '#00d4ff' }
+  checkin_reminder : { icon: '/Raza_Art/icon-192.png', badge: '/Raza_Art/icon-192.png', color: '#00d4ff' },
+  late_warning     : { icon: '/Raza_Art/icon-192.png', badge: '/Raza_Art/icon-192.png', color: '#ff8c00' },
+  work_pressure    : { icon: '/Raza_Art/icon-192.png', badge: '/Raza_Art/icon-192.png', color: '#ff4466' },
+  holiday          : { icon: '/Raza_Art/icon-192.png', badge: '/Raza_Art/icon-192.png', color: '#a855f7' },
+  leave_update     : { icon: '/Raza_Art/icon-192.png', badge: '/Raza_Art/icon-192.png', color: '#00ff88' },
+  broadcast        : { icon: '/Raza_Art/icon-192.png', badge: '/Raza_Art/icon-192.png', color: '#ffd700' },
+  default          : { icon: '/Raza_Art/icon-192.png', badge: '/Raza_Art/icon-192.png', color: '#00d4ff' }
 };
 
 // ════════════════════════════════════════════
