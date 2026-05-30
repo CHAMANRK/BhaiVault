@@ -18,7 +18,7 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Phone aur OTP dono chahiye' });
 
   try {
-    const dbUrl = process.env.FIREBASE_DB_URL;
+    const dbUrl = process.env.FIREBASE_DB_URL.replace(/\/$/, ''); // trailing slash hatao
 
     // RTDB se stored OTP lo
     const dbRes = await fetch(`${dbUrl}/otp_store/${phone}.json`);
