@@ -1,5 +1,7 @@
 {
   "rewrites": [
+    { "source": "/api/send-otp",   "destination": "/api/send-otp" },
+    { "source": "/api/verify-otp", "destination": "/api/verify-otp" },
     { "source": "/Raza_Art/(.*)\\.html", "destination": "/Raza_Art/$1.html" },
     { "source": "/Raza_Art/(.*)\\.js",   "destination": "/Raza_Art/$1.js"   },
     { "source": "/Raza_Art/(.*)\\.css",  "destination": "/Raza_Art/$1.css"  },
