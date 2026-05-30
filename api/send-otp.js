@@ -26,7 +26,7 @@ export default async function handler(req, res) {
     const expiry = Date.now() + 5 * 60 * 1000; // 5 minutes
 
     // 2. RTDB mein store karo (REST API)
-    const dbUrl = process.env.FIREBASE_DB_URL;
+    const dbUrl = process.env.FIREBASE_DB_URL.replace(/\/$/, ''); // trailing slash hatao
     const dbKey = phone; // phone number as key
 
     const dbRes = await fetch(`${dbUrl}/otp_store/${dbKey}.json`, {
