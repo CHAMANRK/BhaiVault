@@ -21,7 +21,15 @@ export default async function handler(req, res) {
     const dbUrl = process.env.FIREBASE_DB_URL.replace(/\/$/, ''); // trailing slash hatao
 
     // RTDB se stored OTP lo
-    const dbRes = await fetch(`${dbUrl}/otp_store/${phone}.json`);
+      // RTDB se stored OTP lo (Cache bypass ke sath)
+    const dbRes = await fetch(`${dbUrl}/otp_store/${phone}.json`, {
+      cache: 'no-store',
+      headers: {
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        'Pragma': 'no-cache'
+      }
+    });
+
     const data = await dbRes.json();
 
     // OTP exist karta hai?
