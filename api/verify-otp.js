@@ -1,6 +1,4 @@
 // api/verify-otp.js
-// RTDB se OTP compare karta hai + expiry check karta hai (WITH DEBUGGER)
-
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
@@ -13,55 +11,49 @@ export default async function handler(req, res) {
   if (!phone || !otp) return res.status(400).json({ error: 'Phone aur OTP dono chahiye' });
 
   try {
-    // URL me se space ya trailing slash hatane ka double check
     const dbUrl = process.env.FIREBASE_DB_URL.trim().replace(/\/$/, '');
-
-    // Fetch from Firebase
     const fetchUrl = `${dbUrl}/otp_store/${phone}.json`;
+    
+    // Fresh fetch without cache
     const dbRes = await fetch(fetchUrl, {
       cache: 'no-store',
-      headers: {
-        'Cache-Control': 'no-cache, no-store, must-revalidate',
-        'Pragma': 'no-cache'
-      }
+      headers: { 'Cache-Control': 'no-cache, no-store, must-revalidate', 'Pragma': 'no-cache' }
     });
     
-    const dbStatus = dbRes.status;
     const data = await dbRes.json();
 
-    // 🔥 DEBUGGER: Agar OTP nahi mila, toh exact reason screen par dikha
     if (!data || !data.otp) {
-      return res.status(400).json({ 
-        error: `DEBUG -> Status: ${dbStatus} | Data: ${JSON.stringify(data)} | Phone: ${phone}` 
-      });
+      return res.status(400).json({ error: 'Pehle OTP mangao!' });
     }
 
-    // Expire ho gaya?
     if (Date.now() > data.expiry) {
       await fetch(fetchUrl, { method: 'DELETE' });
       return res.status(400).json({ error: 'OTP expire ho gaya! Dobara mangao.' });
     }
 
-    // Attempts check (max 5)
     if (data.attempts >= 5) {
       await fetch(fetchUrl, { method: 'DELETE' });
       return res.status(400).json({ error: 'Zyada galat tries! Naya OTP mangao.' });
     }
 
-    // OTP match karo
-    if (data.otp !== otp.trim()) {
+    // 🔥 FIX 1: Dono ko strictly String bana kar aur spaces hata kar compare karo
+    if (String(data.otp).trim() !== String(otp).trim()) {
+      
+      // Attempts increment karo
       await fetch(fetchUrl, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ attempts: (data.attempts || 0) + 1 })
       });
-      const remaining = 4 - (data.attempts || 0);
-      return res.status(400).json({ error: `Galat OTP! ${remaining} tries baaki hain.` });
+      
+      // 🔥 FIX 2: Debug error msg — Taki tujhe sachhai dikhe
+      return res.status(400).json({ 
+        error: `Galat OTP! Tune dala: [${otp}], Database me hai: [${data.otp}]` 
+      });
     }
 
-    // ✅ OTP sahi hai — delete karo (one-time use)
+    // ✅ OTP ekdum sahi hai!
     await fetch(fetchUrl, { method: 'DELETE' });
-
     return res.status(200).json({ success: true, message: 'OTP verified!' });
 
   } catch (err) {
