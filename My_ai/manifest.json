@@ -3,7 +3,7 @@
   "short_name": "Chaman AI",
   "description": "Tera personal AI assistant",
   "start_url": "./My_ai/index.html",
-  "scope": "./",
+  "scope": "./My_ai/",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#000000",
