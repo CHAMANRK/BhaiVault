@@ -1,0 +1,2166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<title>Chaman AI</title>
+<link rel="manifest" href="manifest.json"/>
+<meta name="theme-color" content="#030303"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="Chaman AI"/>
+<link rel="apple-touch-icon" href="apple-touch-icon.png"/>
+<link rel="icon" href="icon-192.png"/>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;500;600;700;800;900&family=Source+Serif+4:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.0.379/pdf.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --black:#000000;
+  --black-deep:#030303;
+  --black-soft:#080808;
+  --black-card:#0c0c0e;
+  --black-raised:#111116;
+  --black-hover:#16161c;
+  --glass-surface:rgba(180,195,220,0.055);
+  --glass-border:rgba(210,220,240,0.13);
+  --glass-border-hi:rgba(230,238,255,0.28);
+  --glass-shine:rgba(240,245,255,0.09);
+  --glass-deep:rgba(160,175,210,0.03);
+  --mercury-top:rgba(245,248,255,0.12);
+  --mercury-mid:rgba(190,205,230,0.07);
+  --mercury-edge:rgba(160,180,220,0.18);
+  --mercury-glow:rgba(200,215,240,0.08);
+  --mercury-drop:rgba(220,230,248,0.06);
+  --chrome:linear-gradient(135deg,#b8c4d8 0%,#ffffff 30%,#c8d2e8 55%,#e8ecf5 75%,#9daec8 90%,#dde5f5 100%);
+  --chrome-flat:#c8d4e8;
+  --chrome-hi:#ffffff;
+  --chrome-mid:#98a8c0;
+  --chrome-dim:#586070;
+  --danger:#e05555;
+  --danger-dim:rgba(224,85,85,0.15);
+  --text-hi:rgba(230,238,255,0.93);
+  --text-mid:rgba(180,195,225,0.62);
+  --text-low:rgba(160,175,210,0.38);
+  --text-ghost:rgba(140,158,200,0.22);
+  --r-xs:6px;--r-sm:10px;--r-md:16px;--r-lg:22px;--r-xl:28px;--r-2xl:36px;
+  --font-display:'Fraunces',serif;
+  --font-body:'Source Serif 4',serif;
+  --shadow-sm:0 2px 16px rgba(0,0,0,0.6),0 0 0 1px rgba(200,215,240,0.04);
+  --shadow-md:0 8px 48px rgba(0,0,0,0.75),0 0 0 1px rgba(200,215,240,0.06);
+  --shadow-lg:0 20px 80px rgba(0,0,0,0.88),0 0 40px rgba(160,185,230,0.04);
+  --shadow-glass:0 8px 32px rgba(0,0,0,0.65),inset 0 1px 0 rgba(240,246,255,0.11),inset 0 -1px 0 rgba(120,145,190,0.06);
+}
+
+html,body{height:100dvh;width:100%;background:var(--black);color:var(--text-hi);font-family:var(--font-body);font-size:15px;line-height:1.5;overflow:hidden;-webkit-font-smoothing:antialiased;position:fixed;inset:0}
+
+body::before{content:'';position:fixed;inset:0;z-index:0;background:radial-gradient(ellipse 65% 45% at 12% 18%,rgba(160,185,230,0.055) 0%,transparent 58%),radial-gradient(ellipse 55% 38% at 88% 78%,rgba(130,160,210,0.048) 0%,transparent 55%),radial-gradient(ellipse 85% 65% at 50% 108%,rgba(180,200,235,0.035) 0%,transparent 52%);animation:mf1 20s ease-in-out infinite alternate;pointer-events:none}
+body::after{content:'';position:fixed;inset:0;z-index:0;background:radial-gradient(ellipse 42% 32% at 82% 12%,rgba(140,168,225,0.038) 0%,transparent 50%),radial-gradient(ellipse 38% 28% at 18% 82%,rgba(160,188,235,0.032) 0%,transparent 45%);animation:mf2 28s ease-in-out infinite alternate;pointer-events:none}
+@keyframes mf1{0%{opacity:0.55;transform:scale(1) translateY(0)}100%{opacity:1;transform:scale(1.05) translateY(-18px) translateX(6px)}}
+@keyframes mf2{0%{opacity:0.45;transform:scale(1.03) translateX(0)}100%{opacity:0.9;transform:scale(0.98) translateX(-6px) translateY(-4px)}}
+
+/* ── LAYOUT ── */
+#app{position:relative;z-index:1;height:100dvh;width:100%;display:flex;flex-direction:column;max-width:720px;margin:0 auto;border-left:1px solid var(--glass-border);border-right:1px solid var(--glass-border)}
+
+/* ── HEADER ── */
+#header{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;background:linear-gradient(180deg,rgba(175,197,238,0.045) 0%,rgba(155,178,228,0.025) 100%);backdrop-filter:blur(28px) saturate(200%);border-bottom:1px solid var(--glass-border);flex-shrink:0;position:relative;z-index:10}
+#header::after{content:'';position:absolute;bottom:-1px;left:5%;right:5%;height:1px;background:linear-gradient(90deg,transparent,rgba(190,215,255,0.12),rgba(215,235,255,0.18),rgba(190,215,255,0.12),transparent)}
+.hdr-left{display:flex;align-items:center;gap:12px}
+.ai-avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(145deg,rgba(178,200,240,0.12) 0%,rgba(148,172,222,0.07) 100%);border:1px solid var(--glass-border);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;box-shadow:0 2px 12px rgba(0,0,0,0.5),inset 0 1px 0 rgba(220,238,255,0.12)}
+.hdr-info h3{font-family:var(--font-display);font-weight:800;font-size:1rem;background:var(--chrome);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:-0.01em}
+.hdr-status{display:flex;align-items:center;gap:5px;font-size:0.75rem;color:var(--text-low)}
+.status-dot{width:6px;height:6px;border-radius:50%;background:#4ade80;box-shadow:0 0 6px rgba(74,222,128,0.6);animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(74,222,128,0.5)}50%{box-shadow:0 0 0 5px rgba(74,222,128,0)}}
+.hdr-actions{display:flex;gap:4px}
+.icon-btn{width:36px;height:36px;background:none;border:none;color:var(--text-low);cursor:pointer;border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;transition:all 0.2s}
+.icon-btn:hover{background:rgba(255,255,255,0.06);color:var(--text-hi)}
+.icon-btn svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+
+/* ── MESSAGES ── */
+#msgs-area{flex:1;overflow-y:auto;padding:20px 16px 10px;display:flex;flex-direction:column;background:transparent}
+#msgs-area::-webkit-scrollbar{width:2px}
+#msgs-area::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.06);border-radius:2px}
+#msgs-list{display:flex;flex-direction:column;gap:4px;min-height:100%;justify-content:flex-start}
+
+.message{display:flex;gap:8px;margin-bottom:3px;animation:msgIn 0.28s cubic-bezier(.34,1.56,.64,1)}
+@keyframes msgIn{from{opacity:0;transform:translateY(10px) scale(0.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+.message.out{justify-content:flex-end}
+.message.in{justify-content:flex-start}
+.msg-av{width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,0.06);border:1px solid var(--glass-border);display:flex;align-items:center;justify-content:center;font-size:0.8rem;flex-shrink:0;align-self:flex-end}
+
+.msg-bubble{max-width:min(72vw,480px);padding:10px 14px;border-radius:var(--r-lg);position:relative;word-break:break-word;backdrop-filter:blur(16px) saturate(200%);-webkit-backdrop-filter:blur(16px) saturate(200%);line-height:1.55}
+.message.out .msg-bubble{background:linear-gradient(145deg,rgba(200,218,248,0.12) 0%,rgba(172,195,238,0.08) 55%,rgba(185,207,242,0.10) 100%);border:1px solid rgba(210,228,252,0.17);border-bottom-right-radius:4px;box-shadow:0 2px 18px rgba(0,0,0,0.42),inset 0 1px 0 rgba(235,245,255,0.15);font-size:0.92rem;color:var(--text-hi)}
+.message.in .msg-bubble{background:none;border:none;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none;border-radius:0;max-width:100%;padding:2px 0;font-size:0.92rem;color:var(--text-hi)}
+
+.msg-time{font-size:0.65rem;color:var(--text-ghost);margin-top:4px;text-align:right}
+.message.in .msg-time{text-align:left}
+.model-tag-inline{color:var(--text-low);font-weight:500}
+
+/* Typing */
+.typing-bubble{background:linear-gradient(145deg,rgba(165,185,225,0.065) 0%,rgba(145,168,215,0.04) 100%);border:1px solid var(--glass-border);border-bottom-left-radius:4px;padding:12px 16px;border-radius:var(--r-lg);display:inline-flex;gap:5px;align-items:center}
+.typing-bubble span{width:6px;height:6px;border-radius:50%;background:var(--chrome-dim);animation:tdot 1.4s infinite}
+.typing-bubble span:nth-child(2){animation-delay:0.2s}
+.typing-bubble span:nth-child(3){animation-delay:0.4s}
+@keyframes tdot{0%,60%,100%{transform:translateY(0);opacity:0.3}30%{transform:translateY(-5px);opacity:1}}
+
+/* Welcome */
+#welcome{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 24px;gap:10px;animation:fadeIn 0.6s ease both;flex:1}
+@keyframes fadeIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+#welcome .wc-icon{font-size:3rem;opacity:0.3;margin-bottom:8px}
+#welcome h2{font-family:var(--font-display);font-size:1.6rem;font-weight:900;background:var(--chrome);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:-0.02em}
+#welcome p{color:var(--text-low);font-size:0.9rem;text-align:center;max-width:280px}
+.sugg-chips{display:flex;flex-wrap:wrap;gap:7px;justify-content:center;margin-top:14px}
+.sugg-chip{background:rgba(255,255,255,0.04);border:1px solid var(--glass-border);color:var(--text-mid);padding:7px 14px;border-radius:20px;font-size:0.82rem;cursor:pointer;transition:all 0.2s;font-family:var(--font-body)}
+.sugg-chip:hover{border-color:var(--glass-border-hi);color:var(--text-hi);background:rgba(255,255,255,0.07)}
+
+/* Ask-User elicitation card — jab AI ko koi fact nahi pata */
+.ask-card{margin-top:10px;padding:14px;border-radius:14px;background:linear-gradient(155deg,rgba(182,202,240,0.075) 0%,rgba(155,178,225,0.045) 100%);border:1px solid var(--glass-border);max-width:min(88vw,420px)}
+.ask-q{font-size:0.9rem;color:var(--text-hi);margin-bottom:10px;font-weight:500}
+.ask-opts{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.ask-opt-btn{background:rgba(255,255,255,0.05);border:1px solid var(--glass-border);color:var(--text-hi);padding:7px 13px;border-radius:16px;font-size:0.82rem;cursor:pointer;transition:all 0.2s;font-family:var(--font-body)}
+.ask-opt-btn:hover:not(:disabled){border-color:var(--glass-border-hi);background:rgba(255,255,255,0.09)}
+.ask-opt-btn:disabled{opacity:0.4;cursor:default}
+.ask-custom-row{display:flex;gap:6px}
+.ask-custom-inp{flex:1;background:rgba(0,0,0,0.25);border:1px solid var(--glass-border);border-radius:10px;padding:8px 10px;color:var(--text-hi);font-size:0.85rem;font-family:var(--font-body)}
+.ask-custom-inp:disabled{opacity:0.4}
+.ask-custom-btn{background:rgba(200,218,248,0.15);border:1px solid var(--glass-border-hi);color:var(--text-hi);border-radius:10px;padding:8px 14px;cursor:pointer;font-size:0.9rem}
+.ask-custom-btn:disabled{opacity:0.4;cursor:default}
+.ask-chosen{margin-top:10px;font-size:0.82rem;color:var(--text-low)}
+
+/* File preview strip */
+#file-preview{display:none;align-items:center;gap:10px;padding:8px 14px;background:rgba(200,218,248,0.05);border-top:1px solid var(--glass-border);flex-shrink:0}
+#file-preview.show{display:flex}
+#fp-img{width:38px;height:38px;object-fit:cover;border-radius:6px;border:1px solid var(--glass-border)}
+#fp-name{flex:1;font-size:0.82rem;color:var(--text-mid);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#fp-clear{background:none;border:none;color:var(--text-low);cursor:pointer;font-size:1.1rem;padding:2px 6px;transition:color 0.15s}
+#fp-clear:hover{color:var(--danger)}
+
+/* ── INPUT AREA ── */
+#input-area{padding:10px 14px;padding-bottom:max(12px,env(safe-area-inset-bottom));background:linear-gradient(0deg,rgba(172,194,236,0.045) 0%,rgba(155,178,228,0.025) 100%);backdrop-filter:blur(28px) saturate(200%);border-top:1px solid var(--glass-border);flex-shrink:0;position:relative}
+#input-area::before{content:'';position:absolute;top:0;left:5%;right:5%;height:1px;background:linear-gradient(90deg,transparent,rgba(192,215,255,0.18),rgba(220,238,255,0.26),rgba(192,215,255,0.18),transparent)}
+.input-row{display:flex;align-items:flex-end;gap:8px}
+.input-wrap{flex:1;background:linear-gradient(145deg,rgba(170,192,232,0.065) 0%,rgba(148,172,220,0.040) 100%);backdrop-filter:blur(20px) saturate(200%);border:1px solid var(--glass-border);border-radius:var(--r-xl);transition:border-color 0.22s,box-shadow 0.22s;overflow:hidden;box-shadow:inset 0 1px 0 rgba(218,235,255,0.08)}
+.input-wrap:focus-within{border-color:var(--glass-border-hi);box-shadow:0 0 0 2px rgba(178,205,248,0.07),inset 0 1px 0 rgba(228,242,255,0.12)}
+#msg-inp{width:100%;padding:11px 16px;background:none;border:none;outline:none;color:var(--text-hi);font-size:0.93rem;font-family:var(--font-body);resize:none;max-height:120px;line-height:1.5}
+#msg-inp::placeholder{color:var(--text-ghost)}
+
+.iact-btn{width:38px;height:38px;background:rgba(255,255,255,0.04);border:1px solid var(--glass-border);color:var(--text-low);cursor:pointer;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.2s}
+.iact-btn:hover{background:rgba(255,255,255,0.08);color:var(--text-hi);border-color:var(--glass-border-hi)}
+.iact-btn.active{background:rgba(224,85,85,0.12);border-color:rgba(224,85,85,0.35);color:var(--danger)}
+.iact-btn svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+
+.send-btn{width:44px;height:44px;border-radius:50%;background:linear-gradient(145deg,rgba(200,218,248,0.16) 0%,rgba(168,192,240,0.10) 55%,rgba(185,208,245,0.14) 100%);backdrop-filter:blur(16px) saturate(200%);border:1px solid rgba(215,232,255,0.22);color:var(--text-hi);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.28s cubic-bezier(.34,1.56,.64,1);box-shadow:0 2px 14px rgba(0,0,0,0.52),inset 0 1px 0 rgba(240,248,255,0.20);flex-shrink:0;position:relative;overflow:hidden}
+.send-btn::before{content:'';position:absolute;top:0;left:15%;right:15%;height:1px;background:linear-gradient(90deg,transparent,rgba(230,245,255,0.8),transparent)}
+.send-btn:hover{transform:scale(1.1);background:linear-gradient(145deg,rgba(210,228,255,0.22) 0%,rgba(178,202,248,0.15) 55%,rgba(198,218,252,0.20) 100%);border-color:rgba(225,240,255,0.36);box-shadow:0 8px 28px rgba(0,0,0,0.62),inset 0 1px 0 rgba(245,252,255,0.26)}
+.send-btn:active{transform:scale(0.96)}
+.send-btn:disabled{opacity:0.3;cursor:not-allowed;transform:none}
+.send-btn svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+/* ── MARKDOWN ── */
+.msg-bubble p{margin-bottom:6px}
+.msg-bubble p:last-child{margin-bottom:0}
+.msg-bubble strong{color:var(--chrome-flat);font-weight:700}
+.msg-bubble em{color:var(--text-mid);font-style:italic}
+.msg-bubble ul,.msg-bubble ol{padding-left:18px;margin:6px 0}
+.msg-bubble li{margin-bottom:3px}
+.msg-bubble h1,.msg-bubble h2,.msg-bubble h3{font-family:var(--font-display);font-weight:700;margin:10px 0 4px;background:var(--chrome);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.msg-bubble h1{font-size:1.1rem}
+.msg-bubble h2{font-size:1rem}
+.msg-bubble h3{font-size:0.95rem}
+.msg-bubble a{color:var(--chrome-flat);text-decoration:underline;text-underline-offset:3px}
+.msg-bubble code{background:rgba(255,255,255,0.08);border:1px solid var(--glass-border);padding:1px 6px;border-radius:4px;font-size:0.82rem;font-family:'Courier New',monospace;color:rgba(200,220,255,0.85)}
+.code-block{background:rgba(0,0,0,0.6);border:1px solid var(--glass-border);border-radius:10px;margin:8px 0;overflow:hidden}
+.code-hdr{display:flex;align-items:center;justify-content:space-between;padding:6px 12px;background:rgba(255,255,255,0.04);border-bottom:1px solid var(--glass-border)}
+.code-lang{font-size:0.72rem;color:var(--text-ghost);text-transform:uppercase;letter-spacing:0.08em;font-family:'Courier New',monospace}
+.code-cp{background:none;border:1px solid var(--glass-border);color:var(--text-low);border-radius:4px;padding:2px 8px;font-size:0.7rem;cursor:pointer;transition:all 0.2s;font-family:var(--font-body)}
+.code-cp:hover,.code-cp.done{border-color:var(--chrome-flat);color:var(--chrome-flat)}
+.code-body{padding:12px;overflow-x:auto;font-size:0.82rem;color:rgba(180,220,200,0.9);line-height:1.6;white-space:pre;font-family:'Courier New',monospace}
+.stream-cursor{display:inline-block;width:2px;height:14px;background:var(--chrome-flat);vertical-align:middle;margin-left:1px;animation:cur 0.7s step-end infinite}
+@keyframes cur{0%,100%{opacity:1}50%{opacity:0}}
+
+/* ── TOAST ── */
+#toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:rgba(255,255,255,0.08);backdrop-filter:blur(24px);border:1px solid var(--glass-border);color:var(--text-hi);padding:9px 20px;border-radius:var(--r-md);z-index:999;font-size:0.85rem;box-shadow:var(--shadow-md);white-space:nowrap;pointer-events:none;opacity:0;transition:opacity 0.3s}
+#toast.show{opacity:1}
+
+/* ── MODAL BASE ── */
+.modal-ov{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,0.75);backdrop-filter:blur(12px)}
+.modal-ov.hidden{display:none!important}
+.modal-box{position:relative;z-index:1;background:linear-gradient(155deg,rgba(182,202,240,0.075) 0%,rgba(155,178,225,0.045) 45%,rgba(172,195,235,0.065) 80%,rgba(145,168,218,0.04) 100%);backdrop-filter:blur(36px) saturate(220%);border:1px solid var(--glass-border);border-radius:var(--r-2xl);width:100%;max-width:440px;box-shadow:var(--shadow-lg),inset 0 1px 0 rgba(235,246,255,0.13);animation:dropIn 0.32s cubic-bezier(.34,1.56,.64,1);overflow:hidden}
+.modal-box::before{content:'';position:absolute;top:0;left:6%;right:6%;height:1px;background:linear-gradient(90deg,transparent,rgba(205,226,255,0.45),rgba(238,248,255,0.68),rgba(205,226,255,0.45),transparent)}
+@keyframes dropIn{from{opacity:0;transform:translateY(32px) scale(0.95);filter:blur(4px)}to{opacity:1;transform:none;filter:none}}
+.modal-hdr{display:flex;align-items:center;justify-content:space-between;padding:18px 22px;border-bottom:1px solid var(--glass-border)}
+.modal-hdr h3{font-family:var(--font-display);font-size:1.1rem;font-weight:800;color:var(--text-hi)}
+.modal-close{background:rgba(255,255,255,0.06);border:1px solid var(--glass-border);color:var(--text-low);cursor:pointer;font-size:1rem;padding:4px 10px;border-radius:var(--r-xs);transition:all 0.2s}
+.modal-close:hover{background:rgba(255,255,255,0.1);color:var(--text-hi)}
+.modal-body{padding:20px 22px;max-height:70vh;overflow-y:auto}
+
+/* Form elements */
+.form-group{margin-bottom:16px}
+.form-group label{display:block;font-size:0.8rem;font-weight:600;color:var(--text-low);margin-bottom:6px;letter-spacing:0.02em}
+.form-inp,.form-ta,.form-sel{width:100%;background:rgba(255,255,255,0.04);border:1px solid var(--glass-border);color:var(--text-hi);padding:10px 14px;border-radius:var(--r-md);font-family:var(--font-body);font-size:0.88rem;outline:none;transition:border-color 0.2s,box-shadow 0.2s}
+.form-inp:focus,.form-ta:focus,.form-sel:focus{border-color:var(--glass-border-hi);box-shadow:0 0 0 2px rgba(255,255,255,0.04)}
+.form-ta{resize:vertical;min-height:80px;line-height:1.55}
+.form-sel option{background:#0a0a0e;color:var(--text-hi)}
+.form-hint{font-size:0.75rem;color:var(--text-ghost);margin-top:5px}
+.form-row{display:flex;gap:10px}
+.form-row .form-group{flex:1}
+
+.btn-prim{width:100%;padding:12px 20px;background:linear-gradient(160deg,rgba(200,218,248,0.14) 0%,rgba(170,192,238,0.09) 50%,rgba(185,205,242,0.12) 100%);backdrop-filter:blur(16px);border:1px solid var(--glass-border-hi);color:var(--text-hi);font-weight:700;font-size:0.9rem;border-radius:var(--r-md);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;font-family:var(--font-display);transition:all 0.28s cubic-bezier(.34,1.2,.64,1);box-shadow:0 4px 24px rgba(0,0,0,0.55),inset 0 1px 0 rgba(240,248,255,0.18);position:relative;overflow:hidden}
+.btn-prim:hover{background:linear-gradient(160deg,rgba(210,228,255,0.20) 0%,rgba(178,200,245,0.14) 50%,rgba(196,215,250,0.18) 100%);transform:translateY(-1px);box-shadow:0 10px 40px rgba(0,0,0,0.65)}
+.btn-prim:active{transform:scale(0.99)}
+.btn-danger{background:rgba(224,85,85,0.12);border:1px solid rgba(224,85,85,0.3);color:rgba(255,120,120,0.9);padding:8px 16px;border-radius:var(--r-sm);cursor:pointer;font-size:0.82rem;font-family:var(--font-body);transition:all 0.2s}
+.btn-danger:hover{background:rgba(224,85,85,0.2);border-color:rgba(224,85,85,0.5)}
+.btn-ghost{background:none;border:1px solid var(--glass-border);color:var(--text-low);padding:8px 16px;border-radius:var(--r-sm);cursor:pointer;font-size:0.82rem;font-family:var(--font-body);transition:all 0.2s}
+.btn-ghost:hover{border-color:var(--glass-border-hi);color:var(--text-hi)}
+.btn-row{display:flex;gap:8px;margin-top:14px}
+.btn-row .btn-prim{flex:1}
+
+/* Memory items */
+.mem-list{display:flex;flex-direction:column;gap:6px;margin-bottom:10px;max-height:180px;overflow-y:auto}
+.mem-item{display:flex;align-items:flex-start;gap:8px;background:rgba(255,255,255,0.03);border:1px solid var(--glass-border);border-radius:var(--r-sm);padding:8px 12px;font-size:0.82rem;color:var(--text-mid)}
+.mem-item span{flex:1;word-break:break-word}
+.mem-del{background:none;border:none;color:var(--text-ghost);cursor:pointer;font-size:1rem;flex-shrink:0;transition:color 0.15s;line-height:1}
+.mem-del:hover{color:var(--danger)}
+.mem-add-row{display:flex;gap:6px}
+.mem-add-row .form-inp{flex:1}
+.add-btn{background:rgba(255,255,255,0.07);border:1px solid var(--glass-border);color:var(--text-mid);padding:8px 14px;border-radius:var(--r-sm);cursor:pointer;font-size:0.82rem;font-family:var(--font-body);transition:all 0.2s;white-space:nowrap}
+.add-btn:hover{border-color:var(--glass-border-hi);color:var(--text-hi)}
+
+/* Session pills */
+.sess-list{display:flex;flex-direction:column;gap:6px;max-height:200px;overflow-y:auto}
+.sess-item{background:rgba(255,255,255,0.03);border:1px solid var(--glass-border);border-radius:var(--r-sm);padding:10px 12px}
+.sess-meta{font-size:0.72rem;color:var(--text-ghost);margin-bottom:4px}
+.sess-preview{font-size:0.8rem;color:var(--text-low);line-height:1.45;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+
+/* Summary box */
+.summary-box{background:rgba(255,255,255,0.02);border:1px solid var(--glass-border);border-radius:var(--r-sm);padding:12px;font-size:0.8rem;color:var(--text-low);line-height:1.6;max-height:120px;overflow-y:auto}
+.section-title{font-size:0.75rem;font-weight:700;color:var(--text-ghost);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px}
+
+/* Key input eye toggle */
+.key-wrap{position:relative}
+.key-wrap .form-inp{padding-right:44px}
+.key-eye{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--text-ghost);cursor:pointer;transition:color 0.15s;padding:2px}
+.key-eye:hover{color:var(--text-mid)}
+.key-eye svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+
+/* Divider */
+.mdiv{height:1px;background:var(--glass-border);margin:16px 0}
+.settings-tabs{display:flex;gap:6px;padding:12px 22px 0;border-bottom:1px solid var(--glass-border)}
+.settings-tab-btn{flex:1;background:none;border:none;color:var(--text-ghost);font-family:var(--font-display);font-size:0.78rem;font-weight:700;padding:10px 4px 12px;cursor:pointer;border-bottom:2px solid transparent;transition:all 0.15s;white-space:nowrap}
+.settings-tab-btn.active{color:var(--text-hi);border-bottom-color:rgba(200,220,250,0.85)}
+.settings-tab-btn:not(.active):active{color:var(--text-mid)}
+.settings-tab-pane{display:none}
+.settings-tab-pane.active{display:block}
+
+/* API key setup screen */
+#setup-screen{position:fixed;inset:0;z-index:500;display:flex;align-items:center;justify-content:center;padding:24px;background:var(--black)}
+#setup-screen::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 60% 50% at 50% 50%,rgba(180,205,240,0.06) 0%,transparent 60%)}
+#setup-screen.hidden{display:none!important}
+#onboard-screen{position:fixed;inset:0;z-index:500;display:flex;align-items:center;justify-content:center;padding:24px;background:var(--black)}
+#onboard-screen::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 60% 50% at 50% 50%,rgba(180,205,240,0.06) 0%,transparent 60%)}
+#onboard-screen.hidden{display:none!important}
+.ob-progress{display:flex;gap:6px;justify-content:center;margin-bottom:24px}
+.ob-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.12);transition:all 0.25s}
+.ob-dot.on{background:var(--chrome-flat);width:22px;border-radius:5px;box-shadow:0 0 8px rgba(200,220,250,0.4)}
+.ob-dot.done{background:rgba(160,200,180,0.55)}
+.ob-step{animation:dropIn 0.3s cubic-bezier(.34,1.56,.64,1)}
+.ob-emoji{font-size:2.2rem;text-align:center;margin-bottom:10px}
+.ob-q{font-family:var(--font-display);font-size:1.15rem;font-weight:800;color:var(--text-hi);text-align:center;margin-bottom:6px}
+.ob-sub{color:var(--text-low);font-size:0.82rem;text-align:center;margin-bottom:22px}
+.ob-nav{display:flex;gap:10px;margin-top:22px}
+.ob-skip{background:none;border:none;color:var(--text-ghost);font-size:0.82rem;cursor:pointer;text-decoration:underline;display:block;margin:14px auto 0}
+.ob-chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:6px}
+.ob-chip{background:rgba(255,255,255,0.045);border:1px solid var(--glass-border);color:var(--text-mid);font-size:0.82rem;padding:8px 14px;border-radius:20px;cursor:pointer;transition:all 0.15s}
+.ob-chip:active,.ob-chip.picked{background:rgba(180,205,240,0.16);border-color:var(--glass-border-hi);color:var(--text-hi)}
+
+/* Lock screen (PIN) */
+#lock-screen{position:fixed;inset:0;z-index:900;display:flex;align-items:center;justify-content:center;padding:24px;background:var(--black)}
+#lock-screen::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 60% 50% at 50% 50%,rgba(180,205,240,0.06) 0%,transparent 60%)}
+#lock-screen.hidden{display:none!important}
+.lock-card{position:relative;z-index:1;width:100%;max-width:360px;text-align:center;animation:dropIn 0.45s cubic-bezier(.34,1.56,.64,1)}
+.lock-icon{font-size:2.4rem;margin-bottom:10px}
+.lock-card h1{font-family:var(--font-display);font-size:1.4rem;font-weight:800;background:var(--chrome);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:-0.01em;margin-bottom:6px}
+.lock-card p{color:var(--text-low);font-size:0.85rem;margin-bottom:26px}
+.pin-dots{display:flex;justify-content:center;gap:14px;margin-bottom:30px}
+.pin-dot{width:14px;height:14px;border-radius:50%;border:1px solid var(--glass-border-hi);background:transparent;transition:all 0.15s}
+.pin-dot.filled{background:var(--chrome-flat);box-shadow:0 0 10px rgba(200,220,250,0.5)}
+.pin-dot.err{border-color:var(--danger);background:var(--danger)}
+.lock-card.shake{animation:lockShake 0.4s}
+@keyframes lockShake{0%,100%{transform:translateX(0)}20%{transform:translateX(-10px)}40%{transform:translateX(10px)}60%{transform:translateX(-8px)}80%{transform:translateX(8px)}}
+.pin-pad{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;max-width:280px;margin:0 auto}
+.pin-key{aspect-ratio:1;border-radius:50%;background:rgba(255,255,255,0.045);border:1px solid var(--glass-border);color:var(--text-hi);font-size:1.3rem;font-family:var(--font-display);font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.15s;backdrop-filter:blur(10px)}
+.pin-key:active{background:rgba(255,255,255,0.12);transform:scale(0.94)}
+.pin-key.pin-ghost{background:none;border:none;box-shadow:none}
+.lock-hint-btn{margin-top:22px;background:none;border:none;color:var(--text-ghost);font-size:0.78rem;cursor:pointer;text-decoration:underline}
+.fp-btn{margin-top:24px;width:64px;height:64px;border-radius:50%;background:rgba(255,255,255,0.045);border:1px solid var(--glass-border-hi);color:var(--text-hi);font-size:1.7rem;cursor:pointer;display:flex;align-items:center;justify-content:center;margin-left:auto;margin-right:auto;transition:all 0.15s}
+.fp-btn:active{transform:scale(0.92);background:rgba(255,255,255,0.1)}
+.fp-btn.hidden{display:none}
+.fp-status{margin-top:8px;font-size:0.75rem;color:var(--text-ghost)}
+.setup-card{position:relative;z-index:1;width:100%;max-width:400px;background:linear-gradient(155deg,rgba(182,202,240,0.075) 0%,rgba(155,178,225,0.045) 45%,rgba(172,195,235,0.065) 80%);backdrop-filter:blur(36px) saturate(220%);border:1px solid var(--glass-border);border-radius:var(--r-2xl);padding:36px;box-shadow:var(--shadow-lg),inset 0 1px 0 rgba(235,246,255,0.12);animation:dropIn 0.45s cubic-bezier(.34,1.56,.64,1)}
+.setup-card::before{content:'';position:absolute;top:0;left:8%;right:8%;height:1px;background:linear-gradient(90deg,transparent,rgba(200,225,255,0.45),rgba(240,250,255,0.65),rgba(200,225,255,0.45),transparent)}
+.setup-logo{text-align:center;margin-bottom:28px}
+.setup-logo h1{font-family:var(--font-display);font-size:2rem;font-weight:900;background:var(--chrome);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin:10px 0 6px;letter-spacing:-0.02em}
+.setup-logo p{color:var(--text-low);font-size:0.85rem}
+.setup-logo .logo-em{font-size:2.5rem}
+.model-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+.model-tag{font-size:0.72rem;color:var(--text-ghost);background:rgba(255,255,255,0.04);border:1px solid var(--glass-border);padding:3px 10px;border-radius:14px}
+
+/* Scrollbar for modals */
+.modal-body::-webkit-scrollbar,.mem-list::-webkit-scrollbar,.sess-list::-webkit-scrollbar,.summary-box::-webkit-scrollbar{width:2px}
+.modal-body::-webkit-scrollbar-thumb,.mem-list::-webkit-scrollbar-thumb,.sess-list::-webkit-scrollbar-thumb,.summary-box::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.08);border-radius:2px}
+
+@media(max-width:600px){
+  .msg-bubble{max-width:85%}
+  #app{border:none}
+}
+</style>
+</head>
+<body>
+
+<!-- LOCK SCREEN (PIN) -->
+<div id="lock-screen" class="hidden">
+  <div class="lock-card" id="lock-card">
+    <div class="lock-icon">🔒</div>
+    <h1 id="lock-title">Chaman AI</h1>
+    <p id="lock-sub">PIN dalo unlock karne ke liye</p>
+    <div class="pin-dots" id="pin-dots"></div>
+    <div class="pin-pad" id="pin-pad">
+      <button class="pin-key" data-k="1">1</button>
+      <button class="pin-key" data-k="2">2</button>
+      <button class="pin-key" data-k="3">3</button>
+      <button class="pin-key" data-k="4">4</button>
+      <button class="pin-key" data-k="5">5</button>
+      <button class="pin-key" data-k="6">6</button>
+      <button class="pin-key" data-k="7">7</button>
+      <button class="pin-key" data-k="8">8</button>
+      <button class="pin-key" data-k="9">9</button>
+      <div class="pin-key pin-ghost"></div>
+      <button class="pin-key" data-k="0">0</button>
+      <button class="pin-key" id="pin-back" data-k="back">⌫</button>
+    </div>
+    <button class="fp-btn hidden" id="fp-unlock-btn" title="Fingerprint se unlock">👆</button>
+    <p class="fp-status hidden" id="fp-status">Fingerprint se unlock karo</p>
+  </div>
+</div>
+
+<!-- SETUP SCREEN (first run) -->
+<div id="setup-screen" class="hidden">
+  <div class="setup-card">
+    <div class="setup-logo">
+      <div class="logo-em">🤖</div>
+      <h1>Chaman AI</h1>
+      <p>Tera personal AI assistant — sirf tere liye</p>
+    </div>
+    <div class="form-group">
+      <label>Groq API Key</label>
+      <div class="key-wrap">
+        <input class="form-inp" id="setup-key" type="password" placeholder="gsk_..."/>
+        <button class="key-eye" id="eye-setup">
+          <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        </button>
+      </div>
+      <p class="form-hint">console.groq.com pe jaake free key milegi. Sirf tumhare browser mein save hoga.</p>
+    </div>
+    <div class="form-group">
+      <label>Model</label>
+      <input class="form-inp" id="setup-model" type="text" placeholder="Model ID (baad mein settings se bhi badal sakte ho)"/>
+      <p class="form-hint" style="margin-top:6px">API key save karne ke baad Settings → Fetch se free models dekh sakte ho</p>
+    </div>
+    <button class="btn-prim" id="setup-btn">Shuru karo →</button>
+  </div>
+</div>
+
+<!-- ONBOARDING (basic profile setup) -->
+<div id="onboard-screen" class="hidden">
+  <div class="setup-card">
+    <div class="ob-progress" id="ob-progress"></div>
+    <div id="ob-step-holder"></div>
+  </div>
+</div>
+
+<!-- MAIN APP -->
+<div id="app">
+  <!-- Header -->
+  <div id="header">
+    <div class="hdr-left">
+      <div class="ai-avatar">🤖</div>
+      <div class="hdr-info">
+        <h3>Chaman AI</h3>
+        <div class="hdr-status"><div class="status-dot"></div><span id="status-txt">Online</span></div>
+      </div>
+    </div>
+    <div class="hdr-actions">
+      <button class="icon-btn" title="Memory">
+        <svg viewBox="0 0 24 24"><path d="M12 2a5 5 0 0 1 5 5v1a5 5 0 0 1-10 0V7a5 5 0 0 1 5-5z"/><path d="M2 20c0-4 4-7 10-7s10 3 10 7"/></svg>
+      </button>
+      <button class="icon-btn" title="Settings">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      </button>
+      <button class="icon-btn" title="Clear chat">
+        <svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+      </button>
+      <button class="icon-btn" id="lock-now-btn" title="Lock" style="display:none">
+        <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Messages -->
+  <div id="msgs-area">
+    <div id="msgs-list">
+      <div id="welcome">
+        <div class="wc-icon">✨</div>
+        <h2>Kya haal hai?</h2>
+        <p>Bol kya karna hai — main yaad rakhta hoon sab</p>
+        <div class="sugg-chips" id="sugg-chips"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- File preview -->
+  <div id="file-preview">
+    <img id="fp-img" src="" style="display:none"/>
+    <span id="fp-name"></span>
+    <button id="fp-clear" >✕</button>
+  </div>
+
+  <!-- Input -->
+  <div id="input-area">
+    <div class="input-row">
+      <button class="iact-btn" id="mic-btn" title="Voice" >
+        <svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+      </button>
+      <button class="iact-btn" id="attach-btn" title="Attach" >
+        <svg viewBox="0 0 24 24"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+      </button>
+      <input type="file" id="file-inp" style="display:none" accept="image/*,.pdf,.txt,.md,.csv" />
+      <div class="input-wrap">
+        <textarea id="msg-inp" rows="1" placeholder="Kuch bhi pooch..."></textarea>
+      </div>
+      <button class="send-btn" id="send-btn" >
+        <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- MEMORY MODAL -->
+<div id="mem-modal" class="modal-ov hidden">
+  <div class="modal-box">
+    <div class="modal-hdr">
+      <h3>🧠 Memory & History</h3>
+      <button class="modal-close" >✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="section-title">Permanent Memory (Facts)</div>
+      <div class="mem-list" id="perm-mem-list"></div>
+      <div class="mem-add-row">
+        <input class="form-inp" id="mem-inp" placeholder="Naya fact add karo..."/>
+        <button class="add-btn" >+ Add</button>
+      </div>
+      <div class="mdiv"></div>
+      <div class="section-title">Purana Summary</div>
+      <div class="summary-box" id="old-summary"></div>
+      <div class="mdiv"></div>
+      <div class="section-title">Recent Sessions (last 5)</div>
+      <div class="sess-list" id="sess-list"></div>
+      <div class="mdiv"></div>
+      <div class="btn-row">
+        <button class="btn-danger" >🗑️ Sab clear</button>
+        <button class="btn-ghost" >Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SETTINGS MODAL -->
+<div id="settings-modal" class="modal-ov hidden">
+  <div class="modal-box">
+    <div class="modal-hdr">
+      <h3>⚙️ Settings</h3>
+      <button class="modal-close" >✕</button>
+    </div>
+    <div class="settings-tabs">
+      <button class="settings-tab-btn active" data-tab="general">⚙️ General</button>
+      <button class="settings-tab-btn" data-tab="fallback">🔀 Fallback</button>
+      <button class="settings-tab-btn" data-tab="lock">🔒 Lock</button>
+    </div>
+    <div class="modal-body">
+      <div class="settings-tab-pane active" data-pane="general">
+      <div class="form-group">
+        <label>System Prompt</label>
+        <textarea class="form-ta" id="sys-prompt" rows="5" placeholder="Tu mera personal AI assistant hai..."></textarea>
+        <p class="form-hint">AI ka personality aur context yahan define karo. Iske alawa app khud technical details + changelog add karta hai — <span id="preview-full-prompt-btn" style="text-decoration:underline;cursor:pointer;color:var(--text-mid)">poora prompt preview karo →</span></p>
+      </div>
+      <div class="form-group">
+        <label>Groq API Key</label>
+        <div class="key-wrap">
+          <input class="form-inp" id="api-key-inp" type="password" placeholder="gsk_..."/>
+          <button class="key-eye" id="eye-settings">
+            <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Model</label>
+        <input class="form-inp" id="model-inp" type="text" placeholder="Model ID..."/>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:8px">
+          <select class="form-sel" id="free-models-sel" style="flex:1" >
+            <option value="">-- Free models load karo --</option>
+          </select>
+          <button class="btn-ghost" id="fetch-models-btn"  style="white-space:nowrap;padding:8px 14px">🔄 Fetch</button>
+        </div>
+        <p class="form-hint" id="models-hint">Fetch dabao — Groq ke sare active models aa jayenge</p>
+      </div>
+      <div class="form-group">
+        <label>Response Language</label>
+        <select class="form-sel" id="lang-sel">
+          <option value="hinglish">Hinglish (default)</option>
+          <option value="hindi">Pure Hindi</option>
+          <option value="english">English</option>
+        </select>
+      </div>
+      <div class="form-group" style="display:flex;align-items:center;justify-content:space-between">
+        <label style="margin:0">Response ke saath model naam dikhao</label>
+        <input type="checkbox" id="show-model-tag-inp" style="width:18px;height:18px;accent-color:rgba(180,205,240,0.8)"/>
+      </div>
+      <div class="form-group" style="display:flex;align-items:center;justify-content:space-between">
+        <label style="margin:0">Related follow-up suggestions dikhao</label>
+        <input type="checkbox" id="show-followups-inp" style="width:18px;height:18px;accent-color:rgba(180,205,240,0.8)"/>
+      </div>
+      <div class="mdiv"></div>
+      <button class="btn-ghost" id="restart-onboarding-btn" type="button" style="width:100%">🧭 Onboarding dobara karo</button>
+      </div>
+
+      <div class="settings-tab-pane" data-pane="fallback">
+      <div class="section-title">Fallback Endpoints (free, optional)</div>
+      <p class="form-hint" style="margin-bottom:10px">Agar Groq fail/garbled ho, in providers mein se agla try hoga (order maayne rakhta hai)</p>
+      <div class="mem-list" id="fallback-list" style="max-height:220px"></div>
+      <div class="form-group">
+        <label>Provider</label>
+        <select class="form-sel" id="fb-preset">
+          <option value="together">Together AI</option>
+          <option value="cerebras">Cerebras</option>
+          <option value="gemini">Google Gemini</option>
+          <option value="mistral">Mistral AI</option>
+          <option value="custom">Custom</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>API Key</label>
+        <input class="form-inp" id="fb-key" type="password" placeholder="API key"/>
+      </div>
+      <div class="form-group">
+        <label>Model ID</label>
+        <input class="form-inp" id="fb-model" type="text" placeholder="Model ID"/>
+      </div>
+      <button class="btn-prim" id="fb-add-btn" type="button" style="margin-bottom:6px">➕ Add Fallback Endpoint</button>
+      </div>
+
+      <div class="settings-tab-pane" data-pane="lock">
+      <div class="section-title">🔒 App Lock</div>
+      <div class="form-group" style="display:flex;align-items:center;justify-content:space-between">
+        <label style="margin:0">PIN lock enable karo</label>
+        <input type="checkbox" id="lock-enable-inp" style="width:18px;height:18px;accent-color:rgba(180,205,240,0.8)"/>
+      </div>
+      <div id="lock-setup-box">
+        <div class="form-group">
+          <label id="lock-pin-label">Naya 4-6 digit PIN</label>
+          <input class="form-inp" id="new-pin-inp" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="6" placeholder="••••"/>
+        </div>
+        <div class="form-group">
+          <label>PIN confirm karo</label>
+          <input class="form-inp" id="confirm-pin-inp" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="6" placeholder="••••"/>
+        </div>
+        <button class="btn-ghost" id="set-pin-btn" type="button" style="width:100%">🔐 PIN Set/Update karo</button>
+        <p class="form-hint" id="lock-status-hint">Lock abhi off hai</p>
+        <button class="btn-ghost" id="fp-enable-btn" type="button" style="width:100%;margin-top:8px">👆 Fingerprint Enable karo</button>
+        <p class="form-hint" id="fp-status-hint"></p>
+      </div>
+      </div>
+
+      <div class="mdiv"></div>
+      <button class="btn-prim" id="save-settings-btn" type="button">💾 Save Settings</button>
+    </div>
+  </div>
+</div>
+
+<!-- FULL SYSTEM PROMPT PREVIEW (read-only, code-generated part included) -->
+<div id="prompt-preview-modal" class="modal-ov hidden">
+  <div class="modal-box">
+    <div class="modal-hdr">
+      <h3>👁 Poora System Prompt</h3>
+      <button class="modal-close">✕</button>
+    </div>
+    <div class="modal-body">
+      <p class="form-hint" style="margin-bottom:10px">Ye exact wahi text hai jo AI ko har message ke saath jaata hai — tera personal hissa + memory + code-maintained app-info/changelog. Read-only hai, edit karne ke liye upar wala System Prompt box use karo.</p>
+      <textarea class="form-ta" id="prompt-preview-box" rows="20" readonly style="font-family:monospace;font-size:0.78rem;white-space:pre-wrap"></textarea>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+// ════════════════════════════════════
+// STATE
+// ════════════════════════════════════
+let loading = false;
+let attachedFile = null;
+let isRec = false;
+let recog = null;
+let currentSession = [];
+
+if (window.pdfjsLib) {
+  pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.0.379/pdf.worker.min.js';
+}
+
+const LS = {
+  get: k => { try { return JSON.parse(localStorage.getItem(k)) } catch { return null } },
+  set: (k, v) => localStorage.setItem(k, JSON.stringify(v)),
+  rm: k => localStorage.removeItem(k)
+};
+
+let cfg = {
+  apiKey: '',
+  model: 'llama-3.3-70b-versatile',
+  sysPrompt: `Tu "Chaman AI" hai — mera personal AI assistant. Mera naam Chaman hai. Tu sirf mere liye hai.
+
+Kuch important rules:
+- Hamesha Hinglish mein baat kar (Hindi + English mix) jab tak main kuch aur na kahe
+- Tera tone casual, warm, aur helpful ho — jaise ek close dost
+- Seedha kaam ki baat kar, bekar formalities nahi
+- Meri purani baatein yaad rakh aur context use kar
+- Agar main koi project ya kaam ka zikr karu toh usse yaad rakh
+- Sirf woh info use kar jo tujhe [MERI IMPORTANT DETAILS] ya session summaries mein di gayi hai — kabhi bhi facts (jaise DOB, naam, location) invent ya guess mat kar
+- Agar koi feature ya info tere paas nahi hai, toh seedha bol de "mujhe pata nahi" — kabhi fake technical details (encryption, storage system, etc.) mat bana`,
+  lang: 'hinglish',
+  permMemory: [],
+  sessions: [],
+  oldSummary: '',
+  fallbacks: [], // [{label, base, key, model}] — tried in order if primary (Groq) fails
+  showModelTag: true, // response ke saath "Groq · model-name" dikhana ha nahi
+  showFollowUps: true, // response ke baad 3 related follow-up chips dikhana ha nahi
+  lockEnabled: false, // PIN lock on/off
+  lockPinHash: '', // SHA-256 hex of PIN, kabhi bhi plain PIN save nahi hota
+  lockPinLen: 0, // stored PIN ki length (4-6) taaki auto-submit pata chale
+  lockWebauthnEnabled: false, // fingerprint/device biometric unlock on/off
+  lockWebauthnId: '', // registered WebAuthn credential ID (base64url)
+  onboarded: false // basic profile onboarding (naam/age/etc) complete ho chuka ha nahi
+};
+
+// Presets for common free OpenAI-compatible providers (user still needs their own key)
+// Groq is the PRIMARY provider (see getEndpointList) — these are only fallbacks.
+const PROVIDER_PRESETS = {
+  together: { label: 'Together AI', base: 'https://api.together.xyz/v1/chat/completions', model: 'meta-llama/Llama-3.3-70B-Instruct-Turbo-Free' },
+  cerebras: { label: 'Cerebras', base: 'https://api.cerebras.ai/v1/chat/completions', model: 'llama-3.3-70b' },
+  gemini: { label: 'Google Gemini', base: 'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions', model: 'gemini-2.5-flash' },
+  mistral: { label: 'Mistral AI', base: 'https://api.mistral.ai/v1/chat/completions', model: 'mistral-small-latest' },
+  custom: { label: 'Custom', base: '', model: '' }
+};
+
+// init() called after all functions are defined — see bottom of script
+
+// ════════════════════════════════════
+// SETUP
+// ════════════════════════════════════
+function saveSetup() {
+  const key = document.getElementById('setup-key').value.trim();
+  const model = document.getElementById('setup-model').value.trim();
+  if (!key) { toast('API key dalo pehle!'); return; }
+  cfg.apiKey = key;
+  if (model) cfg.model = model;
+  LS.set('chaman_cfg', cfg);
+  document.getElementById('setup-screen').classList.add('hidden');
+  toast('✓ Sab set ho gaya!');
+}
+function setModel(m) {
+  document.getElementById('setup-model').value = m;
+}
+function setModelS(m) {
+  document.getElementById('model-inp').value = m;
+}
+
+// ════════════════════════════════════
+// ONBOARDING (basic profile: naam, age, etc)
+// ════════════════════════════════════
+const OB_STEPS = [
+  { key: 'apiKey', emoji: '🔑', q: 'Groq API Key dalo', sub: 'console.groq.com pe free milegi — bina isske AI kaam nahi karega. Baad mein Settings se bhi daal sakte ho', type: 'password', placeholder: 'gsk_...', required: false },
+  { key: 'model', emoji: '🧠', q: 'Kaunsa model use karu?', sub: 'Khaali chhodo toh default model (llama-3.3-70b-versatile) use hoga', type: 'text', placeholder: 'llama-3.3-70b-versatile', required: false },
+  { key: 'fallback', emoji: '🔀', q: 'Fallback API bhi add karna hai?', sub: 'Agar Groq fail/garbled ho toh backup provider try hoga (optional)', type: 'fallback', required: false },
+  { key: 'name', emoji: '👋', q: 'Tera naam kya hai?', sub: 'Taaki main tujhe sahi se bulau', type: 'text', placeholder: 'Jaise: Chaman', required: true },
+  { key: 'age', emoji: '🎂', q: 'Age kitni hai?', sub: 'Optional hai, skip bhi kar sakta hai', type: 'number', placeholder: 'Jaise: 20', required: false },
+  { key: 'work', emoji: '💼', q: 'Tu kya karta hai?', sub: 'Kaam, padhai, ya interest — jo bhi ho', type: 'text', placeholder: 'Jaise: Developer, Student...', required: false },
+  { key: 'lang', emoji: '💬', q: 'Kis language mein baat karu?', sub: 'Baad mein Settings se bhi badal sakte ho', type: 'chips', options: ['Hinglish', 'Pure Hindi', 'English'], required: false },
+  { key: 'extra', emoji: '📝', q: 'Kuch aur jo mujhe pata hona chahiye?', sub: 'Koi project, pasand, habit — kuch bhi (optional)', type: 'textarea', placeholder: 'Yahan likho...', required: false }
+];
+let obIndex = 0;
+let obAnswers = {};
+
+function startOnboarding() {
+  obIndex = 0;
+  obAnswers = {};
+  if (cfg.apiKey) obAnswers.apiKey = cfg.apiKey;
+  if (cfg.model) obAnswers.model = cfg.model;
+  document.getElementById('onboard-screen').classList.remove('hidden');
+  renderObProgress();
+  renderObStep();
+}
+function renderObProgress() {
+  const wrap = document.getElementById('ob-progress');
+  wrap.innerHTML = '';
+  OB_STEPS.forEach((s, i) => {
+    const d = document.createElement('div');
+    d.className = 'ob-dot' + (i === obIndex ? ' on' : '') + (i < obIndex ? ' done' : '');
+    wrap.appendChild(d);
+  });
+}
+function renderObStep() {
+  const step = OB_STEPS[obIndex];
+  const holder = document.getElementById('ob-step-holder');
+  let inputHtml = '';
+  if (step.type === 'text') {
+    inputHtml = `<input class="form-inp" id="ob-input" type="text" placeholder="${step.placeholder || ''}" value="${obAnswers[step.key] || ''}"/>`;
+  } else if (step.type === 'number') {
+    inputHtml = `<input class="form-inp" id="ob-input" type="number" placeholder="${step.placeholder || ''}" value="${obAnswers[step.key] || ''}"/>`;
+  } else if (step.type === 'textarea') {
+    inputHtml = `<textarea class="form-ta" id="ob-input" rows="3" placeholder="${step.placeholder || ''}">${obAnswers[step.key] || ''}</textarea>`;
+  } else if (step.type === 'chips') {
+    inputHtml = `<div class="ob-chips" id="ob-chips">` + step.options.map(o => `<button type="button" class="ob-chip${obAnswers[step.key] === o ? ' picked' : ''}" data-v="${o}">${o}</button>`).join('') + `</div>`;
+  } else if (step.type === 'password') {
+    inputHtml = `<div class="key-wrap"><input class="form-inp" id="ob-input" type="password" placeholder="${step.placeholder || ''}" value="${obAnswers[step.key] || ''}"/><button type="button" class="key-eye" id="ob-eye"><svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button></div>`;
+  } else if (step.type === 'fallback') {
+    inputHtml = `<div class="mem-list" id="ob-fb-list" style="max-height:150px;margin-bottom:10px"></div>
+      <select class="form-sel" id="ob-fb-preset" style="margin-bottom:8px">
+        <option value="together">Together AI</option>
+        <option value="cerebras">Cerebras</option>
+        <option value="gemini">Google Gemini</option>
+        <option value="mistral">Mistral AI</option>
+        <option value="custom">Custom</option>
+      </select>
+      <input class="form-inp" id="ob-fb-key" type="password" placeholder="API key" style="margin-bottom:8px"/>
+      <input class="form-inp" id="ob-fb-model" type="text" placeholder="Model ID" style="margin-bottom:8px"/>
+      <button class="btn-ghost" id="ob-fb-add" type="button" style="width:100%">➕ Add Fallback</button>`;
+  }
+  holder.innerHTML = `
+    <div class="ob-step">
+      <div class="ob-emoji">${step.emoji}</div>
+      <div class="ob-q">${step.q}</div>
+      <div class="ob-sub">${step.sub}</div>
+      <div class="form-group">${inputHtml}</div>
+      <div class="ob-nav">
+        ${obIndex > 0 ? '<button class="btn-ghost" id="ob-back" type="button" style="flex:1">← Peeche</button>' : ''}
+        <button class="btn-prim" id="ob-next" type="button" style="flex:2">${obIndex === OB_STEPS.length - 1 ? 'Ho gaya ✓' : 'Aage →'}</button>
+      </div>
+      ${step.required ? '' : '<button class="ob-skip" id="ob-skip" type="button">Skip karo</button>'}
+    </div>`;
+  if (step.type === 'chips') {
+    holder.querySelectorAll('.ob-chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        obAnswers[step.key] = chip.getAttribute('data-v');
+        holder.querySelectorAll('.ob-chip').forEach(c => c.classList.toggle('picked', c === chip));
+      });
+    });
+  }
+  if (step.type === 'password') {
+    const eyeBtn = document.getElementById('ob-eye');
+    if (eyeBtn) eyeBtn.addEventListener('click', () => {
+      const inp = document.getElementById('ob-input');
+      inp.type = inp.type === 'password' ? 'text' : 'password';
+    });
+  }
+  if (step.type === 'fallback') {
+    renderObFbList();
+    document.getElementById('ob-fb-preset').addEventListener('change', onObFbPresetChange);
+    document.getElementById('ob-fb-add').addEventListener('click', addObFallback);
+  }
+  document.getElementById('ob-next').addEventListener('click', onObNext);
+  if (obIndex > 0) document.getElementById('ob-back').addEventListener('click', onObBack);
+  const skipBtn = document.getElementById('ob-skip');
+  if (skipBtn) skipBtn.addEventListener('click', onObSkip);
+  const inputEl = document.getElementById('ob-input');
+  if (inputEl && step.type !== 'chips' && step.type !== 'fallback') {
+    inputEl.focus();
+    inputEl.addEventListener('keydown', e => { if (e.key === 'Enter' && step.type !== 'textarea') onObNext(); });
+  }
+}
+function onObNext() {
+  const step = OB_STEPS[obIndex];
+  if (step.type !== 'chips' && step.type !== 'fallback') {
+    const v = document.getElementById('ob-input').value.trim();
+    if (step.required && !v) { toast('Ye field zaroori hai'); return; }
+    if (v) obAnswers[step.key] = v; else delete obAnswers[step.key];
+  }
+  advanceOb();
+}
+function onObSkip() { advanceOb(); }
+function onObBack() { obIndex--; renderObProgress(); renderObStep(); }
+
+// Onboarding's own mini fallback-add UI (writes straight into cfg.fallbacks)
+function renderObFbList() {
+  const list = document.getElementById('ob-fb-list');
+  if (!list) return;
+  if (!cfg.fallbacks || !cfg.fallbacks.length) {
+    list.innerHTML = '<div style="font-size:0.8rem;color:var(--text-ghost);padding:4px 0">(koi fallback nahi add kiya — sirf Groq use hoga)</div>';
+    return;
+  }
+  list.innerHTML = cfg.fallbacks.map((f, i) =>
+    `<div class="mem-item"><span>${i + 1}. ${f.label} — ${f.model}</span><button class="mem-del" onclick="delFallback(${i})">✕</button></div>`
+  ).join('');
+}
+function onObFbPresetChange() {
+  const preset = PROVIDER_PRESETS[document.getElementById('ob-fb-preset').value];
+  document.getElementById('ob-fb-model').placeholder = preset?.model ? `e.g. ${preset.model}` : 'Model ID';
+}
+function addObFallback() {
+  const presetKey = document.getElementById('ob-fb-preset').value;
+  const preset = PROVIDER_PRESETS[presetKey];
+  const key = document.getElementById('ob-fb-key').value.trim();
+  let model = document.getElementById('ob-fb-model').value.trim();
+  if (!key) { toast('Pehle API key dalo'); return; }
+  if (!model) model = preset.model;
+  if (!model) { toast('Model ID dalo'); return; }
+  let base = preset.base;
+  if (presetKey === 'custom') {
+    base = prompt('Custom endpoint URL (OpenAI-compatible /chat/completions):', 'https://');
+    if (!base) return;
+  }
+  cfg.fallbacks = cfg.fallbacks || [];
+  cfg.fallbacks.push({ label: preset.label, base, key, model });
+  LS.set('chaman_cfg', cfg);
+  document.getElementById('ob-fb-key').value = '';
+  document.getElementById('ob-fb-model').value = '';
+  renderObFbList();
+  toast('✓ Fallback add ho gaya!');
+}
+function advanceOb() {
+  if (obIndex < OB_STEPS.length - 1) {
+    obIndex++;
+    renderObProgress();
+    renderObStep();
+  } else {
+    finishOnboarding();
+  }
+}
+function finishOnboarding() {
+  if (obAnswers.apiKey) cfg.apiKey = obAnswers.apiKey;
+  if (obAnswers.model) cfg.model = obAnswers.model;
+  cfg.permMemory = cfg.permMemory || [];
+  const prefixes = ['Naam →', 'Age →', 'Kaam/Interest →', 'Extra info →'];
+  cfg.permMemory = cfg.permMemory.filter(m => !prefixes.some(p => m.startsWith(p)));
+  if (obAnswers.name) cfg.permMemory.push(`Naam → ${obAnswers.name}`);
+  if (obAnswers.age) cfg.permMemory.push(`Age → ${obAnswers.age}`);
+  if (obAnswers.work) cfg.permMemory.push(`Kaam/Interest → ${obAnswers.work}`);
+  if (obAnswers.extra) cfg.permMemory.push(`Extra info → ${obAnswers.extra}`);
+  if (obAnswers.lang) {
+    const map = { 'Hinglish': 'hinglish', 'Pure Hindi': 'hindi', 'English': 'english' };
+    cfg.lang = map[obAnswers.lang] || cfg.lang;
+  }
+  cfg.onboarded = true;
+  LS.set('chaman_cfg', cfg);
+  document.getElementById('onboard-screen').classList.add('hidden');
+  if (!cfg.apiKey) {
+    document.getElementById('setup-screen').classList.remove('hidden');
+    toast('⚠️ API key abhi baaki hai — daal do');
+  } else {
+    toast(obAnswers.name ? `Welcome, ${obAnswers.name}! 🎉` : 'Sab set ho gaya! 🎉');
+  }
+}
+
+// ════════════════════════════════════
+// APP LOCK (PIN)
+// ════════════════════════════════════
+let pinBuffer = '';
+let pinMode = 'unlock'; // 'unlock' | 'set' | 'confirm-disable'
+let firstPinEntry = '';
+
+async function hashPin(pin) {
+  const enc = new TextEncoder().encode('chamanai_salt_' + pin);
+  const digest = await crypto.subtle.digest('SHA-256', enc);
+  return Array.from(new Uint8Array(digest)).map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+function renderPinDots(errState) {
+  const wrap = document.getElementById('pin-dots');
+  const len = cfg.lockPinLen || 6;
+  wrap.innerHTML = '';
+  for (let i = 0; i < len; i++) {
+    const d = document.createElement('div');
+    d.className = 'pin-dot' + (i < pinBuffer.length ? ' filled' : '') + (errState ? ' err' : '');
+    wrap.appendChild(d);
+  }
+}
+
+function showLockScreen() {
+  pinBuffer = '';
+  document.getElementById('lock-title').textContent = 'Chaman AI';
+  document.getElementById('lock-sub').textContent = 'PIN dalo unlock karne ke liye';
+  renderPinDots(false);
+  document.getElementById('lock-screen').classList.remove('hidden');
+  const fpBtn = document.getElementById('fp-unlock-btn');
+  const fpStatus = document.getElementById('fp-status');
+  if (cfg.lockWebauthnEnabled && cfg.lockWebauthnId) {
+    fpBtn.classList.remove('hidden');
+    fpStatus.classList.remove('hidden');
+    fpStatus.textContent = 'Fingerprint se unlock karo';
+    setTimeout(() => tryFingerprintUnlock(), 350);
+  } else {
+    fpBtn.classList.add('hidden');
+    fpStatus.classList.add('hidden');
+  }
+}
+function hideLockScreen() {
+  document.getElementById('lock-screen').classList.add('hidden');
+}
+function lockNow() {
+  if (!cfg.lockEnabled || !cfg.lockPinHash) { toast('Pehle Settings mein PIN set karo'); return; }
+  showLockScreen();
+}
+
+async function onPinKey(k) {
+  if (k === 'back') {
+    pinBuffer = pinBuffer.slice(0, -1);
+    renderPinDots(false);
+    return;
+  }
+  if (pinBuffer.length >= (cfg.lockPinLen || 6)) return;
+  pinBuffer += k;
+  renderPinDots(false);
+  if (pinBuffer.length === (cfg.lockPinLen || 6)) {
+    const h = await hashPin(pinBuffer);
+    if (h === cfg.lockPinHash) {
+      hideLockScreen();
+    } else {
+      renderPinDots(true);
+      document.getElementById('lock-card').classList.add('shake');
+      document.getElementById('lock-sub').textContent = 'Galat PIN, dobara try karo';
+      setTimeout(() => {
+        document.getElementById('lock-card').classList.remove('shake');
+        pinBuffer = '';
+        renderPinDots(false);
+      }, 420);
+    }
+  }
+}
+
+async function setNewPin() {
+  const p1 = document.getElementById('new-pin-inp').value.trim();
+  const p2 = document.getElementById('confirm-pin-inp').value.trim();
+  if (!/^\d{4,6}$/.test(p1)) { toast('PIN 4-6 digit ka number hona chahiye'); return; }
+  if (p1 !== p2) { toast('Dono PIN match nahi kar rahe'); return; }
+  cfg.lockPinHash = await hashPin(p1);
+  cfg.lockPinLen = p1.length;
+  cfg.lockEnabled = true;
+  LS.set('chaman_cfg', cfg);
+  document.getElementById('new-pin-inp').value = '';
+  document.getElementById('confirm-pin-inp').value = '';
+  document.getElementById('lock-enable-inp').checked = true;
+  updateLockUI();
+  toast('🔒 PIN set ho gaya!');
+}
+function updateLockUI() {
+  const hint = document.getElementById('lock-status-hint');
+  const lockBtn = document.getElementById('lock-now-btn');
+  if (cfg.lockEnabled && cfg.lockPinHash) {
+    hint.textContent = `Lock ON hai (${cfg.lockPinLen}-digit PIN). Naya PIN daalke update kar sakte ho.`;
+    lockBtn.style.display = 'flex';
+  } else {
+    hint.textContent = 'Lock abhi off hai';
+    lockBtn.style.display = 'none';
+  }
+  const fpHint = document.getElementById('fp-status-hint');
+  const fpBtn = document.getElementById('fp-enable-btn');
+  if (cfg.lockWebauthnEnabled && cfg.lockWebauthnId) {
+    fpHint.textContent = '👆 Fingerprint ON hai';
+    fpBtn.textContent = '🗑️ Fingerprint Hatao';
+  } else {
+    fpHint.textContent = cfg.lockEnabled ? 'PIN ke saath fingerprint bhi jod sakte ho' : 'Pehle PIN set karo, fir fingerprint jod sakte ho';
+    fpBtn.textContent = '👆 Fingerprint Enable karo';
+  }
+}
+
+// ── WebAuthn (device fingerprint / Windows Hello) ──
+const WA_RP_ID = location.hostname;
+function randBytes(n) { const a = new Uint8Array(n); crypto.getRandomValues(a); return a; }
+function b64url(buf) { return btoa(String.fromCharCode(...new Uint8Array(buf))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, ''); }
+function b64urlToBuf(str) {
+  str = str.replace(/-/g, '+').replace(/_/g, '/');
+  while (str.length % 4) str += '=';
+  const bin = atob(str);
+  const buf = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) buf[i] = bin.charCodeAt(i);
+  return buf.buffer;
+}
+async function waSupported() {
+  return !!(window.PublicKeyCredential && await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable());
+}
+
+async function toggleFingerprint() {
+  if (cfg.lockWebauthnEnabled && cfg.lockWebauthnId) {
+    cfg.lockWebauthnEnabled = false;
+    cfg.lockWebauthnId = '';
+    LS.set('chaman_cfg', cfg);
+    updateLockUI();
+    toast('Fingerprint hata diya');
+    return;
+  }
+  if (!cfg.lockEnabled || !cfg.lockPinHash) { toast('Pehle PIN set karo'); return; }
+  if (location.protocol !== 'https:' && location.hostname !== 'localhost') {
+    toast('Fingerprint sirf HTTPS pe kaam karega'); return;
+  }
+  if (!(await waSupported())) { toast('Is device/browser mein fingerprint support nahi hai'); return; }
+  try {
+    const cred = await navigator.credentials.create({
+      publicKey: {
+        challenge: randBytes(32),
+        rp: { name: 'Chaman AI', id: WA_RP_ID },
+        user: { id: randBytes(16), name: 'chaman', displayName: 'Chaman' },
+        pubKeyCredParams: [{ alg: -7, type: 'public-key' }, { alg: -257, type: 'public-key' }],
+        authenticatorSelection: { authenticatorAttachment: 'platform', userVerification: 'required' },
+        timeout: 60000
+      }
+    });
+    cfg.lockWebauthnId = b64url(cred.rawId);
+    cfg.lockWebauthnEnabled = true;
+    LS.set('chaman_cfg', cfg);
+    updateLockUI();
+    toast('👆 Fingerprint enable ho gaya!');
+  } catch (e) {
+    toast('Fingerprint set nahi ho paya');
+  }
+}
+
+async function tryFingerprintUnlock() {
+  if (!cfg.lockWebauthnEnabled || !cfg.lockWebauthnId) return false;
+  document.getElementById('fp-status').textContent = 'Fingerprint scan ho raha hai...';
+  try {
+    const assertion = await navigator.credentials.get({
+      publicKey: {
+        challenge: randBytes(32),
+        allowCredentials: [{ id: b64urlToBuf(cfg.lockWebauthnId), type: 'public-key' }],
+        userVerification: 'required',
+        timeout: 60000
+      }
+    });
+    if (assertion) { hideLockScreen(); return true; }
+  } catch (e) {
+    document.getElementById('fp-status').textContent = 'Fingerprint fail, PIN daalo';
+  }
+  return false;
+}
+
+// ════════════════════════════════════
+// SETTINGS
+// ════════════════════════════════════
+function openSettings() {
+  document.getElementById("sys-prompt").value = cfg.sysPrompt;
+  document.getElementById("api-key-inp").value = cfg.apiKey;
+  document.getElementById("model-inp").value = cfg.model;
+  document.getElementById("lang-sel").value = cfg.lang;
+  document.getElementById("show-model-tag-inp").checked = cfg.showModelTag !== false;
+  document.getElementById("show-followups-inp").checked = cfg.showFollowUps !== false;
+  document.getElementById("settings-modal").classList.remove("hidden");
+  if (cfg.apiKey) fetchFreeModels();
+  renderFallbacks();
+  onFbPresetChange();
+  document.getElementById('lock-enable-inp').checked = !!(cfg.lockEnabled && cfg.lockPinHash);
+  updateLockUI();
+  document.querySelectorAll('.settings-tab-btn').forEach(b => b.classList.toggle('active', b.getAttribute('data-tab') === 'general'));
+  document.querySelectorAll('.settings-tab-pane').forEach(p => p.classList.toggle('active', p.getAttribute('data-pane') === 'general'));
+}
+function pickFreeModel(sel) {
+  if (sel.value) document.getElementById("model-inp").value = sel.value;
+}
+async function fetchFreeModels() {
+  const key = document.getElementById("api-key-inp").value.trim() || cfg.apiKey;
+  if (!key) { toast("Pehle API key dalo"); return; }
+  const btn = document.getElementById("fetch-models-btn");
+  const hint = document.getElementById("models-hint");
+  const sel = document.getElementById("free-models-sel");
+  btn.textContent = "⏳"; btn.disabled = true; hint.textContent = "Loading...";
+  try {
+    const res = await fetch("https://api.groq.com/openai/v1/models", { headers: { "Authorization": `Bearer ${key}` } });
+    if (!res.ok) throw new Error("API error " + res.status);
+    const data = await res.json();
+    // Groq free tier = saare active chat models; whisper/guard/tts wagera hata do (sirf chat ke liye)
+    const chatModels = (data.data || []).filter(m => m.active !== false && !/whisper|guard|tts|moderation/i.test(m.id)).sort((a,b) => a.id.localeCompare(b.id));
+    if (!chatModels.length) { hint.textContent = "Koi model nahi mila"; return; }
+    sel.innerHTML = '<option value="">-- Select karo --</option>' + chatModels.map(m => `<option value="${m.id}" ${m.id === cfg.model ? "selected" : ""}>${m.id}</option>`).join("");
+    hint.textContent = `✓ ${chatModels.length} Groq models mile!`;
+    sel.value = cfg.model;
+  } catch(e) { hint.textContent = "❌ " + e.message; }
+  finally { btn.textContent = "🔄 Fetch"; btn.disabled = false; }
+}
+function saveSettings() {
+  cfg.sysPrompt = document.getElementById('sys-prompt').value.trim();
+  cfg.apiKey = document.getElementById('api-key-inp').value.trim();
+  cfg.model = document.getElementById('model-inp').value.trim() || 'llama-3.3-70b-versatile';
+  cfg.lang = document.getElementById('lang-sel').value;
+  cfg.showModelTag = document.getElementById('show-model-tag-inp').checked;
+  cfg.showFollowUps = document.getElementById('show-followups-inp').checked;
+  LS.set('chaman_cfg', cfg);
+  closeModal('settings-modal');
+  toast('✓ Settings save ho gaye!');
+}
+
+// ════════════════════════════════════
+// FALLBACK ENDPOINTS
+// ════════════════════════════════════
+function renderFallbacks() {
+  const list = document.getElementById('fallback-list');
+  if (!list) return;
+  if (!cfg.fallbacks || !cfg.fallbacks.length) {
+    list.innerHTML = '<div style="font-size:0.8rem;color:var(--text-ghost);padding:4px 0">(koi fallback nahi — sirf Groq use hoga)</div>';
+    return;
+  }
+  list.innerHTML = cfg.fallbacks.map((f, i) =>
+    `<div class="mem-item"><span>${i + 1}. ${f.label} — ${f.model}</span><button class="mem-del" onclick="delFallback(${i})">✕</button></div>`
+  ).join('');
+}
+function onFbPresetChange() {
+  const preset = PROVIDER_PRESETS[document.getElementById('fb-preset').value];
+  document.getElementById('fb-model').placeholder = preset?.model ? `e.g. ${preset.model}` : 'Model ID';
+}
+function addFallback() {
+  const presetKey = document.getElementById('fb-preset').value;
+  const preset = PROVIDER_PRESETS[presetKey];
+  const key = document.getElementById('fb-key').value.trim();
+  let model = document.getElementById('fb-model').value.trim();
+  if (!key) { toast('Pehle API key dalo'); return; }
+  if (!model) model = preset.model;
+  if (!model) { toast('Model ID dalo'); return; }
+  let base = preset.base;
+  if (presetKey === 'custom') {
+    base = prompt('Custom endpoint URL (OpenAI-compatible /chat/completions):', 'https://');
+    if (!base) return;
+  }
+  cfg.fallbacks = cfg.fallbacks || [];
+  cfg.fallbacks.push({ label: preset.label, base, key, model });
+  LS.set('chaman_cfg', cfg);
+  document.getElementById('fb-key').value = '';
+  document.getElementById('fb-model').value = '';
+  renderFallbacks();
+  toast('✓ Fallback add ho gaya!');
+}
+function delFallback(i) {
+  cfg.fallbacks.splice(i, 1);
+  LS.set('chaman_cfg', cfg);
+  renderFallbacks();
+  renderObFbList();
+}
+
+// ════════════════════════════════════
+// MEMORY MODAL
+// ════════════════════════════════════
+function openMemModal() {
+  renderPermMem();
+  renderSessions();
+  document.getElementById('old-summary').textContent = cfg.oldSummary || '(koi summary nahi abhi)';
+  document.getElementById('mem-modal').classList.remove('hidden');
+}
+function renderPermMem() {
+  const list = document.getElementById('perm-mem-list');
+  if (!cfg.permMemory.length) {
+    list.innerHTML = '<div style="font-size:0.8rem;color:var(--text-ghost);padding:4px 0">(koi memory nahi)</div>';
+    return;
+  }
+  list.innerHTML = cfg.permMemory.map((m, i) =>
+    `<div class="mem-item"><span>${m}</span><button class="mem-del" onclick="delMem(${i})">✕</button></div>`
+  ).join('');
+}
+function addMem() {
+  const v = document.getElementById('mem-inp').value.trim();
+  if (!v) return;
+  cfg.permMemory.push(v);
+  LS.set('chaman_cfg', cfg);
+  document.getElementById('mem-inp').value = '';
+  renderPermMem();
+  toast('💾 Memory add ho gaya!');
+}
+function delMem(i) {
+  cfg.permMemory.splice(i, 1);
+  LS.set('chaman_cfg', cfg);
+  renderPermMem();
+}
+function clearAllMemory() {
+  if (!confirm('Sab memory aur sessions delete karne ho?')) return;
+  cfg.permMemory = [];
+  cfg.sessions = [];
+  cfg.oldSummary = '';
+  LS.set('chaman_cfg', cfg);
+  renderPermMem();
+  renderSessions();
+  document.getElementById('old-summary').textContent = '(koi summary nahi abhi)';
+  toast('🗑️ Sab clear ho gaya');
+}
+function renderSessions() {
+  const list = document.getElementById('sess-list');
+  if (!cfg.sessions.length) {
+    list.innerHTML = '<div style="font-size:0.8rem;color:var(--text-ghost);padding:4px 0">(koi session nahi)</div>';
+    return;
+  }
+  list.innerHTML = [...cfg.sessions].reverse().map(s => `
+    <div class="sess-item">
+      <div class="sess-meta">${s.date} · ${s.msgCount} messages</div>
+      <div class="sess-preview">${s.summary || 'No summary'}</div>
+    </div>
+  `).join('');
+}
+
+// ════════════════════════════════════
+// APP ENVIRONMENT PROMPT (code-maintained, NOT user-editable)
+// Ye block Settings ke "System Prompt" text se ALAG hai. Jab bhi app mein
+// koi technical/feature change hota hai (provider badle, naya button aaya,
+// wagera), sirf YAHAN update karna hai — Chaman ko baar-baar apna personal
+// system prompt edit nahi karna padega. Har change ke saath date daal do
+// [APP CHANGELOG] mein, taaki AI ko pata rahe konsi info abhi valid hai.
+// ════════════════════════════════════
+const APP_CHANGELOG = [
+  { date: '2 July 2026', note: 'OpenRouter completely hata diya gaya hai. Groq ab PRIMARY provider hai (free, OpenAI-compatible). Fallback providers: Together AI, Cerebras, Google Gemini, Mistral AI, ya Custom.' },
+  { date: '2 July 2026', note: 'Naya feature: "Ask User" card. Jab tujhe (AI) koi personal fact nahi pata jo answer ke liye zaroori hai, toh guess/invent karne ke bajaye [ASK_USER] protocol use kar — neeche instructions hain.' }
+];
+
+function buildAppEnvPrompt() {
+  const changelogText = APP_CHANGELOG.map(c => `[${c.date}] ${c.note}`).join('\n');
+  return `[APP ENVIRONMENT — TERI PRESENCE KA CONTEXT, CODE SE AUTO-GENERATED]
+Tu "Chaman AI" hai — ek single-file HTML app ke andar chal raha hai jo user ke phone mein localStorage
+use karke data save karta hai (koi cloud server, koi database nahi — sab kuch sirf iss phone/browser tak
+limited hai). Backend mein Groq API (primary) se connect hota hai, aur agar Groq fail ho jaye toh user ke
+add kiye hue fallback providers (Together AI / Cerebras / Google Gemini / Mistral AI / Custom) try hote hain.
+
+TERE PAAS YE UI FEATURES/BUTTONS HAIN (in sabka use user kar sakta hai, tujhe pata hona chahiye):
+
+Header (top bar):
+- 🧠 Memory button — permanent facts, purane session summaries, aur last 5 sessions dekhne/manage karne ke liye
+- ⚙️ Settings button — API key, model, system prompt, fallback providers, aur response language (Hinglish/Hindi/English) change karne ke liye
+- 🗑️ Clear chat button — current conversation clear karta hai (purani cheez memory mein summarize hoke save ho jaati hai)
+
+Input area (bottom bar):
+- 🎙️ Mic button — voice input (speech-to-text), bola hua text seedha bhej deta hai
+- 📎 Attach button — file upload: images (tu dekh sakta hai), .txt/.md/.csv files (poora text read hota hai), aur .pdf (text extract hota hai, max ~30 pages/8000 chars)
+- Send button — message bhejta hai (Enter key se bhi bhej sakta hai)
+
+Message area:
+- Har AI response mein agar code-block ho (\`\`\`) toh uske saath ek "Copy" button aata hai
+- Markdown support: **bold**, *italic*, headings, lists, links — sab render hote hain
+- Response ke baad 3 follow-up suggestion chips dikhte hain (agar Ask-User card nahi ho)
+
+Memory system (permanent, session ke paar):
+- User manually "facts" add/delete kar sakta hai jo hamesha tere context mein rahenge
+- Auto session-summary: jab bhi chat band hoti hai, us conversation ka summary auto-generate hoke save hota hai (last 5 sessions rakhta hai, purane compress hoke "oldSummary" ban jaate hain)
+- [ASK_USER] se milne wale jawab bhi automatically permanent memory mein save ho jaate hain
+
+[ASK_USER PROTOCOL — MISSING FACTS KE LIYE]
+Agar koi question ka jawab dene ke liye tujhe ek personal fact chahiye jo tere paas [MERI IMPORTANT DETAILS] ya session summaries mein NAHI hai (jaise DOB, koi specific date, koi number, koi choice) — TOH GUESS YA INVENT MAT KAR. Iske bajaye apne response mein neeche wala exact block include kar:
+
+[ASK_USER]
+Q: <chhota, clear question Hinglish mein>
+OPTIONS: <option1> | <option2> | <option3>
+[/ASK_USER]
+
+Rules:
+- OPTIONS line optional hai — agar sensible suggestions nahi ban sakte (jaise exact date/number), toh OPTIONS line hata de, sirf Q: rakh; app khud text-input dikha dega
+- OPTIONS mein max 4 short choices rakh
+- [ASK_USER] block ke pehle agar zaroori ho toh normal text bhi likh sakta hai (jaise "Ye pata nahi hai mujhe abhi"), lekin block ek hi baar aur EXACT isi format mein hona chahiye
+- Jab user jawab de de, wo automatically permanent memory mein save ho jaata hai — dobara mat poochna
+
+TU YE NAHI KAR SAKTA (limitations, honestly bata dena agar user pooche):
+- Koi bash/terminal/code execution nahi
+- Koi real file create/download nahi (sirf text render hota hai chat mein)
+- Koi web search/internet browsing nahi (jab tak model khud built-in na kare)
+- Agar koi feature app mein exist nahi karta, toh usse invent mat kar — seedha bol do ki ye feature nahi hai
+
+[APP CHANGELOG — TERI PURANI KNOWLEDGE KO YE UPDATES OVERRIDE KARTE HAIN]
+${changelogText}`;
+}
+
+// ════════════════════════════════════
+// BUILD SYSTEM PROMPT
+// ════════════════════════════════════
+function buildPrompt() {
+  let p = cfg.sysPrompt || '';
+
+  // Lang instruction
+  const langMap = { hinglish: 'Hamesha Hinglish mein jawab de (Hindi-English mix).', hindi: 'Hamesha pure Hindi mein jawab de.', english: 'Always respond in English.' };
+  p += '\n\n' + (langMap[cfg.lang] || langMap.hinglish);
+
+  // Permanent memory
+  if (cfg.permMemory.length) {
+    p += '\n\n[MERI IMPORTANT DETAILS / PERMANENT MEMORY]:\n' + cfg.permMemory.map((m, i) => `${i + 1}. ${m}`).join('\n');
+  }
+
+  // Old summary
+  if (cfg.oldSummary) {
+    p += '\n\n[PURANE SESSIONS KA SUMMARY]:\n' + cfg.oldSummary;
+  }
+
+  // Recent sessions (last 5)
+  if (cfg.sessions.length) {
+    p += '\n\n[RECENT SESSIONS]:\n';
+    cfg.sessions.slice(-5).forEach((s, i) => {
+      p += `\n--- Session ${i + 1} (${s.date}) ---\n${s.summary}`;
+    });
+  }
+
+  // Code-maintained app environment + changelog (always fresh, never gets stale)
+  p += '\n\n' + buildAppEnvPrompt();
+
+  return p;
+}
+
+// ════════════════════════════════════
+// SEND MESSAGE
+// ════════════════════════════════════
+async function sendMsg() {
+  const inp = document.getElementById('msg-inp');
+  const text = inp.value.trim();
+  if ((!text && !attachedFile) || loading) return;
+
+  if (!cfg.apiKey) { toast('Pehle API key set karo (Settings)'); openSettings(); return; }
+
+  inp.value = '';
+  inp.style.height = 'auto';
+
+  const file = attachedFile;
+  if (file) { attachedFile = null; clearFile(); }
+
+  // Hide welcome
+  document.getElementById('welcome')?.remove();
+
+  // Append user message
+  appendMsg('out', text, file);
+
+  // Build content
+  let userContent;
+  if (file?.type === 'image') {
+    userContent = [
+      { type: 'image_url', image_url: { url: `data:${file.mimeType};base64,${file.data}` } },
+      { type: 'text', text: text || 'Is image ke baare mein batao' }
+    ];
+  } else if (file) {
+    userContent = text + '\n\n[File: ' + file.name + ']\n' + file.data.slice(0, 8000);
+  } else {
+    userContent = text;
+  }
+
+  // Add to session history (text only, no base64)
+  const histEntry = { role: 'user', content: file?.type === 'image' ? (text || 'image attached') + ' [image]' : (typeof userContent === 'string' ? userContent : text) };
+  currentSession.push(histEntry);
+
+  // Show typing
+  const typingEl = appendTyping();
+  loading = true;
+  document.getElementById('send-btn').disabled = true;
+  document.getElementById('status-txt').textContent = 'Typing...';
+
+  // Build messages for API
+  const messages = [];
+  // Add recent session context (last 20 turns)
+  const sessSlice = currentSession.slice(-20);
+  const histForApi = sessSlice.map((m, idx) => {
+    if (idx === sessSlice.length - 1 && file?.type === 'image') {
+      return { role: 'user', content: userContent };
+    }
+    return m;
+  });
+  messages.push(...histForApi.slice(0, -1));
+  messages.push({ role: 'user', content: userContent });
+
+  try {
+    const aiBub = appendMsg('in', '', null, true);
+    typingEl.remove();
+
+    const { text: full, label, model } = await streamChat(aiBub, buildPrompt(), messages);
+    aiBub.innerHTML = '';
+    const ask = extractAskUser(full);
+    if (ask) {
+      if (ask.cleanText) aiBub.appendChild(parseMarkdown(ask.cleanText));
+      aiBub.appendChild(renderAskCard(ask));
+    } else {
+      const parsed = parseMarkdown(full || '...');
+      aiBub.appendChild(parsed);
+    }
+
+    // Add timestamp + model tag (label — model)
+    const timEl = document.createElement('div');
+    timEl.className = 'msg-time';
+    if (cfg.showModelTag) {
+      const tagEl = document.createElement('span');
+      tagEl.className = 'model-tag-inline';
+      tagEl.textContent = `${label} · ${model}`;
+      timEl.appendChild(tagEl);
+      timEl.appendChild(document.createTextNode(' · '));
+    }
+    timEl.appendChild(document.createTextNode(now()));
+    aiBub.parentElement.appendChild(timEl);
+
+    currentSession.push({ role: 'assistant', content: full });
+    if (!ask && cfg.showFollowUps !== false) renderFollowUps(aiBub.parentElement, text, full);
+  } catch (e) {
+    typingEl?.remove();
+    const errMsg = e.message || 'Kuch gadbad ho gaya';
+    const isProviderErr = errMsg.toLowerCase().includes('provider') || errMsg.includes('502') || errMsg.includes('503');
+    appendMsg('in', '❌ ' + errMsg + (isProviderErr ? '\n\n💡 Tip: Settings mein alag model try karo (jaise llama-3.1-8b-instant)' : ''));
+  } finally {
+    loading = false;
+    document.getElementById('send-btn').disabled = false;
+    document.getElementById('status-txt').textContent = 'Online';
+    scrollBottom();
+  }
+}
+
+// ════════════════════════════════════
+// FOLLOW-UP SUGGESTIONS (Claude.ai-style related prompts)
+// ════════════════════════════════════
+async function renderFollowUps(msgWrap, userText, aiText) {
+  const langLine = cfg.lang === 'english' ? 'Reply in English.' : cfg.lang === 'hindi' ? 'Pure Hindi mein reply karo.' : 'Hinglish mein reply karo.';
+  const sysMsg = `Neeche ek chat ka aakhri exchange diya hai. Isse related 3 chhote follow-up questions/prompts suggest karo jo user aage puch sakta hai. ${langLine} Har suggestion max 6 words ka ho. Sirf 3 lines return karo, kuch aur nahi — no numbering, no bullets, no quotes.`;
+  const userMsg = `User: ${String(userText).slice(0, 300)}\nAI: ${String(aiText).slice(0, 500)}`;
+
+  let raw = '';
+  for (const ep of getEndpointList()) {
+    if (!ep.key) continue;
+    try {
+      const res = await fetch(ep.base, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${ep.key}`, ...(ep.extraHeaders || {}) },
+        body: JSON.stringify({ model: ep.model, messages: [{ role: 'system', content: sysMsg }, { role: 'user', content: userMsg }], max_tokens: 80 })
+      });
+      const d = await res.json();
+      raw = d.choices?.[0]?.message?.content || '';
+      if (raw) break;
+    } catch {}
+  }
+  if (!raw) return;
+
+  const items = raw.split('\n').map(l => l.replace(/^[\d.\-•*"'\s]+/, '').replace(/["']+$/, '').trim()).filter(Boolean).slice(0, 3);
+  if (!items.length) return;
+
+  const box = document.createElement('div');
+  box.className = 'sugg-chips';
+  box.style.justifyContent = 'flex-start';
+  box.style.marginTop = '10px';
+  box.innerHTML = items.map(s => `<button class="sugg-chip" type="button">${s.replace(/</g, '&lt;')}</button>`).join('');
+  box.querySelectorAll('.sugg-chip').forEach((btn, i) => {
+    btn.addEventListener('click', () => {
+      box.remove();
+      document.getElementById('msg-inp').value = items[i];
+      sendMsg();
+    });
+  });
+  msgWrap.appendChild(box);
+  scrollBottom();
+}
+
+// ════════════════════════════════════
+// ASK-USER ELICITATION CARD
+// Jab AI ko koi personal fact nahi pata (jaise DOB), toh guess karne ke bajaye
+// [ASK_USER] block bhejta hai — hum usse ek interactive card mein render karte hain
+// (suggested option buttons + free-text input). Jawab milne par woh permanent
+// memory mein auto-save ho jaata hai, taaki dobara na poochna pade.
+// ════════════════════════════════════
+function extractAskUser(text) {
+  if (!text) return null;
+  const m = text.match(/\[ASK_USER\]([\s\S]*?)\[\/ASK_USER\]/i);
+  if (!m) return null;
+  const block = m[1];
+  const qMatch = block.match(/Q:\s*(.+)/i);
+  const optMatch = block.match(/OPTIONS:\s*(.+)/i);
+  const question = qMatch ? qMatch[1].trim() : '';
+  const options = optMatch ? optMatch[1].split('|').map(s => s.trim()).filter(Boolean) : [];
+  const cleanText = text.replace(m[0], '').trim();
+  if (!question) return null;
+  return { question, options, cleanText };
+}
+
+function renderAskCard(ask) {
+  const card = document.createElement('div');
+  card.className = 'ask-card';
+
+  const q = document.createElement('div');
+  q.className = 'ask-q';
+  q.textContent = '❓ ' + ask.question;
+  card.appendChild(q);
+
+  if (ask.options.length) {
+    const optsWrap = document.createElement('div');
+    optsWrap.className = 'ask-opts';
+    ask.options.forEach(opt => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'ask-opt-btn';
+      b.textContent = opt;
+      b.addEventListener('click', () => submitAskAnswer(ask, opt, card));
+      optsWrap.appendChild(b);
+    });
+    card.appendChild(optsWrap);
+  }
+
+  const customRow = document.createElement('div');
+  customRow.className = 'ask-custom-row';
+  const inp = document.createElement('input');
+  inp.className = 'ask-custom-inp';
+  inp.type = 'text';
+  inp.placeholder = 'Apna jawab type karo...';
+  const btn = document.createElement('button');
+  btn.type = 'button';
+  btn.className = 'ask-custom-btn';
+  btn.textContent = '➤';
+  const submit = () => { const v = inp.value.trim(); if (v) submitAskAnswer(ask, v, card); };
+  btn.addEventListener('click', submit);
+  inp.addEventListener('keydown', e => { if (e.key === 'Enter') submit(); });
+  customRow.appendChild(inp);
+  customRow.appendChild(btn);
+  card.appendChild(customRow);
+
+  return card;
+}
+
+function submitAskAnswer(ask, answerText, card) {
+  card.querySelectorAll('button, input').forEach(el => el.disabled = true);
+  const chosen = document.createElement('div');
+  chosen.className = 'ask-chosen';
+  chosen.textContent = '✓ ' + answerText;
+  card.appendChild(chosen);
+
+  // Auto-save as permanent fact so AI kabhi dobara na poochhe
+  cfg.permMemory = cfg.permMemory || [];
+  cfg.permMemory.push(`${ask.question} → ${answerText}`);
+  LS.set('chaman_cfg', cfg);
+  toast('💾 Yaad rakh liya: ' + answerText);
+
+  document.getElementById('msg-inp').value = answerText;
+  sendMsg();
+}
+
+// ════════════════════════════════════
+// STREAMING (with automatic fallback across providers)
+// ════════════════════════════════════
+function getEndpointList() {
+  const eps = [{ label: 'Groq', base: 'https://api.groq.com/openai/v1/chat/completions', key: cfg.apiKey, model: cfg.model, extraHeaders: {} }];
+  (cfg.fallbacks || []).forEach(f => eps.push({ ...f, extraHeaders: {} }));
+  return eps;
+}
+
+async function streamChat(bubbleEl, sysPrompt, messages) {
+  const endpoints = getEndpointList();
+  let lastErr = null;
+
+  for (let i = 0; i < endpoints.length; i++) {
+    const ep = endpoints[i];
+    if (!ep.key) { lastErr = new Error(`${ep.label}: API key missing`); continue; }
+    try {
+      if (i > 0) toast(`⚠️ ${endpoints[i - 1].label} fail hua, ${ep.label} try kar rahe hain...`);
+      const full = await attemptEndpoint(ep, bubbleEl, sysPrompt, messages);
+      return { text: full, label: ep.label, model: ep.model };
+    } catch (e) {
+      lastErr = e;
+      bubbleEl.textContent = ''; // clear any partial output before next attempt
+    }
+  }
+  throw lastErr || new Error('Koi endpoint configure nahi hai');
+}
+
+async function attemptEndpoint(ep, bubbleEl, sysPrompt, messages) {
+  const cursor = document.createElement('span');
+  cursor.className = 'stream-cursor';
+  bubbleEl.textContent = '';
+  bubbleEl.appendChild(cursor);
+
+  // content:// and file:// URLs block true SSE streaming — detect and use non-stream fallback
+  const isLocalURL = location.href.startsWith('content://') || location.href.startsWith('file://');
+
+  const res = await fetch(ep.base, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${ep.key}`,
+      ...(ep.extraHeaders || {})
+    },
+    body: JSON.stringify({
+      model: ep.model,
+      messages: [{ role: 'system', content: sysPrompt }, ...messages],
+      stream: !isLocalURL,
+      max_tokens: 2000
+    })
+  });
+
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(`${ep.label}: ` + (err?.error?.message || 'API error ' + res.status));
+  }
+
+  // Non-streaming path for content:// and file:// — simulate typewriter
+  if (isLocalURL) {
+    const data = await res.json();
+    const full = data.choices?.[0]?.message?.content || '';
+    const visibleLen = full.search(/\[ASK_USER\]/i);
+    const typeLimit = visibleLen === -1 ? full.length : visibleLen;
+    let i = 0;
+    await new Promise(resolve => {
+      function type() {
+        if (i >= typeLimit) { cursor.remove(); resolve(); return; }
+        i = Math.min(i + 3, typeLimit);
+        bubbleEl.textContent = full.slice(0, i);
+        bubbleEl.appendChild(cursor);
+        scrollBottom();
+        setTimeout(type, 16);
+      }
+      type();
+    });
+    if (!full) throw new Error(`${ep.label}: khaali response aaya`);
+    return full;
+  }
+
+  // True streaming path for http/https
+  const reader = res.body.getReader();
+  const dec = new TextDecoder();
+  let full = '';
+  let buf = '';
+
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    buf += dec.decode(value, { stream: true });
+    const lines = buf.split('\n');
+    buf = lines.pop() || '';
+    for (const line of lines) {
+      if (!line.startsWith('data: ')) continue;
+      const data = line.slice(6);
+      if (data === '[DONE]') continue;
+      try {
+        const chunk = JSON.parse(data);
+        const delta = chunk.choices?.[0]?.delta?.content || '';
+        if (delta) {
+          full += delta;
+          // [ASK_USER] block ko live-stream mein raw text ke roop mein mat dikhao — jab tak
+          // poora response na aa jaaye, tab final card render hoga (sendMsg() mein)
+          const visible = full.split(/\[ASK_USER\]/i)[0];
+          bubbleEl.textContent = visible;
+          bubbleEl.appendChild(cursor);
+          scrollBottom();
+        }
+      } catch {}
+    }
+  }
+  cursor.remove();
+  if (!full) throw new Error(`${ep.label}: khaali response aaya`);
+  return full;
+}
+
+// ════════════════════════════════════
+// SESSION SAVE (on page hide/unload)
+// ════════════════════════════════════
+async function saveCurrentSession() {
+  if (currentSession.length < 2) return;
+
+  // Auto-summarize using API — tries Groq first, then fallbacks (same order as chat)
+  let summary = '';
+  const sumMessages = [
+    { role: 'system', content: 'Yeh conversation ka brief summary do — sirf key points, decisions, topics discussed. 2-4 sentences max. Hinglish mein.' },
+    { role: 'user', content: 'Conversation:\n' + currentSession.map(m => `${m.role}: ${String(m.content).slice(0, 300)}`).join('\n') }
+  ];
+  for (const ep of getEndpointList()) {
+    if (!ep.key) continue;
+    try {
+      const sumRes = await fetch(ep.base, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${ep.key}`, ...(ep.extraHeaders || {}) },
+        body: JSON.stringify({ model: ep.model, messages: sumMessages, max_tokens: 200 })
+      });
+      const d = await sumRes.json();
+      summary = d.choices?.[0]?.message?.content || '';
+      if (summary) break;
+    } catch {}
+  }
+  if (!summary) {
+    summary = currentSession.slice(0, 2).map(m => String(m.content).slice(0, 100)).join(' | ');
+  }
+
+  const session = {
+    date: new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }),
+    msgCount: currentSession.length,
+    summary
+  };
+
+  cfg.sessions.push(session);
+
+  // Keep only 5 recent sessions; rest go to old summary
+  if (cfg.sessions.length > 5) {
+    const old = cfg.sessions.splice(0, cfg.sessions.length - 5);
+    const oldText = old.map(s => `[${s.date}] ${s.summary}`).join('\n');
+    cfg.oldSummary = (cfg.oldSummary ? cfg.oldSummary + '\n' : '') + oldText;
+    // Keep old summary under 1000 chars
+    if (cfg.oldSummary.length > 1000) cfg.oldSummary = cfg.oldSummary.slice(-1000);
+  }
+
+  LS.set('chaman_cfg', cfg);
+  currentSession = [];
+}
+
+window.addEventListener('visibilitychange', () => {
+  if (document.hidden && cfg.apiKey && currentSession.length >= 2) saveCurrentSession();
+});
+window.addEventListener('beforeunload', () => {
+  if (cfg.apiKey && currentSession.length >= 2) {
+    // Sync fallback (no await)
+    const summary = currentSession.slice(0, 3).map(m => String(m.content).slice(0, 80)).join(' | ');
+    const session = { date: new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }), msgCount: currentSession.length, summary };
+    cfg.sessions.push(session);
+    if (cfg.sessions.length > 5) {
+      const old = cfg.sessions.splice(0, cfg.sessions.length - 5);
+      cfg.oldSummary = (cfg.oldSummary ? cfg.oldSummary + '\n' : '') + old.map(s => `[${s.date}] ${s.summary}`).join('\n');
+      if (cfg.oldSummary.length > 1000) cfg.oldSummary = cfg.oldSummary.slice(-1000);
+    }
+    LS.set('chaman_cfg', cfg);
+  }
+});
+
+// ════════════════════════════════════
+// MARKDOWN PARSER
+// ════════════════════════════════════
+function parseMarkdown(text) {
+  const div = document.createElement('div');
+  // Code blocks
+  const parts = text.split(/(```[\s\S]*?```)/g);
+  parts.forEach(part => {
+    if (part.startsWith('```')) {
+      const lines = part.slice(3, -3).split('\n');
+      const lang = lines[0].trim();
+      const code = lines.slice(1).join('\n');
+      const block = document.createElement('div');
+      block.className = 'code-block';
+      const hdr = document.createElement('div');
+      hdr.className = 'code-hdr';
+      hdr.innerHTML = `<span class="code-lang">${lang || 'code'}</span><button class="code-cp" onclick="copyCode(this)">Copy</button>`;
+      const body = document.createElement('div');
+      body.className = 'code-body';
+      body.textContent = code;
+      block.appendChild(hdr);
+      block.appendChild(body);
+      div.appendChild(block);
+    } else {
+      // Inline markdown
+      let html = part
+        .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+        .replace(/(?<!\d)([.!?])[ \t]+(?=\S)/g,'$1\n')
+        .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
+        .replace(/\*(.+?)\*/g,'<em>$1</em>')
+        .replace(/`([^`]+)`/g,'<code>$1</code>')
+        .replace(/^### (.+)$/gm,'<h3>$1</h3>')
+        .replace(/^## (.+)$/gm,'<h2>$1</h2>')
+        .replace(/^# (.+)$/gm,'<h1>$1</h1>')
+        .replace(/^\- (.+)$/gm,'<li>$1</li>')
+        .replace(/^\d+\. (.+)$/gm,'<li>$1</li>')
+        .replace(/(<li>.*<\/li>\n?)+/g, m => '<ul>' + m + '</ul>')
+        .replace(/\[(.+?)\]\((.+?)\)/g,'<a href="$2" target="_blank" rel="noopener">$1</a>')
+        .replace(/\n\n/g,'</p><p>')
+        .replace(/\n/g,'<br>');
+      const p = document.createElement('p');
+      p.innerHTML = html;
+      div.appendChild(p);
+    }
+  });
+  return div;
+}
+
+function copyCode(btn) {
+  const code = btn.closest('.code-block').querySelector('.code-body').textContent;
+  navigator.clipboard.writeText(code).then(() => {
+    btn.textContent = '✓ Copied';
+    btn.classList.add('done');
+    setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('done'); }, 2000);
+  });
+}
+
+// ════════════════════════════════════
+// DOM HELPERS
+// ════════════════════════════════════
+function appendMsg(dir, text, file = null, streaming = false) {
+  const list = document.getElementById('msgs-list');
+  const wrap = document.createElement('div');
+  wrap.className = `message ${dir}`;
+
+  const inner = document.createElement('div');
+  if (dir === 'in') inner.style.width = '100%';
+  const bub = document.createElement('div');
+  bub.className = 'msg-bubble';
+
+  if (streaming) {
+    // bubble returned for streaming
+  } else if (file?.type === 'image') {
+    const img = document.createElement('img');
+    img.src = `data:${file.mimeType};base64,${file.data}`;
+    img.style.cssText = 'max-width:180px;border-radius:8px;display:block;margin-bottom:6px';
+    bub.appendChild(img);
+    if (text) { const t = document.createElement('div'); t.textContent = text; bub.appendChild(t); }
+  } else if (text) {
+    if (dir === 'out') {
+      bub.textContent = text;
+    } else {
+      bub.appendChild(parseMarkdown(text));
+    }
+  }
+
+  inner.appendChild(bub);
+
+  if (!streaming && dir !== 'in') {
+    const t = document.createElement('div');
+    t.className = 'msg-time';
+    t.textContent = now();
+    inner.appendChild(t);
+  }
+
+  wrap.appendChild(inner);
+  list.appendChild(wrap);
+  scrollBottom();
+  return bub;
+}
+
+function appendTyping() {
+  const list = document.getElementById('msgs-list');
+  const wrap = document.createElement('div');
+  wrap.className = 'message in';
+  const bub = document.createElement('div');
+  bub.className = 'typing-bubble';
+  bub.innerHTML = '<span></span><span></span><span></span>';
+  wrap.appendChild(bub);
+  list.appendChild(wrap);
+  scrollBottom();
+  return wrap;
+}
+
+function scrollBottom() {
+  const a = document.getElementById('msgs-area');
+  a.scrollTop = a.scrollHeight;
+}
+
+function now() {
+  return new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
+}
+
+// ════════════════════════════════════
+// FILE UPLOAD
+// ════════════════════════════════════
+async function handleFile(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  e.target.value = '';
+  if (file.size > 10 * 1024 * 1024) { toast('File bahut badi hai (max 10MB)'); return; }
+
+  const ext = file.name.split('.').pop().toLowerCase();
+  const isImg = ['jpg', 'jpeg', 'png', 'webp', 'gif'].includes(ext);
+  const isTxt = ['txt', 'md', 'csv'].includes(ext);
+  const isPDF = ext === 'pdf';
+
+  const prev = document.getElementById('file-preview');
+  const fpImg = document.getElementById('fp-img');
+  const fpName = document.getElementById('fp-name');
+
+  if (isImg) {
+    const reader = new FileReader();
+    reader.onload = ev => {
+      const b64 = ev.target.result.split(',')[1];
+      attachedFile = { type: 'image', data: b64, name: file.name, mimeType: file.type || 'image/jpeg' };
+      fpImg.src = ev.target.result;
+      fpImg.style.display = 'block';
+      fpName.textContent = '📷 ' + file.name;
+      prev.classList.add('show');
+      toast('📷 Image ready!');
+    };
+    reader.readAsDataURL(file);
+  } else if (isTxt) {
+    const reader = new FileReader();
+    reader.onload = ev => {
+      attachedFile = { type: 'text', data: ev.target.result, name: file.name };
+      fpImg.style.display = 'none';
+      fpName.textContent = '📄 ' + file.name;
+      prev.classList.add('show');
+      toast('📄 File ready!');
+    };
+    reader.readAsText(file);
+  } else if (isPDF) {
+    if (!window.pdfjsLib) { toast('❌ PDF reader load nahi hui, internet check karo'); return; }
+    fpImg.style.display = 'none';
+    fpName.textContent = '📕 ' + file.name + ' (padh raha hai...)';
+    prev.classList.add('show');
+    try {
+      const buf = await file.arrayBuffer();
+      const pdf = await pdfjsLib.getDocument({ data: buf }).promise;
+      let text = '';
+      const maxPages = Math.min(pdf.numPages, 30);
+      for (let i = 1; i <= maxPages; i++) {
+        const page = await pdf.getPage(i);
+        const content = await page.getTextContent();
+        text += content.items.map(it => it.str).join(' ') + '\n\n';
+        if (text.length > 8000) break;
+      }
+      text = text.trim().slice(0, 8000);
+      if (!text) { toast('⚠️ PDF se text nahi mila (scanned ho sakta hai)'); prev.classList.remove('show'); return; }
+      attachedFile = { type: 'pdf', data: text, name: file.name };
+      fpName.textContent = '📕 ' + file.name;
+      toast('📕 PDF ready! (' + pdf.numPages + ' pages)');
+    } catch (err) {
+      toast('❌ PDF read nahi ho payi: ' + err.message);
+      prev.classList.remove('show');
+    }
+  } else {
+    toast('Ye file type supported nahi hai');
+  }
+}
+function clearFile() {
+  attachedFile = null;
+  const prev = document.getElementById('file-preview');
+  prev.classList.remove('show');
+  document.getElementById('fp-img').style.display = 'none';
+  document.getElementById('fp-img').src = '';
+}
+
+// ════════════════════════════════════
+// VOICE
+// ════════════════════════════════════
+function toggleVoice() {
+  if (!('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)) {
+    toast('Voice supported nahi hai is browser mein'); return;
+  }
+  const btn = document.getElementById('mic-btn');
+  if (isRec) { recog?.stop(); return; }
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  recog = new SR();
+  recog.lang = 'hi-IN';
+  recog.interimResults = true;
+  recog.continuous = false;
+  btn.classList.add('active');
+  isRec = true;
+  const inp = document.getElementById('msg-inp');
+  recog.onresult = e => {
+    inp.value = Array.from(e.results).map(r => r[0].transcript).join('');
+    autoResize(inp);
+  };
+  recog.onend = () => { btn.classList.remove('active'); isRec = false; if (inp.value.trim()) sendMsg(); };
+  recog.onerror = () => { btn.classList.remove('active'); isRec = false; toast('Voice error!'); };
+  recog.start();
+  toast('🎙️ Bol...');
+}
+
+// ════════════════════════════════════
+// UTILS
+// ════════════════════════════════════
+function toast(msg, d = 2500) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), d);
+}
+function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
+function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+function clearChat() {
+  if (!confirm('Current chat clear karo?')) return;
+  if (currentSession.length >= 2) saveCurrentSession();
+  document.getElementById('msgs-list').innerHTML = `
+    <div id="welcome">
+      <div class="wc-icon">✨</div>
+      <h2>Kya haal hai?</h2>
+      <p>Bol kya karna hai — main yaad rakhta hoon sab</p>
+      <div class="sugg-chips" id="sugg-chips"></div>
+    </div>
+  `;
+  renderSuggChips();
+  currentSession = [];
+  toast('Chat clear ho gaya');
+}
+function toggleEye(inputId, btn) {
+  const inp = document.getElementById(inputId);
+  const show = inp.type === 'password';
+  inp.type = show ? 'text' : 'password';
+  btn.innerHTML = show
+    ? '<svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>'
+    : '<svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
+}
+function autoResize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 120) + 'px';
+}
+
+// Input auto resize + Enter to send
+document.getElementById('msg-inp').addEventListener('input', function() { autoResize(this); });
+document.getElementById('msg-inp').addEventListener('keydown', e => {
+  // On mobile (Android), Enter with no Shift sends message
+  // But IME composition (e.g. typing Hinglish suggestions) must not trigger send
+  if (e.key === 'Enter' && !e.shiftKey && !e.isComposing) {
+    e.preventDefault();
+    sendMsg();
+  }
+});
+
+// Suggestions
+const SUGGS = [
+  'Aaj kya karein?',
+  'Koi idea do',
+  'Motivate karo',
+  'Code mein help chahiye',
+  'Kuch interesting batao'
+];
+function renderSuggChips() {
+  const box = document.getElementById('sugg-chips');
+  if (!box) return;
+  box.innerHTML = SUGGS.map(s => `<button class="sugg-chip" onclick="useSugg(this)">${s}</button>`).join('');
+}
+function useSugg(btn) {
+  document.getElementById('msg-inp').value = btn.textContent;
+  sendMsg();
+}
+
+// ════════════════════════════════════
+// PWA: SERVICE WORKER REGISTRATION
+// ════════════════════════════════════
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').catch(() => {});
+  });
+}
+
+// ════════════════════════════════════
+// INIT (called here so all functions above are defined)
+// ════════════════════════════════════
+(function init() {
+  const saved = LS.get('chaman_cfg');
+  if (saved) {
+    cfg = { ...cfg, ...saved };
+    if (!saved.permMemory) cfg.permMemory = [];
+    if (!saved.sessions) cfg.sessions = [];
+  }
+  if (!cfg.onboarded) {
+    startOnboarding();
+  } else if (!cfg.apiKey) {
+    document.getElementById('setup-screen').classList.remove('hidden');
+  }
+  if (cfg.lockEnabled && cfg.lockPinHash) {
+    showLockScreen();
+  }
+  document.getElementById('lock-now-btn').style.display = (cfg.lockEnabled && cfg.lockPinHash) ? 'flex' : 'none';
+  renderSuggChips();
+})();
+
+// ════════════════════════════════════
+// ALL EVENT LISTENERS (safe for content:// URLs)
+// ════════════════════════════════════
+(function bindEvents() {
+  // Setup screen
+  const setupBtn = document.getElementById('setup-btn');
+  if (setupBtn) setupBtn.addEventListener('click', saveSetup);
+  document.getElementById('restart-onboarding-btn').addEventListener('click', () => {
+    closeModal('settings-modal');
+    startOnboarding();
+  });
+
+  // Header buttons
+  document.getElementById('send-btn').addEventListener('click', sendMsg);
+  document.getElementById('mic-btn').addEventListener('click', toggleVoice);
+  document.getElementById('attach-btn').addEventListener('click', () => document.getElementById('file-inp').click());
+  document.getElementById('fp-clear').addEventListener('click', clearFile);
+  document.getElementById('file-inp').addEventListener('change', handleFile);
+
+  // Header icon buttons
+  document.querySelectorAll('.icon-btn').forEach(btn => {
+    const title = btn.getAttribute('title');
+    if (title === 'Memory') btn.addEventListener('click', openMemModal);
+    if (title === 'Settings') btn.addEventListener('click', openSettings);
+    if (title === 'Clear chat') btn.addEventListener('click', clearChat);
+  });
+
+  // Modal closes
+  document.querySelectorAll('.modal-close').forEach(btn => {
+    btn.addEventListener('click', function() {
+      this.closest('.modal-ov').classList.add('hidden');
+    });
+  });
+  document.querySelectorAll('.modal-ov').forEach(ov => {
+    ov.addEventListener('click', function(e) {
+      if (e.target === this) this.classList.add('hidden');
+    });
+  });
+
+  // Settings save
+  document.getElementById('save-settings-btn').addEventListener('click', saveSettings);
+
+  // Memory buttons
+  document.getElementById('mem-inp').addEventListener('keydown', e => { if (e.key === 'Enter') addMem(); });
+
+  // Fetch models button
+  document.getElementById('fetch-models-btn').addEventListener('click', fetchFreeModels);
+
+  // Fallback endpoints
+  document.getElementById('fb-add-btn').addEventListener('click', addFallback);
+  document.getElementById('fb-preset').addEventListener('change', onFbPresetChange);
+
+  // Free models dropdown
+  document.getElementById('free-models-sel').addEventListener('change', function() { pickFreeModel(this); });
+
+  // Key eye toggles
+  function setupEye(btnId, inpId) {
+    const btn = document.getElementById(btnId);
+    const inp = document.getElementById(inpId);
+    if (!btn || !inp) return;
+    btn.addEventListener('click', function() {
+      const show = inp.type === 'password';
+      inp.type = show ? 'text' : 'password';
+      this.innerHTML = show
+        ? '<svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>'
+        : '<svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
+    });
+  }
+  setupEye('eye-setup', 'setup-key');
+  setupEye('eye-settings', 'api-key-inp');
+
+  // Full system prompt preview (uses whatever is currently typed in the box, even if unsaved)
+  document.getElementById('preview-full-prompt-btn').addEventListener('click', () => {
+    const liveSysPrompt = document.getElementById('sys-prompt').value.trim() || cfg.sysPrompt;
+    const savedSysPrompt = cfg.sysPrompt;
+    cfg.sysPrompt = liveSysPrompt; // temp swap so buildPrompt() reflects unsaved edits too
+    document.getElementById('prompt-preview-box').value = buildPrompt();
+    cfg.sysPrompt = savedSysPrompt; // restore — this button never saves anything
+    document.getElementById('prompt-preview-modal').classList.remove('hidden');
+  });
+
+  // Memory modal buttons
+  document.querySelector('#mem-modal .btn-danger').addEventListener('click', clearAllMemory);
+  document.getElementById('mem-modal').querySelector('.btn-ghost').addEventListener('click', () => closeModal('mem-modal'));
+  document.getElementById('mem-modal').querySelector('.add-btn').addEventListener('click', addMem);
+
+  // App lock
+  document.getElementById('lock-now-btn').addEventListener('click', lockNow);
+  document.getElementById('set-pin-btn').addEventListener('click', setNewPin);
+  document.getElementById('fp-enable-btn').addEventListener('click', toggleFingerprint);
+  document.getElementById('fp-unlock-btn').addEventListener('click', tryFingerprintUnlock);
+  document.getElementById('pin-pad').addEventListener('click', e => {
+    const btn = e.target.closest('.pin-key[data-k]');
+    if (!btn) return;
+    onPinKey(btn.getAttribute('data-k'));
+  });
+  document.getElementById('lock-enable-inp').addEventListener('change', function() {
+    if (this.checked && !cfg.lockPinHash) {
+      this.checked = false;
+      toast('Pehle neeche PIN set karo');
+      return;
+    }
+    cfg.lockEnabled = this.checked;
+    LS.set('chaman_cfg', cfg);
+    updateLockUI();
+    toast(this.checked ? '🔒 Lock ON' : '🔓 Lock OFF');
+  });
+
+  // Settings tabs
+  document.querySelectorAll('.settings-tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const tab = btn.getAttribute('data-tab');
+      document.querySelectorAll('.settings-tab-btn').forEach(b => b.classList.toggle('active', b === btn));
+      document.querySelectorAll('.settings-tab-pane').forEach(p => p.classList.toggle('active', p.getAttribute('data-pane') === tab));
+    });
+  });
+})();
+</script>
+</body>
+</html>
