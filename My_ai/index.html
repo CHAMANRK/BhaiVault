@@ -1,0 +1,3240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<title>Chaman AI</title>
+<link rel="manifest" href="manifest.json"/>
+<meta name="theme-color" content="#030303"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="Chaman AI"/>
+<link rel="apple-touch-icon" href="apple-touch-icon.png"/>
+<link rel="icon" href="icon-192.png"/>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;500;600;700;800;900&family=Source+Serif+4:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.0.379/pdf.min.js"></script>
+<script src="https://js.puter.com/v2/"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --black:#000000;
+  --black-deep:#030303;
+  --black-soft:#080808;
+  --black-card:#0c0c0e;
+  --black-raised:#111116;
+  --black-hover:#16161c;
+  --glass-surface:rgba(180,195,220,0.055);
+  --glass-border:rgba(210,220,240,0.13);
+  --glass-border-hi:rgba(230,238,255,0.28);
+  --glass-shine:rgba(240,245,255,0.09);
+  --glass-deep:rgba(160,175,210,0.03);
+  --mercury-top:rgba(245,248,255,0.12);
+  --mercury-mid:rgba(190,205,230,0.07);
+  --mercury-edge:rgba(160,180,220,0.18);
+  --mercury-glow:rgba(200,215,240,0.08);
+  --mercury-drop:rgba(220,230,248,0.06);
+  --chrome:linear-gradient(135deg,#b8c4d8 0%,#ffffff 30%,#c8d2e8 55%,#e8ecf5 75%,#9daec8 90%,#dde5f5 100%);
+  --chrome-flat:#c8d4e8;
+  --chrome-hi:#ffffff;
+  --chrome-mid:#98a8c0;
+  --chrome-dim:#586070;
+  --danger:#e05555;
+  --danger-dim:rgba(224,85,85,0.15);
+  --text-hi:rgba(230,238,255,0.93);
+  --text-mid:rgba(180,195,225,0.62);
+  --text-low:rgba(160,175,210,0.38);
+  --text-ghost:rgba(140,158,200,0.22);
+  --r-xs:6px;--r-sm:10px;--r-md:16px;--r-lg:22px;--r-xl:28px;--r-2xl:36px;
+  --font-display:'Fraunces',serif;
+  --font-body:'Source Serif 4',serif;
+  --shadow-sm:0 2px 16px rgba(0,0,0,0.6),0 0 0 1px rgba(200,215,240,0.04);
+  --shadow-md:0 8px 48px rgba(0,0,0,0.75),0 0 0 1px rgba(200,215,240,0.06);
+  --shadow-lg:0 20px 80px rgba(0,0,0,0.88),0 0 40px rgba(160,185,230,0.04);
+  --shadow-glass:0 8px 32px rgba(0,0,0,0.65),inset 0 1px 0 rgba(240,246,255,0.11),inset 0 -1px 0 rgba(120,145,190,0.06);
+}
+
+html,body{height:100dvh;width:100%;background:var(--black);color:var(--text-hi);font-family:var(--font-body);font-size:15px;line-height:1.5;overflow:hidden;-webkit-font-smoothing:antialiased;position:fixed;inset:0}
+
+body::before{content:'';position:fixed;inset:0;z-index:0;background:radial-gradient(ellipse 65% 45% at 12% 18%,rgba(160,185,230,0.055) 0%,transparent 58%),radial-gradient(ellipse 55% 38% at 88% 78%,rgba(130,160,210,0.048) 0%,transparent 55%),radial-gradient(ellipse 85% 65% at 50% 108%,rgba(180,200,235,0.035) 0%,transparent 52%);animation:mf1 20s ease-in-out infinite alternate;pointer-events:none}
+body::after{content:'';position:fixed;inset:0;z-index:0;background:radial-gradient(ellipse 42% 32% at 82% 12%,rgba(140,168,225,0.038) 0%,transparent 50%),radial-gradient(ellipse 38% 28% at 18% 82%,rgba(160,188,235,0.032) 0%,transparent 45%);animation:mf2 28s ease-in-out infinite alternate;pointer-events:none}
+@keyframes mf1{0%{opacity:0.55;transform:scale(1) translateY(0)}100%{opacity:1;transform:scale(1.05) translateY(-18px) translateX(6px)}}
+@keyframes mf2{0%{opacity:0.45;transform:scale(1.03) translateX(0)}100%{opacity:0.9;transform:scale(0.98) translateX(-6px) translateY(-4px)}}
+
+/* ── LAYOUT ── */
+#app{position:relative;z-index:1;height:100dvh;width:100%;display:flex;flex-direction:column;max-width:720px;margin:0 auto;border-left:1px solid var(--glass-border);border-right:1px solid var(--glass-border)}
+
+/* ── HEADER ── */
+#header{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;background:linear-gradient(180deg,rgba(175,197,238,0.045) 0%,rgba(155,178,228,0.025) 100%);backdrop-filter:blur(28px) saturate(200%);border-bottom:1px solid var(--glass-border);flex-shrink:0;position:relative;z-index:10}
+#header::after{content:'';position:absolute;bottom:-1px;left:5%;right:5%;height:1px;background:linear-gradient(90deg,transparent,rgba(190,215,255,0.12),rgba(215,235,255,0.18),rgba(190,215,255,0.12),transparent)}
+.hdr-left{display:flex;align-items:center;gap:12px}
+.ai-avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(145deg,rgba(178,200,240,0.12) 0%,rgba(148,172,222,0.07) 100%);border:1px solid var(--glass-border);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;box-shadow:0 2px 12px rgba(0,0,0,0.5),inset 0 1px 0 rgba(220,238,255,0.12)}
+.hdr-info h3{font-family:var(--font-display);font-weight:800;font-size:1rem;background:var(--chrome);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:-0.01em}
+.hdr-status{display:flex;align-items:center;gap:5px;font-size:0.75rem;color:var(--text-low)}
+.status-dot{width:6px;height:6px;border-radius:50%;background:#4ade80;box-shadow:0 0 6px rgba(74,222,128,0.6);animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(74,222,128,0.5)}50%{box-shadow:0 0 0 5px rgba(74,222,128,0)}}
+.hdr-actions{display:flex;gap:4px}
+.icon-btn{width:36px;height:36px;background:none;border:none;color:var(--text-low);cursor:pointer;border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;transition:all 0.2s}
+.icon-btn:hover{background:rgba(255,255,255,0.06);color:var(--text-hi)}
+.icon-btn svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+
+/* ── MESSAGES ── */
+#msgs-area{flex:1;overflow-y:auto;padding:20px 16px 10px;display:flex;flex-direction:column;background:transparent}
+#msgs-area::-webkit-scrollbar{width:2px}
+#msgs-area::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.06);border-radius:2px}
+#msgs-list{display:flex;flex-direction:column;gap:4px;min-height:100%;justify-content:flex-start}
+
+.message{display:flex;gap:8px;margin-bottom:3px;animation:msgIn 0.28s cubic-bezier(.34,1.56,.64,1)}
+@keyframes msgIn{from{opacity:0;transform:translateY(10px) scale(0.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+.message.out{justify-content:flex-end}
+.message.in{justify-content:flex-start}
+.msg-av{width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,0.06);border:1px solid var(--glass-border);display:flex;align-items:center;justify-content:center;font-size:0.8rem;flex-shrink:0;align-self:flex-end}
+
+.msg-bubble{max-width:min(72vw,480px);padding:10px 14px;border-radius:var(--r-lg);position:relative;word-break:break-word;backdrop-filter:blur(16px) saturate(200%);-webkit-backdrop-filter:blur(16px) saturate(200%);line-height:1.55}
+.message.out .msg-bubble{background:linear-gradient(145deg,rgba(200,218,248,0.12) 0%,rgba(172,195,238,0.08) 55%,rgba(185,207,242,0.10) 100%);border:1px solid rgba(210,228,252,0.17);border-bottom-right-radius:4px;box-shadow:0 2px 18px rgba(0,0,0,0.42),inset 0 1px 0 rgba(235,245,255,0.15);font-size:0.92rem;color:var(--text-hi)}
+.message.in .msg-bubble{background:none;border:none;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none;border-radius:0;max-width:100%;padding:2px 0;font-size:0.92rem;color:var(--text-hi)}
+
+.msg-time{font-size:0.65rem;color:var(--text-ghost);margin-top:4px;text-align:right}
+.message.in .msg-time{text-align:left}
+.model-tag-inline{color:var(--text-low);font-weight:500}
+
+/* Typing */
+.typing-bubble{background:linear-gradient(145deg,rgba(165,185,225,0.065) 0%,rgba(145,168,215,0.04) 100%);border:1px solid var(--glass-border);border-bottom-left-radius:4px;padding:12px 16px;border-radius:var(--r-lg);display:inline-flex;gap:5px;align-items:center}
+.typing-bubble span{width:6px;height:6px;border-radius:50%;background:var(--chrome-dim);animation:tdot 1.4s infinite}
+.typing-bubble span:nth-child(2){animation-delay:0.2s}
+.typing-bubble span:nth-child(3){animation-delay:0.4s}
+@keyframes tdot{0%,60%,100%{transform:translateY(0);opacity:0.3}30%{transform:translateY(-5px);opacity:1}}
+
+/* Welcome */
+#welcome{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 24px;gap:10px;animation:fadeIn 0.6s ease both;flex:1}
+@keyframes fadeIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+#welcome .wc-icon{font-size:3rem;opacity:0.3;margin-bottom:8px}
+#welcome h2{font-family:var(--font-display);font-size:1.6rem;font-weight:900;background:var(--chrome);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:-0.02em}
+#welcome p{color:var(--text-low);font-size:0.9rem;text-align:center;max-width:280px}
+.sugg-chips{display:flex;flex-wrap:wrap;gap:7px;justify-content:center;margin-top:14px}
+.sugg-chip{background:rgba(255,255,255,0.04);border:1px solid var(--glass-border);color:var(--text-mid);padding:7px 14px;border-radius:20px;font-size:0.82rem;cursor:pointer;transition:all 0.2s;font-family:var(--font-body)}
+.sugg-chip:hover{border-color:var(--glass-border-hi);color:var(--text-hi);background:rgba(255,255,255,0.07)}
+
+/* Ask-User elicitation card — jab AI ko koi fact nahi pata */
+.ask-card{margin-top:10px;padding:14px;border-radius:14px;background:linear-gradient(155deg,rgba(182,202,240,0.075) 0%,rgba(155,178,225,0.045) 100%);border:1px solid var(--glass-border);max-width:min(88vw,420px)}
+.ask-q{font-size:0.9rem;color:var(--text-hi);margin-bottom:10px;font-weight:500}
+.ask-opts{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.ask-opt-btn{background:rgba(255,255,255,0.05);border:1px solid var(--glass-border);color:var(--text-hi);padding:7px 13px;border-radius:16px;font-size:0.82rem;cursor:pointer;transition:all 0.2s;font-family:var(--font-body)}
+.ask-opt-btn:hover:not(:disabled){border-color:var(--glass-border-hi);background:rgba(255,255,255,0.09)}
+.ask-opt-btn:disabled{opacity:0.4;cursor:default}
+
+/* Web search status card — jab AI [WEB_SEARCH] block deta hai aur result ka wait ho raha hota hai */
+.search-card{display:flex;align-items:center;gap:8px;margin-top:8px;padding:9px 13px;border-radius:14px;background:rgba(160,185,230,0.055);border:1px solid var(--glass-border);max-width:min(88vw,420px);font-size:0.82rem;color:var(--text-mid)}
+.search-card-icon{flex-shrink:0}
+.search-card-txt{word-break:break-word}
+.search-card-err{background:var(--danger-dim);border-color:rgba(224,85,85,0.3);color:var(--danger)}
+
+/* Ask-card save-to-facts toggle */
+.ask-save-row{display:flex;align-items:center;gap:7px;margin-top:2px;font-size:0.76rem;color:var(--text-low);cursor:pointer;user-select:none}
+.ask-save-toggle{width:14px;height:14px;accent-color:#98a8c0;cursor:pointer;flex-shrink:0}
+.ask-custom-row{display:flex;gap:6px}
+.ask-custom-inp{flex:1;background:rgba(0,0,0,0.25);border:1px solid var(--glass-border);border-radius:10px;padding:8px 10px;color:var(--text-hi);font-size:0.85rem;font-family:var(--font-body)}
+.ask-custom-inp:disabled{opacity:0.4}
+.ask-custom-btn{background:rgba(200,218,248,0.15);border:1px solid var(--glass-border-hi);color:var(--text-hi);border-radius:10px;padding:8px 14px;cursor:pointer;font-size:0.9rem}
+.ask-custom-btn:disabled{opacity:0.4;cursor:default}
+.ask-chosen{margin-top:10px;font-size:0.82rem;color:var(--text-low)}
+
+/* File preview strip */
+#file-preview{display:none;align-items:center;gap:10px;padding:8px 14px;background:rgba(200,218,248,0.05);border-top:1px solid var(--glass-border);flex-shrink:0}
+#file-preview.show{display:flex}
+#fp-img{width:38px;height:38px;object-fit:cover;border-radius:6px;border:1px solid var(--glass-border)}
+#fp-name{flex:1;font-size:0.82rem;color:var(--text-mid);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#fp-clear{background:none;border:none;color:var(--text-low);cursor:pointer;font-size:1.1rem;padding:2px 6px;transition:color 0.15s}
+#fp-clear:hover{color:var(--danger)}
+
+/* ── INPUT AREA ── */
+#input-area{padding:10px 14px;padding-bottom:max(12px,env(safe-area-inset-bottom));background:linear-gradient(0deg,rgba(172,194,236,0.045) 0%,rgba(155,178,228,0.025) 100%);backdrop-filter:blur(28px) saturate(200%);border-top:1px solid var(--glass-border);flex-shrink:0;position:relative}
+#input-area::before{content:'';position:absolute;top:0;left:5%;right:5%;height:1px;background:linear-gradient(90deg,transparent,rgba(192,215,255,0.18),rgba(220,238,255,0.26),rgba(192,215,255,0.18),transparent)}
+.input-row{display:flex;align-items:flex-end;gap:8px}
+.input-wrap{flex:1;background:linear-gradient(145deg,rgba(170,192,232,0.065) 0%,rgba(148,172,220,0.040) 100%);backdrop-filter:blur(20px) saturate(200%);border:1px solid var(--glass-border);border-radius:var(--r-xl);transition:border-color 0.22s,box-shadow 0.22s;overflow:hidden;box-shadow:inset 0 1px 0 rgba(218,235,255,0.08)}
+.input-wrap:focus-within{border-color:var(--glass-border-hi);box-shadow:0 0 0 2px rgba(178,205,248,0.07),inset 0 1px 0 rgba(228,242,255,0.12)}
+#msg-inp{width:100%;padding:11px 16px;background:none;border:none;outline:none;color:var(--text-hi);font-size:0.93rem;font-family:var(--font-body);resize:none;max-height:120px;line-height:1.5}
+#msg-inp::placeholder{color:var(--text-ghost)}
+
+.iact-btn{width:38px;height:38px;background:rgba(255,255,255,0.04);border:1px solid var(--glass-border);color:var(--text-low);cursor:pointer;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.2s}
+.iact-btn:hover{background:rgba(255,255,255,0.08);color:var(--text-hi);border-color:var(--glass-border-hi)}
+.iact-btn.active{background:rgba(224,85,85,0.12);border-color:rgba(224,85,85,0.35);color:var(--danger)}
+.iact-btn svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+
+#plus-btn svg{transition:transform 0.25s cubic-bezier(.34,1.56,.64,1)}
+#plus-btn.open{background:rgba(255,255,255,0.1);color:var(--text-hi);border-color:var(--glass-border-hi)}
+#plus-btn.open svg{transform:rotate(45deg)}
+
+.plus-menu{position:absolute;left:14px;bottom:calc(100% - 2px);margin-bottom:8px;display:flex;flex-direction:column;gap:4px;padding:6px;border-radius:var(--r-lg);background:linear-gradient(155deg,rgba(20,22,28,0.96) 0%,rgba(12,13,17,0.98) 100%);backdrop-filter:blur(24px) saturate(200%);border:1px solid var(--glass-border-hi);box-shadow:var(--shadow-lg);z-index:20;min-width:180px;animation:plusMenuIn 0.18s cubic-bezier(.34,1.56,.64,1)}
+.plus-menu.hidden{display:none}
+@keyframes plusMenuIn{from{opacity:0;transform:translateY(8px) scale(0.96)}to{opacity:1;transform:translateY(0) scale(1)}}
+.plus-menu-item{display:flex;align-items:center;gap:10px;padding:10px 12px;background:none;border:none;border-radius:var(--r-sm);color:var(--text-hi);font-size:0.87rem;font-family:var(--font-body);cursor:pointer;transition:background 0.15s;text-align:left}
+.plus-menu-item:hover{background:rgba(255,255,255,0.07)}
+.plus-menu-item svg{width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0;color:var(--text-mid)}
+.plus-menu-item.active{color:var(--danger)}
+.plus-menu-item.active svg{color:var(--danger)}
+
+.send-btn{width:44px;height:44px;border-radius:50%;background:linear-gradient(145deg,rgba(200,218,248,0.16) 0%,rgba(168,192,240,0.10) 55%,rgba(185,208,245,0.14) 100%);backdrop-filter:blur(16px) saturate(200%);border:1px solid rgba(215,232,255,0.22);color:var(--text-hi);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.28s cubic-bezier(.34,1.56,.64,1);box-shadow:0 2px 14px rgba(0,0,0,0.52),inset 0 1px 0 rgba(240,248,255,0.20);flex-shrink:0;position:relative;overflow:hidden}
+.send-btn::before{content:'';position:absolute;top:0;left:15%;right:15%;height:1px;background:linear-gradient(90deg,transparent,rgba(230,245,255,0.8),transparent)}
+.send-btn:hover{transform:scale(1.1);background:linear-gradient(145deg,rgba(210,228,255,0.22) 0%,rgba(178,202,248,0.15) 55%,rgba(198,218,252,0.20) 100%);border-color:rgba(225,240,255,0.36);box-shadow:0 8px 28px rgba(0,0,0,0.62),inset 0 1px 0 rgba(245,252,255,0.26)}
+.send-btn:active{transform:scale(0.96)}
+.send-btn:disabled{opacity:0.3;cursor:not-allowed;transform:none}
+.send-btn svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+/* ── IMAGE LIGHTBOX ── */
+.lightbox{position:fixed;inset:0;z-index:300;background:rgba(0,0,0,0.95);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px}
+.lightbox.hidden{display:none}
+.lightbox-top{position:absolute;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:14px 16px;padding-top:max(14px,env(safe-area-inset-top));z-index:2}
+.lb-btn{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.16);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;backdrop-filter:blur(10px);transition:background 0.15s;flex-shrink:0}
+.lb-btn:hover{background:rgba(255,255,255,0.18)}
+.lb-btn svg{width:19px;height:19px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.lb-nav{position:absolute;top:50%;transform:translateY(-50%);z-index:2}
+.lb-nav.prev{left:12px}
+.lb-nav.next{right:12px}
+.lb-nav.hidden-nav{visibility:hidden}
+#lightbox-img{max-width:92vw;max-height:76vh;border-radius:12px;object-fit:contain;box-shadow:0 20px 60px rgba(0,0,0,0.6)}
+.lightbox-caption{margin-top:14px;color:rgba(255,255,255,0.65);font-size:0.85rem;max-width:88vw;text-align:center;padding:0 24px}
+
+/* ── MARKDOWN ── */
+.msg-bubble p{margin-bottom:6px}
+.msg-bubble p:last-child{margin-bottom:0}
+.msg-bubble strong{color:var(--chrome-flat);font-weight:700}
+.msg-bubble em{color:var(--text-mid);font-style:italic}
+.msg-bubble ul,.msg-bubble ol{padding-left:18px;margin:6px 0}
+.msg-bubble li{margin-bottom:3px}
+.msg-bubble h1,.msg-bubble h2,.msg-bubble h3{font-family:var(--font-display);font-weight:700;margin:10px 0 4px;background:var(--chrome);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.msg-bubble h1{font-size:1.1rem}
+.msg-bubble h2{font-size:1rem}
+.msg-bubble h3{font-size:0.95rem}
+.msg-bubble a{color:var(--chrome-flat);text-decoration:underline;text-underline-offset:3px}
+.msg-bubble code{background:rgba(255,255,255,0.08);border:1px solid var(--glass-border);padding:1px 6px;border-radius:4px;font-size:0.82rem;font-family:'Courier New',monospace;color:rgba(200,220,255,0.85)}
+.code-block{background:rgba(0,0,0,0.6);border:1px solid var(--glass-border);border-radius:10px;margin:8px 0;overflow:hidden}
+.code-hdr{display:flex;align-items:center;justify-content:space-between;padding:6px 12px;background:rgba(255,255,255,0.04);border-bottom:1px solid var(--glass-border)}
+.code-lang{font-size:0.72rem;color:var(--text-ghost);text-transform:uppercase;letter-spacing:0.08em;font-family:'Courier New',monospace}
+.code-cp{background:none;border:1px solid var(--glass-border);color:var(--text-low);border-radius:4px;padding:2px 8px;font-size:0.7rem;cursor:pointer;transition:all 0.2s;font-family:var(--font-body)}
+.code-cp:hover,.code-cp.done{border-color:var(--chrome-flat);color:var(--chrome-flat)}
+.code-body{padding:12px;overflow-x:auto;font-size:0.82rem;color:rgba(180,220,200,0.9);line-height:1.6;white-space:pre;font-family:'Courier New',monospace}
+.code-run{background:none;border:1px solid rgba(120,220,160,0.35);color:rgba(140,230,170,0.9);border-radius:4px;padding:2px 10px;font-size:0.7rem;cursor:pointer;transition:all 0.2s;font-family:var(--font-body);margin-right:6px}
+.code-run:hover{border-color:rgba(140,230,170,0.7);background:rgba(120,220,160,0.08)}
+.code-run:disabled{opacity:0.5;cursor:wait}
+.code-stop{background:none;border:1px solid rgba(224,85,85,0.4);color:rgba(240,130,130,0.95);border-radius:4px;padding:2px 10px;font-size:0.7rem;cursor:pointer;transition:all 0.2s;font-family:var(--font-body);margin-right:6px}
+.code-stop:hover{border-color:rgba(224,85,85,0.8);background:rgba(224,85,85,0.1)}
+.term-box{background:#050807;border-top:1px solid var(--glass-border);padding:12px;font-size:0.78rem;line-height:1.55;white-space:pre-wrap;word-break:break-word;color:rgba(150,235,180,0.92);font-family:'Courier New',monospace;max-height:320px;overflow-y:auto;display:none}
+.term-box.show{display:block}
+.term-box .term-cursor{display:inline-block;width:7px;height:14px;background:rgba(150,235,180,0.8);vertical-align:text-bottom;animation:termblink 1s step-end infinite}
+
+/* Step 5 — pending-exec: AI response ek runnable code-block pe ruka
+   hai, "Run" ka wait ho raha hai */
+.message.in.pending-exec{position:relative}
+.message.in.pending-exec::before{content:'';position:absolute;left:-11px;top:2px;bottom:2px;width:2px;background:rgba(150,235,180,0.45);border-radius:2px}
+.exec-wait-indicator{padding:7px 12px;font-size:0.72rem;color:rgba(150,235,180,0.6);font-style:italic;border-top:1px dashed var(--glass-border)}
+.exec-nudge{padding:0 12px 8px;font-size:0.72rem;color:rgba(240,190,120,0.75)}
+
+/* Step 7 — Run result continuation, seamlessly appended to the same bubble */
+.exec-continuation-sep{border-top:1px dashed var(--glass-border);margin:10px 0 8px;opacity:0.6}
+.exec-continuation{font-size:0.92rem;color:var(--text-hi)}
+.exec-continuation-err{border-left:2px solid rgba(224,85,85,0.5);padding-left:10px}
+.exec-continuation-note{font-size:0.78rem;color:rgba(240,150,150,0.85);font-style:italic;padding:4px 0}
+@keyframes termblink{50%{opacity:0}}
+.stream-cursor{display:inline-block;width:2px;height:14px;background:var(--chrome-flat);vertical-align:middle;margin-left:1px;animation:cur 0.7s step-end infinite}
+@keyframes cur{0%,100%{opacity:1}50%{opacity:0}}
+
+/* ── TOAST ── */
+#toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:rgba(255,255,255,0.08);backdrop-filter:blur(24px);border:1px solid var(--glass-border);color:var(--text-hi);padding:9px 20px;border-radius:var(--r-md);z-index:999;font-size:0.85rem;box-shadow:var(--shadow-md);white-space:nowrap;pointer-events:none;opacity:0;transition:opacity 0.3s}
+#toast.show{opacity:1}
+
+/* ── MODAL BASE ── */
+.modal-ov{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,0.75);backdrop-filter:blur(12px)}
+.modal-ov.hidden{display:none!important}
+.modal-box{position:relative;z-index:1;background:linear-gradient(155deg,rgba(182,202,240,0.075) 0%,rgba(155,178,225,0.045) 45%,rgba(172,195,235,0.065) 80%,rgba(145,168,218,0.04) 100%);backdrop-filter:blur(36px) saturate(220%);border:1px solid var(--glass-border);border-radius:var(--r-2xl);width:100%;max-width:440px;box-shadow:var(--shadow-lg),inset 0 1px 0 rgba(235,246,255,0.13);animation:dropIn 0.32s cubic-bezier(.34,1.56,.64,1);overflow:hidden}
+.modal-box::before{content:'';position:absolute;top:0;left:6%;right:6%;height:1px;background:linear-gradient(90deg,transparent,rgba(205,226,255,0.45),rgba(238,248,255,0.68),rgba(205,226,255,0.45),transparent)}
+@keyframes dropIn{from{opacity:0;transform:translateY(32px) scale(0.95);filter:blur(4px)}to{opacity:1;transform:none;filter:none}}
+.modal-hdr{display:flex;align-items:center;justify-content:space-between;padding:18px 22px;border-bottom:1px solid var(--glass-border)}
+.modal-hdr h3{font-family:var(--font-display);font-size:1.1rem;font-weight:800;color:var(--text-hi)}
+.modal-close{background:rgba(255,255,255,0.06);border:1px solid var(--glass-border);color:var(--text-low);cursor:pointer;font-size:1rem;padding:4px 10px;border-radius:var(--r-xs);transition:all 0.2s}
+.modal-close:hover{background:rgba(255,255,255,0.1);color:var(--text-hi)}
+.modal-body{padding:20px 22px;max-height:70vh;overflow-y:auto}
+
+/* Form elements */
+.form-group{margin-bottom:16px}
+.form-group label{display:block;font-size:0.8rem;font-weight:600;color:var(--text-low);margin-bottom:6px;letter-spacing:0.02em}
+.form-inp,.form-ta,.form-sel{width:100%;background:rgba(255,255,255,0.04);border:1px solid var(--glass-border);color:var(--text-hi);padding:10px 14px;border-radius:var(--r-md);font-family:var(--font-body);font-size:0.88rem;outline:none;transition:border-color 0.2s,box-shadow 0.2s}
+.form-inp:focus,.form-ta:focus,.form-sel:focus{border-color:var(--glass-border-hi);box-shadow:0 0 0 2px rgba(255,255,255,0.04)}
+.form-ta{resize:vertical;min-height:80px;line-height:1.55}
+.form-sel option{background:#0a0a0e;color:var(--text-hi)}
+.form-hint{font-size:0.75rem;color:var(--text-ghost);margin-top:5px}
+.form-row{display:flex;gap:10px}
+.form-row .form-group{flex:1}
+
+.btn-prim{width:100%;padding:12px 20px;background:linear-gradient(160deg,rgba(200,218,248,0.14) 0%,rgba(170,192,238,0.09) 50%,rgba(185,205,242,0.12) 100%);backdrop-filter:blur(16px);border:1px solid var(--glass-border-hi);color:var(--text-hi);font-weight:700;font-size:0.9rem;border-radius:var(--r-md);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;font-family:var(--font-display);transition:all 0.28s cubic-bezier(.34,1.2,.64,1);box-shadow:0 4px 24px rgba(0,0,0,0.55),inset 0 1px 0 rgba(240,248,255,0.18);position:relative;overflow:hidden}
+.btn-prim:hover{background:linear-gradient(160deg,rgba(210,228,255,0.20) 0%,rgba(178,200,245,0.14) 50%,rgba(196,215,250,0.18) 100%);transform:translateY(-1px);box-shadow:0 10px 40px rgba(0,0,0,0.65)}
+.btn-prim:active{transform:scale(0.99)}
+.btn-danger{background:rgba(224,85,85,0.12);border:1px solid rgba(224,85,85,0.3);color:rgba(255,120,120,0.9);padding:8px 16px;border-radius:var(--r-sm);cursor:pointer;font-size:0.82rem;font-family:var(--font-body);transition:all 0.2s}
+.btn-danger:hover{background:rgba(224,85,85,0.2);border-color:rgba(224,85,85,0.5)}
+.btn-ghost{background:none;border:1px solid var(--glass-border);color:var(--text-low);padding:8px 16px;border-radius:var(--r-sm);cursor:pointer;font-size:0.82rem;font-family:var(--font-body);transition:all 0.2s}
+.btn-ghost:hover{border-color:var(--glass-border-hi);color:var(--text-hi)}
+.btn-row{display:flex;gap:8px;margin-top:14px}
+.btn-row .btn-prim{flex:1}
+
+/* Memory items */
+.mem-list{display:flex;flex-direction:column;gap:6px;margin-bottom:10px;max-height:180px;overflow-y:auto}
+.mem-item{display:flex;align-items:flex-start;gap:8px;background:rgba(255,255,255,0.03);border:1px solid var(--glass-border);border-radius:var(--r-sm);padding:8px 12px;font-size:0.82rem;color:var(--text-mid)}
+.mem-item span{flex:1;word-break:break-word}
+.mem-del{background:none;border:none;color:var(--text-ghost);cursor:pointer;font-size:1rem;flex-shrink:0;transition:color 0.15s;line-height:1}
+.mem-del:hover{color:var(--danger)}
+.mem-add-row{display:flex;gap:6px}
+.mem-add-row .form-inp{flex:1}
+.add-btn{background:rgba(255,255,255,0.07);border:1px solid var(--glass-border);color:var(--text-mid);padding:8px 14px;border-radius:var(--r-sm);cursor:pointer;font-size:0.82rem;font-family:var(--font-body);transition:all 0.2s;white-space:nowrap}
+.add-btn:hover{border-color:var(--glass-border-hi);color:var(--text-hi)}
+
+/* Session pills */
+.sess-list{display:flex;flex-direction:column;gap:6px;max-height:200px;overflow-y:auto}
+.sess-item{background:rgba(255,255,255,0.03);border:1px solid var(--glass-border);border-radius:var(--r-sm);padding:10px 12px}
+.sess-meta{font-size:0.72rem;color:var(--text-ghost);margin-bottom:4px}
+.sess-preview{font-size:0.8rem;color:var(--text-low);line-height:1.45;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+
+/* Summary box */
+.summary-box{background:rgba(255,255,255,0.02);border:1px solid var(--glass-border);border-radius:var(--r-sm);padding:12px;font-size:0.8rem;color:var(--text-low);line-height:1.6;max-height:120px;overflow-y:auto}
+.section-title{font-size:0.75rem;font-weight:700;color:var(--text-ghost);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px}
+
+/* Key input eye toggle */
+.key-wrap{position:relative}
+.key-wrap .form-inp{padding-right:44px}
+.key-eye{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--text-ghost);cursor:pointer;transition:color 0.15s;padding:2px}
+.key-eye:hover{color:var(--text-mid)}
+.key-eye svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+
+/* Divider */
+.mdiv{height:1px;background:var(--glass-border);margin:16px 0}
+.settings-tabs{display:flex;gap:6px;padding:12px 22px 0;border-bottom:1px solid var(--glass-border)}
+.settings-tab-btn{flex:1;background:none;border:none;color:var(--text-ghost);font-family:var(--font-display);font-size:0.78rem;font-weight:700;padding:10px 4px 12px;cursor:pointer;border-bottom:2px solid transparent;transition:all 0.15s;white-space:nowrap}
+.settings-tab-btn.active{color:var(--text-hi);border-bottom-color:rgba(200,220,250,0.85)}
+.settings-tab-btn:not(.active):active{color:var(--text-mid)}
+.settings-tab-pane{display:none}
+.settings-tab-pane.active{display:block}
+
+/* API key setup screen */
+#setup-screen{position:fixed;inset:0;z-index:500;display:flex;align-items:center;justify-content:center;padding:24px;background:var(--black)}
+#setup-screen::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 60% 50% at 50% 50%,rgba(180,205,240,0.06) 0%,transparent 60%)}
+#setup-screen.hidden{display:none!important}
+#onboard-screen{position:fixed;inset:0;z-index:500;display:flex;align-items:center;justify-content:center;padding:24px;background:var(--black)}
+#onboard-screen::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 60% 50% at 50% 50%,rgba(180,205,240,0.06) 0%,transparent 60%)}
+#onboard-screen.hidden{display:none!important}
+.ob-progress{display:flex;gap:6px;justify-content:center;margin-bottom:24px}
+.ob-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.12);transition:all 0.25s}
+.ob-dot.on{background:var(--chrome-flat);width:22px;border-radius:5px;box-shadow:0 0 8px rgba(200,220,250,0.4)}
+.ob-dot.done{background:rgba(160,200,180,0.55)}
+.ob-step{animation:dropIn 0.3s cubic-bezier(.34,1.56,.64,1)}
+.ob-emoji{font-size:2.2rem;text-align:center;margin-bottom:10px}
+.ob-q{font-family:var(--font-display);font-size:1.15rem;font-weight:800;color:var(--text-hi);text-align:center;margin-bottom:6px}
+.ob-sub{color:var(--text-low);font-size:0.82rem;text-align:center;margin-bottom:22px}
+.ob-nav{display:flex;gap:10px;margin-top:22px}
+.ob-skip{background:none;border:none;color:var(--text-ghost);font-size:0.82rem;cursor:pointer;text-decoration:underline;display:block;margin:14px auto 0}
+.ob-chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:6px}
+.ob-chip{background:rgba(255,255,255,0.045);border:1px solid var(--glass-border);color:var(--text-mid);font-size:0.82rem;padding:8px 14px;border-radius:20px;cursor:pointer;transition:all 0.15s}
+.ob-chip:active,.ob-chip.picked{background:rgba(180,205,240,0.16);border-color:var(--glass-border-hi);color:var(--text-hi)}
+
+/* Lock screen (PIN) */
+#lock-screen{position:fixed;inset:0;z-index:900;display:flex;align-items:center;justify-content:center;padding:24px;background:var(--black)}
+#lock-screen::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 60% 50% at 50% 50%,rgba(180,205,240,0.06) 0%,transparent 60%)}
+#lock-screen.hidden{display:none!important}
+.lock-card{position:relative;z-index:1;width:100%;max-width:360px;text-align:center;animation:dropIn 0.45s cubic-bezier(.34,1.56,.64,1)}
+.lock-icon{font-size:2.4rem;margin-bottom:10px}
+.lock-card h1{font-family:var(--font-display);font-size:1.4rem;font-weight:800;background:var(--chrome);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:-0.01em;margin-bottom:6px}
+.lock-card p{color:var(--text-low);font-size:0.85rem;margin-bottom:26px}
+.pin-dots{display:flex;justify-content:center;gap:14px;margin-bottom:30px}
+.pin-dot{width:14px;height:14px;border-radius:50%;border:1px solid var(--glass-border-hi);background:transparent;transition:all 0.15s}
+.pin-dot.filled{background:var(--chrome-flat);box-shadow:0 0 10px rgba(200,220,250,0.5)}
+.pin-dot.err{border-color:var(--danger);background:var(--danger)}
+.lock-card.shake{animation:lockShake 0.4s}
+@keyframes lockShake{0%,100%{transform:translateX(0)}20%{transform:translateX(-10px)}40%{transform:translateX(10px)}60%{transform:translateX(-8px)}80%{transform:translateX(8px)}}
+.pin-pad{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;max-width:280px;margin:0 auto}
+.pin-key{aspect-ratio:1;border-radius:50%;background:rgba(255,255,255,0.045);border:1px solid var(--glass-border);color:var(--text-hi);font-size:1.3rem;font-family:var(--font-display);font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.15s;backdrop-filter:blur(10px)}
+.pin-key:active{background:rgba(255,255,255,0.12);transform:scale(0.94)}
+.pin-key.pin-ghost{background:none;border:none;box-shadow:none}
+.lock-hint-btn{margin-top:22px;background:none;border:none;color:var(--text-ghost);font-size:0.78rem;cursor:pointer;text-decoration:underline}
+.fp-btn{margin-top:24px;width:64px;height:64px;border-radius:50%;background:rgba(255,255,255,0.045);border:1px solid var(--glass-border-hi);color:var(--text-hi);font-size:1.7rem;cursor:pointer;display:flex;align-items:center;justify-content:center;margin-left:auto;margin-right:auto;transition:all 0.15s}
+.fp-btn:active{transform:scale(0.92);background:rgba(255,255,255,0.1)}
+.fp-btn.hidden{display:none}
+.fp-status{margin-top:8px;font-size:0.75rem;color:var(--text-ghost)}
+.setup-card{position:relative;z-index:1;width:100%;max-width:400px;background:linear-gradient(155deg,rgba(182,202,240,0.075) 0%,rgba(155,178,225,0.045) 45%,rgba(172,195,235,0.065) 80%);backdrop-filter:blur(36px) saturate(220%);border:1px solid var(--glass-border);border-radius:var(--r-2xl);padding:36px;box-shadow:var(--shadow-lg),inset 0 1px 0 rgba(235,246,255,0.12);animation:dropIn 0.45s cubic-bezier(.34,1.56,.64,1)}
+.setup-card::before{content:'';position:absolute;top:0;left:8%;right:8%;height:1px;background:linear-gradient(90deg,transparent,rgba(200,225,255,0.45),rgba(240,250,255,0.65),rgba(200,225,255,0.45),transparent)}
+.setup-logo{text-align:center;margin-bottom:28px}
+.setup-logo h1{font-family:var(--font-display);font-size:2rem;font-weight:900;background:var(--chrome);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin:10px 0 6px;letter-spacing:-0.02em}
+.setup-logo p{color:var(--text-low);font-size:0.85rem}
+.setup-logo .logo-em{font-size:2.5rem}
+.model-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+.model-tag{font-size:0.72rem;color:var(--text-ghost);background:rgba(255,255,255,0.04);border:1px solid var(--glass-border);padding:3px 10px;border-radius:14px}
+
+/* Scrollbar for modals */
+.modal-body::-webkit-scrollbar,.mem-list::-webkit-scrollbar,.sess-list::-webkit-scrollbar,.summary-box::-webkit-scrollbar{width:2px}
+.modal-body::-webkit-scrollbar-thumb,.mem-list::-webkit-scrollbar-thumb,.sess-list::-webkit-scrollbar-thumb,.summary-box::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.08);border-radius:2px}
+
+@media(max-width:600px){
+  .msg-bubble{max-width:85%}
+  #app{border:none}
+}
+</style>
+</head>
+<body>
+
+<!-- LOCK SCREEN (PIN) -->
+<div id="lock-screen" class="hidden">
+  <div class="lock-card" id="lock-card">
+    <div class="lock-icon">🔒</div>
+    <h1 id="lock-title">Chaman AI</h1>
+    <p id="lock-sub">PIN dalo unlock karne ke liye</p>
+    <div class="pin-dots" id="pin-dots"></div>
+    <div class="pin-pad" id="pin-pad">
+      <button class="pin-key" data-k="1">1</button>
+      <button class="pin-key" data-k="2">2</button>
+      <button class="pin-key" data-k="3">3</button>
+      <button class="pin-key" data-k="4">4</button>
+      <button class="pin-key" data-k="5">5</button>
+      <button class="pin-key" data-k="6">6</button>
+      <button class="pin-key" data-k="7">7</button>
+      <button class="pin-key" data-k="8">8</button>
+      <button class="pin-key" data-k="9">9</button>
+      <div class="pin-key pin-ghost"></div>
+      <button class="pin-key" data-k="0">0</button>
+      <button class="pin-key" id="pin-back" data-k="back">⌫</button>
+    </div>
+    <button class="fp-btn hidden" id="fp-unlock-btn" title="Fingerprint se unlock">👆</button>
+    <p class="fp-status hidden" id="fp-status">Fingerprint se unlock karo</p>
+  </div>
+</div>
+
+<!-- SETUP SCREEN (first run) -->
+<div id="setup-screen" class="hidden">
+  <div class="setup-card">
+    <div class="setup-logo">
+      <div class="logo-em">🤖</div>
+      <h1>Chaman AI</h1>
+      <p>Tera personal AI assistant — sirf tere liye</p>
+    </div>
+    <div class="form-group">
+      <label>Groq API Key</label>
+      <div class="key-wrap">
+        <input class="form-inp" id="setup-key" type="password" placeholder="gsk_..."/>
+        <button class="key-eye" id="eye-setup">
+          <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        </button>
+      </div>
+      <p class="form-hint">console.groq.com pe jaake free key milegi. Sirf tumhare browser mein save hoga.</p>
+    </div>
+    <div class="form-group">
+      <label>Model</label>
+      <input class="form-inp" id="setup-model" type="text" placeholder="Model ID (baad mein settings se bhi badal sakte ho)"/>
+      <p class="form-hint" style="margin-top:6px">API key save karne ke baad Settings → Fetch se free models dekh sakte ho</p>
+    </div>
+    <button class="btn-prim" id="setup-btn">Shuru karo →</button>
+  </div>
+</div>
+
+<!-- ONBOARDING (basic profile setup) -->
+<div id="onboard-screen" class="hidden">
+  <div class="setup-card">
+    <div class="ob-progress" id="ob-progress"></div>
+    <div id="ob-step-holder"></div>
+  </div>
+</div>
+
+<!-- MAIN APP -->
+<div id="app">
+  <!-- Header -->
+  <div id="header">
+    <div class="hdr-left">
+      <div class="ai-avatar">🤖</div>
+      <div class="hdr-info">
+        <h3>Chaman AI</h3>
+        <div class="hdr-status"><div class="status-dot"></div><span id="status-txt">Online</span></div>
+      </div>
+    </div>
+    <div class="hdr-actions">
+      <button class="icon-btn" title="Memory">
+        <svg viewBox="0 0 24 24"><path d="M12 2a5 5 0 0 1 5 5v1a5 5 0 0 1-10 0V7a5 5 0 0 1 5-5z"/><path d="M2 20c0-4 4-7 10-7s10 3 10 7"/></svg>
+      </button>
+      <button class="icon-btn" title="Settings">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      </button>
+      <button class="icon-btn" title="Clear chat">
+        <svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+      </button>
+      <button class="icon-btn" id="lock-now-btn" title="Lock" style="display:none">
+        <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Messages -->
+  <div id="msgs-area">
+    <div id="msgs-list">
+      <div id="welcome">
+        <div class="wc-icon">✨</div>
+        <h2>Kya haal hai?</h2>
+        <p>Bol kya karna hai — main yaad rakhta hoon sab</p>
+        <div class="sugg-chips" id="sugg-chips"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- File preview -->
+  <div id="file-preview">
+    <img id="fp-img" src="" style="display:none"/>
+    <span id="fp-name"></span>
+    <button id="fp-clear" >✕</button>
+  </div>
+
+  <!-- Input -->
+  <div id="input-area">
+    <div class="plus-menu hidden" id="plus-menu">
+      <button class="plus-menu-item" id="mic-btn" title="Voice">
+        <svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+        <span>Voice</span>
+      </button>
+      <button class="plus-menu-item" id="attach-btn" title="Attach">
+        <svg viewBox="0 0 24 24"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+        <span>Attach file</span>
+      </button>
+      <button class="plus-menu-item" id="imggen-btn" title="Image banao">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        <span>Generate image</span>
+      </button>
+    </div>
+    <div class="input-row">
+      <button class="iact-btn" id="plus-btn" title="More options">
+        <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      </button>
+      <input type="file" id="file-inp" style="display:none" accept="image/*,.pdf,.txt,.md,.csv,.py,.js,.jsx,.ts,.tsx,.html,.htm,.css,.scss,.java,.c,.cpp,.h,.hpp,.cs,.php,.rb,.go,.rs,.swift,.kt,.json,.xml,.yaml,.yml,.sql,.sh,.bat,.log,.ini,.env,.toml,.dart,.lua,.r,.pl,.vue,.svelte" />
+      <div class="input-wrap">
+        <textarea id="msg-inp" rows="1" placeholder="Kuch bhi pooch..."></textarea>
+      </div>
+      <button class="send-btn" id="send-btn" >
+        <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- MEMORY MODAL -->
+<div id="mem-modal" class="modal-ov hidden">
+  <div class="modal-box">
+    <div class="modal-hdr">
+      <h3>🧠 Memory & History</h3>
+      <button class="modal-close" >✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="section-title">Permanent Memory (Facts)</div>
+      <div class="mem-list" id="perm-mem-list"></div>
+      <div class="mem-add-row">
+        <input class="form-inp" id="mem-inp" placeholder="Naya fact add karo..."/>
+        <button class="add-btn" >+ Add</button>
+      </div>
+      <div class="mdiv"></div>
+      <div class="section-title">Purana Summary</div>
+      <div class="summary-box" id="old-summary"></div>
+      <div class="mdiv"></div>
+      <div class="section-title">Recent Sessions (last 5)</div>
+      <div class="sess-list" id="sess-list"></div>
+      <div class="mdiv"></div>
+      <div class="btn-row">
+        <button class="btn-danger" >🗑️ Sab clear</button>
+        <button class="btn-ghost" >Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SETTINGS MODAL -->
+<div id="settings-modal" class="modal-ov hidden">
+  <div class="modal-box">
+    <div class="modal-hdr">
+      <h3>⚙️ Settings</h3>
+      <button class="modal-close" >✕</button>
+    </div>
+    <div class="settings-tabs">
+      <button class="settings-tab-btn active" data-tab="general">⚙️ General</button>
+      <button class="settings-tab-btn" data-tab="fallback">🔀 Fallback</button>
+      <button class="settings-tab-btn" data-tab="lock">🔒 Lock</button>
+    </div>
+    <div class="modal-body">
+      <div class="settings-tab-pane active" data-pane="general">
+      <div class="form-group">
+        <label>System Prompt</label>
+        <textarea class="form-ta" id="sys-prompt" rows="5" placeholder="Tu mera personal AI assistant hai..."></textarea>
+        <p class="form-hint">AI ka personality aur context yahan define karo. Iske alawa app khud technical details + changelog add karta hai — <span id="preview-full-prompt-btn" style="text-decoration:underline;cursor:pointer;color:var(--text-mid)">poora prompt preview karo →</span></p>
+      </div>
+      <div class="form-group">
+        <label>Groq API Key</label>
+        <div class="key-wrap">
+          <input class="form-inp" id="api-key-inp" type="password" placeholder="gsk_..."/>
+          <button class="key-eye" id="eye-settings">
+            <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Model</label>
+        <input class="form-inp" id="model-inp" type="text" placeholder="Model ID..."/>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:8px">
+          <select class="form-sel" id="free-models-sel" style="flex:1" >
+            <option value="">-- Free models load karo --</option>
+          </select>
+          <button class="btn-ghost" id="fetch-models-btn"  style="white-space:nowrap;padding:8px 14px">🔄 Fetch</button>
+        </div>
+        <p class="form-hint" id="models-hint">Fetch dabao — Groq ke sare active models aa jayenge</p>
+      </div>
+      <div class="form-group">
+        <label>Response Language</label>
+        <select class="form-sel" id="lang-sel">
+          <option value="hinglish">Hinglish (default)</option>
+          <option value="hindi">Pure Hindi</option>
+          <option value="english">English</option>
+        </select>
+      </div>
+      <div class="form-group" style="display:flex;align-items:center;justify-content:space-between">
+        <label style="margin:0">Response ke saath model naam dikhao</label>
+        <input type="checkbox" id="show-model-tag-inp" style="width:18px;height:18px;accent-color:rgba(180,205,240,0.8)"/>
+      </div>
+      <div class="form-group" style="display:flex;align-items:center;justify-content:space-between">
+        <label style="margin:0">Related follow-up suggestions dikhao</label>
+        <input type="checkbox" id="show-followups-inp" style="width:18px;height:18px;accent-color:rgba(180,205,240,0.8)"/>
+      </div>
+      <div class="mdiv"></div>
+      <button class="btn-ghost" id="restart-onboarding-btn" type="button" style="width:100%">🧭 Onboarding dobara karo</button>
+      </div>
+
+      <div class="settings-tab-pane" data-pane="fallback">
+      <div class="section-title">Fallback Endpoints (free, optional)</div>
+      <p class="form-hint" style="margin-bottom:10px">Agar Groq fail/garbled ho, in providers mein se agla try hoga (order maayne rakhta hai)</p>
+      <div class="mem-list" id="fallback-list" style="max-height:220px"></div>
+      <div class="form-group">
+        <label>Provider</label>
+        <select class="form-sel" id="fb-preset">
+          <option value="together">Together AI</option>
+          <option value="cerebras">Cerebras</option>
+          <option value="gemini">Google Gemini</option>
+          <option value="mistral">Mistral AI</option>
+          <option value="custom">Custom</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>API Key</label>
+        <input class="form-inp" id="fb-key" type="password" placeholder="API key"/>
+      </div>
+      <div class="form-group">
+        <label>Model ID</label>
+        <input class="form-inp" id="fb-model" type="text" placeholder="Model ID"/>
+      </div>
+      <button class="btn-prim" id="fb-add-btn" type="button" style="margin-bottom:6px">➕ Add Fallback Endpoint</button>
+      </div>
+
+      <div class="settings-tab-pane" data-pane="lock">
+      <div class="section-title">🔒 App Lock</div>
+      <div class="form-group" style="display:flex;align-items:center;justify-content:space-between">
+        <label style="margin:0">PIN lock enable karo</label>
+        <input type="checkbox" id="lock-enable-inp" style="width:18px;height:18px;accent-color:rgba(180,205,240,0.8)"/>
+      </div>
+      <div id="lock-setup-box">
+        <div class="form-group">
+          <label id="lock-pin-label">Naya 4-6 digit PIN</label>
+          <input class="form-inp" id="new-pin-inp" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="6" placeholder="••••"/>
+        </div>
+        <div class="form-group">
+          <label>PIN confirm karo</label>
+          <input class="form-inp" id="confirm-pin-inp" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="6" placeholder="••••"/>
+        </div>
+        <button class="btn-ghost" id="set-pin-btn" type="button" style="width:100%">🔐 PIN Set/Update karo</button>
+        <p class="form-hint" id="lock-status-hint">Lock abhi off hai</p>
+        <button class="btn-ghost" id="fp-enable-btn" type="button" style="width:100%;margin-top:8px">👆 Fingerprint Enable karo</button>
+        <p class="form-hint" id="fp-status-hint"></p>
+      </div>
+      </div>
+
+      <div class="mdiv"></div>
+      <button class="btn-prim" id="save-settings-btn" type="button">💾 Save Settings</button>
+    </div>
+  </div>
+</div>
+
+<!-- FULL SYSTEM PROMPT PREVIEW (read-only, code-generated part included) -->
+<div id="prompt-preview-modal" class="modal-ov hidden">
+  <div class="modal-box">
+    <div class="modal-hdr">
+      <h3>👁 Poora System Prompt</h3>
+      <button class="modal-close">✕</button>
+    </div>
+    <div class="modal-body">
+      <p class="form-hint" style="margin-bottom:10px">Ye exact wahi text hai jo AI ko har message ke saath jaata hai — tera personal hissa + memory + code-maintained app-info/changelog. Read-only hai, edit karne ke liye upar wala System Prompt box use karo.</p>
+      <textarea class="form-ta" id="prompt-preview-box" rows="20" readonly style="font-family:monospace;font-size:0.78rem;white-space:pre-wrap"></textarea>
+    </div>
+  </div>
+</div>
+
+<!-- Image Lightbox -->
+<div id="lightbox" class="lightbox hidden">
+  <div class="lightbox-top">
+    <button class="lb-btn" id="lb-close" title="Close">✕</button>
+    <button class="lb-btn" id="lb-download" title="Download">
+      <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+    </button>
+  </div>
+  <button class="lb-btn lb-nav prev" id="lb-prev" title="Previous">
+    <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+  </button>
+  <button class="lb-btn lb-nav next" id="lb-next" title="Next">
+    <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+  </button>
+  <img id="lightbox-img" src="" alt=""/>
+  <div class="lightbox-caption" id="lb-caption"></div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+// ════════════════════════════════════
+// STATE
+// ════════════════════════════════════
+let loading = false;
+let galleryImages = []; // { src, caption } — sab chat images (attached + generated), lightbox nav ke liye
+let attachedFile = null;
+let isRec = false;
+let recog = null;
+let currentSession = [];
+
+if (window.pdfjsLib) {
+  pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.0.379/pdf.worker.min.js';
+}
+
+const LS = {
+  get: k => { try { return JSON.parse(localStorage.getItem(k)) } catch { return null } },
+  set: (k, v) => localStorage.setItem(k, JSON.stringify(v)),
+  rm: k => localStorage.removeItem(k)
+};
+
+let cfg = {
+  apiKey: '',
+  model: 'llama-3.3-70b-versatile',
+  sysPrompt: `Tu "Chaman AI" hai — mera personal AI assistant. Mera naam Chaman hai. Tu sirf mere liye hai.
+
+Kuch important rules:
+- Hamesha Hinglish mein baat kar (Hindi + English mix) jab tak main kuch aur na kahe
+- Tera tone casual, warm, aur helpful ho — jaise ek close dost
+- Seedha kaam ki baat kar, bekar formalities nahi
+- Meri purani baatein yaad rakh aur context use kar
+- Agar main koi project ya kaam ka zikr karu toh usse yaad rakh
+- Sirf woh info use kar jo tujhe [MERI IMPORTANT DETAILS] ya session summaries mein di gayi hai — kabhi bhi facts (jaise DOB, naam, location) invent ya guess mat kar
+- Agar koi feature ya info tere paas nahi hai, toh seedha bol de "mujhe pata nahi" — kabhi fake technical details (encryption, storage system, etc.) mat bana`,
+  lang: 'hinglish',
+  permMemory: [],
+  sessions: [],
+  oldSummary: '',
+  fallbacks: [], // [{label, base, key, model}] — tried in order if primary (Groq) fails
+  showModelTag: true, // response ke saath "Groq · model-name" dikhana ha nahi
+  showFollowUps: true, // response ke baad 3 related follow-up chips dikhana ha nahi
+  lockEnabled: false, // PIN lock on/off
+  lockPinHash: '', // SHA-256 hex of PIN, kabhi bhi plain PIN save nahi hota
+  lockPinLen: 0, // stored PIN ki length (4-6) taaki auto-submit pata chale
+  lockWebauthnEnabled: false, // fingerprint/device biometric unlock on/off
+  lockWebauthnId: '', // registered WebAuthn credential ID (base64url)
+  onboarded: false // basic profile onboarding (naam/age/etc) complete ho chuka ha nahi
+};
+
+// Presets for common free OpenAI-compatible providers (user still needs their own key)
+// Groq is the PRIMARY provider (see getEndpointList) — these are only fallbacks.
+const PROVIDER_PRESETS = {
+  together: { label: 'Together AI', base: 'https://api.together.xyz/v1/chat/completions', model: 'meta-llama/Llama-3.3-70B-Instruct-Turbo-Free' },
+  cerebras: { label: 'Cerebras', base: 'https://api.cerebras.ai/v1/chat/completions', model: 'llama-3.3-70b' },
+  gemini: { label: 'Google Gemini', base: 'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions', model: 'gemini-2.5-flash' },
+  mistral: { label: 'Mistral AI', base: 'https://api.mistral.ai/v1/chat/completions', model: 'mistral-small-latest' },
+  custom: { label: 'Custom', base: '', model: '' }
+};
+
+// ════════════════════════════════════
+// EXEC BACKEND — ENVIRONMENT SNAPSHOT
+// Har session (app open) pe ek baar local backend (server.js) se /env
+// call karke OS/tools/workspace ka real snapshot le lete hain, taaki AI
+// ko guess na karna pade. Agar backend chal hi nahi raha, envSnapshot
+// null reh jaata hai aur AI ko explicitly bataya jaata hai ki abhi
+// exec backend connected nahi hai. Ye deliberately cfg (localStorage)
+// mein save NAHI hota — runtime-only, kyunki tools/paths session ke
+// beech badal sakte hain (naya tool install hua, etc).
+// ════════════════════════════════════
+let envSnapshot = null;   // last successful /env response, ya null
+let envFetchedAt = 0;     // Date.now() jab last fetch hua tha
+let envFetching = null;   // in-flight promise (duplicate calls avoid karne ke liye)
+
+function getExecBackend() {
+  return cfg.execBackend || 'http://localhost:8787';
+}
+
+async function fetchEnvSnapshot() {
+  if (envFetching) return envFetching; // already chal raha hai, wahi promise reuse karo
+  envFetching = (async () => {
+    try {
+      const ctrl = new AbortController();
+      const timer = setTimeout(() => ctrl.abort(), 4000); // backend na mile to zyada der na atke
+      const res = await fetch(getExecBackend() + '/env', { signal: ctrl.signal });
+      clearTimeout(timer);
+      if (!res.ok) throw new Error('bad status ' + res.status);
+      const data = await res.json();
+      envSnapshot = data;
+      envFetchedAt = Date.now();
+    } catch (err) {
+      envSnapshot = null; // backend nahi mila / band hai / CORS issue — chup-chaap fallback
+    } finally {
+      envFetching = null;
+    }
+    return envSnapshot;
+  })();
+  return envFetching;
+}
+
+// init() called after all functions are defined — see bottom of script
+
+// ════════════════════════════════════
+// SETUP
+// ════════════════════════════════════
+function saveSetup() {
+  const key = document.getElementById('setup-key').value.trim();
+  const model = document.getElementById('setup-model').value.trim();
+  if (!key) { toast('API key dalo pehle!'); return; }
+  cfg.apiKey = key;
+  if (model) cfg.model = model;
+  LS.set('chaman_cfg', cfg);
+  document.getElementById('setup-screen').classList.add('hidden');
+  toast('✓ Sab set ho gaya!');
+}
+function setModel(m) {
+  document.getElementById('setup-model').value = m;
+}
+function setModelS(m) {
+  document.getElementById('model-inp').value = m;
+}
+
+// ════════════════════════════════════
+// ONBOARDING (basic profile: naam, age, etc)
+// ════════════════════════════════════
+const OB_STEPS = [
+  { key: 'apiKey', emoji: '🔑', q: 'Groq API Key dalo', sub: 'console.groq.com pe free milegi — bina isske AI kaam nahi karega. Baad mein Settings se bhi daal sakte ho', type: 'password', placeholder: 'gsk_...', required: false },
+  { key: 'model', emoji: '🧠', q: 'Kaunsa model use karu?', sub: 'Khaali chhodo toh default model (llama-3.3-70b-versatile) use hoga', type: 'text', placeholder: 'llama-3.3-70b-versatile', required: false },
+  { key: 'fallback', emoji: '🔀', q: 'Fallback API bhi add karna hai?', sub: 'Agar Groq fail/garbled ho toh backup provider try hoga (optional)', type: 'fallback', required: false },
+  { key: 'name', emoji: '👋', q: 'Tera naam kya hai?', sub: 'Taaki main tujhe sahi se bulau', type: 'text', placeholder: 'Jaise: Chaman', required: true },
+  { key: 'age', emoji: '🎂', q: 'Age kitni hai?', sub: 'Optional hai, skip bhi kar sakta hai', type: 'number', placeholder: 'Jaise: 20', required: false },
+  { key: 'work', emoji: '💼', q: 'Tu kya karta hai?', sub: 'Kaam, padhai, ya interest — jo bhi ho', type: 'text', placeholder: 'Jaise: Developer, Student...', required: false },
+  { key: 'lang', emoji: '💬', q: 'Kis language mein baat karu?', sub: 'Baad mein Settings se bhi badal sakte ho', type: 'chips', options: ['Hinglish', 'Pure Hindi', 'English'], required: false },
+  { key: 'extra', emoji: '📝', q: 'Kuch aur jo mujhe pata hona chahiye?', sub: 'Koi project, pasand, habit — kuch bhi (optional)', type: 'textarea', placeholder: 'Yahan likho...', required: false }
+];
+let obIndex = 0;
+let obAnswers = {};
+
+function startOnboarding() {
+  obIndex = 0;
+  obAnswers = {};
+  if (cfg.apiKey) obAnswers.apiKey = cfg.apiKey;
+  if (cfg.model) obAnswers.model = cfg.model;
+  document.getElementById('onboard-screen').classList.remove('hidden');
+  renderObProgress();
+  renderObStep();
+}
+function renderObProgress() {
+  const wrap = document.getElementById('ob-progress');
+  wrap.innerHTML = '';
+  OB_STEPS.forEach((s, i) => {
+    const d = document.createElement('div');
+    d.className = 'ob-dot' + (i === obIndex ? ' on' : '') + (i < obIndex ? ' done' : '');
+    wrap.appendChild(d);
+  });
+}
+function renderObStep() {
+  const step = OB_STEPS[obIndex];
+  const holder = document.getElementById('ob-step-holder');
+  let inputHtml = '';
+  if (step.type === 'text') {
+    inputHtml = `<input class="form-inp" id="ob-input" type="text" placeholder="${step.placeholder || ''}" value="${obAnswers[step.key] || ''}"/>`;
+  } else if (step.type === 'number') {
+    inputHtml = `<input class="form-inp" id="ob-input" type="number" placeholder="${step.placeholder || ''}" value="${obAnswers[step.key] || ''}"/>`;
+  } else if (step.type === 'textarea') {
+    inputHtml = `<textarea class="form-ta" id="ob-input" rows="3" placeholder="${step.placeholder || ''}">${obAnswers[step.key] || ''}</textarea>`;
+  } else if (step.type === 'chips') {
+    inputHtml = `<div class="ob-chips" id="ob-chips">` + step.options.map(o => `<button type="button" class="ob-chip${obAnswers[step.key] === o ? ' picked' : ''}" data-v="${o}">${o}</button>`).join('') + `</div>`;
+  } else if (step.type === 'password') {
+    inputHtml = `<div class="key-wrap"><input class="form-inp" id="ob-input" type="password" placeholder="${step.placeholder || ''}" value="${obAnswers[step.key] || ''}"/><button type="button" class="key-eye" id="ob-eye"><svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button></div>`;
+  } else if (step.type === 'fallback') {
+    inputHtml = `<div class="mem-list" id="ob-fb-list" style="max-height:150px;margin-bottom:10px"></div>
+      <select class="form-sel" id="ob-fb-preset" style="margin-bottom:8px">
+        <option value="together">Together AI</option>
+        <option value="cerebras">Cerebras</option>
+        <option value="gemini">Google Gemini</option>
+        <option value="mistral">Mistral AI</option>
+        <option value="custom">Custom</option>
+      </select>
+      <input class="form-inp" id="ob-fb-key" type="password" placeholder="API key" style="margin-bottom:8px"/>
+      <input class="form-inp" id="ob-fb-model" type="text" placeholder="Model ID" style="margin-bottom:8px"/>
+      <button class="btn-ghost" id="ob-fb-add" type="button" style="width:100%">➕ Add Fallback</button>`;
+  }
+  holder.innerHTML = `
+    <div class="ob-step">
+      <div class="ob-emoji">${step.emoji}</div>
+      <div class="ob-q">${step.q}</div>
+      <div class="ob-sub">${step.sub}</div>
+      <div class="form-group">${inputHtml}</div>
+      <div class="ob-nav">
+        ${obIndex > 0 ? '<button class="btn-ghost" id="ob-back" type="button" style="flex:1">← Peeche</button>' : ''}
+        <button class="btn-prim" id="ob-next" type="button" style="flex:2">${obIndex === OB_STEPS.length - 1 ? 'Ho gaya ✓' : 'Aage →'}</button>
+      </div>
+      ${step.required ? '' : '<button class="ob-skip" id="ob-skip" type="button">Skip karo</button>'}
+    </div>`;
+  if (step.type === 'chips') {
+    holder.querySelectorAll('.ob-chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        obAnswers[step.key] = chip.getAttribute('data-v');
+        holder.querySelectorAll('.ob-chip').forEach(c => c.classList.toggle('picked', c === chip));
+      });
+    });
+  }
+  if (step.type === 'password') {
+    const eyeBtn = document.getElementById('ob-eye');
+    if (eyeBtn) eyeBtn.addEventListener('click', () => {
+      const inp = document.getElementById('ob-input');
+      inp.type = inp.type === 'password' ? 'text' : 'password';
+    });
+  }
+  if (step.type === 'fallback') {
+    renderObFbList();
+    document.getElementById('ob-fb-preset').addEventListener('change', onObFbPresetChange);
+    document.getElementById('ob-fb-add').addEventListener('click', addObFallback);
+  }
+  document.getElementById('ob-next').addEventListener('click', onObNext);
+  if (obIndex > 0) document.getElementById('ob-back').addEventListener('click', onObBack);
+  const skipBtn = document.getElementById('ob-skip');
+  if (skipBtn) skipBtn.addEventListener('click', onObSkip);
+  const inputEl = document.getElementById('ob-input');
+  if (inputEl && step.type !== 'chips' && step.type !== 'fallback') {
+    inputEl.focus();
+    inputEl.addEventListener('keydown', e => { if (e.key === 'Enter' && step.type !== 'textarea') onObNext(); });
+  }
+}
+function onObNext() {
+  const step = OB_STEPS[obIndex];
+  if (step.type !== 'chips' && step.type !== 'fallback') {
+    const v = document.getElementById('ob-input').value.trim();
+    if (step.required && !v) { toast('Ye field zaroori hai'); return; }
+    if (v) obAnswers[step.key] = v; else delete obAnswers[step.key];
+  }
+  advanceOb();
+}
+function onObSkip() { advanceOb(); }
+function onObBack() { obIndex--; renderObProgress(); renderObStep(); }
+
+// Onboarding's own mini fallback-add UI (writes straight into cfg.fallbacks)
+function renderObFbList() {
+  const list = document.getElementById('ob-fb-list');
+  if (!list) return;
+  if (!cfg.fallbacks || !cfg.fallbacks.length) {
+    list.innerHTML = '<div style="font-size:0.8rem;color:var(--text-ghost);padding:4px 0">(koi fallback nahi add kiya — sirf Groq use hoga)</div>';
+    return;
+  }
+  list.innerHTML = cfg.fallbacks.map((f, i) =>
+    `<div class="mem-item"><span>${i + 1}. ${f.label} — ${f.model}</span><button class="mem-del" onclick="delFallback(${i})">✕</button></div>`
+  ).join('');
+}
+function onObFbPresetChange() {
+  const preset = PROVIDER_PRESETS[document.getElementById('ob-fb-preset').value];
+  document.getElementById('ob-fb-model').placeholder = preset?.model ? `e.g. ${preset.model}` : 'Model ID';
+}
+function addObFallback() {
+  const presetKey = document.getElementById('ob-fb-preset').value;
+  const preset = PROVIDER_PRESETS[presetKey];
+  const key = document.getElementById('ob-fb-key').value.trim();
+  let model = document.getElementById('ob-fb-model').value.trim();
+  if (!key) { toast('Pehle API key dalo'); return; }
+  if (!model) model = preset.model;
+  if (!model) { toast('Model ID dalo'); return; }
+  let base = preset.base;
+  if (presetKey === 'custom') {
+    base = prompt('Custom endpoint URL (OpenAI-compatible /chat/completions):', 'https://');
+    if (!base) return;
+  }
+  cfg.fallbacks = cfg.fallbacks || [];
+  cfg.fallbacks.push({ label: preset.label, base, key, model });
+  LS.set('chaman_cfg', cfg);
+  document.getElementById('ob-fb-key').value = '';
+  document.getElementById('ob-fb-model').value = '';
+  renderObFbList();
+  toast('✓ Fallback add ho gaya!');
+}
+function advanceOb() {
+  if (obIndex < OB_STEPS.length - 1) {
+    obIndex++;
+    renderObProgress();
+    renderObStep();
+  } else {
+    finishOnboarding();
+  }
+}
+function finishOnboarding() {
+  if (obAnswers.apiKey) cfg.apiKey = obAnswers.apiKey;
+  if (obAnswers.model) cfg.model = obAnswers.model;
+  cfg.permMemory = cfg.permMemory || [];
+  const prefixes = ['Naam →', 'Age →', 'Kaam/Interest →', 'Extra info →'];
+  cfg.permMemory = cfg.permMemory.filter(m => !prefixes.some(p => m.startsWith(p)));
+  if (obAnswers.name) cfg.permMemory.push(`Naam → ${obAnswers.name}`);
+  if (obAnswers.age) cfg.permMemory.push(`Age → ${obAnswers.age}`);
+  if (obAnswers.work) cfg.permMemory.push(`Kaam/Interest → ${obAnswers.work}`);
+  if (obAnswers.extra) cfg.permMemory.push(`Extra info → ${obAnswers.extra}`);
+  if (obAnswers.lang) {
+    const map = { 'Hinglish': 'hinglish', 'Pure Hindi': 'hindi', 'English': 'english' };
+    cfg.lang = map[obAnswers.lang] || cfg.lang;
+  }
+  cfg.onboarded = true;
+  LS.set('chaman_cfg', cfg);
+  document.getElementById('onboard-screen').classList.add('hidden');
+  if (!cfg.apiKey) {
+    document.getElementById('setup-screen').classList.remove('hidden');
+    toast('⚠️ API key abhi baaki hai — daal do');
+  } else {
+    toast(obAnswers.name ? `Welcome, ${obAnswers.name}! 🎉` : 'Sab set ho gaya! 🎉');
+  }
+}
+
+// ════════════════════════════════════
+// APP LOCK (PIN)
+// ════════════════════════════════════
+let pinBuffer = '';
+let pinMode = 'unlock'; // 'unlock' | 'set' | 'confirm-disable'
+let firstPinEntry = '';
+
+async function hashPin(pin) {
+  const enc = new TextEncoder().encode('chamanai_salt_' + pin);
+  const digest = await crypto.subtle.digest('SHA-256', enc);
+  return Array.from(new Uint8Array(digest)).map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+function renderPinDots(errState) {
+  const wrap = document.getElementById('pin-dots');
+  const len = cfg.lockPinLen || 6;
+  wrap.innerHTML = '';
+  for (let i = 0; i < len; i++) {
+    const d = document.createElement('div');
+    d.className = 'pin-dot' + (i < pinBuffer.length ? ' filled' : '') + (errState ? ' err' : '');
+    wrap.appendChild(d);
+  }
+}
+
+function showLockScreen() {
+  pinBuffer = '';
+  document.getElementById('lock-title').textContent = 'Chaman AI';
+  document.getElementById('lock-sub').textContent = 'PIN dalo unlock karne ke liye';
+  renderPinDots(false);
+  document.getElementById('lock-screen').classList.remove('hidden');
+  const fpBtn = document.getElementById('fp-unlock-btn');
+  const fpStatus = document.getElementById('fp-status');
+  if (cfg.lockWebauthnEnabled && cfg.lockWebauthnId) {
+    fpBtn.classList.remove('hidden');
+    fpStatus.classList.remove('hidden');
+    fpStatus.textContent = 'Fingerprint se unlock karo';
+    setTimeout(() => tryFingerprintUnlock(), 350);
+  } else {
+    fpBtn.classList.add('hidden');
+    fpStatus.classList.add('hidden');
+  }
+}
+function hideLockScreen() {
+  document.getElementById('lock-screen').classList.add('hidden');
+}
+function lockNow() {
+  if (!cfg.lockEnabled || !cfg.lockPinHash) { toast('Pehle Settings mein PIN set karo'); return; }
+  showLockScreen();
+}
+
+async function onPinKey(k) {
+  if (k === 'back') {
+    pinBuffer = pinBuffer.slice(0, -1);
+    renderPinDots(false);
+    return;
+  }
+  if (pinBuffer.length >= (cfg.lockPinLen || 6)) return;
+  pinBuffer += k;
+  renderPinDots(false);
+  if (pinBuffer.length === (cfg.lockPinLen || 6)) {
+    const h = await hashPin(pinBuffer);
+    if (h === cfg.lockPinHash) {
+      hideLockScreen();
+    } else {
+      renderPinDots(true);
+      document.getElementById('lock-card').classList.add('shake');
+      document.getElementById('lock-sub').textContent = 'Galat PIN, dobara try karo';
+      setTimeout(() => {
+        document.getElementById('lock-card').classList.remove('shake');
+        pinBuffer = '';
+        renderPinDots(false);
+      }, 420);
+    }
+  }
+}
+
+async function setNewPin() {
+  const p1 = document.getElementById('new-pin-inp').value.trim();
+  const p2 = document.getElementById('confirm-pin-inp').value.trim();
+  if (!/^\d{4,6}$/.test(p1)) { toast('PIN 4-6 digit ka number hona chahiye'); return; }
+  if (p1 !== p2) { toast('Dono PIN match nahi kar rahe'); return; }
+  cfg.lockPinHash = await hashPin(p1);
+  cfg.lockPinLen = p1.length;
+  cfg.lockEnabled = true;
+  LS.set('chaman_cfg', cfg);
+  document.getElementById('new-pin-inp').value = '';
+  document.getElementById('confirm-pin-inp').value = '';
+  document.getElementById('lock-enable-inp').checked = true;
+  updateLockUI();
+  toast('🔒 PIN set ho gaya!');
+}
+function updateLockUI() {
+  const hint = document.getElementById('lock-status-hint');
+  const lockBtn = document.getElementById('lock-now-btn');
+  if (cfg.lockEnabled && cfg.lockPinHash) {
+    hint.textContent = `Lock ON hai (${cfg.lockPinLen}-digit PIN). Naya PIN daalke update kar sakte ho.`;
+    lockBtn.style.display = 'flex';
+  } else {
+    hint.textContent = 'Lock abhi off hai';
+    lockBtn.style.display = 'none';
+  }
+  const fpHint = document.getElementById('fp-status-hint');
+  const fpBtn = document.getElementById('fp-enable-btn');
+  if (cfg.lockWebauthnEnabled && cfg.lockWebauthnId) {
+    fpHint.textContent = '👆 Fingerprint ON hai';
+    fpBtn.textContent = '🗑️ Fingerprint Hatao';
+  } else {
+    fpHint.textContent = cfg.lockEnabled ? 'PIN ke saath fingerprint bhi jod sakte ho' : 'Pehle PIN set karo, fir fingerprint jod sakte ho';
+    fpBtn.textContent = '👆 Fingerprint Enable karo';
+  }
+}
+
+// ── WebAuthn (device fingerprint / Windows Hello) ──
+const WA_RP_ID = location.hostname;
+function randBytes(n) { const a = new Uint8Array(n); crypto.getRandomValues(a); return a; }
+function b64url(buf) { return btoa(String.fromCharCode(...new Uint8Array(buf))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, ''); }
+function b64urlToBuf(str) {
+  str = str.replace(/-/g, '+').replace(/_/g, '/');
+  while (str.length % 4) str += '=';
+  const bin = atob(str);
+  const buf = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) buf[i] = bin.charCodeAt(i);
+  return buf.buffer;
+}
+async function waSupported() {
+  return !!(window.PublicKeyCredential && await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable());
+}
+
+async function toggleFingerprint() {
+  if (cfg.lockWebauthnEnabled && cfg.lockWebauthnId) {
+    cfg.lockWebauthnEnabled = false;
+    cfg.lockWebauthnId = '';
+    LS.set('chaman_cfg', cfg);
+    updateLockUI();
+    toast('Fingerprint hata diya');
+    return;
+  }
+  if (!cfg.lockEnabled || !cfg.lockPinHash) { toast('Pehle PIN set karo'); return; }
+  if (location.protocol !== 'https:' && location.hostname !== 'localhost') {
+    toast('Fingerprint sirf HTTPS pe kaam karega'); return;
+  }
+  if (!(await waSupported())) { toast('Is device/browser mein fingerprint support nahi hai'); return; }
+  try {
+    const cred = await navigator.credentials.create({
+      publicKey: {
+        challenge: randBytes(32),
+        rp: { name: 'Chaman AI', id: WA_RP_ID },
+        user: { id: randBytes(16), name: 'chaman', displayName: 'Chaman' },
+        pubKeyCredParams: [{ alg: -7, type: 'public-key' }, { alg: -257, type: 'public-key' }],
+        authenticatorSelection: { authenticatorAttachment: 'platform', userVerification: 'required' },
+        timeout: 60000
+      }
+    });
+    cfg.lockWebauthnId = b64url(cred.rawId);
+    cfg.lockWebauthnEnabled = true;
+    LS.set('chaman_cfg', cfg);
+    updateLockUI();
+    toast('👆 Fingerprint enable ho gaya!');
+  } catch (e) {
+    toast('Fingerprint set nahi ho paya');
+  }
+}
+
+async function tryFingerprintUnlock() {
+  if (!cfg.lockWebauthnEnabled || !cfg.lockWebauthnId) return false;
+  document.getElementById('fp-status').textContent = 'Fingerprint scan ho raha hai...';
+  try {
+    const assertion = await navigator.credentials.get({
+      publicKey: {
+        challenge: randBytes(32),
+        allowCredentials: [{ id: b64urlToBuf(cfg.lockWebauthnId), type: 'public-key' }],
+        userVerification: 'required',
+        timeout: 60000
+      }
+    });
+    if (assertion) { hideLockScreen(); return true; }
+  } catch (e) {
+    document.getElementById('fp-status').textContent = 'Fingerprint fail, PIN daalo';
+  }
+  return false;
+}
+
+// ════════════════════════════════════
+// SETTINGS
+// ════════════════════════════════════
+function openSettings() {
+  document.getElementById("sys-prompt").value = cfg.sysPrompt;
+  document.getElementById("api-key-inp").value = cfg.apiKey;
+  document.getElementById("model-inp").value = cfg.model;
+  document.getElementById("lang-sel").value = cfg.lang;
+  document.getElementById("show-model-tag-inp").checked = cfg.showModelTag !== false;
+  document.getElementById("show-followups-inp").checked = cfg.showFollowUps !== false;
+  document.getElementById("settings-modal").classList.remove("hidden");
+  if (cfg.apiKey) fetchFreeModels();
+  renderFallbacks();
+  onFbPresetChange();
+  document.getElementById('lock-enable-inp').checked = !!(cfg.lockEnabled && cfg.lockPinHash);
+  updateLockUI();
+  document.querySelectorAll('.settings-tab-btn').forEach(b => b.classList.toggle('active', b.getAttribute('data-tab') === 'general'));
+  document.querySelectorAll('.settings-tab-pane').forEach(p => p.classList.toggle('active', p.getAttribute('data-pane') === 'general'));
+}
+function pickFreeModel(sel) {
+  if (sel.value) document.getElementById("model-inp").value = sel.value;
+}
+async function fetchFreeModels() {
+  const key = document.getElementById("api-key-inp").value.trim() || cfg.apiKey;
+  if (!key) { toast("Pehle API key dalo"); return; }
+  const btn = document.getElementById("fetch-models-btn");
+  const hint = document.getElementById("models-hint");
+  const sel = document.getElementById("free-models-sel");
+  btn.textContent = "⏳"; btn.disabled = true; hint.textContent = "Loading...";
+  try {
+    const res = await fetch("https://api.groq.com/openai/v1/models", { headers: { "Authorization": `Bearer ${key}` } });
+    if (!res.ok) throw new Error("API error " + res.status);
+    const data = await res.json();
+    // Groq free tier = saare active chat models; whisper/guard/tts wagera hata do (sirf chat ke liye)
+    const chatModels = (data.data || []).filter(m => m.active !== false && !/whisper|guard|tts|moderation/i.test(m.id)).sort((a,b) => a.id.localeCompare(b.id));
+    if (!chatModels.length) { hint.textContent = "Koi model nahi mila"; return; }
+    sel.innerHTML = '<option value="">-- Select karo --</option>' + chatModels.map(m => `<option value="${m.id}" ${m.id === cfg.model ? "selected" : ""}>${m.id}</option>`).join("");
+    hint.textContent = `✓ ${chatModels.length} Groq models mile!`;
+    sel.value = cfg.model;
+  } catch(e) { hint.textContent = "❌ " + e.message; }
+  finally { btn.textContent = "🔄 Fetch"; btn.disabled = false; }
+}
+function saveSettings() {
+  cfg.sysPrompt = document.getElementById('sys-prompt').value.trim();
+  cfg.apiKey = document.getElementById('api-key-inp').value.trim();
+  cfg.model = document.getElementById('model-inp').value.trim() || 'llama-3.3-70b-versatile';
+  cfg.lang = document.getElementById('lang-sel').value;
+  cfg.showModelTag = document.getElementById('show-model-tag-inp').checked;
+  cfg.showFollowUps = document.getElementById('show-followups-inp').checked;
+  LS.set('chaman_cfg', cfg);
+  closeModal('settings-modal');
+  toast('✓ Settings save ho gaye!');
+}
+
+// ════════════════════════════════════
+// FALLBACK ENDPOINTS
+// ════════════════════════════════════
+function renderFallbacks() {
+  const list = document.getElementById('fallback-list');
+  if (!list) return;
+  if (!cfg.fallbacks || !cfg.fallbacks.length) {
+    list.innerHTML = '<div style="font-size:0.8rem;color:var(--text-ghost);padding:4px 0">(koi fallback nahi — sirf Groq use hoga)</div>';
+    return;
+  }
+  list.innerHTML = cfg.fallbacks.map((f, i) =>
+    `<div class="mem-item"><span>${i + 1}. ${f.label} — ${f.model}</span><button class="mem-del" onclick="delFallback(${i})">✕</button></div>`
+  ).join('');
+}
+function onFbPresetChange() {
+  const preset = PROVIDER_PRESETS[document.getElementById('fb-preset').value];
+  document.getElementById('fb-model').placeholder = preset?.model ? `e.g. ${preset.model}` : 'Model ID';
+}
+function addFallback() {
+  const presetKey = document.getElementById('fb-preset').value;
+  const preset = PROVIDER_PRESETS[presetKey];
+  const key = document.getElementById('fb-key').value.trim();
+  let model = document.getElementById('fb-model').value.trim();
+  if (!key) { toast('Pehle API key dalo'); return; }
+  if (!model) model = preset.model;
+  if (!model) { toast('Model ID dalo'); return; }
+  let base = preset.base;
+  if (presetKey === 'custom') {
+    base = prompt('Custom endpoint URL (OpenAI-compatible /chat/completions):', 'https://');
+    if (!base) return;
+  }
+  cfg.fallbacks = cfg.fallbacks || [];
+  cfg.fallbacks.push({ label: preset.label, base, key, model });
+  LS.set('chaman_cfg', cfg);
+  document.getElementById('fb-key').value = '';
+  document.getElementById('fb-model').value = '';
+  renderFallbacks();
+  toast('✓ Fallback add ho gaya!');
+}
+function delFallback(i) {
+  cfg.fallbacks.splice(i, 1);
+  LS.set('chaman_cfg', cfg);
+  renderFallbacks();
+  renderObFbList();
+}
+
+// ════════════════════════════════════
+// MEMORY MODAL
+// ════════════════════════════════════
+function openMemModal() {
+  renderPermMem();
+  renderSessions();
+  document.getElementById('old-summary').textContent = cfg.oldSummary || '(koi summary nahi abhi)';
+  document.getElementById('mem-modal').classList.remove('hidden');
+}
+function renderPermMem() {
+  const list = document.getElementById('perm-mem-list');
+  if (!cfg.permMemory.length) {
+    list.innerHTML = '<div style="font-size:0.8rem;color:var(--text-ghost);padding:4px 0">(koi memory nahi)</div>';
+    return;
+  }
+  list.innerHTML = cfg.permMemory.map((m, i) =>
+    `<div class="mem-item"><span>${m}</span><button class="mem-del" onclick="delMem(${i})">✕</button></div>`
+  ).join('');
+}
+function addMem() {
+  const v = document.getElementById('mem-inp').value.trim();
+  if (!v) return;
+  cfg.permMemory.push(v);
+  LS.set('chaman_cfg', cfg);
+  document.getElementById('mem-inp').value = '';
+  renderPermMem();
+  toast('💾 Memory add ho gaya!');
+}
+function delMem(i) {
+  cfg.permMemory.splice(i, 1);
+  LS.set('chaman_cfg', cfg);
+  renderPermMem();
+}
+function clearAllMemory() {
+  if (!confirm('Sab memory aur sessions delete karne ho?')) return;
+  cfg.permMemory = [];
+  cfg.sessions = [];
+  cfg.oldSummary = '';
+  LS.set('chaman_cfg', cfg);
+  renderPermMem();
+  renderSessions();
+  document.getElementById('old-summary').textContent = '(koi summary nahi abhi)';
+  toast('🗑️ Sab clear ho gaya');
+}
+function renderSessions() {
+  const list = document.getElementById('sess-list');
+  if (!cfg.sessions.length) {
+    list.innerHTML = '<div style="font-size:0.8rem;color:var(--text-ghost);padding:4px 0">(koi session nahi)</div>';
+    return;
+  }
+  list.innerHTML = [...cfg.sessions].reverse().map(s => `
+    <div class="sess-item">
+      <div class="sess-meta">${s.date} · ${s.msgCount} messages</div>
+      <div class="sess-preview">${s.summary || 'No summary'}</div>
+    </div>
+  `).join('');
+}
+
+// ════════════════════════════════════
+// APP ENVIRONMENT PROMPT (code-maintained, NOT user-editable)
+// Ye block Settings ke "System Prompt" text se ALAG hai. Jab bhi app mein
+// koi technical/feature change hota hai (provider badle, naya button aaya,
+// wagera), sirf YAHAN update karna hai — Chaman ko baar-baar apna personal
+// system prompt edit nahi karna padega. Har change ke saath date daal do
+// [APP CHANGELOG] mein, taaki AI ko pata rahe konsi info abhi valid hai.
+// ════════════════════════════════════
+const APP_CHANGELOG = [
+  { date: '2 July 2026', note: 'OpenRouter completely hata diya gaya hai. Groq ab PRIMARY provider hai (free, OpenAI-compatible). Fallback providers: Together AI, Cerebras, Google Gemini, Mistral AI, ya Custom.' },
+  { date: '2 July 2026', note: 'Naya feature: "Ask User" card. Jab tujhe (AI) koi personal fact nahi pata jo answer ke liye zaroori hai, toh guess/invent karne ke bajaye [ASK_USER] protocol use kar — neeche instructions hain.' },
+  { date: '2 July 2026', note: 'Attach button ab code/text files ka bhi support karta hai — .py/.js/.ts/.html/.css/.java/.c/.cpp/.cs/.php/.rb/.go/.rs/.swift/.kt/.json/.xml/.yaml/.sql/.sh/etc, na sirf .txt/.md/.csv.' },
+  { date: '2 July 2026', note: 'Naya feature: Free AI image generation (Puter.js, koi API key nahi chahiye). User "/image <description>" ya "/img <description>" type karke bhej sakta hai, ya + menu ke andar "Generate image" option se. Model: flux-schnell (fallback: gpt-image-1-mini, stable-diffusion-3).' },
+  { date: '2 July 2026', note: 'Input area redesign: mic/attach/image-gen buttons ab ek "+" popup menu ke andar consolidate ho gaye hain (pehle 3 alag icons the). Chat mein koi bhi image (attached ya AI-generated) par tap karke fullscreen lightbox khulta hai — jisme download button aur agar multiple images hain toh left/right navigation bhi hai.' },
+  { date: '3 July 2026', note: 'CODE EXECUTION section mein ek naya [COMMAND EXECUTION PROTOCOL] add hua hai — safe/read-only commands (cd, mkdir, ls, etc) ek hi batched code-block mein dene chahiye, jabki risky/impactful commands (install, delete, download, build) alag block mein dene chahiye aur result ka wait karna chahiye. Ye batching-decision hai, actual "pause aur result wapas milna" wala mechanism abhi build nahi hua hai — filhaal ye sirf response ki quality/organization ke liye guidance hai.' },
+  { date: '3 July 2026', note: 'Naya feature: WEB SEARCH. Local exec backend (server.js) mein /search endpoint add hua hai (DuckDuckGo se, koi API key nahi chahiye). Current/uncertain info ke liye [WEB_SEARCH]QUERY: ...[/WEB_SEARCH] protocol use kar (upar describe hai) — ye exec commands se ALAG hai: user ko "Run" dabana nahi padta, result automatically fetch hoke tujhe wapas mil jaata hai aur response usi bubble mein continue ho jaata hai. Sirf tab kaam karega jab backend connected ho.' },
+  { date: '3 July 2026', note: '[ASK_USER] protocol ab GENERALIZE ho gaya hai — pehle sirf personal facts ke liye tha, ab kisi bhi missing input (task-specific, jaise link/filename/parameter) ke liye bhi use kar sakta hai. Naya SAVE: yes/no field add karna zaroori hai — SAVE: yes sirf durable personal facts ke liye, SAVE: no one-off task inputs ke liye (jo permanent memory mein clutter nahi karne chahiye). User jawab dega toh card mein ek toggle bhi dikhega jisse wo save-decision override kar sakta hai. Jawab milne par ab NAYA message-turn nahi banta — response tere usi bubble ke andar continue hota hai (jaise exec/search continuation).' }
+];
+
+function buildAppEnvPrompt() {
+  const changelogText = APP_CHANGELOG.map(c => `[${c.date}] ${c.note}`).join('\n');
+  return `[APP ENVIRONMENT — TERI PRESENCE KA CONTEXT, CODE SE AUTO-GENERATED]
+Tu "Chaman AI" hai — ek single-file HTML app ke andar chal raha hai jo user ke phone mein localStorage
+use karke data save karta hai (koi cloud server, koi database nahi — sab kuch sirf iss phone/browser tak
+limited hai). Backend mein Groq API (primary) se connect hota hai, aur agar Groq fail ho jaye toh user ke
+add kiye hue fallback providers (Together AI / Cerebras / Google Gemini / Mistral AI / Custom) try hote hain.
+
+TERE PAAS YE UI FEATURES/BUTTONS HAIN (in sabka use user kar sakta hai, tujhe pata hona chahiye):
+
+Header (top bar):
+- 🧠 Memory button — permanent facts, purane session summaries, aur last 5 sessions dekhne/manage karne ke liye
+- ⚙️ Settings button — API key, model, system prompt, fallback providers, aur response language (Hinglish/Hindi/English) change karne ke liye
+- 🗑️ Clear chat button — current conversation clear karta hai (purani cheez memory mein summarize hoke save ho jaati hai)
+
+Input area (bottom bar):
+- ➕ "+" button — ek popup menu kholta hai jisme teen options hain: 🎙️ Voice (speech-to-text), 📎 Attach file, 🎨 Generate image
+- 🎙️ Voice — bola hua text seedha bhej deta hai
+- 📎 Attach file — file upload: images (tu dekh sakta hai), text/code files jaise .txt/.md/.csv/.py/.js/.html/.css/.java/.json/.xml/.yaml/.sql/.sh/.php/.rb/.go/.rs/.c/.cpp/.cs/.swift/.kt/etc (poora text read hota hai), aur .pdf (text extract hota hai, max ~30 pages/8000 chars)
+- 🎨 Generate image — agar user koi image/photo/tasveer banane ko bole, to usse "/image <description>" ya "/img <description>" type karke bhejne ko bol (ya "+" menu ke "Generate image" option se), jisse ek AI-generated image ban jayegi (Puter.js se, free). Tu khud image nahi bana sakta, sirf ye command suggest kar sakta hai.
+- Send button — message bhejta hai (Enter key se bhi bhej sakta hai)
+
+Message area:
+- Har AI response mein agar code-block ho (\`\`\`) toh uske saath ek "Copy" button aata hai
+- Markdown support: **bold**, *italic*, headings, lists, links — sab render hote hain
+- Response ke baad 3 follow-up suggestion chips dikhte hain (agar Ask-User card nahi ho)
+- Koi bhi image (attached ya AI-generated) par tap karke fullscreen lightbox khulta hai — jisme download button aur (agar multiple images hain) left/right navigation hota hai
+
+Memory system (permanent, session ke paar):
+- User manually "facts" add/delete kar sakta hai jo hamesha tere context mein rahenge
+- Auto session-summary: jab bhi chat band hoti hai, us conversation ka summary auto-generate hoke save hota hai (last 5 sessions rakhta hai, purane compress hoke "oldSummary" ban jaate hain)
+- [ASK_USER] se milne wale jawab bhi automatically permanent memory mein save ho jaate hain
+
+[ASK_USER PROTOCOL — MISSING INFO KE LIYE, SIRF PERSONAL FACTS TAK LIMITED NAHI]
+Agar koi task complete karne ke liye tujhe koi cheez chahiye jo tere paas abhi nahi hai — chahe wo koi
+PERSONAL FACT ho (DOB, naam, koi permanent choice) YA koi TASK-SPECIFIC INPUT ho (video/file ka link,
+filename, path, koi parameter jo user ne diya hi nahi) — TOH GUESS YA INVENT MAT KAR, aur seedha chat mein
+"please provide X" jaisa plain text bhi mat likh. Iske bajaye apne response mein neeche wala EXACT block include kar:
+
+[ASK_USER]
+Q: <chhota, clear question Hinglish mein>
+OPTIONS: <option1> | <option2> | <option3>
+SAVE: yes/no
+[/ASK_USER]
+
+Rules:
+- OPTIONS line optional hai — agar sensible suggestions nahi ban sakte (jaise exact link, exact date/number), toh OPTIONS line hata de, sirf Q: rakh; app khud text-input dikha dega
+- OPTIONS mein max 4 short choices rakh
+- SAVE: yes SIRF tab de jab jawab ek DURABLE PERSONAL FACT hai jo future conversations mein bhi kaam aayega (jaise naam, DOB, koi standing preference). SAVE: no de jab jawab ek ONE-OFF TASK INPUT hai jo sirf isi kaam ke liye chahiye (jaise video link, filename, koi temporary parameter) — aisi cheezein permanent memory mein save NAHI honi chahiye, warna memory bekar clutter se bhar jayegi.
+- SAVE field hamesha explicitly likh (yes ya no) — missing hone par app default "no" maan legi
+- [ASK_USER] block ke pehle agar zaroori ho toh normal text bhi likh sakta hai, lekin block ek hi baar aur EXACT isi format mein hona chahiye
+- Jab user jawab de (button tap kare ya type kare), wo automatically tere ISI response ke continuation ke roop mein wapas tujhe milega (naya alag message-exchange nahi, seedha isi flow mein) — agar jawab se turant koi command/action bant sakta hai (jaise download karne ka bash block), agle hi turn mein wahi de, dobara mat pooch
+
+[WEB SEARCH PROTOCOL — REAL-TIME/CURRENT INFO KE LIYE]
+Tera training data purana ho sakta hai — current events, live prices, aaj ki date se related cheezein, ya
+koi bhi fact jo tujhe pakka pata nahi (aur jo permanent memory/session summary mein bhi nahi hai), uske
+liye GUESS ya INVENT mat kar. Iske bajaye apne response ke SABSE AAKHRI mein neeche wala EXACT block de:
+
+[WEB_SEARCH]
+QUERY: <chhota, specific search query — jaise Google mein type karte ho>
+[/WEB_SEARCH]
+
+Rules:
+- Ye block hamesha response ke SABSE AAKHRI mein ho — block ke baad kuch aur mat likh (result abhi tujhe nahi mila hai)
+- Ek response mein sirf EK [WEB_SEARCH] block — agar multiple cheezein search karni hain, ek query mein combine kar ya pehle ek karke result ka wait kar
+- Query specific aur short rakh (3-8 words), poora sentence mat likh
+- Result milne ke baad tera response yahin se automatically continue hoga (naya message nahi banega) — result ko apne answer mein naturally use kar, aur agar koi source specifically relevant ho toh uska link bhi de de
+- Agar search backend down hai (neeche [EXECUTION ENVIRONMENT] mein bataya jayega), toh search suggest mat kar — seedha bol de ki "abhi real-time info fetch nahi kar sakta, local backend (server.js) chalu karo"
+- Roz-marra ki, well-known, stable facts (jo definitely nahi badalte, jaise history, science concepts) ke liye search ki zaroorat nahi — sirf tab use kar jab genuinely current/uncertain info chahiye
+
+CODE EXECUTION (bash/sh code-blocks):
+- Tu khud command execute NAHI karta — lekin agar tu apne response mein \`\`\`bash ya \`\`\`sh code-block do, toh us block ke upar UI mein user ko ek "▶ Run" button dikhta hai. User dabata hai toh wahi command uske apne device pe (local exec backend ke through, jo neeche [EXECUTION ENVIRONMENT] mein describe hai) chalti hai aur output terminal-style box mein live dikhta hai.
+- Isliye jab user koi file/folder/system-level kaam bole (download, script banao, file dhoondo, install karo, etc), tu ek bash code-block suggest kar sakta hai — ye ek REAL feature hai, "nahi kar sakta" mat bol.
+- Agar [EXECUTION ENVIRONMENT] section mein "⚠️ Exec backend connected nahi hai" likha ho, toh iska matlab user ka local server (server.js) is waqt band hai — tab bol de ki backend chalu karo pehle, taaki Run button kaam kare.
+- Koi bhi destructive/risky command (delete, format, sudo, shutdown, etc) khud backend mein hi blocked hai — fir bhi aisi commands suggest karte waqt user ko clearly warn kar.
+
+TU YE NAHI KAR SAKTA (limitations, honestly bata dena agar user pooche):
+- Koi real file create/download tere response text ke andar nahi hota (sirf chat mein text render hota hai) — file/download ka asli kaam upar wale bash code-block + Run button se hota hai, seedha nahi
+- Web search sirf tab kaam karta hai jab local exec backend (server.js) chalu ho — [WEB_SEARCH] protocol use kar (upar describe hai), khud se browse/fetch nahi kar sakta, aur agar backend down hai toh search bhi kaam nahi karega
+- Agar koi feature app mein exist nahi karta, toh usse invent mat kar — seedha bol do ki ye feature nahi hai
+
+[COMMAND EXECUTION PROTOCOL — BASH SUGGEST KARTE WAQT YE RULES FOLLOW KAR]
+Jab bhi tu koi bash/shell command user ko chalane ke liye suggest kare, do categories mein socho:
+
+── SAFE / BATCHABLE (in sabko EK HI code block mein, multiple lines ki tarah de — user ek hi baar "Run" dabayega aur sab sequentially chal jayenge) ──
+Examples: cd, mkdir, ls, pwd, touch, cat, echo, cp (workspace ke andar), mv (workspace ke andar), find, du, df, whoami, date, head, tail, wc, file, stat
+Ye sab non-destructive, read-only, ya sirf navigation/organizing wale commands hain — inme koi risk nahi ki kuch permanently badal ya toot jaye.
+
+── RISKY / IMPACTFUL (ALAG code block mein de, aur us block ke baad apna response WAHIN ROK DE — aage mat likh jab tak result na aaye) ──
+Examples: pip install / npm install / apt install (kuch bhi install), rm (delete), download karne wale commands (curl -o, wget, yt-dlp), build/compile commands, git push/pull/clone, koi script jo naya file bade size ka banaye ya overwrite kare, koi network-heavy operation
+Ye commands system state ko badalte hain ya time/resource lete hain — inka result dekhe bina agla step batana galat hoga.
+
+RULE: Agar ek task mein safe aur risky dono commands chahiye (jaise "pehle folder banao phir usme video download karo"), toh:
+1. Pehle SAFE wale ek block mein de (cd + mkdir + ls jaisa combo)
+2. Agar risky command turant zaroori hai, use ALAG block mein de aur wahin ruk ja — agla safe step tab dena jab result mil jaye
+
+Jab command(s) ka result tujhe wapas milega, response ko is tarah continue kar (naya message nahi, wahi response aage badhega):
+- Result ko 2-4 chhote bullet points mein summarize kar (kya hua, koi error to nahi)
+- Agar error hai, wajah bata aur agla try/fix suggest kar (execute mat kar khud — user "Run" dabayega naye suggestion pe bhi)
+- Agar success hai aur task poora ho gaya, seedha confirm kar de
+
+Kabhi bhi khud se kisi risky command ko retry/auto-correct karke turant naya block mat de bina user ko pehle bataye kya galat hua tha.
+
+${buildExecEnvPrompt()}
+
+[APP CHANGELOG — TERI PURANI KNOWLEDGE KO YE UPDATES OVERRIDE KARTE HAIN]
+${changelogText}`;
+}
+
+// ════════════════════════════════════
+// EXECUTION ENVIRONMENT PROMPT — fetched envSnapshot ko AI-readable
+// text mein format karta hai: OS, tools available/missing, workspace
+// convention, aur kaunsa tool kab use karna hai (decision guide).
+// Agar backend se abhi tak env nahi mila (ya fetch fail hui), ek clear
+// fallback bata deta hai taaki AI blind guess na kare.
+// ════════════════════════════════════
+function buildExecEnvPrompt() {
+  if (!envSnapshot) {
+    return `[EXECUTION ENVIRONMENT]
+⚠️ Exec backend connected nahi hai (server.js is waqt reachable nahi — ho sakta hai band ho, ya URL galat ho: ${getExecBackend()}).
+Jab tak connect na ho, OS/tools/paths ke baare mein kuch bhi assume/guess mat kar. Agar user koi command/script maange, pehle keh de ki "local backend (server.js) chalu karo taaki main tumhara real environment dekh sakoon", aur agar phir bhi generic command dena zaroori ho, toh explicitly bol ki "ye assume karke likha hai, tumhara actual environment check nahi kar paya".`;
+  }
+
+  const os = envSnapshot.os || {};
+  const tools = envSnapshot.tools || {};
+  const ws = envSnapshot.workspace || {};
+
+  const available = Object.entries(tools).filter(([, v]) => v).map(([k, v]) => `${k} (${typeof v === 'string' ? v : 'available'})`);
+  const missing = Object.entries(tools).filter(([, v]) => !v).map(([k]) => k);
+
+  return `[EXECUTION ENVIRONMENT — REAL DEVICE SNAPSHOT, /env se abhi-abhi fetch hua]
+OS: ${os.platform || 'unknown'}${os.isTermux ? ' (Termux, Android)' : ''}${os.uname ? ' — ' + os.uname : ''}
+Home: ${envSnapshot.home || 'unknown'}
+Shell: ${envSnapshot.shell || 'unknown'}
+Current working directory: ${envSnapshot.cwd || 'unknown'}
+
+Available tools: ${available.length ? available.join(', ') : '(koi nahi mila)'}
+NAHI available: ${missing.length ? missing.join(', ') : '(sab available hain)'}
+Agar koi zaroori tool "NAHI available" list mein hai, toh pehle usko install karne ka command alag block mein de (jaise pip install yt-dlp), user Run dabayega, phir agla kaam wala command de — dono ek sath ek block mein mat de.
+
+[WORKSPACE CONVENTION — hamesha isi structure ka use kar]
+Root: ${ws.root || '/sdcard/Chaman_AI'}
+- Downloads (internet se aayi files/videos): ${ws.dirs?.downloads || ws.root + '/downloads'}
+- Scripts (tere likhe python/bash scripts): ${ws.dirs?.scripts || ws.root + '/scripts'}
+- Output (processed/generated results): ${ws.dirs?.output || ws.root + '/output'}
+- Temp (scratch space, kabhi bhi clear ho sakta): ${ws.dirs?.temp || ws.root + '/temp'}
+Jab bhi koi file banao, download karo, ya script save karo — inhi folders mein daal, jab tak user khud specific path na de. Random jagah (jaise seedha home ya current dir) files mat banao.
+
+[TOOL DECISION GUIDE]
+- Simple file download → curl -L -o <path> <url> (agar curl available hai), warna wget
+- Video/audio download (YouTube etc) → yt-dlp agar available hai (warna pehle install karne ko bol: pip install yt-dlp)
+- Structured data/scraping/multi-step logic → Python (python3 + requests/urllib), sirf jab simple curl/wget se kaam na chale
+- Archive extract/create → unzip/zip/tar jo available ho
+- Image processing → convert (ImageMagick) agar available hai
+- Media conversion/trimming → ffmpeg agar available hai
+Kabhi bhi kisi tool ka naam mat le jo upar "NAHI available" list mein hai bina pehle install-step suggest kiye.`;
+}
+
+// ════════════════════════════════════
+// BUILD SYSTEM PROMPT
+// ════════════════════════════════════
+function buildPrompt() {
+  let p = cfg.sysPrompt || '';
+
+  // Lang instruction
+  const langMap = { hinglish: 'Hamesha Hinglish mein jawab de (Hindi-English mix).', hindi: 'Hamesha pure Hindi mein jawab de.', english: 'Always respond in English.' };
+  p += '\n\n' + (langMap[cfg.lang] || langMap.hinglish);
+
+  // Permanent memory
+  if (cfg.permMemory.length) {
+    p += '\n\n[MERI IMPORTANT DETAILS / PERMANENT MEMORY]:\n' + cfg.permMemory.map((m, i) => `${i + 1}. ${m}`).join('\n');
+  }
+
+  // Old summary
+  if (cfg.oldSummary) {
+    p += '\n\n[PURANE SESSIONS KA SUMMARY]:\n' + cfg.oldSummary;
+  }
+
+  // Recent sessions (last 5)
+  if (cfg.sessions.length) {
+    p += '\n\n[RECENT SESSIONS]:\n';
+    cfg.sessions.slice(-5).forEach((s, i) => {
+      p += `\n--- Session ${i + 1} (${s.date}) ---\n${s.summary}`;
+    });
+  }
+
+  // Code-maintained app environment + changelog (always fresh, never gets stale)
+  p += '\n\n' + buildAppEnvPrompt();
+
+  return p;
+}
+
+// ════════════════════════════════════
+// SEND MESSAGE
+// ════════════════════════════════════
+async function sendMsg() {
+  const inp = document.getElementById('msg-inp');
+  const text = inp.value.trim();
+  if ((!text && !attachedFile) || loading) return;
+
+  // /image <prompt> ya /img <prompt> — AI image generation (Puter.js, free)
+  const imgMatch = text.match(/^\/(image|img)\s+(.+)/i);
+  if (imgMatch) {
+    inp.value = '';
+    inp.style.height = 'auto';
+    document.getElementById('welcome')?.remove();
+    return generateImageMsg(imgMatch[2].trim(), text);
+  }
+
+  if (!cfg.apiKey) { toast('Pehle API key set karo (Settings)'); openSettings(); return; }
+
+  inp.value = '';
+  inp.style.height = 'auto';
+
+  const file = attachedFile;
+  if (file) { attachedFile = null; clearFile(); }
+
+  // Hide welcome
+  document.getElementById('welcome')?.remove();
+
+  // Append user message
+  appendMsg('out', text, file);
+
+  // Build content
+  let userContent;
+  if (file?.type === 'image') {
+    userContent = [
+      { type: 'image_url', image_url: { url: `data:${file.mimeType};base64,${file.data}` } },
+      { type: 'text', text: text || 'Is image ke baare mein batao' }
+    ];
+  } else if (file) {
+    userContent = text + '\n\n[File: ' + file.name + ']\n' + file.data.slice(0, 8000);
+  } else {
+    userContent = text;
+  }
+
+  // Add to session history (text only, no base64)
+  const histEntry = { role: 'user', content: file?.type === 'image' ? (text || 'image attached') + ' [image]' : (typeof userContent === 'string' ? userContent : text) };
+  currentSession.push(histEntry);
+
+  // Show typing
+  const typingEl = appendTyping();
+  loading = true;
+  document.getElementById('send-btn').disabled = true;
+  document.getElementById('status-txt').textContent = 'Typing...';
+
+  // Build messages for API
+  const messages = [];
+  // Add recent session context (last 20 turns)
+  const sessSlice = currentSession.slice(-20);
+  const histForApi = sessSlice.map((m, idx) => {
+    if (idx === sessSlice.length - 1 && file?.type === 'image') {
+      return { role: 'user', content: userContent };
+    }
+    return m;
+  });
+  messages.push(...histForApi.slice(0, -1));
+  messages.push({ role: 'user', content: userContent });
+
+  try {
+    const aiBub = appendMsg('in', '', null, true);
+    typingEl.remove();
+
+    // Naya AI-turn shuru — agar koi purani message abhi bhi "pending"
+    // hai (user ne Run nahi dabaya tha), usse clear kar do
+    clearActivePending();
+
+    const { text: full, label, model, stoppedForExec, stoppedForSearch } = await streamChat(aiBub, buildPrompt(), messages);
+    aiBub.innerHTML = '';
+    const ask = extractAskUser(full);
+    const search = stoppedForSearch ? extractWebSearch(full) : null;
+    if (ask) {
+      if (ask.cleanText) aiBub.appendChild(parseMarkdown(ask.cleanText));
+      aiBub.appendChild(renderAskCard(ask, { bubbleEl: aiBub, historySnapshot: messages, pendingText: full }));
+    } else if (search) {
+      if (search.cleanText) aiBub.appendChild(parseMarkdown(search.cleanText));
+    } else {
+      const parsed = parseMarkdown(full || '...');
+      aiBub.appendChild(parsed);
+    }
+
+    // Step 5: response ek runnable block pe ruka hai — pending mark karo
+    if (stoppedForExec && !ask) {
+      const blockInfo = extractLastRunnableBlock(full);
+      if (blockInfo) markMessagePending(aiBub, blockInfo.cmd, blockInfo.lang, full);
+    }
+
+    // Add timestamp + model tag (label — model)
+    const timEl = document.createElement('div');
+    timEl.className = 'msg-time';
+    if (cfg.showModelTag) {
+      const tagEl = document.createElement('span');
+      tagEl.className = 'model-tag-inline';
+      tagEl.textContent = `${label} · ${model}`;
+      timEl.appendChild(tagEl);
+      timEl.appendChild(document.createTextNode(' · '));
+    }
+    timEl.appendChild(document.createTextNode(now()));
+    aiBub.parentElement.appendChild(timEl);
+
+    currentSession.push({ role: 'assistant', content: full });
+    if (!ask && !search && cfg.showFollowUps !== false) renderFollowUps(aiBub.parentElement, text, full);
+
+    // [WEB_SEARCH] block mila — koi button-click ki zaroorat nahi (read-only/safe),
+    // automatically backend se search karke result AI ko wapas bhej do
+    if (search) {
+      triggerSearchContinuation(aiBub, currentSession.slice(0, -1), full, search.query);
+    }
+  } catch (e) {
+    typingEl?.remove();
+    const errMsg = e.message || 'Kuch gadbad ho gaya';
+    const isProviderErr = errMsg.toLowerCase().includes('provider') || errMsg.includes('502') || errMsg.includes('503');
+    appendMsg('in', '❌ ' + errMsg + (isProviderErr ? '\n\n💡 Tip: Settings mein alag model try karo (jaise llama-3.1-8b-instant)' : ''));
+  } finally {
+    loading = false;
+    document.getElementById('send-btn').disabled = false;
+    document.getElementById('status-txt').textContent = 'Online';
+    scrollBottom();
+  }
+}
+
+// ════════════════════════════════════
+// IMAGE GENERATION (Puter.js — free, no API key)
+// ════════════════════════════════════
+async function generateImageMsg(prompt, rawText) {
+  appendMsg('out', rawText);
+  currentSession.push({ role: 'user', content: '[Image request: ' + prompt + ']' });
+
+  const typingEl = appendTyping();
+  loading = true;
+  document.getElementById('send-btn').disabled = true;
+  document.getElementById('status-txt').textContent = 'Image bana raha hai...';
+
+  try {
+    if (!window.puter || !window.puter.ai || !window.puter.ai.txt2img) {
+      throw new Error('Image generator load nahi hua, internet check karo');
+    }
+    const models = ['black-forest-labs/flux-schnell', 'openai/gpt-image-1-mini', 'stabilityai/stable-diffusion-3-medium'];
+    let imgEl, lastErr;
+    for (const m of models) {
+      try {
+        imgEl = await puter.ai.txt2img(prompt, { model: m });
+        break;
+      } catch (err) {
+        lastErr = err;
+      }
+    }
+    if (!imgEl) throw lastErr || new Error('Koi model kaam nahi kiya');
+    typingEl.remove();
+
+    const wrap = document.createElement('div');
+    wrap.className = 'message in';
+    const inner = document.createElement('div');
+    const bub = document.createElement('div');
+    bub.className = 'msg-bubble';
+    imgEl.style.cssText = 'max-width:min(72vw,320px);width:100%;border-radius:14px;display:block';
+    makeClickableImg(imgEl, prompt);
+    bub.appendChild(imgEl);
+    const cap = document.createElement('div');
+    cap.style.cssText = 'margin-top:6px;font-size:0.8rem;color:var(--text-low)';
+    cap.textContent = '🎨 ' + prompt;
+    bub.appendChild(cap);
+    inner.appendChild(bub);
+    const t = document.createElement('div');
+    t.className = 'msg-time';
+    t.textContent = now();
+    inner.appendChild(t);
+    wrap.appendChild(inner);
+    document.getElementById('msgs-list').appendChild(wrap);
+    scrollBottom();
+
+    currentSession.push({ role: 'assistant', content: '[Generated image for: ' + prompt + ']' });
+  } catch (e) {
+    typingEl?.remove();
+    appendMsg('in', '❌ Image nahi ban payi: ' + (e.message || 'kuch gadbad ho gaya'));
+  } finally {
+    loading = false;
+    document.getElementById('send-btn').disabled = false;
+    document.getElementById('status-txt').textContent = 'Online';
+    scrollBottom();
+  }
+}
+
+// ════════════════════════════════════
+// FOLLOW-UP SUGGESTIONS (Claude.ai-style related prompts)
+// ════════════════════════════════════
+async function renderFollowUps(msgWrap, userText, aiText) {
+  const langLine = cfg.lang === 'english' ? 'Reply in English.' : cfg.lang === 'hindi' ? 'Pure Hindi mein reply karo.' : 'Hinglish mein reply karo.';
+  const sysMsg = `Neeche ek chat ka aakhri exchange diya hai. Isse related 3 chhote follow-up questions/prompts suggest karo jo user aage puch sakta hai. ${langLine} Har suggestion max 6 words ka ho. Sirf 3 lines return karo, kuch aur nahi — no numbering, no bullets, no quotes.`;
+  const userMsg = `User: ${String(userText).slice(0, 300)}\nAI: ${String(aiText).slice(0, 500)}`;
+
+  let raw = '';
+  for (const ep of getEndpointList()) {
+    if (!ep.key) continue;
+    try {
+      const res = await fetch(ep.base, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${ep.key}`, ...(ep.extraHeaders || {}) },
+        body: JSON.stringify({ model: ep.model, messages: [{ role: 'system', content: sysMsg }, { role: 'user', content: userMsg }], max_tokens: 80 })
+      });
+      const d = await res.json();
+      raw = d.choices?.[0]?.message?.content || '';
+      if (raw) break;
+    } catch {}
+  }
+  if (!raw) return;
+
+  const items = raw.split('\n').map(l => l.replace(/^[\d.\-•*"'\s]+/, '').replace(/["']+$/, '').trim()).filter(Boolean).slice(0, 3);
+  if (!items.length) return;
+
+  const box = document.createElement('div');
+  box.className = 'sugg-chips';
+  box.style.justifyContent = 'flex-start';
+  box.style.marginTop = '10px';
+  box.innerHTML = items.map(s => `<button class="sugg-chip" type="button">${s.replace(/</g, '&lt;')}</button>`).join('');
+  box.querySelectorAll('.sugg-chip').forEach((btn, i) => {
+    btn.addEventListener('click', () => {
+      box.remove();
+      document.getElementById('msg-inp').value = items[i];
+      sendMsg();
+    });
+  });
+  msgWrap.appendChild(box);
+  scrollBottom();
+}
+
+// ════════════════════════════════════
+// ASK-USER ELICITATION CARD
+// Jab AI ko koi personal fact nahi pata (jaise DOB), toh guess karne ke bajaye
+// [ASK_USER] block bhejta hai — hum usse ek interactive card mein render karte hain
+// (suggested option buttons + free-text input). Jawab milne par woh permanent
+// memory mein auto-save ho jaata hai, taaki dobara na poochna pade.
+// ════════════════════════════════════
+function extractAskUser(text) {
+  if (!text) return null;
+  const m = text.match(/\[ASK_USER\]([\s\S]*?)\[\/ASK_USER\]/i);
+  if (!m) return null;
+  const block = m[1];
+  const qMatch = block.match(/Q:\s*(.+)/i);
+  const optMatch = block.match(/OPTIONS:\s*(.+)/i);
+  const saveMatch = block.match(/SAVE:\s*(yes|no)/i);
+  const question = qMatch ? qMatch[1].trim() : '';
+  const options = optMatch ? optMatch[1].split('|').map(s => s.trim()).filter(Boolean) : [];
+  // Missing/unclear SAVE field ho to safe default "no" — warna task-specific
+  // inputs (jaise links, filenames) galti se permanent memory mein clutter kar dete
+  const save = saveMatch ? saveMatch[1].toLowerCase() === 'yes' : false;
+  const cleanText = text.replace(m[0], '').trim();
+  if (!question) return null;
+  return { question, options, save, cleanText };
+}
+
+// ════════════════════════════════════
+// WEB SEARCH — [WEB_SEARCH] block detection
+// AI apne response ke aakhir mein [WEB_SEARCH]QUERY: ...[/WEB_SEARCH]
+// block deta hai jab usse current/uncertain info chahiye hoti hai. Ye
+// exec-block ki tarah hi kaam karta hai (stream cut ho jaata hai jaise
+// hi block band hota hai), farak sirf itna hai ki search safe/read-only
+// hai isliye user ko "Run" dabane ki zaroorat nahi — automatically
+// backend se fetch hoke result AI ko wapas chala jaata hai.
+// ════════════════════════════════════
+function extractWebSearch(text) {
+  if (!text) return null;
+  const m = text.match(/\[WEB_SEARCH\]([\s\S]*?)\[\/WEB_SEARCH\]/i);
+  if (!m) return null;
+  const block = m[1];
+  const qMatch = block.match(/QUERY:\s*(.+)/i);
+  const query = qMatch ? qMatch[1].trim() : '';
+  const cleanText = text.replace(m[0], '').trim();
+  if (!query) return null;
+  return { query, cleanText };
+}
+
+// Streaming ke beech mein [/WEB_SEARCH] band hote hi cut karne ke liye
+// (findRunnableFenceEnd jaisa hi pattern, bash-fence ki jagah is block ke liye)
+function findWebSearchBlockEnd(text) {
+  const m = text.match(/\[WEB_SEARCH\][\s\S]*?\[\/WEB_SEARCH\]/i);
+  if (!m) return -1;
+  return m.index + m[0].length;
+}
+
+// `ctx` = { bubbleEl, historySnapshot, pendingText } — jahan se ye card
+// trigger hua tha (top-level sendMsg response, ya kisi exec/search
+// continuation ke andar). Answer submit hone par isi ctx ka use karke
+// SAME bubble mein continuation chalta hai, naya alag message-turn nahi.
+function renderAskCard(ask, ctx) {
+  const card = document.createElement('div');
+  card.className = 'ask-card';
+
+  const q = document.createElement('div');
+  q.className = 'ask-q';
+  q.textContent = '❓ ' + ask.question;
+  card.appendChild(q);
+
+  if (ask.options.length) {
+    const optsWrap = document.createElement('div');
+    optsWrap.className = 'ask-opts';
+    ask.options.forEach(opt => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'ask-opt-btn';
+      b.textContent = opt;
+      b.addEventListener('click', () => submitAskAnswer(ask, opt, card, ctx));
+      optsWrap.appendChild(b);
+    });
+    card.appendChild(optsWrap);
+  }
+
+  const customRow = document.createElement('div');
+  customRow.className = 'ask-custom-row';
+  const inp = document.createElement('input');
+  inp.className = 'ask-custom-inp';
+  inp.type = 'text';
+  inp.placeholder = 'Apna jawab type karo...';
+  const btn = document.createElement('button');
+  btn.type = 'button';
+  btn.className = 'ask-custom-btn';
+  btn.textContent = '➤';
+  const submit = () => { const v = inp.value.trim(); if (v) submitAskAnswer(ask, v, card, ctx); };
+  btn.addEventListener('click', submit);
+  inp.addEventListener('keydown', e => { if (e.key === 'Enter') submit(); });
+  customRow.appendChild(inp);
+  customRow.appendChild(btn);
+  card.appendChild(customRow);
+
+  // Save-to-facts toggle — AI ka suggested default (ask.save) pehle se set
+  // hota hai, lekin user chahe to submit karne se pehle badal sakta hai
+  const saveRow = document.createElement('label');
+  saveRow.className = 'ask-save-row';
+  const saveToggle = document.createElement('input');
+  saveToggle.type = 'checkbox';
+  saveToggle.className = 'ask-save-toggle';
+  saveToggle.checked = !!ask.save;
+  const saveTxt = document.createElement('span');
+  saveTxt.textContent = '💾 Facts mein yaad rakhu (agli baar dobara na poochu)';
+  saveRow.appendChild(saveToggle);
+  saveRow.appendChild(saveTxt);
+  card.appendChild(saveRow);
+  card._saveToggle = saveToggle; // submitAskAnswer isse read karega
+
+  return card;
+}
+
+function submitAskAnswer(ask, answerText, card, ctx) {
+  card.querySelectorAll('button, input').forEach(el => el.disabled = true);
+  const chosen = document.createElement('div');
+  chosen.className = 'ask-chosen';
+  chosen.textContent = '✓ ' + answerText;
+  card.appendChild(chosen);
+
+  // Toggle jo abhi card mein set hai (user ne badla ho toh wahi final maana jayega)
+  const shouldSave = card._saveToggle ? card._saveToggle.checked : !!ask.save;
+  if (shouldSave) {
+    cfg.permMemory = cfg.permMemory || [];
+    cfg.permMemory.push(`${ask.question} → ${answerText}`);
+    LS.set('chaman_cfg', cfg);
+    toast('💾 Yaad rakh liya: ' + answerText);
+  }
+
+  // Same-bubble continuation — naya "out" message ya naya AI-turn nahi
+  // banta, seedha jahan ye card trigger hua tha wahin continue hota hai
+  // (bilkul exec/search continuation jaisa hi flow)
+  if (ctx && ctx.bubbleEl) {
+    continueAfterAskAnswer(ctx.bubbleEl, ctx.historySnapshot, ctx.pendingText, ask, answerText);
+  } else {
+    // Fallback (context na mila kabhi) — purana behavior, normal message bhej do
+    document.getElementById('msg-inp').value = answerText;
+    sendMsg();
+  }
+}
+
+// ════════════════════════════════════
+// ASK-USER ANSWER → SAME-BUBBLE CONTINUATION
+// triggerContinuation/triggerSearchContinuation jaisa hi pattern: user
+// ke jawab ko ek instruction-message ki tarah AI ko wapas bhejte hain,
+// aur response usi AI bubble ke andar continue hota hai.
+// ════════════════════════════════════
+async function continueAfterAskAnswer(bubbleEl, historySnapshot, pendingText, ask, answerText) {
+  if (!bubbleEl || !bubbleEl.isConnected) return;
+
+  const instructionUser = `[USER ANSWER — TU (AI) YE DEKH RAHA HAI, ISE NAYA ALAG MESSAGE MAT SAMAJH]
+Tune ye poocha tha: ${ask.question}
+User ka jawab: ${answerText}
+
+[INSTRUCTION] Apna pichla response yahin se continue kar us jawab ko use karke. Agar is jawab se turant koi command/action ban sakta hai (jaise ek bash code-block), agle hi step mein wahi de. NAYA greeting ya intro mat likh — jaise apna hi pichla sentence complete kar raha hai.`;
+
+  const continuationMessages = [
+    ...historySnapshot,
+    { role: 'assistant', content: pendingText },
+    { role: 'user', content: instructionUser },
+  ];
+
+  const divider = document.createElement('div');
+  divider.className = 'exec-continuation-sep';
+  bubbleEl.appendChild(divider);
+  const contEl = document.createElement('div');
+  contEl.className = 'exec-continuation';
+  bubbleEl.appendChild(contEl);
+  scrollBottom();
+
+  try {
+    const res = await streamChat(contEl, buildPrompt(), continuationMessages);
+    const contFull = res.text;
+
+    contEl.innerHTML = '';
+    const contAsk = extractAskUser(contFull);
+    const contSearch = !contAsk && res.stoppedForSearch ? extractWebSearch(contFull) : null;
+    const nextCtx = { bubbleEl, historySnapshot: continuationMessages, pendingText: contFull };
+    if (contAsk) {
+      if (contAsk.cleanText) contEl.appendChild(parseMarkdown(contAsk.cleanText));
+      contEl.appendChild(renderAskCard(contAsk, nextCtx));
+    } else if (contSearch) {
+      if (contSearch.cleanText) contEl.appendChild(parseMarkdown(contSearch.cleanText));
+    } else {
+      contEl.appendChild(parseMarkdown(contFull || '...'));
+    }
+
+    currentSession.push({ role: 'user', content: instructionUser });
+    currentSession.push({ role: 'assistant', content: contFull });
+
+    // Chaining: ya to naya runnable command block pending mark ho,
+    // ya naya web-search auto-trigger ho — same bubble ke andar hi
+    if (res.stoppedForExec && !contAsk && !contSearch) {
+      const blockInfo = extractLastRunnableBlock(contFull);
+      if (blockInfo) markMessagePending(bubbleEl, blockInfo.cmd, blockInfo.lang, contFull, continuationMessages);
+    } else if (contSearch) {
+      triggerSearchContinuation(bubbleEl, continuationMessages, contFull, contSearch.query);
+    }
+    scrollBottom();
+  } catch (err) {
+    contEl.textContent = '⚠️ AI se jawab discuss nahi ho paya (connection issue).';
+    contEl.classList.add('exec-continuation-note');
+    scrollBottom();
+  }
+}
+
+// ════════════════════════════════════
+// STREAMING (with automatic fallback across providers)
+// ════════════════════════════════════
+function getEndpointList() {
+  const eps = [{ label: 'Groq', base: 'https://api.groq.com/openai/v1/chat/completions', key: cfg.apiKey, model: cfg.model, extraHeaders: {} }];
+  (cfg.fallbacks || []).forEach(f => eps.push({ ...f, extraHeaders: {} }));
+  return eps;
+}
+
+// ── Runnable-fence detector — sirf bash/sh/shell/zsh/console/terminal
+// blocks (wahi languages jo "▶ Run" button dikhate hain, isRunnable
+// regex se match) ke CLOSE hone par generation ko cut karna hai.
+// Explanation-only code blocks (js/python/json/etc jo sirf dikhane ke
+// liye hain) ko is se koi farak nahi padta — API-level `stop` param
+// use nahi kiya kyunki wo language-agnostic hota (har code-fence pe
+// trigger hoke normal explanatory answers bhi tod deta). Isliye ye
+// client-side, accumulated-text pe chalta hai — jaisa jaisa stream
+// aata hai, waisa waisa check hota hai. ──
+const RUNNABLE_LANG_RE = '(?:bash|sh|shell|zsh|console|terminal)';
+function findRunnableFenceEnd(text) {
+  const openRe = new RegExp('```\\s*' + RUNNABLE_LANG_RE + '\\s*\\r?\\n', 'gi');
+  let m;
+  while ((m = openRe.exec(text))) {
+    const contentStart = m.index + m[0].length;
+    const closeIdx = text.indexOf('\n```', contentStart);
+    if (closeIdx !== -1) {
+      return closeIdx + 4; // '\n```'.length — cut turant baad usi ke
+    }
+    // fence khula hai lekin abhi tak close nahi hua stream mein — wait karo
+  }
+  return -1;
+}
+
+// ── Ek runnable fence ke andar ka lang+code nikalta hai (last wale ko,
+// kyunki stop-cut ke baad max ek hi runnable block hona chahiye, lekin
+// safety ke liye "last match" le lete hain) ──
+function extractLastRunnableBlock(text) {
+  if (!text) return null;
+  const re = new RegExp('```\\s*(' + RUNNABLE_LANG_RE + ')\\s*\\r?\\n([\\s\\S]*?)\\n```', 'gi');
+  let m, last = null;
+  while ((m = re.exec(text))) last = { lang: m[1], cmd: m[2] };
+  return last;
+}
+
+// ════════════════════════════════════
+// STEP 5 — PENDING-EXEC MESSAGE STATE
+// Jab AI response ek runnable bash/sh block pe ruk jata hai (stop-fence
+// cut), us message ko "pending" mark karte hain jab tak user "▶ Run"
+// na dabaye. Practically ek time pe ek hi pending hota hai (naya
+// AI-turn shuru hote hi purani wali clear ho jaati hai), lekin
+// id-based map rakha hai taaki Step 6/7 mein (nudge timer, runId,
+// continuation) isi structure pe build ho sake bina restructure kiye.
+// ════════════════════════════════════
+const pendingMessages = new Map(); // id → { wrapEl, bubbleEl, blockEl, cmd, lang, indicatorEl, nudgeEl, timeoutId }
+let activePendingId = null;
+
+// Pending state hata do — CSS class, indicator, nudge, timeout sab
+// cleanup ho jate hain. `reason` sirf debugging/future-hooks ke liye.
+function clearPendingState(id, reason) {
+  const entry = pendingMessages.get(id);
+  if (!entry) return;
+  if (entry.timeoutId) clearTimeout(entry.timeoutId);
+  entry.wrapEl?.classList.remove('pending-exec');
+  entry.indicatorEl?.remove();
+  entry.nudgeEl?.remove();
+  if (entry.blockEl) delete entry.blockEl.dataset.pendingId;
+  pendingMessages.delete(id);
+  if (activePendingId === id) activePendingId = null;
+}
+
+// Naya AI-turn shuru hote hi purani pending state ko clear karo —
+// "assume user ne ignore kar diya / topic badal diya", permanently
+// stuck state na bane.
+function clearActivePending() {
+  if (activePendingId) clearPendingState(activePendingId, 'new-turn');
+}
+
+// AI response ek runnable block pe ruka — is bubble ko pending mark
+// karo: wrapper pe CSS class, code-block ke end mein "wait" indicator.
+// `fullText` = AI ka poora (cut-hua) response text, aur `historySnapshot`
+// = conversation history jis par ye response based tha — dono Step 7
+// ke continuation call ke liye store ho rahe hain. `historySnapshot`
+// na diya jaye to currentSession se le lete hain (top-level, pehli
+// baar ruka hua response); nested continuation apna khud ka snapshot
+// pass karega (chained context ke liye).
+function markMessagePending(aiBub, cmd, lang, fullText, historySnapshot) {
+  const wrapEl = aiBub.closest('.message.in');
+  if (!wrapEl) return null;
+
+  const blocks = aiBub.querySelectorAll('.code-block');
+  const blockEl = blocks[blocks.length - 1] || null;
+  if (!blockEl) return null; // koi runnable block DOM mein mila hi nahi, kuch mismatch — pending mat banao
+
+  wrapEl.classList.add('pending-exec');
+
+  const indicatorEl = document.createElement('div');
+  indicatorEl.className = 'exec-wait-indicator';
+  indicatorEl.textContent = '⏳ Result ka wait ho raha hai';
+  blockEl.appendChild(indicatorEl);
+
+  const id = 'p_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7);
+  blockEl.dataset.pendingId = id;
+
+  pendingMessages.set(id, {
+    wrapEl, bubbleEl: aiBub, blockEl, cmd, lang,
+    pendingText: fullText,
+    historySnapshot: historySnapshot || currentSession.slice(-20),
+    indicatorEl, nudgeEl: null, timeoutId: null
+  });
+  activePendingId = id;
+
+  // Step 6 — 5 second baad, agar abhi bhi pending hai (user ne Run
+  // nahi dabaya), ek chhota static nudge dikhao. Koi API call nahi,
+  // sirf UI-level text. Run dabane pe ya naya AI-turn aane pe
+  // clearPendingState() ye timeout khud clear kar dega.
+  const entry = pendingMessages.get(id);
+  entry.timeoutId = setTimeout(() => {
+    if (!pendingMessages.has(id)) return; // already clear ho chuki (safety)
+    const nudgeEl = document.createElement('div');
+    nudgeEl.className = 'exec-nudge';
+    nudgeEl.textContent = "⏳ Upar 'Run' dabao command chalane ke liye, taaki main aage bata sakoon kya hua";
+    entry.blockEl.appendChild(nudgeEl);
+    entry.nudgeEl = nudgeEl;
+  }, 5000);
+
+  return id;
+}
+
+// ════════════════════════════════════
+// STEP 7 — RUN → CONTINUATION FLOW
+// Command khatam hone ke baad uska result (exit code, cwd, output)
+// bina user ke kuch type kiye AI ko wapas bheja jata hai, aur AI ka
+// response usi message-bubble mein "continue" hota hai (naya bubble
+// nahi banta).
+// ════════════════════════════════════
+
+// server.js jo "[exit code: X] (pwd: Y)" marker line bhejta hai, usse
+// parse karta hai. Backend hi na chala ho to match nahi milega — us
+// case mein exitCode/cwd null rahenge, aur raw error text hi stdout
+// ki tarah AI ko chala jayega (context ke liye kaafi hai).
+function parseRunResult(fullOutput) {
+  const text = fullOutput || '';
+  const match = text.match(/\[exit code: (\S+)(?:, signal: (\S+))?\]\s*\(pwd: (.+)\)\s*$/);
+  return {
+    exitCode: match ? match[1] : null,
+    signal: match ? (match[2] || null) : null,
+    cwd: match ? match[3].trim() : null,
+    stdout: text,
+  };
+}
+
+// Token-safety: bahut lamba output (jaise pip install verbose log)
+// pura AI ko mat bhejo — sirf last 1500 chars + truncation note.
+function truncateForAI(text) {
+  if (!text || text.length <= 2000) return text || '';
+  return '[...output truncated, showing last portion...]\n' + text.slice(-1500);
+}
+
+// Command khatam hone ke baad ye call hota hai (fire-and-forget,
+// runCommand() ke await ka wait nahi karta — background mein complete
+// hota hai chahe user aage badh gaya ho conversation mein).
+async function triggerContinuation(entry, cmdRun, { rawOutput, cancelled }) {
+  const { bubbleEl, historySnapshot, pendingText } = entry;
+  if (!bubbleEl || !bubbleEl.isConnected) return; // bubble hi hata di gayi ho to kuch mat karo
+
+  let instructionUser;
+  if (cancelled) {
+    instructionUser = `[TERMINAL RESULT — TU (AI) IS COMMAND KA RESULT DEKH RAHA HAI, USER NE YE NAHI LIKHA]
+Command: ${cmdRun}
+Status: User ne command ko beech mein CANCEL kar diya (Stop button dabaya).
+
+[INSTRUCTION] Apna pichla response yahin se continue kar — chhota sa acknowledge kar ki command cancel ho gayi, aur agar zaroori ho to dobara try karne ka suggestion de. NAYA greeting ya intro mat likh — jaise tu apna hi pichla sentence complete kar raha hai.`;
+  } else {
+    const parsed = parseRunResult(rawOutput);
+    const stdoutForAI = truncateForAI(parsed.stdout);
+    instructionUser = `[TERMINAL RESULT — TU (AI) IS COMMAND KA RESULT DEKH RAHA HAI, USER NE YE NAHI LIKHA]
+Command: ${cmdRun}
+Exit code: ${parsed.exitCode ?? 'unknown'}${parsed.signal ? ' (signal: ' + parsed.signal + ')' : ''}
+Working directory ab: ${parsed.cwd ?? 'unknown'}
+Output:
+${stdoutForAI}
+
+[INSTRUCTION] Apna pichla response yahin se continue kar — 2-4 chhote bullet points mein result summarize kar (kya hua, error hai ya nahi). Agar error hai, wajah bata aur agla suggestion de (naya code-block agar zaroori ho, alag block mein). Agar success hai aur task poora ho gaya, seedha confirm kar de. NAYA greeting ya intro mat likh — jaise tu apna hi pichla sentence complete kar raha hai.`;
+  }
+
+  const continuationMessages = [
+    ...historySnapshot,
+    { role: 'assistant', content: pendingText },
+    { role: 'user', content: instructionUser }
+  ];
+
+  // Visual separator + naya content area, lekin SAME bubble ke andar —
+  // koi naya chat-bubble/div.message nahi banta
+  const divider = document.createElement('div');
+  divider.className = 'exec-continuation-sep';
+  bubbleEl.appendChild(divider);
+  const contEl = document.createElement('div');
+  contEl.className = 'exec-continuation';
+  bubbleEl.appendChild(contEl);
+  scrollBottom();
+
+  let contFull = '';
+  let contStopped = false;
+  try {
+    const res = await streamChat(contEl, buildPrompt(), continuationMessages);
+    contFull = res.text;
+    contStopped = res.stoppedForExec;
+
+    contEl.innerHTML = '';
+    const contAsk = extractAskUser(contFull);
+    const contSearch = !contAsk && res.stoppedForSearch ? extractWebSearch(contFull) : null;
+    if (contAsk) {
+      if (contAsk.cleanText) contEl.appendChild(parseMarkdown(contAsk.cleanText));
+      contEl.appendChild(renderAskCard(contAsk, { bubbleEl, historySnapshot: continuationMessages, pendingText: contFull }));
+    } else if (contSearch) {
+      if (contSearch.cleanText) contEl.appendChild(parseMarkdown(contSearch.cleanText));
+    } else {
+      contEl.appendChild(parseMarkdown(contFull || '...'));
+    }
+
+    // Command khud fail hui thi (exit code != 0) — thoda visual treatment
+    if (!cancelled) {
+      const ec = parseRunResult(rawOutput).exitCode;
+      if (ec && ec !== '0') contEl.classList.add('exec-continuation-err');
+    }
+
+    // History mein record rakho taaki aage ki normal turns ko context mile
+    currentSession.push({ role: 'user', content: instructionUser });
+    currentSession.push({ role: 'assistant', content: contFull });
+
+    // Agar continuation khud bhi ek runnable block pe ruk gaya (Step 8
+    // chaining) — usi bubble ke andar dobara pending-cycle trigger karo
+    if (contStopped && !contAsk && !contSearch) {
+      const blockInfo = extractLastRunnableBlock(contFull);
+      if (blockInfo) markMessagePending(bubbleEl, blockInfo.cmd, blockInfo.lang, contFull, continuationMessages);
+    } else if (contSearch) {
+      // Command result dekhne ke baad AI ko web search bhi chahiye — chain kar do
+      triggerSearchContinuation(bubbleEl, continuationMessages, contFull, contSearch.query);
+    }
+    scrollBottom();
+  } catch (err) {
+    contEl.textContent = '⚠️ AI se result discuss nahi ho paya (connection issue). Command chal chuki hai, upar output dekh sakte ho.';
+    contEl.classList.add('exec-continuation-note');
+    scrollBottom();
+  }
+}
+
+// ════════════════════════════════════
+// WEB SEARCH — backend call + auto-continuation
+// Exec-flow se farak: yahan user ko "Run" dabane ki zaroorat nahi
+// (search read-only/safe hai), isliye [WEB_SEARCH] block detect hote
+// hi automatically backend ko call karte hain aur result AI ko wapas
+// bhej dete hain — bilkul triggerContinuation() jaisa hi, bas trigger
+// khud-ba-khud hota hai.
+// ════════════════════════════════════
+async function performWebSearch(query) {
+  const backendBase = getExecBackend();
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), 10000);
+  try {
+    const res = await fetch(backendBase + '/search', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ query }),
+      signal: ctrl.signal,
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok || !data.ok) throw new Error(data.error || `Search backend error ${res.status}`);
+    return { ok: true, results: data.results || [] };
+  } catch (err) {
+    const timedOut = err.name === 'AbortError';
+    return { ok: false, error: timedOut ? 'Search timeout ho gaya.' : (err.message || 'Backend se connect nahi ho paya.') };
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+function renderSearchCard(query, status) {
+  const card = document.createElement('div');
+  card.className = 'search-card';
+  card.innerHTML = `<span class="search-card-icon">🔍</span><span class="search-card-txt">"${query.replace(/</g, '&lt;')}" ${status}</span>`;
+  return card;
+}
+
+// bubbleEl = jis AI message-bubble mein continuation dikhana hai,
+// historySnapshot/pendingText = triggerContinuation jaisa hi context,
+// query = AI ne [WEB_SEARCH] block mein jo maanga tha
+async function triggerSearchContinuation(bubbleEl, historySnapshot, pendingText, query) {
+  if (!bubbleEl || !bubbleEl.isConnected) return;
+
+  const statusCard = renderSearchCard(query, '— search ho raha hai...');
+  bubbleEl.appendChild(statusCard);
+  scrollBottom();
+
+  const searchRes = await performWebSearch(query);
+
+  let instructionUser;
+  if (!searchRes.ok) {
+    statusCard.querySelector('.search-card-txt').textContent = `"${query}" — search fail ho gaya`;
+    statusCard.classList.add('search-card-err');
+    instructionUser = `[WEB SEARCH RESULT — TU (AI) YE DEKH RAHA HAI, USER NE YE NAHI LIKHA]
+Query: ${query}
+Status: Search FAIL ho gaya. Error: ${searchRes.error}
+
+[INSTRUCTION] Apna pichla response yahin se continue kar — user ko bata de ki real-time info fetch nahi ho payi (backend/network issue), aur agar tere paas is topic ka koi general/training-data-based idea hai jo help kar sake toh clearly "ye current info nahi hai" keh ke de sakta hai. NAYA greeting mat likh, jaise apna hi sentence continue kar raha hai.`;
+  } else if (!searchRes.results.length) {
+    statusCard.querySelector('.search-card-txt').textContent = `"${query}" — koi result nahi mila`;
+    instructionUser = `[WEB SEARCH RESULT — TU (AI) YE DEKH RAHA HAI, USER NE YE NAHI LIKHA]
+Query: ${query}
+Status: Search chal gaya lekin koi result nahi mila.
+
+[INSTRUCTION] Apna pichla response yahin se continue kar — user ko bata de ki search mein kuch nahi mila, query alag tarah se phrase karke dobara try karna hai to bata sakta hai. NAYA greeting mat likh.`;
+  } else {
+    statusCard.querySelector('.search-card-txt').textContent = `"${query}" — ${searchRes.results.length} results mile`;
+    const resultsText = searchRes.results.map((r, i) => `${i + 1}. ${r.title}\n   URL: ${r.url}\n   ${r.snippet || '(no snippet)'}`).join('\n\n');
+    instructionUser = `[WEB SEARCH RESULT — TU (AI) YE DEKH RAHA HAI, USER NE YE NAHI LIKHA]
+Query: ${query}
+Results:
+${resultsText}
+
+[INSTRUCTION] Apna pichla response yahin se continue kar — in results se query ka jawab de (apne words mein summarize kar, results ko raw copy-paste mat kar). Agar relevant ho toh 1-2 source links de de. Agar results question se relevant nahi lagte, wo bhi honestly bata de. Agar aur specific info chahiye toh naya [WEB_SEARCH] block bhi de sakta hai. NAYA greeting mat likh, jaise apna hi sentence continue kar raha hai.`;
+  }
+
+  const continuationMessages = [
+    ...historySnapshot,
+    { role: 'assistant', content: pendingText },
+    { role: 'user', content: instructionUser },
+  ];
+
+  const divider = document.createElement('div');
+  divider.className = 'exec-continuation-sep';
+  bubbleEl.appendChild(divider);
+  const contEl = document.createElement('div');
+  contEl.className = 'exec-continuation';
+  bubbleEl.appendChild(contEl);
+  scrollBottom();
+
+  try {
+    const res = await streamChat(contEl, buildPrompt(), continuationMessages);
+    const contFull = res.text;
+
+    contEl.innerHTML = '';
+    const contAsk = extractAskUser(contFull);
+    const contSearch = extractWebSearch(contFull);
+    if (contAsk) {
+      if (contAsk.cleanText) contEl.appendChild(parseMarkdown(contAsk.cleanText));
+      contEl.appendChild(renderAskCard(contAsk, { bubbleEl, historySnapshot: continuationMessages, pendingText: contFull }));
+    } else if (contSearch) {
+      if (contSearch.cleanText) contEl.appendChild(parseMarkdown(contSearch.cleanText));
+    } else {
+      contEl.appendChild(parseMarkdown(contFull || '...'));
+    }
+
+    currentSession.push({ role: 'user', content: instructionUser });
+    currentSession.push({ role: 'assistant', content: contFull });
+
+    // Chaining: agar continuation khud bhi ek runnable bash block ya
+    // naya [WEB_SEARCH] block maange, usi bubble ke andar cycle continue karo
+    if (res.stoppedForExec && !contAsk && !contSearch) {
+      const blockInfo = extractLastRunnableBlock(contFull);
+      if (blockInfo) markMessagePending(bubbleEl, blockInfo.cmd, blockInfo.lang, contFull, continuationMessages);
+    } else if (contSearch) {
+      triggerSearchContinuation(bubbleEl, continuationMessages, contFull, contSearch.query);
+    }
+    scrollBottom();
+  } catch (err) {
+    contEl.textContent = '⚠️ AI se search-result discuss nahi ho paya (connection issue).';
+    contEl.classList.add('exec-continuation-note');
+    scrollBottom();
+  }
+}
+
+async function streamChat(bubbleEl, sysPrompt, messages) {
+  const endpoints = getEndpointList();
+  let lastErr = null;
+
+  for (let i = 0; i < endpoints.length; i++) {
+    const ep = endpoints[i];
+    if (!ep.key) { lastErr = new Error(`${ep.label}: API key missing`); continue; }
+    try {
+      if (i > 0) toast(`⚠️ ${endpoints[i - 1].label} fail hua, ${ep.label} try kar rahe hain...`);
+      const { text: full, stoppedForExec, stoppedForSearch } = await attemptEndpoint(ep, bubbleEl, sysPrompt, messages);
+      // stoppedForExec = true matlab response ek runnable bash/sh block
+      // pe khatam hua hai (naturally ya humne cut kiya). stoppedForSearch
+      // = true matlab [WEB_SEARCH] block pe khatam hua — dono cases
+      // aage consume honge (Step 5 pending-message / auto web-search).
+      return { text: full, label: ep.label, model: ep.model, stoppedForExec, stoppedForSearch };
+    } catch (e) {
+      lastErr = e;
+      bubbleEl.textContent = ''; // clear any partial output before next attempt
+    }
+  }
+  throw lastErr || new Error('Koi endpoint configure nahi hai');
+}
+
+async function attemptEndpoint(ep, bubbleEl, sysPrompt, messages) {
+  const cursor = document.createElement('span');
+  cursor.className = 'stream-cursor';
+  bubbleEl.textContent = '';
+  bubbleEl.appendChild(cursor);
+
+  // content:// and file:// URLs block true SSE streaming — detect and use non-stream fallback
+  const isLocalURL = location.href.startsWith('content://') || location.href.startsWith('file://');
+
+  const res = await fetch(ep.base, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${ep.key}`,
+      ...(ep.extraHeaders || {})
+    },
+    body: JSON.stringify({
+      model: ep.model,
+      messages: [{ role: 'system', content: sysPrompt }, ...messages],
+      stream: !isLocalURL,
+      max_tokens: 2000
+    })
+  });
+
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(`${ep.label}: ` + (err?.error?.message || 'API error ' + res.status));
+  }
+
+  // Non-streaming path for content:// and file:// — simulate typewriter
+  if (isLocalURL) {
+    const data = await res.json();
+    let full = data.choices?.[0]?.message?.content || '';
+    let stoppedForExec = false;
+    let stoppedForSearch = false;
+    const cutAt = findRunnableFenceEnd(full);
+    if (cutAt !== -1) {
+      full = full.slice(0, cutAt);
+      stoppedForExec = true;
+    } else {
+      const searchCutAt = findWebSearchBlockEnd(full);
+      if (searchCutAt !== -1) {
+        full = full.slice(0, searchCutAt);
+        stoppedForSearch = true;
+      }
+    }
+    const visibleLen = full.search(/\[ASK_USER\]|\[WEB_SEARCH\]/i);
+    const typeLimit = visibleLen === -1 ? full.length : visibleLen;
+    let i = 0;
+    await new Promise(resolve => {
+      function type() {
+        if (i >= typeLimit) { cursor.remove(); resolve(); return; }
+        i = Math.min(i + 3, typeLimit);
+        bubbleEl.textContent = full.slice(0, i);
+        bubbleEl.appendChild(cursor);
+        scrollBottom();
+        setTimeout(type, 16);
+      }
+      type();
+    });
+    if (!full) throw new Error(`${ep.label}: khaali response aaya`);
+    return { text: full, stoppedForExec, stoppedForSearch };
+  }
+
+  // True streaming path for http/https
+  const reader = res.body.getReader();
+  const dec = new TextDecoder();
+  let full = '';
+  let buf = '';
+  let stoppedForExec = false;
+  let stoppedForSearch = false;
+
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    buf += dec.decode(value, { stream: true });
+    const lines = buf.split('\n');
+    buf = lines.pop() || '';
+    for (const line of lines) {
+      if (!line.startsWith('data: ')) continue;
+      const data = line.slice(6);
+      if (data === '[DONE]') continue;
+      try {
+        const chunk = JSON.parse(data);
+        const delta = chunk.choices?.[0]?.delta?.content || '';
+        if (delta) {
+          full += delta;
+          const cutAt = findRunnableFenceEnd(full);
+          if (cutAt !== -1) {
+            full = full.slice(0, cutAt);
+            stoppedForExec = true;
+          } else {
+            const searchCutAt = findWebSearchBlockEnd(full);
+            if (searchCutAt !== -1) {
+              full = full.slice(0, searchCutAt);
+              stoppedForSearch = true;
+            }
+          }
+          // [ASK_USER]/[WEB_SEARCH] block ko live-stream mein raw text ke roop mein mat dikhao —
+          // jab tak poora response na aa jaaye, tab final card render hoga (sendMsg() mein)
+          const visible = full.split(/\[ASK_USER\]|\[WEB_SEARCH\]/i)[0];
+          bubbleEl.textContent = visible;
+          bubbleEl.appendChild(cursor);
+          scrollBottom();
+        }
+      } catch {}
+      if (stoppedForExec || stoppedForSearch) break;
+    }
+    if (stoppedForExec || stoppedForSearch) {
+      try { await reader.cancel(); } catch {} // provider ko aage generate karne se rok do, bandwidth/tokens bachao
+      break;
+    }
+  }
+  cursor.remove();
+  if (!full) throw new Error(`${ep.label}: khaali response aaya`);
+  return { text: full, stoppedForExec, stoppedForSearch };
+}
+
+// ════════════════════════════════════
+// SESSION SAVE (on page hide/unload)
+// ════════════════════════════════════
+async function saveCurrentSession() {
+  if (currentSession.length < 2) return;
+
+  // Auto-summarize using API — tries Groq first, then fallbacks (same order as chat)
+  let summary = '';
+  const sumMessages = [
+    { role: 'system', content: 'Yeh conversation ka brief summary do — sirf key points, decisions, topics discussed. 2-4 sentences max. Hinglish mein.' },
+    { role: 'user', content: 'Conversation:\n' + currentSession.map(m => `${m.role}: ${String(m.content).slice(0, 300)}`).join('\n') }
+  ];
+  for (const ep of getEndpointList()) {
+    if (!ep.key) continue;
+    try {
+      const sumRes = await fetch(ep.base, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${ep.key}`, ...(ep.extraHeaders || {}) },
+        body: JSON.stringify({ model: ep.model, messages: sumMessages, max_tokens: 200 })
+      });
+      const d = await sumRes.json();
+      summary = d.choices?.[0]?.message?.content || '';
+      if (summary) break;
+    } catch {}
+  }
+  if (!summary) {
+    summary = currentSession.slice(0, 2).map(m => String(m.content).slice(0, 100)).join(' | ');
+  }
+
+  const session = {
+    date: new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }),
+    msgCount: currentSession.length,
+    summary
+  };
+
+  cfg.sessions.push(session);
+
+  // Keep only 5 recent sessions; rest go to old summary
+  if (cfg.sessions.length > 5) {
+    const old = cfg.sessions.splice(0, cfg.sessions.length - 5);
+    const oldText = old.map(s => `[${s.date}] ${s.summary}`).join('\n');
+    cfg.oldSummary = (cfg.oldSummary ? cfg.oldSummary + '\n' : '') + oldText;
+    // Keep old summary under 1000 chars
+    if (cfg.oldSummary.length > 1000) cfg.oldSummary = cfg.oldSummary.slice(-1000);
+  }
+
+  LS.set('chaman_cfg', cfg);
+  currentSession = [];
+}
+
+window.addEventListener('visibilitychange', () => {
+  if (document.hidden && cfg.apiKey && currentSession.length >= 2) saveCurrentSession();
+});
+window.addEventListener('beforeunload', () => {
+  if (cfg.apiKey && currentSession.length >= 2) {
+    // Sync fallback (no await)
+    const summary = currentSession.slice(0, 3).map(m => String(m.content).slice(0, 80)).join(' | ');
+    const session = { date: new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }), msgCount: currentSession.length, summary };
+    cfg.sessions.push(session);
+    if (cfg.sessions.length > 5) {
+      const old = cfg.sessions.splice(0, cfg.sessions.length - 5);
+      cfg.oldSummary = (cfg.oldSummary ? cfg.oldSummary + '\n' : '') + old.map(s => `[${s.date}] ${s.summary}`).join('\n');
+      if (cfg.oldSummary.length > 1000) cfg.oldSummary = cfg.oldSummary.slice(-1000);
+    }
+    LS.set('chaman_cfg', cfg);
+  }
+});
+
+// ════════════════════════════════════
+// MARKDOWN PARSER
+// ════════════════════════════════════
+function parseMarkdown(text) {
+  const div = document.createElement('div');
+  // Code blocks
+  const parts = text.split(/(```[\s\S]*?```)/g);
+  parts.forEach(part => {
+    if (part.startsWith('```')) {
+      const lines = part.slice(3, -3).split('\n');
+      const lang = lines[0].trim();
+      const code = lines.slice(1).join('\n');
+      const block = document.createElement('div');
+      block.className = 'code-block';
+      const isRunnable = /^(bash|sh|shell|zsh|console|terminal)$/i.test(lang.trim());
+      const hdr = document.createElement('div');
+      hdr.className = 'code-hdr';
+      hdr.innerHTML = `<span class="code-lang">${lang || 'code'}</span>` +
+        `<span>${isRunnable ? '<button class="code-run" onclick="runCommand(this)">▶ Run</button>' : ''}<button class="code-cp" onclick="copyCode(this)">Copy</button></span>`;
+      const body = document.createElement('div');
+      body.className = 'code-body';
+      body.textContent = code;
+      block.appendChild(hdr);
+      block.appendChild(body);
+      if (isRunnable) {
+        const term = document.createElement('div');
+        term.className = 'term-box';
+        block.appendChild(term);
+      }
+      div.appendChild(block);
+    } else {
+      // Inline markdown
+      let html = part
+        .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+        .replace(/(?<!\d)([.!?])[ \t]+(?=\S)/g,'$1\n')
+        .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
+        .replace(/\*(.+?)\*/g,'<em>$1</em>')
+        .replace(/`([^`]+)`/g,'<code>$1</code>')
+        .replace(/^### (.+)$/gm,'<h3>$1</h3>')
+        .replace(/^## (.+)$/gm,'<h2>$1</h2>')
+        .replace(/^# (.+)$/gm,'<h1>$1</h1>')
+        .replace(/^\- (.+)$/gm,'<li>$1</li>')
+        .replace(/^\d+\. (.+)$/gm,'<li>$1</li>')
+        .replace(/(<li>.*<\/li>\n?)+/g, m => '<ul>' + m + '</ul>')
+        .replace(/\[(.+?)\]\((.+?)\)/g,'<a href="$2" target="_blank" rel="noopener">$1</a>')
+        .replace(/\n\n/g,'</p><p>')
+        .replace(/\n/g,'<br>');
+      const p = document.createElement('p');
+      p.innerHTML = html;
+      div.appendChild(p);
+    }
+  });
+  return div;
+}
+
+// ════════════════════════════════════
+// COMMAND EXECUTION (local backend — server.js)
+// ════════════════════════════════════
+async function runCommand(btn) {
+  const block = btn.closest('.code-block');
+  const cmd = block.querySelector('.code-body').textContent;
+  const term = block.querySelector('.term-box');
+
+  // Step 5/7: user ne Run dabaya — is block ki pending-exec state (CSS
+  // class, wait-indicator, nudge-timer) clear kar do, lekin entry ko
+  // pehle nikaal lo (Step 7 continuation ke liye cmd/lang/history/
+  // pendingText chahiye hoga command khatam hone ke baad)
+  const pendingId = block.dataset.pendingId || null;
+  const pendingEntry = pendingId ? pendingMessages.get(pendingId) : null;
+  if (pendingId) clearPendingState(pendingId, 'run-clicked');
+
+  const backendBase = getExecBackend();
+  const backend = backendBase + '/run';
+
+  term.classList.add('show');
+  term.textContent = '';
+  const cursor = document.createElement('span');
+  cursor.className = 'term-cursor';
+
+  // Run button ko Stop button mein badal do jab tak command chal rahi hai
+  const originalLabel = btn.textContent;
+  let runId = null;
+  let cancelled = false;
+  let full = ''; // poora terminal output — Step 7 continuation ko chahiye
+  const stopBtn = document.createElement('button');
+  stopBtn.className = 'code-stop';
+  stopBtn.textContent = '■ Stop';
+  stopBtn.onclick = async () => {
+    if (!runId) return;
+    cancelled = true;
+    stopBtn.disabled = true;
+    stopBtn.textContent = '⏳ Ruk rahe hai...';
+    try {
+      await fetch(backendBase + '/kill', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ runId })
+      });
+    } catch (_) { /* backend already down ho sakta hai, ignore */ }
+  };
+  btn.insertAdjacentElement('afterend', stopBtn);
+  btn.disabled = true;
+  btn.textContent = '⏳ Running...';
+
+  try {
+    const res = await fetch(backend, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ cmd })
+    });
+
+    runId = res.headers.get('X-Run-Id'); // ab Stop button isse kill call kar sakta hai
+
+    if (!res.body) {
+      // Fallback agar streaming supported nahi (rare)
+      full = await res.text();
+      term.textContent = full;
+    } else {
+      const reader = res.body.getReader();
+      const dec = new TextDecoder();
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        full += dec.decode(value, { stream: true });
+        term.textContent = full;
+        term.appendChild(cursor);
+        term.scrollTop = term.scrollHeight;
+      }
+      cursor.remove();
+    }
+  } catch (e) {
+    if (!cancelled) {
+      const errNote = `\n\n❌ Backend se connect nahi ho paya. Check karo 'node server.js' chal raha hai kya (${backendBase}).\n(${e.message})`;
+      term.textContent += errNote;
+      full += errNote;
+    }
+  } finally {
+    btn.disabled = false;
+    btn.textContent = originalLabel;
+    stopBtn.remove();
+    scrollBottom();
+    // Agar command install/setup jaisi lagti hai (naya tool aaya ho sakta
+    // hai), to environment snapshot chup-chaap refresh kar do — taaki
+    // agle response mein AI ko pata ho ki tool ab available hai.
+    if (!cancelled && /\b(pip3?\s+install|npm\s+install|apt(-get)?\s+install|pkg\s+install)\b/i.test(cmd)) {
+      fetchEnvSnapshot();
+    }
+
+    // Step 7: agar ye block AI ke pending response ka hissa tha, uska
+    // result background mein AI ko wapas bhej do (fire-and-forget —
+    // runCommand yahin khatam ho sakta hai, continuation apne aap
+    // chalti rahegi aur isi bubble mein append hogi)
+    if (pendingEntry) {
+      triggerContinuation(pendingEntry, cmd, { rawOutput: full, cancelled });
+    }
+  }
+}
+
+function copyCode(btn) {
+  const code = btn.closest('.code-block').querySelector('.code-body').textContent;
+  navigator.clipboard.writeText(code).then(() => {
+    btn.textContent = '✓ Copied';
+    btn.classList.add('done');
+    setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('done'); }, 2000);
+  });
+}
+
+// ════════════════════════════════════
+// DOM HELPERS
+// ════════════════════════════════════
+// ════════════════════════════════════
+// IMAGE LIGHTBOX
+// ════════════════════════════════════
+let lbIndex = 0;
+function registerGalleryImage(src, caption) {
+  galleryImages.push({ src, caption: caption || '' });
+  return galleryImages.length - 1;
+}
+function makeClickableImg(imgEl, caption) {
+  imgEl.style.cursor = 'pointer';
+  const idx = registerGalleryImage(imgEl.src, caption);
+  imgEl.addEventListener('click', () => openLightbox(idx));
+  return imgEl;
+}
+function openLightbox(idx) {
+  lbIndex = idx;
+  updateLightbox();
+  document.getElementById('lightbox').classList.remove('hidden');
+}
+function closeLightbox() {
+  document.getElementById('lightbox').classList.add('hidden');
+}
+function updateLightbox() {
+  const item = galleryImages[lbIndex];
+  if (!item) return;
+  document.getElementById('lightbox-img').src = item.src;
+  document.getElementById('lb-caption').textContent = item.caption;
+  document.getElementById('lb-prev').classList.toggle('hidden-nav', lbIndex <= 0);
+  document.getElementById('lb-next').classList.toggle('hidden-nav', lbIndex >= galleryImages.length - 1);
+}
+function lbPrev() { if (lbIndex > 0) { lbIndex--; updateLightbox(); } }
+function lbNext() { if (lbIndex < galleryImages.length - 1) { lbIndex++; updateLightbox(); } }
+function lbDownload() {
+  const item = galleryImages[lbIndex];
+  if (!item) return;
+  const a = document.createElement('a');
+  a.href = item.src;
+  const safeName = (item.caption || 'chaman-ai-image').replace(/[^a-z0-9]+/gi, '_').slice(0, 40) || 'image';
+  a.download = safeName + '.jpg';
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+}
+
+function appendMsg(dir, text, file = null, streaming = false) {
+  const list = document.getElementById('msgs-list');
+  const wrap = document.createElement('div');
+  wrap.className = `message ${dir}`;
+
+  const inner = document.createElement('div');
+  if (dir === 'in') inner.style.width = '100%';
+  const bub = document.createElement('div');
+  bub.className = 'msg-bubble';
+
+  if (streaming) {
+    // bubble returned for streaming
+  } else if (file?.type === 'image') {
+    const img = document.createElement('img');
+    img.src = `data:${file.mimeType};base64,${file.data}`;
+    img.style.cssText = 'max-width:180px;border-radius:8px;display:block;margin-bottom:6px';
+    makeClickableImg(img, file.name || '');
+    bub.appendChild(img);
+    if (text) { const t = document.createElement('div'); t.textContent = text; bub.appendChild(t); }
+  } else if (text) {
+    if (dir === 'out') {
+      bub.textContent = text;
+    } else {
+      bub.appendChild(parseMarkdown(text));
+    }
+  }
+
+  inner.appendChild(bub);
+
+  if (!streaming && dir !== 'in') {
+    const t = document.createElement('div');
+    t.className = 'msg-time';
+    t.textContent = now();
+    inner.appendChild(t);
+  }
+
+  wrap.appendChild(inner);
+  list.appendChild(wrap);
+  scrollBottom();
+  return bub;
+}
+
+function appendTyping() {
+  const list = document.getElementById('msgs-list');
+  const wrap = document.createElement('div');
+  wrap.className = 'message in';
+  const bub = document.createElement('div');
+  bub.className = 'typing-bubble';
+  bub.innerHTML = '<span></span><span></span><span></span>';
+  wrap.appendChild(bub);
+  list.appendChild(wrap);
+  scrollBottom();
+  return wrap;
+}
+
+function scrollBottom() {
+  const a = document.getElementById('msgs-area');
+  a.scrollTop = a.scrollHeight;
+}
+
+function now() {
+  return new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
+}
+
+// ════════════════════════════════════
+// FILE UPLOAD
+// ════════════════════════════════════
+async function handleFile(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  e.target.value = '';
+  if (file.size > 10 * 1024 * 1024) { toast('File bahut badi hai (max 10MB)'); return; }
+
+  const ext = file.name.split('.').pop().toLowerCase();
+  const isImg = ['jpg', 'jpeg', 'png', 'webp', 'gif'].includes(ext);
+  const isTxt = [
+    'txt', 'md', 'csv',
+    // code / dev files
+    'py', 'js', 'jsx', 'ts', 'tsx', 'html', 'htm', 'css', 'scss', 'sass',
+    'java', 'c', 'cpp', 'cc', 'h', 'hpp', 'cs', 'php', 'rb', 'go', 'rs',
+    'swift', 'kt', 'kts', 'dart', 'lua', 'r', 'pl', 'vue', 'svelte',
+    'json', 'xml', 'yaml', 'yml', 'toml', 'ini', 'env', 'sql', 'sh',
+    'bat', 'ps1', 'log', 'gradle', 'dockerfile', 'makefile', 'lock'
+  ].includes(ext);
+  const isPDF = ext === 'pdf';
+
+  const prev = document.getElementById('file-preview');
+  const fpImg = document.getElementById('fp-img');
+  const fpName = document.getElementById('fp-name');
+
+  if (isImg) {
+    const reader = new FileReader();
+    reader.onload = ev => {
+      const b64 = ev.target.result.split(',')[1];
+      attachedFile = { type: 'image', data: b64, name: file.name, mimeType: file.type || 'image/jpeg' };
+      fpImg.src = ev.target.result;
+      fpImg.style.display = 'block';
+      fpName.textContent = '📷 ' + file.name;
+      prev.classList.add('show');
+      toast('📷 Image ready!');
+    };
+    reader.readAsDataURL(file);
+  } else if (isTxt) {
+    const reader = new FileReader();
+    reader.onload = ev => {
+      attachedFile = { type: 'text', data: ev.target.result, name: file.name };
+      fpImg.style.display = 'none';
+      fpName.textContent = '📄 ' + file.name;
+      prev.classList.add('show');
+      toast('📄 File ready!');
+    };
+    reader.readAsText(file);
+  } else if (isPDF) {
+    if (!window.pdfjsLib) { toast('❌ PDF reader load nahi hui, internet check karo'); return; }
+    fpImg.style.display = 'none';
+    fpName.textContent = '📕 ' + file.name + ' (padh raha hai...)';
+    prev.classList.add('show');
+    try {
+      const buf = await file.arrayBuffer();
+      const pdf = await pdfjsLib.getDocument({ data: buf }).promise;
+      let text = '';
+      const maxPages = Math.min(pdf.numPages, 30);
+      for (let i = 1; i <= maxPages; i++) {
+        const page = await pdf.getPage(i);
+        const content = await page.getTextContent();
+        text += content.items.map(it => it.str).join(' ') + '\n\n';
+        if (text.length > 8000) break;
+      }
+      text = text.trim().slice(0, 8000);
+      if (!text) { toast('⚠️ PDF se text nahi mila (scanned ho sakta hai)'); prev.classList.remove('show'); return; }
+      attachedFile = { type: 'pdf', data: text, name: file.name };
+      fpName.textContent = '📕 ' + file.name;
+      toast('📕 PDF ready! (' + pdf.numPages + ' pages)');
+    } catch (err) {
+      toast('❌ PDF read nahi ho payi: ' + err.message);
+      prev.classList.remove('show');
+    }
+  } else {
+    toast('Ye file type supported nahi hai');
+  }
+}
+function clearFile() {
+  attachedFile = null;
+  const prev = document.getElementById('file-preview');
+  prev.classList.remove('show');
+  document.getElementById('fp-img').style.display = 'none';
+  document.getElementById('fp-img').src = '';
+}
+
+// ════════════════════════════════════
+// VOICE
+// ════════════════════════════════════
+function toggleVoice() {
+  if (!('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)) {
+    toast('Voice supported nahi hai is browser mein'); return;
+  }
+  const btn = document.getElementById('mic-btn');
+  if (isRec) { recog?.stop(); return; }
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  recog = new SR();
+  recog.lang = 'hi-IN';
+  recog.interimResults = true;
+  recog.continuous = false;
+  btn.classList.add('active');
+  isRec = true;
+  toast('🎙️ Sun raha hai...', 4000);
+  const inp = document.getElementById('msg-inp');
+  recog.onresult = e => {
+    inp.value = Array.from(e.results).map(r => r[0].transcript).join('');
+    autoResize(inp);
+  };
+  recog.onend = () => { btn.classList.remove('active'); isRec = false; if (inp.value.trim()) sendMsg(); };
+  recog.onerror = () => { btn.classList.remove('active'); isRec = false; toast('Voice error!'); };
+  recog.start();
+  toast('🎙️ Bol...');
+}
+
+// ════════════════════════════════════
+// UTILS
+// ════════════════════════════════════
+function toast(msg, d = 2500) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), d);
+}
+function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
+function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+function clearChat() {
+  if (!confirm('Current chat clear karo?')) return;
+  if (currentSession.length >= 2) saveCurrentSession();
+  document.getElementById('msgs-list').innerHTML = `
+    <div id="welcome">
+      <div class="wc-icon">✨</div>
+      <h2>Kya haal hai?</h2>
+      <p>Bol kya karna hai — main yaad rakhta hoon sab</p>
+      <div class="sugg-chips" id="sugg-chips"></div>
+    </div>
+  `;
+  renderSuggChips();
+  currentSession = [];
+  toast('Chat clear ho gaya');
+}
+function toggleEye(inputId, btn) {
+  const inp = document.getElementById(inputId);
+  const show = inp.type === 'password';
+  inp.type = show ? 'text' : 'password';
+  btn.innerHTML = show
+    ? '<svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>'
+    : '<svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
+}
+function autoResize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 120) + 'px';
+}
+
+// Input auto resize + Enter to send
+document.getElementById('msg-inp').addEventListener('input', function() { autoResize(this); });
+document.getElementById('msg-inp').addEventListener('keydown', e => {
+  // On mobile (Android), Enter with no Shift sends message
+  // But IME composition (e.g. typing Hinglish suggestions) must not trigger send
+  if (e.key === 'Enter' && !e.shiftKey && !e.isComposing) {
+    e.preventDefault();
+    sendMsg();
+  }
+});
+
+// Suggestions
+const SUGGS = [
+  'Aaj kya karein?',
+  'Koi idea do',
+  'Motivate karo',
+  'Code mein help chahiye',
+  '🎨 /image ek sunset wala pahad',
+  'Kuch interesting batao'
+];
+function renderSuggChips() {
+  const box = document.getElementById('sugg-chips');
+  if (!box) return;
+  box.innerHTML = SUGGS.map(s => `<button class="sugg-chip" onclick="useSugg(this)">${s}</button>`).join('');
+}
+function useSugg(btn) {
+  document.getElementById('msg-inp').value = btn.textContent;
+  sendMsg();
+}
+
+// ════════════════════════════════════
+// PWA: SERVICE WORKER REGISTRATION
+// ════════════════════════════════════
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').catch(() => {});
+  });
+}
+
+// ════════════════════════════════════
+// INIT (called here so all functions above are defined)
+// ════════════════════════════════════
+(function init() {
+  const saved = LS.get('chaman_cfg');
+  if (saved) {
+    cfg = { ...cfg, ...saved };
+    if (!saved.permMemory) cfg.permMemory = [];
+    if (!saved.sessions) cfg.sessions = [];
+  }
+  if (!cfg.onboarded) {
+    startOnboarding();
+  } else if (!cfg.apiKey) {
+    document.getElementById('setup-screen').classList.remove('hidden');
+  }
+  if (cfg.lockEnabled && cfg.lockPinHash) {
+    showLockScreen();
+  }
+  document.getElementById('lock-now-btn').style.display = (cfg.lockEnabled && cfg.lockPinHash) ? 'flex' : 'none';
+  renderSuggChips();
+
+  // Har session (app open) pe ek baar local exec backend se environment
+  // snapshot le lo — background mein, chat block nahi hoti. Agar backend
+  // band hai to fetchEnvSnapshot() chup-chaap envSnapshot ko null rakh
+  // dega aur buildExecEnvPrompt() AI ko clearly bata dega.
+  fetchEnvSnapshot();
+})();
+
+// ════════════════════════════════════
+// ALL EVENT LISTENERS (safe for content:// URLs)
+// ════════════════════════════════════
+(function bindEvents() {
+  // Setup screen
+  const setupBtn = document.getElementById('setup-btn');
+  if (setupBtn) setupBtn.addEventListener('click', saveSetup);
+  document.getElementById('restart-onboarding-btn').addEventListener('click', () => {
+    closeModal('settings-modal');
+    startOnboarding();
+  });
+
+  // Header buttons
+  document.getElementById('send-btn').addEventListener('click', sendMsg);
+
+  // + menu (mic / attach / image-gen)
+  function closePlusMenu() {
+    document.getElementById('plus-menu').classList.add('hidden');
+    document.getElementById('plus-btn').classList.remove('open');
+  }
+  document.getElementById('plus-btn').addEventListener('click', (e) => {
+    e.stopPropagation();
+    const menu = document.getElementById('plus-menu');
+    const isOpen = !menu.classList.contains('hidden');
+    if (isOpen) closePlusMenu();
+    else { menu.classList.remove('hidden'); document.getElementById('plus-btn').classList.add('open'); }
+  });
+  document.addEventListener('click', (e) => {
+    const menu = document.getElementById('plus-menu');
+    if (!menu.classList.contains('hidden') && !menu.contains(e.target) && e.target.id !== 'plus-btn') closePlusMenu();
+  });
+  document.getElementById('mic-btn').addEventListener('click', () => { toggleVoice(); closePlusMenu(); });
+  document.getElementById('attach-btn').addEventListener('click', () => { document.getElementById('file-inp').click(); closePlusMenu(); });
+  document.getElementById('imggen-btn').addEventListener('click', () => {
+    closePlusMenu();
+    const inp = document.getElementById('msg-inp');
+    const val = inp.value.trim();
+    if (val && !/^\/(image|img)\s/i.test(val)) {
+      inp.value = '/image ' + val;
+      sendMsg();
+    } else if (/^\/(image|img)\s+.+/i.test(val)) {
+      sendMsg();
+    } else {
+      inp.value = '/image ';
+      inp.focus();
+      toast('🎨 Ab image ka description likho aur send karo');
+    }
+  });
+  document.getElementById('fp-clear').addEventListener('click', clearFile);
+  document.getElementById('file-inp').addEventListener('change', handleFile);
+
+  // Image lightbox
+  document.getElementById('lb-close').addEventListener('click', closeLightbox);
+  document.getElementById('lb-download').addEventListener('click', lbDownload);
+  document.getElementById('lb-prev').addEventListener('click', lbPrev);
+  document.getElementById('lb-next').addEventListener('click', lbNext);
+  document.getElementById('lightbox').addEventListener('click', (e) => {
+    if (e.target.id === 'lightbox') closeLightbox();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (document.getElementById('lightbox').classList.contains('hidden')) return;
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowLeft') lbPrev();
+    if (e.key === 'ArrowRight') lbNext();
+  });
+
+  // Header icon buttons
+  document.querySelectorAll('.icon-btn').forEach(btn => {
+    const title = btn.getAttribute('title');
+    if (title === 'Memory') btn.addEventListener('click', openMemModal);
+    if (title === 'Settings') btn.addEventListener('click', openSettings);
+    if (title === 'Clear chat') btn.addEventListener('click', clearChat);
+  });
+
+  // Modal closes
+  document.querySelectorAll('.modal-close').forEach(btn => {
+    btn.addEventListener('click', function() {
+      this.closest('.modal-ov').classList.add('hidden');
+    });
+  });
+  document.querySelectorAll('.modal-ov').forEach(ov => {
+    ov.addEventListener('click', function(e) {
+      if (e.target === this) this.classList.add('hidden');
+    });
+  });
+
+  // Settings save
+  document.getElementById('save-settings-btn').addEventListener('click', saveSettings);
+
+  // Memory buttons
+  document.getElementById('mem-inp').addEventListener('keydown', e => { if (e.key === 'Enter') addMem(); });
+
+  // Fetch models button
+  document.getElementById('fetch-models-btn').addEventListener('click', fetchFreeModels);
+
+  // Fallback endpoints
+  document.getElementById('fb-add-btn').addEventListener('click', addFallback);
+  document.getElementById('fb-preset').addEventListener('change', onFbPresetChange);
+
+  // Free models dropdown
+  document.getElementById('free-models-sel').addEventListener('change', function() { pickFreeModel(this); });
+
+  // Key eye toggles
+  function setupEye(btnId, inpId) {
+    const btn = document.getElementById(btnId);
+    const inp = document.getElementById(inpId);
+    if (!btn || !inp) return;
+    btn.addEventListener('click', function() {
+      const show = inp.type === 'password';
+      inp.type = show ? 'text' : 'password';
+      this.innerHTML = show
+        ? '<svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>'
+        : '<svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
+    });
+  }
+  setupEye('eye-setup', 'setup-key');
+  setupEye('eye-settings', 'api-key-inp');
+
+  // Full system prompt preview (uses whatever is currently typed in the box, even if unsaved)
+  document.getElementById('preview-full-prompt-btn').addEventListener('click', () => {
+    const liveSysPrompt = document.getElementById('sys-prompt').value.trim() || cfg.sysPrompt;
+    const savedSysPrompt = cfg.sysPrompt;
+    cfg.sysPrompt = liveSysPrompt; // temp swap so buildPrompt() reflects unsaved edits too
+    document.getElementById('prompt-preview-box').value = buildPrompt();
+    cfg.sysPrompt = savedSysPrompt; // restore — this button never saves anything
+    document.getElementById('prompt-preview-modal').classList.remove('hidden');
+  });
+
+  // Memory modal buttons
+  document.querySelector('#mem-modal .btn-danger').addEventListener('click', clearAllMemory);
+  document.getElementById('mem-modal').querySelector('.btn-ghost').addEventListener('click', () => closeModal('mem-modal'));
+  document.getElementById('mem-modal').querySelector('.add-btn').addEventListener('click', addMem);
+
+  // App lock
+  document.getElementById('lock-now-btn').addEventListener('click', lockNow);
+  document.getElementById('set-pin-btn').addEventListener('click', setNewPin);
+  document.getElementById('fp-enable-btn').addEventListener('click', toggleFingerprint);
+  document.getElementById('fp-unlock-btn').addEventListener('click', tryFingerprintUnlock);
+  document.getElementById('pin-pad').addEventListener('click', e => {
+    const btn = e.target.closest('.pin-key[data-k]');
+    if (!btn) return;
+    onPinKey(btn.getAttribute('data-k'));
+  });
+  document.getElementById('lock-enable-inp').addEventListener('change', function() {
+    if (this.checked && !cfg.lockPinHash) {
+      this.checked = false;
+      toast('Pehle neeche PIN set karo');
+      return;
+    }
+    cfg.lockEnabled = this.checked;
+    LS.set('chaman_cfg', cfg);
+    updateLockUI();
+    toast(this.checked ? '🔒 Lock ON' : '🔓 Lock OFF');
+  });
+
+  // Settings tabs
+  document.querySelectorAll('.settings-tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const tab = btn.getAttribute('data-tab');
+      document.querySelectorAll('.settings-tab-btn').forEach(b => b.classList.toggle('active', b === btn));
+      document.querySelectorAll('.settings-tab-pane').forEach(p => p.classList.toggle('active', p.getAttribute('data-pane') === tab));
+    });
+  });
+})();
+</script>
+</body>
+</html>
