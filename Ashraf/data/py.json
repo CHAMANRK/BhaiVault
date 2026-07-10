@@ -1,0 +1,221 @@
+{
+  "language": "Python",
+  "course_title": "Python for Complete Beginners (Mobile Friendly)",
+  "lessons": [
+    {
+      "lesson_number": 1,
+      "title": "Python Kya Hai?",
+      "explanation": "Python ek simple aur beginner-friendly programming language hai. Iska syntax padhne me English jaisa lagta hai, isliye naye learners ke liye easy hoti hai.\n\nPython se automation, AI, websites, apps aur scripts banayi ja sakti hain. Hum basics se shuru karenge.",
+      "example_code": "print('Hello World')",
+      "mini_task": "Hello World ki jagah apna naam print karo.",
+      "why_it_matters": "Python AI, automation aur backend development me bahut popular hai."
+    },
+    {
+      "lesson_number": 2,
+      "title": "Variables",
+      "explanation": "Variable ek box ki tarah hota hai jisme data store karte hain. Baad me us data ko baar-baar use kar sakte ho.\n\nPython me variable banane ke liye alag keyword ki zarurat nahi hoti.",
+      "example_code": "name = 'Chaman'\nprint(name)",
+      "mini_task": "Ek variable me apna naam aur doosre me apni age store karke print karo.",
+      "why_it_matters": "Har Python program me data variables me hi store hota hai."
+    },
+    {
+      "lesson_number": 3,
+      "title": "Data Types",
+      "explanation": "Python me text ko string, numbers ko int ya float aur true/false ko boolean kehte hain.\n\nHar type ka apna use hota hai aur sahi type choose karna important hai.",
+      "example_code": "name = 'Ali'\nage = 18\nprint(name, age)",
+      "mini_task": "Ek string, ek number aur ek boolean variable banao.",
+      "why_it_matters": "Real applications me alag-alag tarah ka data store karna padta hai."
+    },
+    {
+      "lesson_number": 4,
+      "title": "Input Lena",
+      "explanation": "Program user se information bhi le sakta hai. Iske liye `input()` function use hota hai.\n\nUser jo type karega, program usko read kar lega.",
+      "example_code": "name = input('Naam: ')\nprint('Hello', name)",
+      "mini_task": "User se city pucho aur print karo.",
+      "why_it_matters": "Login, forms aur chat apps sab user input lete hain."
+    },
+    {
+      "lesson_number": 5,
+      "title": "if...else",
+      "explanation": "Program ko decision lena ho to `if...else` use hota hai. Jaise age check karna ya password verify karna.\n\nCondition true hogi to ek code chalega, warna doosra.",
+      "example_code": "age = 18\nif age >= 18:\n    print('Adult')",
+      "mini_task": "Else add karke age 16 par 'Minor' print karvao.",
+      "why_it_matters": "Har smart application conditions ka use karti hai."
+    },
+    {
+      "lesson_number": 6,
+      "title": "Loops",
+      "explanation": "Loop ek hi kaam ko baar-baar karne ke liye hota hai. Isse code repeat nahi likhna padta.\n\nPython me `for` loop sabse common hai.",
+      "example_code": "for i in range(1, 6):\n    print(i)",
+      "mini_task": "1 se 10 tak numbers print karo.",
+      "why_it_matters": "Data processing aur automation me loops roz use hote hain."
+    },
+    {
+      "lesson_number": 7,
+      "title": "Functions",
+      "explanation": "Function reusable code block hota hai. Ek baar likho aur jitni baar chaho use karo.\n\nIsse code clean aur maintain karna easy ho jata hai.",
+      "example_code": "def greet():\n    print('Hello!')\n\ngreet()",
+      "mini_task": "Ek function banao jo tumhara naam print kare.",
+      "why_it_matters": "Bade Python projects functions ke bina manage karna mushkil hota hai."
+    },
+    {
+      "lesson_number": 8,
+      "title": "Lists",
+      "explanation": "List ek collection hoti hai jisme multiple values store kar sakte ho.\n\nShopping list, students ya products jaise data ke liye list use hoti hai.",
+      "example_code": "fruits = ['Apple', 'Mango', 'Banana']\nprint(fruits[0])",
+      "mini_task": "Apni 5 favourite games ki list banao aur pehla game print karo.",
+      "why_it_matters": "Python me data ko organize karne ke liye lists bahut common hain."
+    },
+    {
+      "lesson_number": 9,
+      "title": "Dictionaries",
+      "explanation": "Dictionary me data key aur value ki form me store hota hai. Jaise naam ke saath age ya city.\n\nYe real-world data ko represent karne ka common tareeka hai.",
+      "example_code": "user = {'name': 'Ali', 'age': 18}\nprint(user['name'])",
+      "mini_task": "Apna dictionary banao jisme name aur city ho.",
+      "why_it_matters": "APIs aur applications me dictionary ka bahut use hota hai."
+    },
+    {
+      "lesson_number": 10,
+      "title": "Mini Project - Simple Calculator",
+      "explanation": "Ab tak jo seekha hai usko mila kar ek chhota calculator banate hain. Isme variables aur operators dono use honge.\n\nYe tumhara pehla useful Python project hoga.",
+      "example_code": "a = 10\nb = 5\nprint(a + b)\nprint(a * b)",
+      "mini_task": "Addition ke saath subtraction aur division bhi print karo.",
+      "why_it_matters": "Projects banane se concepts jaldi strong hote hain aur confidence badhta hai."
+    },
+    {
+      "lesson_number": 11,
+      "title": "Files Padhna Aur Save Karna",
+      "story": "📒 Socho tum ek diary me roz kuch likhte ho. Agar diary band karke dobara kholo aur sab kuch wahi mile, to data save hua. Python bhi files me data save aur read kar sakta hai.",
+      "explanation": "Ab tak hamara data sirf program chalne tak rehta tha. Files ki help se data permanently save kiya ja sakta hai.\n\nText files (`.txt`) se start karna sabse easy hai.",
+      "example_code": "with open('note.txt', 'w') as file:\n    file.write('Hello Python')",
+      "mini_task": "Ek file banao aur usme apna naam likho. Phir us file ko read karke print karo.",
+      "why_it_matters": "Notes apps, logs aur reports sab files ka use karte hain."
+    },
+    {
+      "lesson_number": 12,
+      "title": "Modules - Dusron Ka Code Use Karna",
+      "story": "🧰 Socho har baar screwdriver khud banane ke bajay tum toolbox se ready screwdriver use kar lo. Python modules bhi wahi kaam karte hain.",
+      "explanation": "Python ke paas bahut saare built-in modules hote hain. Unhe import karke hum bina extra mehnat ke naye features use kar sakte hain.\n\nSabse pehle `random` module try karte hain.",
+      "example_code": "import random\nprint(random.randint(1, 10))",
+      "mini_task": "1 se 100 ke beech random number generate karo.",
+      "why_it_matters": "Real projects me modules time bachate hain aur powerful features dete hain."
+    },
+    {
+      "lesson_number": 13,
+      "title": "Errors Aur Debugging",
+      "story": "🔍 Socho cycle chalate waqt chain utar jaye. Cycle kharab nahi hui, bas problem dhoondhkar fix karni hai. Coding me bhi errors normal hote hain.",
+      "explanation": "Error aana matlab tum coding kar rahe ho. Darne ki zarurat nahi, error message ko dhyan se padhna seekho.\n\nPython aksar bata deta hai ki problem kis line me hai.",
+      "example_code": "print('Hello')\nprint(10 / 2)",
+      "mini_task": "Code me jaan-boojhkar ek bracket hatao aur error message padho. Phir use sahi karo.",
+      "why_it_matters": "Debugging har Python developer ki daily skill hai."
+    },
+    {
+      "lesson_number": 14,
+      "title": "try...except - Error Se Bachna",
+      "story": "🛡️ Socho tum glass pakad rahe ho. Girne ka chance hai, isliye tum sambhal kar pakadte ho. Python me `try...except` program ko crash hone se bachata hai.",
+      "explanation": "Kabhi user galat input de deta hai ya koi unexpected error aa jata hai. `try...except` se program band hone ke bajay error ko handle kar sakte ho.\n\nYe real applications me bahut common hai.",
+      "example_code": "try:\n    print(10 / 0)\nexcept:\n    print('Something went wrong')",
+      "mini_task": "User se number lo aur galat input aane par custom message print karo.",
+      "why_it_matters": "Professional software error ko gracefully handle karta hai."
+    },
+    {
+      "lesson_number": 15,
+      "title": "🚀 Mini Project - Student Result Checker",
+      "story": "🎉 Ab tum sirf chhote examples nahi likh rahe. Ab tum ek useful program bana sakte ho jo real-life problem solve kare.",
+      "explanation": "Is project me input, if...else, functions aur dictionaries ko ek saath use karo.\n\nGoal perfect code nahi, balki khud sochkar solution banana hai.",
+      "example_code": "marks = 82\nif marks >= 33:\n    print('Pass')\nelse:\n    print('Fail')",
+      "mini_task": "User se naam aur marks lo. Phir Pass/Fail aur Grade (A, B, C) bhi print karo.",
+      "why_it_matters": "Mini projects se confidence badhta hai aur programming logic strong hota hai."
+    },
+    {
+      "lesson_number": 16,
+      "title": "While Loop - Jab Tak Kaam Poora Na Ho",
+      "story": "🔄 Socho tum bucket me paani bhar rahe ho. Jab tak bucket full nahi hoti, tum nal band nahi karte. `while` loop bhi tab tak chalta hai jab tak condition true hoti hai.",
+      "explanation": "For loop tab use hota hai jab repeat count pata ho. While loop tab use hota hai jab repeat kitni baar hoga, ye pehle se pata na ho.\n\nCondition false hote hi loop automatically stop ho jata hai.",
+      "example_code": "count = 1\nwhile count <= 5:\n    print(count)\n    count += 1",
+      "mini_task": "1 se 10 tak numbers while loop se print karo.",
+      "why_it_matters": "Games, login systems aur automation me while loop bahut common hai."
+    },
+    {
+      "lesson_number": 17,
+      "title": "Strings - Text Ke Saath Kaam Karna",
+      "story": "💬 Socho WhatsApp par message aata hai. Computer ke liye wo sirf text yani String hota hai.",
+      "explanation": "Python me strings par bahut saare operations kar sakte ho, jaise uppercase, lowercase aur length check karna.\n\nText processing Python ki sabse powerful skills me se ek hai.",
+      "example_code": "name = 'chaman'\nprint(name.upper())",
+      "mini_task": "Apna naam lowercase me likho aur `.upper()` se capital letters me print karo.",
+      "why_it_matters": "Chatbots, search engines aur text analysis me strings ka use hota hai."
+    },
+    {
+      "lesson_number": 18,
+      "title": "Functions With Parameters",
+      "story": "📦 Socho pizza order karte waqt har baar alag topping choose karte ho. Function bhi har baar alag data lekar kaam kar sakta hai.",
+      "explanation": "Parameter function ke andar data bhejne ka tareeka hai. Isse ek hi function alag-alag values ke saath use ho sakta hai.\n\nYe reusable code likhne ki best practice hai.",
+      "example_code": "def greet(name):\n    print('Hello', name)\n\ngreet('Chaman')",
+      "mini_task": "Ek function banao jo kisi bhi naam ko Welcome message ke saath print kare.",
+      "why_it_matters": "Real Python applications me almost har function parameters use karta hai."
+    },
+    {
+      "lesson_number": 19,
+      "title": "List Methods",
+      "story": "🛒 Shopping list me kabhi naya item add karte ho aur kabhi purana hata dete ho. Python lists bhi bilkul aisa hi karti hain.",
+      "explanation": "Lists ke paas built-in methods hote hain jaise `append()` aur `remove()`. Inse data ko easily manage kar sakte ho.\n\nYe methods yaad rakhna bahut useful hai.",
+      "example_code": "fruits = ['Apple']\nfruits.append('Mango')\nprint(fruits)",
+      "mini_task": "Apni list me 3 games add karo aur ek game remove karo.",
+      "why_it_matters": "Todo apps, shopping carts aur inventories lists par depend karti hain."
+    },
+    {
+      "lesson_number": 20,
+      "title": "🚀 Mini Project - Todo List",
+      "story": "📝 Socho tum roz ke kaam bhool jaate ho. Ek simple Todo List program tumhari help kar sakta hai.",
+      "explanation": "Ab tak seekhe hue Lists, Loops aur Functions ko use karke ek chhota Todo program banao.\n\nYe tumhara pehla data management project hoga.",
+      "example_code": "tasks = []\ntasks.append('Study Python')\nprint(tasks)",
+      "mini_task": "3 tasks add karo aur sabko loop ki help se print karo.",
+      "why_it_matters": "Todo apps aur task managers isi basic concept par kaam karte hain."
+    },
+    {
+      "lesson_number": 21,
+      "title": "Classes Aur Objects",
+      "story": "🏠 Socho ghar ka blueprint ek design hota hai aur us design se bahut saare ghar ban sakte hain. Class blueprint hai, Object us blueprint se bana hua ghar.",
+      "explanation": "Object-Oriented Programming (OOP) Python ka important concept hai. Class ek template hoti hai aur object uska real example.\n\nAbhi basic idea samajhna hi kaafi hai.",
+      "example_code": "class Student:\n    pass\n\ns = Student()",
+      "mini_task": "Ek `Car` naam ki class banao aur uska object create karo.",
+      "why_it_matters": "Large Python projects aur frameworks OOP par based hote hain."
+    },
+    {
+      "lesson_number": 22,
+      "title": "Python Libraries",
+      "story": "🧰 Socho tumhare paas ek toolbox hai jisme har kaam ke liye alag tool hai. Python libraries bhi wahi toolbox hain.",
+      "explanation": "Libraries ready-made code hoti hain jo naye features deti hain. AI, Data Science aur Web Development me libraries ka bahut use hota hai.\n\nTumhe sab libraries yaad nahi karni, bas use karna seekhna hai.",
+      "example_code": "import math\nprint(math.sqrt(25))",
+      "mini_task": "`math.pi` print karke dekho.",
+      "why_it_matters": "Python ki popularity ka ek bada reason uski powerful libraries hain."
+    },
+    {
+      "lesson_number": 23,
+      "title": "Python Ka Real World Use",
+      "story": "🤖 Socho tum ek boring kaam roz manually karte ho. Python us kaam ko automatically kar sakti hai aur tumhara time bacha sakti hai.",
+      "explanation": "Python sirf coding practice ke liye nahi hai. Isse Automation, AI, Websites, Bots aur Data Analysis jaise real projects bante hain.\n\nAb tum basics ko real-world se connect karna shuru kar rahe ho.",
+      "example_code": "print('Python can automate tasks!')",
+      "mini_task": "3 real-life problems likho jo Python se solve ho sakti hain.",
+      "why_it_matters": "Programming tab valuable hoti hai jab wo kisi real problem ko solve kare."
+    },
+    {
+      "lesson_number": 24,
+      "title": "Mini Project - Student Management System",
+      "story": "🏫 Socho ek school me 500 students hain. Sabka data notebook me manage karna mushkil hai. Python is kaam ko easy bana sakti hai.",
+      "explanation": "Lists, Dictionaries, Functions aur Loops ko mila kar ek simple student management program banao.\n\nYe tumhara ab tak ka sabse bada practice project hoga.",
+      "example_code": "students = {'Ali': 90}\nprint(students)",
+      "mini_task": "2 students ka naam aur marks dictionary me store karke print karo.",
+      "why_it_matters": "Real software chhote-chhote concepts ko combine karke hi banta hai."
+    },
+    {
+      "lesson_number": 25,
+      "title": "🏆 Python Course Complete - Final Challenge",
+      "story": "🎉 Lesson 1 me tum sirf `print()` likhte the. Ab tum loops, functions, files, dictionaries aur classes use kar sakte ho. Ye tumhari Python journey ka pehla bada milestone hai.",
+      "explanation": "Ab bina notes dekhe ek complete Python project banane ki koshish karo. Agar kahin atko, wahi tumhari next practice hai.\n\nIske baad tum Web Development (Django/FastAPI), Automation ya AI/ML me confidently aage badh sakte ho.",
+      "example_code": "print('Congratulations! You completed Python Basics 🎉')",
+      "mini_task": "Ek complete Console App banao jisme Menu, Todo List, Student Manager ya Calculator ho. Bonus: Data ko file me save bhi karo.",
+      "why_it_matters": "Ye challenge complete karne ke baad tum Python ke intermediate topics seekhne ke liye ready ho."
+    }
+  ]
+}

@@ -1,0 +1,221 @@
+{
+  "language": "JavaScript",
+  "course_title": "JavaScript for Complete Beginners (Mobile Friendly)",
+  "lessons": [
+    {
+      "lesson_number": 1,
+      "title": "JavaScript Kya Hai?",
+      "explanation": "HTML website ka structure banata hai aur CSS uska design. JavaScript website ko smart aur interactive banati hai.\n\nJab button click karne par kuch hota hai ya page bina reload hue update hota hai, wahan JavaScript ka use hota hai.",
+      "example_code": "console.log('Hello World');",
+      "mini_task": "Hello World ki jagah apna naam likho aur Console me output dekho.",
+      "why_it_matters": "Modern websites aur web apps JavaScript ke bina complete nahi hote."
+    },
+    {
+      "lesson_number": 2,
+      "title": "Variables (let aur const)",
+      "explanation": "Variable ek box ki tarah hota hai jisme data store karte hain. Modern JavaScript me `let` aur `const` use kiya jata hai.\n\n`const` tab use karo jab value change nahi hogi. `let` tab use karo jab value future me badal sakti hai.",
+      "example_code": "const name = 'Chaman';\nconsole.log(name);",
+      "mini_task": "Apna naam aur age alag variables me store karke print karo.",
+      "why_it_matters": "Har JavaScript project me data variables me hi store hota hai."
+    },
+    {
+      "lesson_number": 3,
+      "title": "Data Types",
+      "explanation": "JavaScript me alag-alag tarah ka data hota hai, jaise String (text), Number aur Boolean (true/false).\n\nSahi data type use karne se code samajhna aur bugs kam karna aasaan hota hai.",
+      "example_code": "const age = 18;\nconst isStudent = true;",
+      "mini_task": "Ek string, ek number aur ek boolean variable banao.",
+      "why_it_matters": "Real apps me user data, prices aur settings alag data types me store hote hain."
+    },
+    {
+      "lesson_number": 4,
+      "title": "Operators",
+      "explanation": "Operators calculation aur comparison ke liye use hote hain. Jaise +, -, *, / aur ===.\n\nYe JavaScript ka basic logic banate hain.",
+      "example_code": "console.log(10 + 5);\nconsole.log(10 === 10);",
+      "mini_task": "20 aur 8 ka addition, subtraction aur multiplication print karo.",
+      "why_it_matters": "Shopping carts, calculators aur games sab operators use karte hain."
+    },
+    {
+      "lesson_number": 5,
+      "title": "if...else Decision",
+      "explanation": "Program ko decision lena ho to `if...else` use hota hai. Jaise login allow karna ya error dikhana.\n\nProgram conditions check karke alag-alag kaam kar sakta hai.",
+      "example_code": "const age = 18;\nif (age >= 18) console.log('Adult');",
+      "mini_task": "Age 16 karke output dekho, phir else add karke 'Minor' print karo.",
+      "why_it_matters": "Login, permissions aur validations sab conditions par depend karte hain."
+    },
+    {
+      "lesson_number": 6,
+      "title": "Functions",
+      "explanation": "Function ek reusable block hota hai. Ek baar likho aur jitni baar chahe use karo.\n\nIsse code clean aur short rehta hai.",
+      "example_code": "function greet() {\n  console.log('Welcome!');\n}",
+      "mini_task": "Apna function banao jo 'Good Morning' print kare aur usse call karo.",
+      "why_it_matters": "Har bade project me functions ka bahut use hota hai."
+    },
+    {
+      "lesson_number": 7,
+      "title": "Arrow Functions (Modern JavaScript)",
+      "explanation": "Arrow functions modern aur short syntax hai. Aaj ke projects me ye bahut common hai.\n\nJab function simple ho, arrow function likhna convenient hota hai.",
+      "example_code": "const greet = () => {\n  console.log('Hello');\n};",
+      "mini_task": "Ek arrow function banao jo tumhara naam print kare.",
+      "why_it_matters": "React aur modern JavaScript frameworks me arrow functions bahut use hote hain."
+    },
+    {
+      "lesson_number": 8,
+      "title": "Arrays",
+      "explanation": "Array ek list hoti hai jisme multiple values store kar sakte ho.\n\nJab bahut saare similar data ho, array best option hota hai.",
+      "example_code": "const fruits = ['Apple', 'Mango', 'Banana'];\nconsole.log(fruits[0]);",
+      "mini_task": "Apni 5 favourite movies ya games ka array banao.",
+      "why_it_matters": "Products, users aur messages aksar arrays me store hote hain."
+    },
+    {
+      "lesson_number": 9,
+      "title": "Loops",
+      "explanation": "Loop ek hi kaam ko baar-baar karne ke liye use hota hai. Isse code repeat nahi karna padta.\n\nSabse common loop `for` hota hai.",
+      "example_code": "for (let i = 1; i <= 5; i++) {\n  console.log(i);\n}",
+      "mini_task": "1 se 10 tak numbers print karo.",
+      "why_it_matters": "Lists, tables aur data processing me loops roz use hote hain."
+    },
+    {
+      "lesson_number": 10,
+      "title": "DOM - HTML Ko JavaScript Se Badalna",
+      "explanation": "DOM ki help se JavaScript HTML elements ko change kar sakti hai. Isi wajah se website interactive banti hai.\n\nYe JavaScript ka sabse important topic hai web development ke liye.",
+      "example_code": "document.querySelector('h1').textContent = 'Welcome!';",
+      "mini_task": "HTML me ek h1 banao aur JavaScript se uska text change karo.",
+      "why_it_matters": "Buttons, forms, dark mode aur almost har interactive feature DOM ka use karta hai."
+    },
+    {
+      "lesson_number": 11,
+      "title": "Button Click Event",
+      "story": "🛎️ Socho tum ghar ki doorbell dabate ho. Bell tabhi bajti hai jab koi button press karta hai. JavaScript me bhi button click hone par code chalta hai.",
+      "explanation": "HTML aur CSS ke baad JavaScript user ke actions ko handle karti hai. Jab user button par click karta hai, hum uske baad koi bhi kaam karwa sakte hain.\n\nIs process ko Event Handling kehte hain. Click sabse common event hai.",
+      "example_code": "document.querySelector('button').addEventListener('click', () => {\n  alert('Button Clicked!');\n});",
+      "mini_task": "Alert me 'Welcome Chaman!' likho aur button click karke dekho.",
+      "why_it_matters": "Buttons, menus aur forms sab click events ka use karte hain."
+    },
+    {
+      "lesson_number": 12,
+      "title": "Navigation Menu Ko Interactive Banana",
+      "story": "📱 Socho mobile me menu button dabane par kuch bhi na ho. User confuse ho jayega. JavaScript menu ko open aur close kar sakti hai.",
+      "explanation": "JavaScript CSS classes add ya remove kar sakti hai. Isi technique se mobile menu, sidebar aur popup open hote hain.\n\nAaj ki almost har website ye technique use karti hai.",
+      "example_code": "document.querySelector('nav').classList.toggle('active');",
+      "mini_task": "HTML me `active` class add aur remove karke difference dekho.",
+      "why_it_matters": "Responsive navigation aur sidebars isi concept par bante hain."
+    },
+    {
+      "lesson_number": 13,
+      "title": "Image Change Karna",
+      "story": "🖼️ Socho tum online shopping website par ho. Product ka chhota photo dabate hi bada photo change ho jata hai. Ye JavaScript ka kaam hai.",
+      "explanation": "JavaScript HTML elements ke attributes bhi change kar sakti hai, jaise image ka `src`.\n\nIsse galleries aur sliders banana possible hota hai.",
+      "example_code": "document.querySelector('img').src = 'https://picsum.photos/300';",
+      "mini_task": "Image ka URL badal kar doosri random image dikhao.",
+      "why_it_matters": "Photo galleries, product pages aur sliders me ye feature bahut common hai."
+    },
+    {
+      "lesson_number": 14,
+      "title": "Form Validation",
+      "story": "📝 Socho kisi ne Signup button dabaya lekin naam hi nahi likha. Agar website fir bhi account bana de to problem ho jayegi.",
+      "explanation": "JavaScript form submit hone se pehle check kar sakti hai ki user ne sahi information di hai ya nahi.\n\nIs process ko Form Validation kehte hain.",
+      "example_code": "const name = document.querySelector('input').value;\nif (name === '') alert('Name is required');",
+      "mini_task": "Email input add karo aur check karo ki wo empty to nahi hai.",
+      "why_it_matters": "Login, Signup aur Contact forms me validation bahut zaroori hoti hai."
+    },
+    {
+      "lesson_number": 15,
+      "title": "🚀 Mini Project - Interactive Portfolio",
+      "story": "🎉 Ab tumhari website sirf dikhne me hi achhi nahi, balki user ke actions ka jawab bhi deti hai. Ye ek static page se interactive website banne ka pehla step hai.",
+      "explanation": "Ab tak jo DOM, events aur JavaScript seekhi hai usko ek saath use karo.\n\nPerfect project banana zaroori nahi. Sabse zaroori baat hai ki tum khud code likho aur experiment karo.",
+      "example_code": "document.querySelector('button').onclick = () => {\n  document.querySelector('h1').textContent = 'Welcome!';\n};",
+      "mini_task": "Ek button banao jo click karne par heading aur image dono change kar de.",
+      "why_it_matters": "Interactive portfolio aur business websites isi tarah JavaScript ka use karti hain."
+    },
+    {
+      "lesson_number": 16,
+      "title": "Dark Mode Banana",
+      "story": "🌙 Raat me bahut log Dark Mode use karte hain kyunki aankhon ko kam strain hota hai. Aaj hum bhi apni website me wahi feature banayenge.",
+      "explanation": "JavaScript CSS class ko add ya remove kar sakti hai. Isi se Dark Mode, themes aur color switcher bante hain.\n\nYe feature aaj ki modern websites me bahut common hai.",
+      "example_code": "document.body.classList.toggle('dark');",
+      "mini_task": "CSS me `.dark` class bana kar background black aur text white kar do. Phir button se Dark Mode on/off karo.",
+      "why_it_matters": "Dark Mode user experience improve karta hai aur bahut si apps me available hota hai."
+    },
+    {
+      "lesson_number": 17,
+      "title": "Objects - Real Data Store Karna",
+      "story": "👤 Socho ek student ki sirf age store karni ho to variable kaafi hai. Lekin agar naam, age aur city sab store karna ho to Object best choice hai.",
+      "explanation": "Object related information ko ek hi jagah store karta hai. Isme key aur value hoti hai.\n\nReal websites me users, products aur settings objects ki form me store hote hain.",
+      "example_code": "const user = {\n  name: 'Chaman',\n  age: 18\n};",
+      "mini_task": "Ek object banao jisme name, city aur favouriteLanguage ho.",
+      "why_it_matters": "JavaScript applications aur APIs me objects sabse important data structure hain."
+    },
+    {
+      "lesson_number": 18,
+      "title": "Array + Loop = Dynamic List",
+      "story": "🛒 Socho shopping website par 100 products hain. Kya developer 100 baar HTML likhega? Bilkul nahi. Loop aur Array ye kaam aasaan bana dete hain.",
+      "explanation": "Array me data store hota hai aur loop us data ko ek-ek karke use karta hai.\n\nIsi concept se product lists, chat messages aur notifications dikhaye jate hain.",
+      "example_code": "const fruits = ['Apple', 'Mango', 'Banana'];\nfruits.forEach(item => console.log(item));",
+      "mini_task": "Apni favourite 5 movies ki list banao aur console me print karo.",
+      "why_it_matters": "Dynamic websites me lists ko dikhane ke liye ye technique roz use hoti hai."
+    },
+    {
+      "lesson_number": 19,
+      "title": "Local Storage - Data Save Karna",
+      "story": "💾 Socho tumne Dark Mode on kiya, lekin page refresh karte hi sab reset ho gaya. Local Storage ki help se data browser me save reh sakta hai.",
+      "explanation": "Local Storage browser ka chhota sa storage hota hai. Isme data save karke baad me dobara use kar sakte ho.\n\nYe sirf user ke browser me save hota hai, server par nahi.",
+      "example_code": "localStorage.setItem('name', 'Chaman');\nconsole.log(localStorage.getItem('name'));",
+      "mini_task": "Apna naam Local Storage me save karo aur refresh ke baad console me print karo.",
+      "why_it_matters": "Theme, language aur user preferences save karne ke liye Local Storage ka use hota hai."
+    },
+    {
+      "lesson_number": 20,
+      "title": "🚀 Mini Project - Smart Portfolio",
+      "story": "🎉 Ab tumhari website sirf click par react hi nahi karti, balki user ki settings bhi yaad rakh sakti hai. Ye ek simple webpage se smart web app banne ka pehla step hai.",
+      "explanation": "Ab tak seekhe hue DOM, Events, Objects, Arrays aur Local Storage ko mila kar ek interactive portfolio banao.\n\nYe project tumhe real-world JavaScript development ka taste dega.",
+      "example_code": "document.querySelector('button').onclick = () => {\n  document.body.classList.toggle('dark');\n};",
+      "mini_task": "Ek portfolio banao jisme Dark Mode button ho, welcome message ho aur user ka naam Local Storage me save ho.",
+      "why_it_matters": "Ye features modern portfolios, dashboards aur business websites me regularly use hote hain."
+    },
+    {
+      "lesson_number": 21,
+      "title": "Clean JavaScript - Achhe Developer Ki Pehchan",
+      "story": "👨‍💻 Do developers ne ek hi feature banaya. Pehle ka code itna uljha hua tha ki ek hafte baad wo khud nahi samajh paya. Dusre ne chhote functions aur achhe variable names use kiye, isliye uska code update karna bahut easy tha.",
+      "explanation": "JavaScript sirf chalna hi nahi chahiye, samajhna bhi easy hona chahiye. Variables aur functions ke meaningful names rakho.\n\nEk function ek hi kaam kare. Isse bugs kam hote hain aur future me changes karna aasaan hota hai.",
+      "example_code": "const updateTitle = () => {\n  document.title = 'My Portfolio';\n};",
+      "mini_task": "Apne kisi purane JavaScript code me confusing variable names ko simple names se replace karo.",
+      "why_it_matters": "Professional teams clean aur readable JavaScript likhti hain."
+    },
+    {
+      "lesson_number": 22,
+      "title": "Fetch API - Internet Se Data Lana",
+      "story": "🌐 Socho weather app har baar naya temperature dikhati hai. Wo data app ke andar nahi hota, internet se aata hai. JavaScript ye kaam Fetch API se karti hai.",
+      "explanation": "Fetch API ki help se kisi server ya API se data manga ja sakta hai.\n\nYe modern JavaScript ka bahut important feature hai aur almost har web app me use hota hai.",
+      "example_code": "fetch('https://api.github.com/users/octocat')\n  .then(res => res.json())\n  .then(data => console.log(data.login));",
+      "mini_task": "Code run karke console me user ka login name dekho.",
+      "why_it_matters": "Weather apps, news apps aur dashboards sab APIs se data laate hain."
+    },
+    {
+      "lesson_number": 23,
+      "title": "HTML + CSS + JavaScript Ek Team Hai",
+      "story": "🏗️ Socho tum ek ghar bana rahe ho. HTML deeware banata hai, CSS unhe paint karta hai aur JavaScript lights, fan aur doorbell ko kaam karne layak banati hai.",
+      "explanation": "Ab tum samajh chuke ho ki ye teen technologies alag nahi, ek team ki tarah kaam karti hain.\n\nJab tum frontend project banaoge, teeno ka saath me use karoge.",
+      "example_code": "document.querySelector('.title').style.color = 'royalblue';",
+      "mini_task": "Ek button banao jo click hone par heading ka color change kare.",
+      "why_it_matters": "Frontend development ki foundation HTML, CSS aur JavaScript ka combination hai."
+    },
+    {
+      "lesson_number": 24,
+      "title": "Mini Project - Interactive Landing Page",
+      "story": "🚀 Socho tumne apna pehla product launch kiya hai. Landing page par aane wale visitor ko achha experience milna chahiye. JavaScript us experience ko interactive banati hai.",
+      "explanation": "Ab tak seekhe hue Events, DOM, Objects, Arrays aur Local Storage ka use karke landing page me interactivity add karo.\n\nFocus perfect design par nahi, working features par rakho.",
+      "example_code": "document.querySelector('#themeBtn').onclick = () => {\n  document.body.classList.toggle('dark');\n};",
+      "mini_task": "Landing page me Dark Mode button, Welcome alert aur Contact button ka click event add karo.",
+      "why_it_matters": "Business websites aur startups apni landing pages ko interactive banane ke liye JavaScript use karte hain."
+    },
+    {
+      "lesson_number": 25,
+      "title": "🏆 JavaScript Course Complete - Final Challenge",
+      "story": "🎉 Lesson 1 me tum sirf `console.log()` likhte the. Ab tum user ke actions handle kar sakte ho, data save kar sakte ho aur internet se data bhi la sakte ho. Ye tumhari frontend journey ka ek bada milestone hai.",
+      "explanation": "Ab bina notes dekhe ek complete interactive portfolio ya mini app banane ki koshish karo. Jahan atko, wahi tumhari next practice hai.\n\nIske baad tum React, Node.js ya kisi bhi modern JavaScript framework ko zyada confidence ke saath seekh paoge.",
+      "example_code": "document.querySelector('#btn').onclick = () => {\n  alert('Congratulations!');\n};",
+      "mini_task": "Ek complete portfolio banao jisme Dark Mode, responsive menu, contact form validation, welcome message aur Local Storage ka use ho. Bonus: Kisi public API se data fetch karke page par dikhao.",
+      "why_it_matters": "Ye project tumhare portfolio ka pehla real interactive web application ban sakta hai aur advanced frontend development ke liye strong foundation tayyar karega."
+    }
+  ]
+}
