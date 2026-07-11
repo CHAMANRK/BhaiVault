@@ -1,0 +1,1192 @@
+{
+  "language": "Mixed Projects",
+  "course_title": "Real Projects Course",
+  "lessons": [
+    {
+      "lesson_number": 1,
+      "title": "Project 1: Build Your First Profile Card",
+      "difficulty": "easy",
+      "concept": "Profile card website ka wo 'face' hai jo user ki identity dikhata hai. Socho ye ek digital visiting card hai. Ismein HTML structure banata hai, CSS usse sundar banata hai, aur JS button click par 'action' leta hai.",
+      "example_code": "<div class='card'>\n  <img src='photo.jpg'>\n  <h2>Chaman</h2>\n  <button id='btn'>Follow</button>\n</div>\n<script>\n  document.getElementById('btn').onclick = () => alert('Followed!');\n</script>",
+      "code_breakdown": [
+        {
+          "part": "<div class='card'>",
+          "explain": "<div> ek container hai jisme hum profile ka saara content rakhte hain. 'class' attribute isse CSS mein pehchan deta hai."
+        },
+        {
+          "part": "<img src='photo.jpg'>",
+          "explain": "<img> tag image dikhane ke liye hai. 'src' (source) batata hai ki photo kahan se leni hai."
+        },
+        {
+          "part": "document.getElementById('btn')",
+          "explain": "JS ka command jo HTML ke us element ko dhundta hai jiski id 'btn' hai."
+        },
+        {
+          "part": ".onclick = () =>",
+          "explain": "Ek 'Event Handler'. Ye batata hai ki jab button par click ho, toh uske baad kya karna hai."
+        }
+      ],
+      "quiz_after_breakdown": [
+        {
+          "type": "mcq",
+          "question": "Profile card ka structure banane ke liye kaunsa tag use hota hai?",
+          "options": [
+            "<div >",
+            "<script>",
+            "<link>"
+          ],
+          "answer": "<div >"
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "Card mein ek h2 tag add karo.",
+          "starter_code": "<div class='card'>\n  ______Chaman______\n</div>"
+        }
+      ],
+      "quiz_after_practice": [
+        {
+          "type": "mcq",
+          "question": "Kya JS ke bina button click hone par alert dikhana possible hai?",
+          "options": [
+            "Haan",
+            "Nahi"
+          ],
+          "answer": "Nahi"
+        }
+      ],
+      "mini_task": "Ek card banao jisme tumhari photo, tumhara naam aur ek Follow button ho. Button click par apna naam alert mein dikhao.",
+      "why_it_matters": "Portfolio websites aur social media pages mein har jagah aise cards use hote hain.",
+      "common_mistake": "Id aur class ko confuse karna. Id unique hoti hai (ek element ke liye), class bahut saare elements ke liye ho sakti hai."
+    },
+    {
+      "lesson_number": 2,
+      "title": "Project 2: Responsive Navigation Bar",
+      "difficulty": "hard",
+      "concept": "Navigation bar website ka 'map' hai. Iske bina user kho jayega. Responsive hone ka matlab hai ki ye mobile aur laptop dono par sahi dikhe. Ismein hum flexbox se alignment aur JS se menu toggle karna seekhenge.",
+      "example_code": "<nav>\n  <h2>MySite</h2>\n  <button id='menu'>☰</button>\n</nav>\n<style>\n  nav { display: flex; justify-content: space-between; background: blue; color: white; padding: 10px; }\n</style>",
+      "code_breakdown": [
+        {
+          "part": "display: flex;",
+          "explain": "Ye CSS property elements ko ek seedhi line mein rakhti hai."
+        },
+        {
+          "part": "justify-content: space-between;",
+          "explain": "Ye property ek element ko left aur doosre ko right mein chipka deti hai."
+        },
+        {
+          "part": "classList.toggle('active')",
+          "explain": "Ye class add ya remove karta hai. Isse hum menu ko 'show' ya 'hide' kar sakte hain."
+        }
+      ],
+      "quiz_after_breakdown": [
+        {
+          "type": "mcq",
+          "question": "Elements ko ek line mein rakhne ke liye kaunsi CSS property best hai?",
+          "options": [
+            "display: block",
+            "display: flex",
+            "display: none"
+          ],
+          "answer": "display: flex"
+        },
+        {
+          "type": "fill_blank",
+          "question": "Class ko on/off karne ke liye ______ method use hota hai.",
+          "answer": "toggle"
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "Nav ko flex property do.",
+          "starter_code": "nav { display: ______; }"
+        },
+        {
+          "instruction": "Toggle logic likho.",
+          "starter_code": "menu.onclick = () => {\n  nav.classList.______( 'active' );\n};"
+        }
+      ],
+      "quiz_after_practice": [
+        {
+          "type": "mcq",
+          "question": "Toggle method tab kaam karta hai jab CSS mein class likhi ho?",
+          "options": [
+            "Haan",
+            "Nahi"
+          ],
+          "answer": "Haan"
+        }
+      ],
+      "mini_task": "Ek navbar banao jisme left mein site ka naam ho aur right mein menu button. JS se button click par background color change karke dekho.",
+      "why_it_matters": "Mobile-friendly menu har modern website ki basic zaroorat hai.",
+      "common_mistake": "HTML tags ko JS mein select karna bhool jana. Hamesha id match karni chahiye."
+    },
+    {
+      "lesson_number": 3,
+      "title": "Project 3: Interactive Image Gallery",
+      "difficulty": "hard",
+      "concept": "Ek achhi gallery sirf photo nahi dikhati, balki user ke saath interact karti hai. Hum CSS 'gap' aur 'flex-wrap' se layout banayenge, aur JS se images par click hone par unhe highlight karenge.",
+      "example_code": "<div class='gallery'>\n  <img src='1.jpg' class='img-item'>\n  <img src='2.jpg' class='img-item'>\n</div>\n<script>\n  document.querySelectorAll('.img-item').forEach(img => {\n    img.onclick = () => img.style.border = '3px solid blue';\n  });\n</script>",
+      "code_breakdown": [
+        {
+          "part": "querySelectorAll('.img-item')",
+          "explain": "Ye ek saath saari images ko select kar leta hai jinki class 'img-item' hai."
+        },
+        {
+          "part": ".forEach(img => { ... })",
+          "explain": "Ye har image par loop chalata hai taaki hum sab par ek saath event laga sakein."
+        },
+        {
+          "part": "flex-wrap: wrap;",
+          "explain": "Agar screen choti ho jaye, toh images automatically neeche wali line mein shift ho jayengi."
+        },
+        {
+          "part": "img.style.border",
+          "explain": "JS se kisi element ka CSS change karne ka direct tarika."
+        }
+      ],
+      "quiz_after_breakdown": [
+        {
+          "type": "mcq",
+          "question": "Ek saath kayi elements select karne ke liye kaunsa method best hai?",
+          "options": [
+            "querySelector",
+            "querySelectorAll",
+            "getElementById"
+          ],
+          "answer": "querySelectorAll"
+        },
+        {
+          "type": "fill_blank",
+          "question": "Images ko wrap karne ke liye CSS mein ______ property use hoti hai.",
+          "answer": "flex-wrap"
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "Gallery mein gap set karo.",
+          "starter_code": ".gallery { display: flex; gap: ______; }"
+        },
+        {
+          "instruction": "Har image par click event lagao.",
+          "starter_code": "images.forEach(img => { img.______ = () => alert('Clicked'); });"
+        }
+      ],
+      "quiz_after_practice": [
+        {
+          "type": "mcq",
+          "question": "Kya forEach loop array ke har element par chalega?",
+          "options": [
+            "Haan",
+            "Nahi"
+          ],
+          "answer": "Haan"
+        }
+      ],
+      "mini_task": "3 images ki ek gallery banao. JS se click hone par image ki opacity 0.5 (faded) kar do.",
+      "why_it_matters": "Portfolio aur e-commerce sites mein gallery interactions user engagement badhate hain.",
+      "common_mistake": "Images ko fixed width dena. Hamesha percentage ya responsive units use karo taki mobile par fit aaye."
+    },
+    {
+      "lesson_number": 4,
+      "title": "Project 4: Contact Form Validation",
+      "difficulty": "hard",
+      "concept": "Form validation ka matlab hai user ko galat data bhejne se rokna. Agar koi 'Name' field khali chhod de, toh JS humein batayegi ki wo zaroori hai. Ye website ki 'peheli security' hai.",
+      "example_code": "<input id='name' placeholder='Name'>\n<button id='send'>Send</button>\n<script>\n  send.onclick = () => {\n    if(name.value === '') alert('Enter name!');\n  };\n</script>",
+      "code_breakdown": [
+        {
+          "part": "input.value",
+          "explain": "Ye property batati hai ki user ne box mein abhi kya likha hai."
+        },
+        {
+          "part": "if (condition)",
+          "explain": "Ye check karta hai ki kya field khali hai (=== '')."
+        },
+        {
+          "part": "alert()",
+          "explain": "User ko browser level par warning dene ka quick method."
+        }
+      ],
+      "quiz_after_breakdown": [
+        {
+          "type": "mcq",
+          "question": "Input field ki text value lene ke liye kaunsi property hai?",
+          "options": [
+            "text",
+            "value",
+            "content"
+          ],
+          "answer": "value"
+        },
+        {
+          "type": "fill_blank",
+          "question": "Empty field check karne ke liye ______ condition use hoti hai.",
+          "answer": "if"
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "Field empty hone par alert dikhao.",
+          "starter_code": "if (name.______ === '') { ______('Field khali hai'); }"
+        },
+        {
+          "instruction": "Button click par function trigger karo.",
+          "starter_code": "send.______ = () => { /* logic */ };"
+        }
+      ],
+      "quiz_after_practice": [
+        {
+          "question": "Validation ke bina kya hoga?",
+          "options": [
+            "Server par galat data jayega",
+            "Kuch nahi hoga"
+          ],
+          "answer": "Server par galat data jayega"
+        }
+      ],
+      "mini_task": "Ek contact form banao jisme 'Name' aur 'Email' ho. Dono khali hone par alag-alag alert dikhao.",
+      "why_it_matters": "Data ki quality maintain karne aur spam se bachne ke liye validation mandatory hai.",
+      "common_mistake": "Input tag ki 'value' property bhool jana. Sirf 'id' likhne se content nahi milta, '.value' zaroori hai."
+    },
+    {
+      "lesson_number": 5,
+      "title": "Project 5: Dark Mode Portfolio",
+      "difficulty": "hard",
+      "concept": "Dark mode user experience (UX) ko improve karta hai, khaas kar raat ke waqt. Iska logic simple hai: Ek CSS class (jaise '.dark') banao, aur JS se jab button click ho, toh poori body par wo class 'toggle' (add/remove) kar do.",
+      "example_code": "<button id='themeBtn'>🌙 Mode</button>\n<style>\n  .dark { background: #111; color: white; }\n</style>\n<script>\n  themeBtn.onclick = () => document.body.classList.toggle('dark');\n</script>",
+      "code_breakdown": [
+        {
+          "part": ".dark { ... }",
+          "explain": "Ye CSS class hai jo background ko black aur text ko white kar degi."
+        },
+        {
+          "part": "document.body",
+          "explain": "Poore webpage ka container (body tag) select karne ka tareeka."
+        },
+        {
+          "part": "classList.toggle('dark')",
+          "explain": "Ye magic command hai: agar '.dark' class hai toh hata dega, nahi hai toh add kar dega."
+        },
+        {
+          "part": "onclick",
+          "explain": "Ye ek 'shortcut' event handler hai jo button click hone par code chalata hai."
+        }
+      ],
+      "quiz_after_breakdown": [
+        {
+          "type": "mcq",
+          "question": "Poore web page ka theme change karne ke liye kisse select karna best hai?",
+          "options": [
+            "h1",
+            "document.body",
+            "div"
+          ],
+          "answer": "document.body"
+        },
+        {
+          "type": "fill_blank",
+          "question": "Class ko on/off karne ke liye ______ method use hota hai.",
+          "answer": "toggle"
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "Body par class toggle karo.",
+          "starter_code": "document.body.classList.______('dark');"
+        },
+        {
+          "instruction": "Button click handler set karo.",
+          "starter_code": "themeBtn.______ = () => { /* logic */ };"
+        }
+      ],
+      "quiz_after_practice": [
+        {
+          "type": "mcq",
+          "question": "Kya toggle karne se CSS file ki properties apne aap apply ho jati hain?",
+          "options": [
+            "Haan",
+            "Nahi"
+          ],
+          "answer": "Haan"
+        }
+      ],
+      "mini_task": "Ek button banao. Click karne par page ka background black aur text white ho jaye. Dobara click karne par original (light) mode mein aa jaye.",
+      "why_it_matters": "Dark mode ab har professional application (Instagram, YouTube) ka basic feature hai.",
+      "common_mistake": "CSS file mein .dark class likhna bhool jana. JS sirf class add karegi, design CSS mein hi likhna hoga."
+    },
+    {
+      "lesson_number": 6,
+      "title": "Project 6: Todo List App",
+      "difficulty": "hard",
+      "concept": "Todo list ek aisa project hai jo 'DOM Manipulation' ka king hai. Ismein hum HTML mein naye elements (li) banate hain aur unhein JavaScript se list mein jodte hain. Ye project sikhata hai ki browser mein naya data live kaise dikhate hain.",
+      "example_code": "<ul id='list'></ul>\n<script>\n  const li = document.createElement('li');\n  li.textContent = 'Learn JS';\n  list.appendChild(li);\n</script>",
+      "code_breakdown": [
+        {
+          "part": "createElement('li')",
+          "explain": "Browser ke memory mein ek naya HTML tag (li) banane ka command."
+        },
+        {
+          "part": "textContent",
+          "explain": "Naye element ke andar text likhne ke liye."
+        },
+        {
+          "part": "appendChild(li)",
+          "explain": "Naye banaye hue element ko main 'list' (ul) ke andar daalne ka command."
+        },
+        {
+          "part": "input.value = ''",
+          "explain": "Task add hone ke baad input box ko dobara khali (empty) karne ke liye."
+        }
+      ],
+      "quiz_after_breakdown": [
+        {
+          "type": "mcq",
+          "question": "Naya HTML element JS se banane ke liye kya use hota hai?",
+          "options": [
+            "addElement()",
+            "createElement()",
+            "newTag()"
+          ],
+          "answer": "createElement()"
+        },
+        {
+          "type": "fill_blank",
+          "question": "Element ko list mein add karne ke liye ______ method hai.",
+          "answer": "appendChild"
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "Naya list item banao.",
+          "starter_code": "const li = document.______( 'li' );"
+        },
+        {
+          "instruction": "List mein add karo.",
+          "starter_code": "list.______( li );"
+        }
+      ],
+      "quiz_after_practice": [
+        {
+          "type": "mcq",
+          "question": "Kya appendChild karne se element screen par dikhega?",
+          "options": [
+            "Haan",
+            "Nahi"
+          ],
+          "answer": "Haan"
+        }
+      ],
+      "mini_task": "Ek input aur button banao. Button click karne par input ka text ek list (ul) mein naye item ki tarah add hona chahiye.",
+      "why_it_matters": "Real apps mein naye comments, messages ya notifications add karne ke liye yehi technique use hoti hai.",
+      "common_mistake": "Naye element ka textContent set karna bhool jana. Agar text nahi doge, toh screen par khali list item dikhega."
+    },
+    {
+      "lesson_number": 7,
+      "title": "Project 7: Mini Calculator",
+      "difficulty": "hard",
+      "concept": "Calculator ek perfect project hai user input aur operators ko samajhne ke liye. Ismein hum do inputs lete hain, unhe `Number()` mein convert karte hain (kyunki JS default mein input ko string manta hai), aur fir math operations perform karte hain.",
+      "example_code": "<input id='n1' type='number'>\n<input id='n2' type='number'>\n<button id='add'>Add</button>\n<script>\n  add.onclick = () => {\n    const res = Number(n1.value) + Number(n2.value);\n    alert('Result: ' + res);\n  };\n</script>",
+      "code_breakdown": [
+        {
+          "part": "type='number'",
+          "explain": "HTML input mein sirf numbers allow karne ke liye."
+        },
+        {
+          "part": "Number(n1.value)",
+          "explain": "Bahut zaroori! JS input value ko 'text' samajhta hai, Number() use convert karke 'math' karne layak banata hai."
+        },
+        {
+          "part": "+",
+          "explain": "Arithmetic operator jo do values ko jodta hai."
+        }
+      ],
+      "quiz_after_breakdown": [
+        {
+          "type": "mcq",
+          "question": "JS mein input value ko number mein badalne ke liye kya function hai?",
+          "options": [
+            "Int()",
+            "Number()",
+            "ToNum()"
+          ],
+          "answer": "Number()"
+        },
+        {
+          "type": "fill_blank",
+          "question": "Calculation ke liye ______ operator use hota hai.",
+          "answer": "+"
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "Input value ko number mein badlo.",
+          "starter_code": "const val = ______(n1.value);"
+        },
+        {
+          "instruction": "Do values ko add karo.",
+          "starter_code": "let sum = v1 ______ v2;"
+        }
+      ],
+      "quiz_after_practice": [
+        {
+          "type": "mcq",
+          "question": "Agar Number() use na karein, toh '1' + '1' kya hoga?",
+          "options": [
+            "2",
+            "'11'"
+          ],
+          "answer": "'11'"
+        }
+      ],
+      "mini_task": "Do input boxes aur ek 'Multiply' button banao. Click karne par dono numbers ka product dikhao.",
+      "why_it_matters": "Billing apps, finance dashboards, aur e-commerce carts mein calculations core logic hoti hain.",
+      "common_mistake": "Input value ko convert na karna. '5' + '5' math mein 10 nahi, '55' (text) hota hai."
+    },
+    {
+      "lesson_number": 8,
+      "title": "Project 8: Digital Clock",
+      "difficulty": "hard",
+      "concept": "Digital clock pehla project hai jahan code khud-ba-khud chalta hai. Hum `setInterval` ka use karte hain, jo har 1 second (1000ms) baad ek function repeat karta hai. Ismein hum JavaScript ke `Date()` object se real-time time nikalte hain.",
+      "example_code": "<h1 id='clock'></h1>\n<script>\n  setInterval(() => {\n    clock.textContent = new Date().toLocaleTimeString();\n  }, 1000);\n</script>",
+      "code_breakdown": [
+        {
+          "part": "setInterval(function, 1000)",
+          "explain": "Ek aisa timer jo har 1000ms (1 second) baad code repeat karta hai."
+        },
+        {
+          "part": "new Date()",
+          "explain": "JS ka built-in object jo computer ka current time/date uthata hai."
+        },
+        {
+          "part": "toLocaleTimeString()",
+          "explain": "Current time ko readable format (12:00:00 PM) mein convert karta hai."
+        }
+      ],
+      "quiz_after_breakdown": [
+        {
+          "type": "mcq",
+          "question": "setInterval mein 1000 ka matlab kya hai?",
+          "options": [
+            "1000 minutes",
+            "1000 seconds",
+            "1000 milliseconds"
+          ],
+          "answer": "1000 milliseconds"
+        },
+        {
+          "type": "fill_blank",
+          "question": "Current time lene ke liye ______ object use hota hai.",
+          "answer": "Date"
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "1 second ka interval set karo.",
+          "starter_code": "setInterval(() => { /* logic */ }, ______);"
+        },
+        {
+          "instruction": "Time ko clock element mein daalo.",
+          "starter_code": "clock.______ = new Date().toLocaleTimeString();"
+        }
+      ],
+      "quiz_after_practice": [
+        {
+          "type": "mcq",
+          "question": "Kya setInterval ko stop kiya ja sakta hai?",
+          "options": [
+            "Haan",
+            "Nahi"
+          ],
+          "answer": "Haan"
+        }
+      ],
+      "mini_task": "Ek h1 banao aur usme live clock chalao. Clock ke niche current date bhi add karo.",
+      "why_it_matters": "Live timers, countdowns aur dashboards ke liye ye sabse basic technique hai.",
+      "common_mistake": "1000ms ki jagah 1 likhna. 1 likhne se code itni tezi se chalega ki browser hang ho sakta hai."
+    },
+    {
+      "lesson_number": 9,
+      "title": "Project 9: Interactive Quiz App",
+      "difficulty": "hard",
+      "concept": "Quiz app logic building ke liye best hai. Ismein hum conditions (if-else) se check karte hain ki answer sahi hai ya nahi, aur variables (score) se progress track karte hain. Ye project tumhe 'state management' ka basic idea deta hai.",
+      "example_code": "<p id='q'>HTML ka full form?</p>\n<button onclick='check(true)'>HyperText</button>\n<button onclick='check(false)'>HomeTool</button>\n<script>\n  let score = 0;\n  const check = (isCorrect) => {\n    if(isCorrect) score++;\n    alert('Score: ' + score);\n  };\n</script>",
+      "code_breakdown": [
+        {
+          "part": "score = 0",
+          "explain": "Ek variable jo user ke sahi jawabon ko track karta hai."
+        },
+        {
+          "part": "onclick='check(true)'",
+          "explain": "HTML button ke andar hi JS function call karna, jisme hum 'true' ya 'false' data bhej rahe hain."
+        },
+        {
+          "part": "score++",
+          "explain": "Iska matlab hai score mein 1 add karo."
+        }
+      ],
+      "quiz_after_breakdown": [
+        {
+          "type": "mcq",
+          "question": "Score badhane ke liye kaunsa operator sahi hai?",
+          "options": [
+            "score--",
+            "score++",
+            "score+"
+          ],
+          "answer": "score++"
+        },
+        {
+          "type": "fill_blank",
+          "question": "Button click par function trigger karne ke liye ______ attribute use hota hai.",
+          "answer": "onclick"
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "Sahi jawab par score badhao.",
+          "starter_code": "if (isCorrect) { ______; }"
+        }
+      ],
+      "quiz_after_practice": [
+        {
+          "type": "mcq",
+          "question": "Kya bina variable ke score track ho sakta hai?",
+          "options": [
+            "Haan",
+            "Nahi"
+          ],
+          "answer": "Nahi"
+        }
+      ],
+      "mini_task": "Do questions ki quiz banao. Sahi jawab par alert mein 'Correct' aur wrong par 'Wrong' dikhao.",
+      "why_it_matters": "Online exams, IQ tests aur learning platforms isi logic par chalte hain.",
+      "common_mistake": "Score variable ko function ke andar banana. Variable hamesha function ke bahar hona chahiye taaki wo har click par reset na ho jaye."
+    },
+    {
+      "lesson_number": 10,
+      "title": "Project 10: Final Portfolio Website",
+      "difficulty": "hard",
+      "concept": "Ab tumne HTML (structure), CSS (design), aur JS (interaction) seekh liya hai. Portfolio website tumhara 'Digital Resume' hai. Ismein hum sab kuch mix karenge: Header, Profile Card, Gallery, Dark Mode aur Contact Form.",
+      "example_code": "\n<header><h1>Chaman Portfolio</h1></header>\n<section id='about'><h2>About Me</h2></section>\n<script>\n  document.title = 'Chaman | Developer';\n</script>",
+      "code_breakdown": [
+        {
+          "part": "Hero Section",
+          "explain": "Website ka top part jahan tumhara introduction aur photo hoti hai."
+        },
+        {
+          "part": "Responsive Structure",
+          "explain": "CSS flex aur grid se website ko mobile aur desktop dono par achha dikhana."
+        },
+        {
+          "part": "Integration",
+          "explain": "Pehle banaye huye chote projects (clock, dark mode) ko ek hi page par jodna."
+        }
+      ],
+      "quiz_after_breakdown": [
+        {
+          "type": "mcq",
+          "question": "Ek pro portfolio mein kya hona chahiye?",
+          "options": [
+            "Sirf photo",
+            "Projects, About, Contact, Responsive design",
+            "Sirf alert box"
+          ],
+          "answer": "Projects, About, Contact, Responsive design"
+        },
+        {
+          "type": "fill_blank",
+          "question": "Portfolio ko mobile par sahi dikhane ke liye ______ design zaroori hai.",
+          "answer": "responsive"
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "Portfolio mein 'About' section banao.",
+          "starter_code": "<section id='about'>\n  ______\n</section>"
+        }
+      ],
+      "quiz_after_practice": [
+        {
+          "type": "mcq",
+          "question": "Kya portfolio website ko baar-baar update karna chahiye?",
+          "options": [
+            "Haan, jaise naye projects bane",
+            "Nahi, ek baar bana kar chhod do"
+          ],
+          "answer": "Haan, jaise naye projects bane"
+        }
+      ],
+      "mini_task": "Ek page banao jisme tumhari photo, skills, 3 projects, aur contact form ho. Dark mode button footer mein add karo.",
+      "why_it_matters": "Ye project tumhe internship ya freelance kaam dilwane mein sabse zyada help karega.",
+      "common_mistake": "Sab kuch ek hi file mein likhna. Code ko organize karne ke liye HTML, CSS aur JS ki alag files use karo."
+    },
+    {
+      "lesson_number": 11,
+      "title": "Project 11: AI Chat Interface",
+      "difficulty": "hard",
+      "concept": "AI tools (like ChatGPT) ka interface bahut clean hota hai. Iska core logic: User input leta hai, usse screen par ek 'bubble' ki tarah display karta hai, aur puraane messages ko save rakhta hai. Ye project DOM manipulation aur Arrays ka masterclass hai.",
+      "example_code": "<div id='chat-box'></div>\n<input id='userInput' placeholder='Ask AI...'>\n<button id='sendBtn'>Send</button>\n<script>\n  sendBtn.onclick = () => {\n    const msg = document.createElement('div');\n    msg.textContent = userInput.value;\n    chatBox.appendChild(msg);\n    userInput.value = '';\n  };\n</script>",
+      "code_breakdown": [
+        {
+          "part": "chatBox.appendChild(msg)",
+          "explain": "DOM mein har naya message ek naye element ke roop mein add karna."
+        },
+        {
+          "part": "userInput.value = ''",
+          "explain": "Message bhejte hi input box ko khali (reset) karna, taaki user agli baat likh sake."
+        },
+        {
+          "part": "innerHTML vs textContent",
+          "explain": "textContent text ke liye safe hai, innerHTML se hum HTML tags (like <b>) bhi inject kar sakte hain."
+        }
+      ],
+      "quiz_after_breakdown": [
+        {
+          "type": "mcq",
+          "question": "Chat mein naya message add karne ke liye kaunsa method best hai?",
+          "options": [
+            "appendChild",
+            "replaceChild",
+            "removeChild"
+          ],
+          "answer": "appendChild"
+        },
+        {
+          "type": "fill_blank",
+          "question": "Message bhejne ke baad input box ko ______ karna zaroori hai.",
+          "answer": "reset"
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "Naya message div banao.",
+          "starter_code": "const msg = document.______( 'div' );"
+        }
+      ],
+      "quiz_after_practice": [
+        {
+          "type": "mcq",
+          "question": "Kya AI interface mein scrollbar hona zaroori hai?",
+          "options": [
+            "Haan, bahut saare messages ke liye",
+            "Nahi"
+          ],
+          "answer": "Haan, bahut saare messages ke liye"
+        }
+      ],
+      "mini_task": "Ek chat box banao jisme CSS se 'bubble' design do. Send button dabane par chat mein message add karo.",
+      "why_it_matters": "Messaging apps aur AI tools aajkal har business ki zaroorat hain.",
+      "common_mistake": "Messages ko ulta add karna (purane messages ke upar naya). Hamesha appendChild use karo taki wo end mein jayein."
+    },
+    {
+      "lesson_number": 12,
+      "title": "Project 12: Live Search Filter",
+      "difficulty": "hard",
+      "concept": "Search filter ek bahut bada feature hai. Ismein hum array mein rakhe data ko filter karte hain. Jaise hi user type karta hai, hum CSS `display: none` ka use karke non-matching results ko chupa dete hain.",
+      "example_code": "<input id='search' onkeyup='filterList()'>\n<ul id='list'><li>HTML</li><li>CSS</li><li>JS</li></ul>\n<script>\n  function filterList() {\n    const val = search.value.toLowerCase();\n    document.querySelectorAll('li').forEach(li => {\n      li.style.display = li.textContent.toLowerCase().includes(val) ? '' : 'none';\n    });\n  }\n</script>",
+      "code_breakdown": [
+        {
+          "part": "onkeyup",
+          "explain": "Keyboard ka button chhodte hi trigger hone wala event."
+        },
+        {
+          "part": ".includes()",
+          "explain": "Check karta hai ki kya 'search text' list item ke naam mein hai."
+        },
+        {
+          "part": "? '' : 'none'",
+          "explain": "Ternary operator: Agar match mila toh empty (show), nahi toh 'none' (hide)."
+        }
+      ],
+      "quiz_after_breakdown": [
+        {
+          "type": "mcq",
+          "question": "Type karte waqt turant trigger hone wala event kaunsa hai?",
+          "options": [
+            "onclick",
+            "onkeyup",
+            "onload"
+          ],
+          "answer": "onkeyup"
+        },
+        {
+          "type": "fill_blank",
+          "question": "Match check karne ke liye ______ method use hota hai.",
+          "answer": "includes"
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "List item ko hide karo.",
+          "starter_code": "li.style.display = '______';"
+        }
+      ],
+      "quiz_after_practice": [
+        {
+          "type": "mcq",
+          "question": "Search mein .toLowerCase() kyun use karte hain?",
+          "options": [
+            "Capital/Small letter match karne ke liye",
+            "Text chhota karne ke liye"
+          ],
+          "answer": "Capital/Small letter match karne ke liye"
+        }
+      ],
+      "mini_task": "Ek list banao (Programming Languages). Search input banao jo sirf match karne wale items dikhaye.",
+      "why_it_matters": "E-commerce aur large contact lists mein search filter ke bina user data nahi dhoond sakta.",
+      "common_mistake": "Case sensitivity. Agar user 'html' likhe aur tumhare data mein 'HTML' ho, toh bina toLowerCase() ke wo match nahi karega."
+    },
+    {
+      "lesson_number": 13,
+      "title": "Project 13: Like Button Counter",
+      "difficulty": "easy",
+      "concept": "Like button engagement ka sabse popular tareeka hai. Iska logic simple hai: Ek variable mein likes ki count rakho, aur button click par use `++` (increment) karke screen par update kar do. Ye 'State' (data ka current status) manage karne ka basic hai.",
+      "example_code": "<button id='likeBtn'>❤️ Like</button>\n<p id='count'>0</p>\n<script>\n  let likes = 0;\n  likeBtn.onclick = () => {\n    likes++;\n    count.textContent = likes;\n  };\n</script>",
+      "code_breakdown": [
+        {
+          "part": "let likes = 0",
+          "explain": "Likes ko track karne ke liye 'State' variable. Hamesha function ke bahar rakho."
+        },
+        {
+          "part": "likes++",
+          "explain": "Increment operator. Ye purani value mein 1 add kar deta hai."
+        },
+        {
+          "part": "count.textContent",
+          "explain": "HTML element ke andar ka data update karne ka tareeka."
+        }
+      ],
+      "quiz_after_breakdown": [
+        {
+          "type": "mcq",
+          "question": "Like button ke liye kaunsa operator sahi hai?",
+          "options": [
+            "likes--",
+            "likes++",
+            "likes+1"
+          ],
+          "answer": "likes++"
+        },
+        {
+          "type": "fill_blank",
+          "question": "Likes track karne ke liye ______ variable zaroori hai.",
+          "answer": "state"
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "Likes ko badhao.",
+          "starter_code": "likeBtn.onclick = () => { likes______; };"
+        }
+      ],
+      "quiz_after_practice": [
+        {
+          "type": "mcq",
+          "question": "Kya likes variable function ke andar hona chahiye?",
+          "options": [
+            "Haan",
+            "Nahi"
+          ],
+          "answer": "Nahi"
+        }
+      ],
+      "mini_task": "Ek 'Like' button banao. Click karne par count badho, aur counter ka color 'red' ho jaye.",
+      "why_it_matters": "Har social media aur blog platform engagement track karne ke liye yehi concept use karta hai.",
+      "common_mistake": "Variable ko click event ke andar zero set karna. Isse click karne par hamesha '1' hi dikhega."
+    },
+    {
+      "lesson_number": 14,
+      "title": "Project 14: Image Slider",
+      "difficulty": "hard",
+      "concept": "Product galleries ke liye image sliders sabse best hote hain. Hum images ka ek 'Array' banate hain aur 'Index' (position number) change karke image ka 'src' update karte hain. Ye project array indexing aur dynamic attribute handling ka perfect combination hai.",
+      "example_code": "<img id='img' src='1.jpg'>\n<button id='next'>Next</button>\n<script>\n  const images = ['1.jpg', '2.jpg', '3.jpg'];\n  let i = 0;\n  next.onclick = () => {\n    i = (i + 1) % images.length;\n    img.src = images[i];\n  };\n</script>",
+      "code_breakdown": [
+        {
+          "part": "const images = [...]",
+          "explain": "Images ke paths (urls) ki ek list (Array)."
+        },
+        {
+          "part": "i = (i + 1) % images.length",
+          "explain": "Modulo (%) operator. Ye logic wapas 0 par aa jata hai jab list khatam ho jaye (infinite loop)."
+        },
+        {
+          "part": "img.src",
+          "explain": "JavaScript se image source dynamically change karna."
+        }
+      ],
+      "quiz_after_breakdown": [
+        {
+          "type": "mcq",
+          "question": "Modulo (%) operator ka slider mein kya kaam hai?",
+          "options": [
+            "Maths calculation",
+            "Infinite loop create karna",
+            "Image resize karna"
+          ],
+          "answer": "Infinite loop create karna"
+        },
+        {
+          "type": "fill_blank",
+          "question": "Images store karne ke liye ______ best hai.",
+          "answer": "Array"
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "Array se image source update karo.",
+          "starter_code": "img.src = images[______];"
+        }
+      ],
+      "quiz_after_practice": [
+        {
+          "type": "mcq",
+          "question": "Kya slider ke liye HTML mein saari images hona zaroori hai?",
+          "options": [
+            "Nahi, JS sirf 1 img tag update karti hai",
+            "Haan, saari images ek saath honi chahiye"
+          ],
+          "answer": "Nahi, JS sirf 1 img tag update karti hai"
+        }
+      ],
+      "mini_task": "3 images ka array banao aur button click par unhe badlo.",
+      "why_it_matters": "Portfolio galleries aur e-commerce product pages ke liye slider industry standard hai.",
+      "common_mistake": "Index ko array ki length se zyada badha dena. Hamesha modulo (%) ya if-else se check karo ki index array limit mein hai."
+    },
+    {
+      "lesson_number": 15,
+      "title": "Project 15: Toast Notification",
+      "difficulty": "hard",
+      "concept": "Jab koi file save hoti hai ya message jata hai, toh screen ke kone mein chhota sa popup aata hai—use 'Toast' kehte hain. Ye user ko bina disturb kiye feedback deta hai. Hum ise 'setTimeout' se automatically hide karna seekhenge.",
+      "example_code": "<div id='toast' style='display:none;'>Saved!</div>\n<button id='btn'>Save</button>\n<script>\n  btn.onclick = () => {\n    toast.style.display = 'block';\n    setTimeout(() => toast.style.display = 'none', 2000);\n  };\n</script>",
+      "code_breakdown": [
+        {
+          "part": "setTimeout(func, 2000)",
+          "explain": "Ye function 2000ms (2 seconds) ka wait karta hai aur phir andar wala code chala deta hai."
+        },
+        {
+          "part": "style.display = 'block'",
+          "explain": "Hidden element ko screen par dikhane ka tareeka."
+        }
+      ],
+      "quiz_after_breakdown": [
+        {
+          "type": "mcq",
+          "question": "Kuch der baad code chalane ke liye kaunsa method use hota hai?",
+          "options": [
+            "setInterval",
+            "setTimeout",
+            "delay"
+          ],
+          "answer": "setTimeout"
+        },
+        {
+          "type": "fill_blank",
+          "question": "Notification ko hide karne ke liye display ko ______ karte hain.",
+          "answer": "none"
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "3 second ka timer lagao.",
+          "starter_code": "setTimeout(() => { /* logic */ }, ______);"
+        }
+      ],
+      "quiz_after_practice": [
+        {
+          "type": "mcq",
+          "question": "Kya 2000ms ka matlab 2 seconds hai?",
+          "options": [
+            "Haan",
+            "Nahi"
+          ],
+          "answer": "Haan"
+        }
+      ],
+      "mini_task": "Ek button banao. Click karne par 'Message Sent!' ka toast dikhao jo 3 seconds baad gayab ho jaye.",
+      "why_it_matters": "User experience (UX) mein notifications ek bahut zaroori communication tool hain.",
+      "common_mistake": "Time ko milliseconds mein na likhna. Hamesha 1000ms = 1s yaad rakho."
+    },
+    {
+      "lesson_number": 16,
+      "title": "Project 16: Copy to Clipboard",
+      "difficulty": "hard",
+      "concept": "Aaj kal 'Copy Link' ya 'Copy Coupon' button har jagah hote hain. JavaScript ki 'Clipboard API' browser se direct text user ke phone ke clipboard mein save kar deti hai. Ye ek chhota feature hai par user ka kaam bahut aasaan kar deta hai.",
+      "example_code": "<input id='txt' value='Hello'>\n<button id='copyBtn'>Copy</button>\n<script>\n  copyBtn.onclick = () => {\n    navigator.clipboard.writeText(txt.value);\n    alert('Copied!');\n  };\n</script>",
+      "code_breakdown": [
+        {
+          "part": "navigator.clipboard",
+          "explain": "Browser ka official tool jo clipboard control karta hai."
+        },
+        {
+          "part": "writeText()",
+          "explain": "Ye method text ko clipboard mein save karta hai."
+        }
+      ],
+      "quiz_after_breakdown": [
+        {
+          "type": "mcq",
+          "question": "Clipboard mein text likhne ke liye kaunsa method hai?",
+          "options": [
+            "writeText",
+            "readText",
+            "copyText"
+          ],
+          "answer": "writeText"
+        },
+        {
+          "type": "fill_blank",
+          "question": "Clipboard API ______ object ke andar hoti hai.",
+          "answer": "navigator"
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "Text copy ka method likho.",
+          "starter_code": "navigator.clipboard.______(text);"
+        }
+      ],
+      "quiz_after_practice": [
+        {
+          "type": "mcq",
+          "question": "Kya ye feature security ke liye browser permission mangta hai?",
+          "options": [
+            "Haan",
+            "Nahi"
+          ],
+          "answer": "Haan"
+        }
+      ],
+      "mini_task": "Ek input mein apna link likho, aur button click par use copy karke alert mein 'Copied!' dikhao.",
+      "why_it_matters": "Invite links, coupon codes, aur account details share karne ke liye ye best UX hai.",
+      "common_mistake": "writeText() ko empty rakhna. Copy karne ke liye iske andar text string ya variable hona zaroori hai."
+    },
+    {
+      "lesson_number": 17,
+      "title": "Project 17: Animated Progress Bar",
+      "difficulty": "hard",
+      "concept": "Progress bar user ko feedback deta hai ki kaam kitna hua hai (jaise file upload ya download). Iska logic CSS 'width' property ko JavaScript se change karna hai. Ye project CSS transitions aur JS dynamic styling ka behtareen combination hai.",
+      "example_code": "<div class='bar'><div id='progress'></div></div>\n<button id='start'>Start</button>\n<style>\n  .bar { width: 200px; height: 20px; background: #ddd; }\n  #progress { height: 100%; width: 0; background: green; transition: width 0.5s; }\n</style>\n<script>\n  start.onclick = () => progress.style.width = '75%';\n</script>",
+      "code_breakdown": [
+        {
+          "part": "transition: width 0.5s;",
+          "explain": "CSS property jo width change hone par smooth animation deti hai."
+        },
+        {
+          "part": "progress.style.width",
+          "explain": "JavaScript se kisi element ki CSS 'width' property ko change karna."
+        }
+      ],
+      "quiz_after_breakdown": [
+        {
+          "type": "mcq",
+          "question": "Animation ko smooth banane ke liye CSS mein kya zaroori hai?",
+          "options": [
+            "transition",
+            "transform",
+            "animation"
+          ],
+          "answer": "transition"
+        },
+        {
+          "type": "fill_blank",
+          "question": "JS se style badalne ke liye ______ object use hota hai.",
+          "answer": "style"
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "Width ko 50% set karo.",
+          "starter_code": "progress.style.width = '______';"
+        }
+      ],
+      "quiz_after_practice": [
+        {
+          "type": "mcq",
+          "question": "Kya width bina transition ke animate hogi?",
+          "options": [
+            "Haan",
+            "Nahi, wo jhatke se badlegi"
+          ],
+          "answer": "Nahi, wo jhatke se badlegi"
+        }
+      ],
+      "mini_task": "Ek progress bar banao. Button click par width 0% se 100% kar do.",
+      "why_it_matters": "Downloads, uploads aur course progress dikhane ke liye ye standard UI hai.",
+      "common_mistake": "Width mein '%' symbol bhool jana. '100' pixel ho jayega, '100%' pura bar fill karega."
+    },
+    {
+      "lesson_number": 18,
+      "title": "Project 18: Loading Spinner",
+      "difficulty": "hard",
+      "concept": "Jab website data fetch kar rahi ho, toh user ko spinner dikhana chahiye taaki wo confuse na ho. Spinner CSS 'keyframes' animation se banta hai aur JS se use tab hide karte hain jab data load ho jaye.",
+      "example_code": "<div id='loader'></div>\n<style>\n  #loader { width: 40px; height: 40px; border: 5px solid #ccc; border-top: 5px solid blue; border-radius: 50%; animation: spin 1s linear infinite; }\n  @keyframes spin { to { transform: rotate(360deg); } }\n</style>\n<script>\n  setTimeout(() => loader.style.display = 'none', 3000);\n</script>",
+      "code_breakdown": [
+        {
+          "part": "@keyframes spin",
+          "explain": "CSS animation jo rotation ka rule banati hai."
+        },
+        {
+          "part": "infinite",
+          "explain": "Animation ko kabhi na rukne wala loop dena."
+        },
+        {
+          "part": "border-top",
+          "explain": "Spinner ka wo hissa jo color dikhata hai, baaki border ko halka rakhte hain."
+        }
+      ],
+      "quiz_after_breakdown": [
+        {
+          "type": "mcq",
+          "question": "Animation banane ke liye CSS rule kaunsa hai?",
+          "options": [
+            "@keyframes",
+            "@animate",
+            "@rotation"
+          ],
+          "answer": "@keyframes"
+        },
+        {
+          "type": "fill_blank",
+          "question": "Spinning rokne ke liye display ko ______ karte hain.",
+          "answer": "none"
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "Rotation 360 degree set karo.",
+          "starter_code": "transform: rotate(______);"
+        }
+      ],
+      "quiz_after_practice": [
+        {
+          "type": "mcq",
+          "question": "Kya loader spinner ke liye CSS animation zaroori hai?",
+          "options": [
+            "Haan",
+            "Nahi"
+          ],
+          "answer": "Haan"
+        }
+      ],
+      "mini_task": "Ek spinner banao jo 2 second baad automatically screen se hat jaye.",
+      "why_it_matters": "User ko website ke 'waiting time' mein engage rakhne ke liye ye best UX practice hai.",
+      "common_mistake": "Animation mein 'infinite' likhna bhool jana. Isse spinner bas ek baar ghoom kar ruk jayega."
+    },
+    {
+      "lesson_number": 19,
+      "title": "Project 19: Music Player UI",
+      "difficulty": "hard",
+      "concept": "Music players mein 'Play' aur 'Pause' button ke beech switch karna 'State Management' ka basic example hai. Ismein hum ek variable (boolean) ka use karte hain jo track karta hai ki music abhi chal raha hai ya nahi. Ye logic tumhare saare interactive projects ka base banega.",
+      "example_code": "<button id='playBtn'>▶ Play</button>\n<script>\n  let isPlaying = false;\n  playBtn.onclick = () => {\n    isPlaying = !isPlaying;\n    playBtn.textContent = isPlaying ? '⏸ Pause' : '▶ Play';\n  };\n</script>",
+      "code_breakdown": [
+        {
+          "part": "let isPlaying = false",
+          "explain": "Ek variable jo music ki 'state' (status) ko save rakhta hai."
+        },
+        {
+          "part": "isPlaying = !isPlaying",
+          "explain": "Logical NOT (!) operator. Ye true ko false aur false ko true mein flip kar deta hai."
+        },
+        {
+          "part": "isPlaying ? 'Pause' : 'Play'",
+          "explain": "Ternary operator. Ye 'if-else' ka short version hai. Agar true, toh Pause; nahi toh Play."
+        }
+      ],
+      "quiz_after_breakdown": [
+        {
+          "type": "mcq",
+          "question": "Variable ki value ko flip (true/false) karne ke liye kaunsa operator sahi hai?",
+          "options": [
+            "!",
+            "!!",
+            "!!="
+          ],
+          "answer": "!"
+        },
+        {
+          "type": "fill_blank",
+          "question": "If-else ka short version ______ operator kehlata hai.",
+          "answer": "ternary"
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "State flip karo.",
+          "starter_code": "isPlaying = ______isPlaying;"
+        }
+      ],
+      "quiz_after_practice": [
+        {
+          "type": "mcq",
+          "question": "Kya ternary operator bina condition ke kaam kar sakta hai?",
+          "options": [
+            "Nahi",
+            "Haan"
+          ],
+          "answer": "Nahi"
+        }
+      ],
+      "mini_task": "Ek button banao. Click karne par button ka text 'Play' se 'Pause' aur 'Pause' se 'Play' hona chahiye.",
+      "why_it_matters": "Spotify, YouTube aur har video player isi 'toggle state' logic par kaam karta hai.",
+      "common_mistake": "Ternary operator mein '?' aur ':' ka order bhool jana. Yaad rakho: Condition ? TrueValue : FalseValue."
+    },
+    {
+      "lesson_number": 20,
+      "title": "Project 20: AI Startup Landing Page",
+      "difficulty": "hard",
+      "concept": "Ye tumhara Final Masterpiece hai! Ek modern AI startup landing page mein sab kuch hota hai: Hero section, Features, Pricing, aur Contact. Is project mein tum HTML, CSS, JS, Dark Mode, Forms aur Dynamic UI ko ek saath jodo. Ye tumhara real portfolio project banega.",
+      "example_code": "<header><h1>Chaman AI</h1><button id='cta'>Try Now</button></header>\n<main>\n  <section class='hero'><h2>Future of AI</h2></section>\n</main>\n<script>\n  cta.onclick = () => alert('Welcome to the AI Era!');\n</script>",
+      "code_breakdown": [
+        {
+          "part": "Header/Main/Section Tags",
+          "explain": "Semantic HTML tags. Ye browser aur SEO ke liye website ko samajhna aasaan banate hain."
+        },
+        {
+          "part": "Hero Section",
+          "explain": "Website ka wo top section jo user ko website ka purpose turant samjhata hai."
+        },
+        {
+          "part": "Component Integration",
+          "explain": "Ismein tum pichhle lessons ke components (dark mode, validation, notification) ko insert karoge."
+        }
+      ],
+      "quiz_after_breakdown": [
+        {
+          "type": "mcq",
+          "question": "Landing page ka sabse important section kaunsa hota hai?",
+          "options": [
+            "Hero Section",
+            "Footer",
+            "Navbar"
+          ],
+          "answer": "Hero Section"
+        },
+        {
+          "type": "fill_blank",
+          "question": "Website ke structure ke liye ______ HTML tags use karne chahiye.",
+          "answer": "semantic"
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "Hero section mein heading dalo.",
+          "starter_code": "<section class='hero'><h1>______</h1></section>"
+        }
+      ],
+      "quiz_after_practice": [
+        {
+          "type": "mcq",
+          "question": "Kya landing page responsive hona zaroori hai?",
+          "options": [
+            "Haan",
+            "Nahi"
+          ],
+          "answer": "Haan"
+        }
+      ],
+      "mini_task": "Ek landing page banao: Hero section, 3 feature cards, pricing table, aur footer. Dark mode button add karo.",
+      "why_it_matters": "Professional AI startups aur SaaS companies ka landing page aisa hi hota hai. Ye project tumhari 'Full-Stack Frontend' capability dikhayega.",
+      "common_mistake": "Bahut zyada CSS animation dalna. Landing page fast hona chahiye, isliye design ko clean rakho."
+    }
+  ]
+}
