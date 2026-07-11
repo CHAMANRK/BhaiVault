@@ -1,0 +1,387 @@
+{
+  "language": "HTML",
+  "course_title": "HTML for Complete Beginners (Mobile Friendly)",
+  "lessons": [
+    {
+      "lesson_number": 1,
+      "title": "HTML Kya Hai?",
+      "difficulty": "easy",
+      "concept": "Socho tum ek ghar bana rahe ho. Furniture aur paint baad me aayega, lekin pehle deeware aur rooms banana padta hai. HTML bhi website ka structure banata hai. Ye browser ko batata hai ki page par kya-kya hona chahiye.",
+      "example_code": "<h1>Hello World!</h1>\n<p>Meri pehli HTML file.</p>",
+      "code_breakdown": [
+        {
+          "part": "<h1>",
+          "explain": "Ye opening heading tag hai. Iske baad jo text likhte ho wo sabse badi heading banta hai. HTML me h1 se h6 tak headings hoti hain. h1 sabse badi aur h6 sabse chhoti hoti hai. Aksar ek page me sirf ek h1 rakhna best practice mana jata hai."
+        },
+        {
+          "part": "Hello World!",
+          "explain": "Ye heading ka actual text hai. Iski jagah tum apna naam, website title ya koi bhi heading likh sakte ho."
+        },
+        {
+          "part": "</h1>",
+          "explain": "Ye closing tag hai. Browser ko batata hai ki heading yahin khatam ho gayi."
+        },
+        {
+          "part": "<p>",
+          "explain": "Ye paragraph ka opening tag hai. Normal text likhne ke liye use hota hai. Agar lambi information likhni ho to paragraph use karte hain."
+        },
+        {
+          "part": "Meri pehli HTML file.",
+          "explain": "Ye paragraph ke andar likha hua normal text hai. Iski jagah tum koi bhi sentence likh sakte ho."
+        },
+        {
+          "part": "</p>",
+          "explain": "Ye paragraph ka closing tag hai. Browser ko batata hai ki paragraph yahan khatam ho gaya."
+        },
+        {
+          "part": "<",
+          "explain": "Ye angle bracket tag ki shuruaat dikhata hai. Lagbhag har HTML tag isi symbol se start hota hai."
+        },
+        {
+          "part": ">",
+          "explain": "Ye angle bracket tag ka end batata hai. Browser iske baad content padhna shuru karta hai."
+        },
+        {
+          "part": "/",
+          "explain": "Closing tag me slash batata hai ki ye tag band ho raha hai. Jaise </h1> aur </p>."
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "Heading ko apne naam se replace karo aur niche ek paragraph me apne baare me ek line likho.",
+          "starter_code": "<h1>Apna Naam</h1>\n<p>______________________</p>"
+        }
+      ],
+      "mini_task": "Ek page banao jisme ek h1 heading aur uske niche do alag paragraphs likho. Heading me apna naam aur paragraphs me apne hobbies aur favourite game likho.",
+      "why_it_matters": "Har website HTML se hi shuru hoti hai. Agar HTML samajh aa gaya to CSS aur JavaScript seekhna bahut aasaan ho jata hai.",
+      "common_mistake": "Bahut beginners closing tag bhool jate hain, jaise </h1> ya </p>. Hamesha check karo ki opening aur closing dono tags maujood hon."
+    },
+    {
+      "lesson_number": 2,
+      "title": "Headings Aur Paragraph",
+      "difficulty": "easy",
+      "concept": "Socho tum ek kitab padh rahe ho. Har chapter ka ek bada title hota hai aur uske niche uski details likhi hoti hain. Website me bhi headings aur paragraphs isi tarah information ko organize karte hain, jisse padhna aasaan ho jata hai.",
+      "example_code": "<h1>Mera Portfolio</h1>\n<h2>About Me</h2>\n<p>Main HTML seekh raha hoon aur mobile se websites banana practice kar raha hoon.</p>",
+      "code_breakdown": [
+        {
+          "part": "<h1>",
+          "explain": "Sabse badi heading ka opening tag. Page ka main title dikhane ke liye use hota hai. HTML me h1 se h6 tak headings hoti hain. h1 sabse badi aur h6 sabse chhoti hoti hai."
+        },
+        {
+          "part": "Mera Portfolio",
+          "explain": "Ye heading ka text hai. Iski jagah tum apna naam, website ka naam ya project ka title likh sakte ho."
+        },
+        {
+          "part": "</h1>",
+          "explain": "Heading ko close karta hai. Har opening h1 tag ka closing hamesha hona chahiye."
+        },
+        {
+          "part": "<h2>",
+          "explain": "Second level heading ka opening tag. Ye main heading ke andar kisi section ka title dikhane ke liye use hota hai. Agar aur chhote sections hon to h3, h4, h5 aur h6 bhi use kar sakte ho."
+        },
+        {
+          "part": "About Me",
+          "explain": "Ye section ka naam hai. Iski jagah Skills, Projects, Contact ya Education bhi likh sakte ho."
+        },
+        {
+          "part": "</h2>",
+          "explain": "Second level heading ko close karta hai."
+        },
+        {
+          "part": "<p>",
+          "explain": "Paragraph ka opening tag. Normal information, description ya story likhne ke liye use hota hai."
+        },
+        {
+          "part": "Main HTML seekh raha hoon aur mobile se websites banana practice kar raha hoon.",
+          "explain": "Ye paragraph ka content hai. Isme tum jitna chahe normal text likh sakte ho."
+        },
+        {
+          "part": "</p>",
+          "explain": "Paragraph ko close karta hai."
+        },
+        {
+          "part": "<",
+          "explain": "Har HTML tag ki shuruaat is symbol se hoti hai."
+        },
+        {
+          "part": ">",
+          "explain": "Tag ka end batata hai."
+        },
+        {
+          "part": "/",
+          "explain": "Closing tag me use hota hai aur batata hai ki tag yahan khatam ho gaya."
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "Ek h1 me apna naam likho, ek h2 me 'My Hobbies' likho aur niche ek paragraph me apni favourite hobby likho.",
+          "starter_code": "<h1>____________</h1>\n<h2>____________</h2>\n<p>______________________________</p>"
+        }
+      ],
+      "mini_task": "Apna ek mini profile page banao jisme h1 me apna naam, h2 me 'About Me' aur uske niche do paragraphs likho. Pehle paragraph me apne baare me aur dusre me apna favourite game ya movie likho.",
+      "why_it_matters": "Blogs, portfolio websites, news sites aur almost har webpage headings aur paragraphs ka use karta hai. Ye content ko clean aur readable banate hain.",
+      "common_mistake": "Bahut beginners sirf h1 hi baar-baar use karte hain. Har heading h1 nahi hoti. Main title ke liye h1 aur sections ke liye h2, h3 waqera use karna better practice hai."
+    },
+    {
+      "lesson_number": 3,
+      "title": "Links Aur Buttons",
+      "difficulty": "hard",
+      "concept": "Socho tum ek mall me ho. Ek board tumhe dusri shop tak le jata hai, aur ek lift ka button dabane par action hota hai. Website me bhi Link user ko dusre page par le jata hai, jabki Button kisi action ko start karne ke liye use hota hai.",
+      "example_code": "<a href=\"https://google.com\">Google Kholo</a>\n<button>Click Me</button>",
+      "code_breakdown": [
+        {
+          "part": "<a",
+          "explain": "Ye Anchor tag ka opening part hai. Anchor tag links banane ke liye use hota hai."
+        },
+        {
+          "part": "href",
+          "explain": "href ka matlab Hypertext Reference hota hai. Isme batate hain ki click karne par user kahan jayega. Ye kisi website, file ya page ke section ka address ho sakta hai."
+        },
+        {
+          "part": "\"https://google.com\"",
+          "explain": "Ye URL (website address) hai. Iski jagah tum https://youtube.com, https://github.com ya apni website ka link bhi de sakte ho."
+        },
+        {
+          "part": ">",
+          "explain": "Ye opening tag ko khatam karta hai. Iske baad link ka text likha jata hai."
+        },
+        {
+          "part": "Google Kholo",
+          "explain": "Ye clickable text hai. User isi text par tap ya click karta hai. Iski jagah koi bhi naam likh sakte ho."
+        },
+        {
+          "part": "</a>",
+          "explain": "Ye Anchor tag ko close karta hai. Har opening <a> ka closing </a> hona chahiye."
+        },
+        {
+          "part": "<button>",
+          "explain": "Button ka opening tag hai. Button click karne ke liye dikhaya jata hai. Sirf HTML me button dikhega, action baad me JavaScript se add karenge."
+        },
+        {
+          "part": "Click Me",
+          "explain": "Ye button par dikhne wala text hai. Iski jagah Submit, Login, Register, Buy Now ya Contact Me likh sakte ho."
+        },
+        {
+          "part": "</button>",
+          "explain": "Ye button tag ko close karta hai."
+        },
+        {
+          "part": "<",
+          "explain": "Har HTML tag ki shuruaat is symbol se hoti hai."
+        },
+        {
+          "part": ">",
+          "explain": "Ye batata hai ki tag complete ho gaya."
+        },
+        {
+          "part": "/",
+          "explain": "Closing tag me use hota hai aur batata hai ki element yahan khatam ho gaya."
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "Ek link banao jo YouTube khole aur uske niche ek button banao jiska text 'Start Learning' ho.",
+          "starter_code": "<a href=\"____________\">YouTube</a>\n<button>____________</button>"
+        },
+        {
+          "instruction": "Ab ek link banao jo GitHub khole, aur do buttons banao: 'Contact Me' aur 'View Projects'.",
+          "starter_code": "<a href=\"____________\">GitHub</a>\n<button>____________</button>\n<button>____________</button>"
+        }
+      ],
+      "mini_task": "Ek chhota webpage banao jisme ek h1 heading 'My Favourite Websites' ho. Uske niche Google aur YouTube ke do alag links banao aur sabse niche 'Visit More' naam ka ek button add karo.",
+      "why_it_matters": "Har website me navigation links aur buttons hote hain. Login, Signup, Buy Now, Contact Us aur Menu sab isi concept par kaam karte hain.",
+      "common_mistake": "Bahut beginners href attribute likhna bhool jate hain ya URL ke around quotes (\"\") nahi lagate. Agar href nahi hoga to link sahi tarah kaam nahi karega."
+    },
+    {
+      "lesson_number": 4,
+      "title": "Images Add Karna",
+      "explanation": "Website bina images ke adhuri lag sakti hai. HTML ka img tag image dikhane ke liye use hota hai.\n\nOnline image ka URL use kar sakte ho ya baad me apni local image bhi add kar sakte ho.",
+      "example_code": "<img src=\"https://picsum.photos/250\" alt=\"Random Image\">",
+      "mini_task": "250 ko 350 kar do aur dekho image ka size kaise change hota hai.",
+      "why_it_matters": "Portfolio, e-commerce aur blogs sab images ka use karte hain."
+    },
+    {
+      "lesson_number": 5,
+      "title": "Apna Pehla Simple Web Page",
+      "explanation": "Ab tak jo seekha hai usko ek saath use karte hain. Real websites bhi isi tarah chhote-chhote parts se milkar banti hain.\n\nPerfect code likhna zaroori nahi. Sabse important hai khud code likhna aur result dekhna.",
+      "example_code": "<h1>Chaman</h1>\n<p>Main HTML seekh raha hoon.</p>\n<img src=\"https://picsum.photos/200\" alt=\"Photo\">\n<br>\n<a href=\"https://github.com\">Mera GitHub</a>\n<br><br>\n<button>Contact Me</button>",
+      "mini_task": "Apna naam likho, paragraph badlo, image ka size change karo aur GitHub ki jagah apni favourite website ka link lagao.",
+      "why_it_matters": "Ye portfolio aur personal website banane ka pehla step hai. Agle lessons me isi page ko CSS se beautiful banayenge."
+    },
+    {
+      "lesson_number": 6,
+      "title": "Lists (Ordered aur Unordered)",
+      "explanation": "Jab tumhe multiple items ek saath dikhani hoti hain, tab list use hoti hai. Shopping list, features list ya steps likhne ke liye ye bahut useful hai.\n\nDo types yaad rakho: `ul` (bullet list) aur `ol` (number list). Har item `li` ke andar likha jata hai.",
+      "example_code": "<h2>Meri Skills</h2>\n<ul><li>HTML</li><li>CSS</li><li>JavaScript</li></ul>",
+      "mini_task": "Apni 5 favourite foods ya apps ki bullet list banao.",
+      "why_it_matters": "Menus, feature lists aur instructions almost har website me use hote hain."
+    },
+    {
+      "lesson_number": 7,
+      "title": "Div - Content ko Group Karna",
+      "explanation": "`div` ek container hota hai. Socho ye ek box hai jiske andar tum related cheezein rakhte ho.\n\nAbhi iska design nahi dikhega, lekin CSS me isi container ko style karoge.",
+      "example_code": "<div>\n  <h2>About Me</h2>\n  <p>Main web development seekh raha hoon.</p>\n</div>",
+      "mini_task": "Ek dusra div banao jiska heading 'My Hobbies' ho aur niche 2 lines likho.",
+      "why_it_matters": "Modern websites ka layout mostly div containers se hi banta hai."
+    },
+    {
+      "lesson_number": 8,
+      "title": "Comments - Notes Sirf Developers Ke Liye",
+      "explanation": "Comments browser me dikhte nahi hain. Ye sirf tumhare ya team ke developers ke liye notes hote hain.\n\nCode samajhne aur future me edit karne ke liye comments bahut helpful hote hain.",
+      "example_code": "<!-- Ye mera heading hai -->\n<h1>Welcome</h1>",
+      "mini_task": "Apne page me 2 comments add karo jo bataye ki niche wala section kis baare me hai.",
+      "why_it_matters": "Real projects me comments se code maintain karna aasaan hota hai."
+    },
+    {
+      "lesson_number": 9,
+      "title": "Forms Ka Introduction",
+      "explanation": "Forms user se information lene ke liye use hote hain. Jaise login, signup ya contact page.\n\nAbhi sirf basic fields seekhenge. Validation aur functionality baad me JavaScript se aayegi.",
+      "example_code": "<input type=\"text\" placeholder=\"Apna Naam\">\n<button>Submit</button>",
+      "mini_task": "Ek aur input add karo jisme placeholder 'Email' ho.",
+      "why_it_matters": "Login, registration aur contact forms har web application ka important hissa hote hain."
+    },
+    {
+      "lesson_number": 10,
+      "title": "Semantic HTML - Sahi Tags Ka Use",
+      "explanation": "Semantic tags batate hain ki page ka har section kis purpose ke liye hai. Isse code padhna aur maintain karna aasaan hota hai.\n\nModern websites me semantic HTML use karna best practice mana jata hai.",
+      "example_code": "<header><h1>My Website</h1></header>\n<main><p>Hello!</p></main>",
+      "mini_task": "Header ke niche ek `<footer>` add karo aur usme © 2026 apna naam likho.",
+      "why_it_matters": "Semantic HTML se code zyada clean hota hai aur search engines aur accessibility dono ko fayda milta hai."
+    },
+    {
+      "lesson_number": 11,
+      "title": "Ek Asli Website Ka Structure",
+      "story": "🏠 Socho tum apna khud ka ghar bana rahe ho. Ghar me entrance, drawing room, main room aur last me exit hota hai. Website bhi bilkul isi tarah alag-alag sections se milkar banti hai.",
+      "explanation": "Ab tak tum alag-alag HTML tags dekh chuke ho. Ab unhe organize karna seekhenge.\n\nModern websites me semantic tags jaise header, nav, main aur footer use kiye jate hain. Inse code padhna aur maintain karna easy ho jata hai.",
+      "example_code": "<header>Logo</header>\n<main>Main Content</main>\n<footer>Copyright 2026</footer>",
+      "mini_task": "Apni website ka header, main aur footer bana kar apna naam likho.",
+      "why_it_matters": "Har professional website isi structure ko follow karti hai."
+    },
+    {
+      "lesson_number": 12,
+      "title": "Navigation Menu Banana",
+      "story": "🗺️ Socho tum mall me gaye ho. Agar direction board hi na ho to shop kaise dhundoge? Website me navigation menu bhi wahi kaam karta hai.",
+      "explanation": "Navigation menu user ko alag pages tak pahunchne me help karta hai.\n\nNormally navigation ke andar links hote hain jo Home, About, Contact jaise pages kholte hain.",
+      "example_code": "<nav>\n<a href=\"#\">Home</a> | <a href=\"#\">About</a> | <a href=\"#\">Contact</a>\n</nav>",
+      "mini_task": "Portfolio naam ka ek aur link add karo.",
+      "why_it_matters": "Navigation ke bina website use karna users ke liye mushkil ho jata hai."
+    },
+    {
+      "lesson_number": 13,
+      "title": "Images Aur Figure",
+      "story": "📷 Socho tum Instagram kholte ho aur sirf text hi text dikhe. Shayad tum turant app band kar do. Images website ko interesting banati hain.",
+      "explanation": "Kabhi-kabhi image ke niche uska short description bhi dikhana hota hai.\n\nIske liye HTML me figure aur figcaption use kiya jata hai. Ye semantic aur clean approach hai.",
+      "example_code": "<figure>\n<img src=\"https://picsum.photos/200\" alt=\"Photo\">\n<figcaption>Random Image</figcaption>\n</figure>",
+      "mini_task": "Caption ko 'Meri Pehli Image' se replace karo.",
+      "why_it_matters": "Blogs, news aur portfolio websites me images ke saath captions common hote hain."
+    },
+    {
+      "lesson_number": 14,
+      "title": "Tables - Data Ko Arrange Karna",
+      "story": "📋 School ka result ya cricket score list me hota hai, paragraph me nahi. Isi liye tables ka use hota hai.",
+      "explanation": "Jab data rows aur columns me dikhana ho tab table use karte hain.\n\nTable sirf tab use karo jab actual data ho. Layout banane ke liye table use karna old practice hai.",
+      "example_code": "<table border=\"1\">\n<tr><th>Name</th><th>Age</th></tr>\n<tr><td>Ali</td><td>18</td></tr>\n</table>",
+      "mini_task": "Ek aur row add karo jisme apna naam aur age likho.",
+      "why_it_matters": "Results, reports aur price lists dikhane ke liye tables use hote hain."
+    },
+    {
+      "lesson_number": 15,
+      "title": "Mini Project - Personal Profile Page",
+      "story": "🎉 Mubarak ho! Ab tum itna HTML seekh chuke ho ki ek simple profile page bana sakte ho. Ye tumhara pehla mini project hai.",
+      "explanation": "Project banane se concepts yaad rehte hain. Sirf padhna kaafi nahi, khud likhna sabse important hai.\n\nAb tak seekhe hue headings, paragraphs, images, links aur semantic tags ko ek saath use karo.",
+      "example_code": "<header><h1>Chaman</h1></header>\n<main><img src=\"https://picsum.photos/150\"><p>I am learning HTML.</p></main>\n<footer>Thanks for Visiting!</footer>",
+      "mini_task": "Apna naam, photo, hobbies aur 3 navigation links add karke profile page complete karo.",
+      "why_it_matters": "Ye tumhare future portfolio website ka pehla version ban sakta hai."
+    },
+    {
+      "lesson_number": 16,
+      "title": "Form - User Se Information Lena",
+      "story": "📝 Socho tum kisi website par account banana chahte ho. Website tumse naam, email aur password maangti hai. Ye sab Form ki wajah se hota hai.",
+      "explanation": "Form HTML ka ek important part hai. Iske through user apni information enter karta hai.\n\nAbhi hum sirf form banana seekhenge. Data save karna baad me JavaScript aur Backend se hoga.",
+      "example_code": "<form>\n  <input type=\"text\" placeholder=\"Your Name\">\n  <button>Submit</button>\n</form>",
+      "mini_task": "Ek Email input aur Password input add karo.",
+      "why_it_matters": "Login, Signup, Contact aur Registration pages sab forms use karte hain."
+    },
+    {
+      "lesson_number": 17,
+      "title": "Audio Aur Video Add Karna",
+      "story": "🎵 Socho tum ek music ya movie website bana rahe ho. Agar audio aur video hi na chale to website adhuri lagegi.",
+      "explanation": "HTML me built-in tags hote hain jinse audio aur video add ki ja sakti hai.\n\nBrowser playback control bhi automatically de deta hai.",
+      "example_code": "<audio controls>\n  <source src=\"song.mp3\">\n</audio>",
+      "mini_task": "Audio ki jagah ek <video> tag use karke video player banao.",
+      "why_it_matters": "Learning websites, music apps aur online courses me media bahut use hota hai."
+    },
+    {
+      "lesson_number": 18,
+      "title": "Special Characters (HTML Entities)",
+      "story": "💬 Socho tum website par '<' ya '>' dikhana chahte ho. Browser confuse ho jayega ki ye tag hai ya text. Is problem ko Entities solve karti hain.",
+      "explanation": "HTML entities special symbols dikhane ke liye use hoti hain.\n\nJaise copyright sign, less than aur greater than symbol.",
+      "example_code": "<p>&copy; 2026 Chaman</p>\n<p>5 &lt; 10</p>",
+      "mini_task": "Apna naam likhkar uske aage © symbol dikhao.",
+      "why_it_matters": "Professional websites me copyright aur special symbols regularly use hote hain."
+    },
+    {
+      "lesson_number": 19,
+      "title": "Meta Tags - Browser Ko Information Dena",
+      "story": "📖 Socho kisi book ke cover par title aur author likha hota hai. Meta tags bhi browser aur search engine ko website ke baare me information dete hain.",
+      "explanation": "Meta tags user ko directly nahi dikhte, lekin browser aur search engines ke liye important hote hain.\n\nHar modern HTML page me basic meta tags hone chahiye.",
+      "example_code": "<meta charset=\"UTF-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">",
+      "mini_task": "Apni HTML file ke head section me dono meta tags add karo.",
+      "why_it_matters": "Responsive websites aur proper text display ke liye ye almost har project me use hote hain."
+    },
+    {
+      "lesson_number": 20,
+      "title": "🏆 Mini Project - Personal Portfolio Website",
+      "story": "🎉 Ab tum beginner nahi rahe. Ab tak tumne itna HTML seekh liya hai ki ek complete static portfolio page bana sakte ho. Ye tumhara pehla real project hoga.",
+      "explanation": "Is project me heading, image, navigation, lists, form aur footer sab use karo.\n\nPerfect banana zaroori nahi. Goal ye hai ki bina copy kiye khud HTML likh pao.",
+      "example_code": "<header><h1>My Portfolio</h1></header>\n<main><h2>About Me</h2><p>I love coding.</p></main>\n<footer>&copy; 2026</footer>",
+      "mini_task": "Ek complete portfolio banao jisme Home, About, Skills, Projects, Contact Form aur Footer ho.",
+      "why_it_matters": "Ye project future me CSS aur JavaScript seekhne ke baad ek real portfolio website ban jayega."
+    },
+    {
+      "lesson_number": 21,
+      "title": "Ek Achha Developer Ka Secret - Clean HTML",
+      "story": "👨‍💻 Do students ne ek hi website banayi. Pehle ka code itna uljha hua tha ki 2 din baad wo khud nahi samajh paya. Dusre ne clean code likha, isliye usne 5 minute me changes kar diye.",
+      "explanation": "Coding sirf browser ko samjhana nahi hota, future wale khud ko bhi samjhana hota hai.\n\nProper indentation, meaningful tags aur clean structure rakhna ek achhe developer ki pehchan hai.",
+      "example_code": "<main>\n  <h1>My Website</h1>\n  <p>Clean code is easy to read.</p>\n</main>",
+      "mini_task": "Apni kisi purani HTML file ko open karo aur indentation sahi karo.",
+      "why_it_matters": "Real companies clean aur readable code ko bahut importance deti hain."
+    },
+    {
+      "lesson_number": 22,
+      "title": "Accessibility - Har Kisi Ke Liye Website",
+      "story": "♿ Socho ek user dekh nahi sakta, lekin screen reader se website use karta hai. Agar tumne image ka description nahi diya to usse kuch samajh nahi aayega.",
+      "explanation": "Accessibility ka matlab hai website ko zyada se zyada log use kar saken.\n\nSabse simple habit hai images me hamesha meaningful alt text likhna.",
+      "example_code": "<img src=\"profile.jpg\" alt=\"Chaman smiling in front of laptop\">",
+      "mini_task": "Apni har image me achha alt text add karo.",
+      "why_it_matters": "Accessible websites zyada users tak pahunchti hain aur professional standard follow karti hain."
+    },
+    {
+      "lesson_number": 23,
+      "title": "HTML + CSS + JavaScript Ka Connection",
+      "story": "🍔 Burger me bun, vegetables aur sauce alag-alag hote hain, lekin saath aakar burger banta hai. Web development bhi aisa hi hai.",
+      "explanation": "HTML structure banata hai, CSS usko design deti hai aur JavaScript usme interactivity add karti hai.\n\nIn teenon ko saath use karna hi modern web development hai.",
+      "example_code": "<button id=\"btn\">Click Me</button>",
+      "mini_task": "Socho is button ka design CSS se aur action JavaScript se kya ho sakta hai. Apne ideas likho.",
+      "why_it_matters": "Har modern website in teen technologies ka combination hoti hai."
+    },
+    {
+      "lesson_number": 24,
+      "title": "Browser HTML Ko Kaise Samajhta Hai?",
+      "story": "📖 Jab tum ek kitab padhte ho to page line by line padhte ho. Browser bhi HTML ko upar se neeche tak isi tarah padhta hai.",
+      "explanation": "Browser HTML file ko read karta hai aur uske hisaab se page banata hai.\n\nAgar tags galat jagah hon ya properly close na hon, to page unexpected tarike se dikh sakta hai.",
+      "example_code": "<h1>Welcome</h1>\n<p>Browser reads HTML from top to bottom.</p>",
+      "mini_task": "Ek closing tag hata kar dekho kya change hota hai, phir use wapas sahi kar do.",
+      "why_it_matters": "Browser ka kaam samajhne se debugging bahut easy ho jati hai."
+    },
+    {
+      "lesson_number": 25,
+      "title": "🎓 HTML Course Complete - Final Challenge",
+      "story": "🏆 Ab tumne HTML ki journey complete kar li. Shuru me tum sirf ek heading likhte the, aur ab ek complete webpage bana sakte ho. Ye sirf shuruaat hai.",
+      "explanation": "Ab bina notes dekhe ek complete webpage banane ki koshish karo. Jahan atko, wahi tumhari next practice hai.\n\nIske baad CSS seekhoge, jo tumhari HTML website ko professional look dega.",
+      "example_code": "<header><h1>My Portfolio</h1></header>\n<main><section><h2>About Me</h2><p>Hello!</p></section></main>\n<footer>&copy; 2026</footer>",
+      "mini_task": "Ek portfolio website banao jisme Header, Navigation, About, Skills, Projects, Contact Form, Image aur Footer ho. Kisi tutorial ko copy mat karo—khud se likhne ki koshish karo.",
+      "why_it_matters": "Agar tum ye challenge khud complete kar lete ho, to CSS shuru karne ke liye strong foundation tayyar hai."
+    }
+  ]
+}
