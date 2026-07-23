@@ -1,54 +1,76 @@
-const CACHE_NAME = 'chaman-ai-v1';
-const APP_SHELL = [
-  './',
-  './index.html',
-  './manifest.json',
-  './icon-192.png',
-  './icon-512.png',
-  './icon-maskable-512.png'
+// ═══════════════════════════════════════════════════════════════════════
+// sw.js — Chaman AI v2 service worker.
+//
+// REPLACES an old leftover sw.js from a previous unrelated PWA shell that
+// lived in this repo folder before the v2 rebuild — that one was
+// cache-first with no version string, so it kept serving a stale cached
+// page (missing css/style.css etc.) even after new deployments. Root
+// cause + fix: https://web.dev/articles/service-worker-lifecycle
+//
+// STRATEGY: network-first for everything this app owns. Always try the
+// network first (so a fresh deploy is picked up immediately); only fall
+// back to cache when offline/network fails. This trades a little offline
+// "freshness" for never getting stuck on stale app code again — the
+// failure mode that just bit us is worse than losing pure cache-first
+// speed.
+//
+// CACHE_VERSION: bump this string (v1 → v2 → v3...) any time you want to
+// force every visiting client to fully discard old cached files. You
+// normally DON'T need to bump it for routine deploys — network-first
+// already picks up new files on every online visit; VERSION exists for
+// the rare "something is stuck, nuke it" case.
+// ═══════════════════════════════════════════════════════════════════════
+
+const CACHE_VERSION = 'chaman-ai-v2-cache-1';
+
+// Core shell — cached on install so the app has *something* to show
+// offline even on a first-ever offline visit. Everything else gets
+// cached opportunistically as it's fetched (see fetch handler below).
+const CORE_ASSETS = [
+  '/',
+  '/index.html',
+  '/css/style.css',
+  '/manifest.json',
 ];
 
-// Install: cache the app shell
 self.addEventListener('install', (event) => {
-  self.skipWaiting();
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(APP_SHELL)).catch(() => {})
+    caches.open(CACHE_VERSION)
+      .then((cache) => cache.addAll(CORE_ASSETS))
+      .catch((err) => console.warn('[sw] core cache failed:', err))
   );
+  self.skipWaiting(); // don't wait for old tabs to close — take over ASAP
 });
 
-// Activate: clean up old cache versions
 self.addEventListener('activate', (event) => {
   event.waitUntil(
-    caches.keys().then((keys) =>
-      Promise.all(keys.filter((k) => k !== CACHE_NAME).map((k) => caches.delete(k)))
-    )
+    caches.keys().then((names) =>
+      Promise.all(
+        names
+          .filter((name) => name !== CACHE_VERSION) // wipe every cache from any older version (including the old leftover sw's cache, whatever it was named)
+          .map((name) => caches.delete(name))
+      )
+    ).then(() => self.clients.claim()) // control already-open tabs immediately, don't wait for a reload
   );
-  self.clients.claim();
 });
 
-// Fetch: only handle same-origin GET requests (app shell).
-// API calls (OpenRouter etc.) always go straight to network — never cached,
-// so chat responses are always fresh and never served stale.
 self.addEventListener('fetch', (event) => {
-  const req = event.request;
-  if (req.method !== 'GET') return;
-
-  const url = new URL(req.url);
-  if (url.origin !== self.location.origin) return; // let cross-origin (API) requests pass through untouched
+  const { request } = event;
+  if (request.method !== 'GET') return; // never intercept POST (e.g. /api/chat) — API calls always go straight to network
 
   event.respondWith(
-    caches.match(req).then((cached) => {
-      const network = fetch(req)
-        .then((res) => {
-          if (res && res.ok) {
-            const clone = res.clone();
-            caches.open(CACHE_NAME).then((cache) => cache.put(req, clone));
-          }
-          return res;
-        })
-        .catch(() => cached);
-      // Serve cached immediately if available (fast load), update cache in background.
-      return cached || network;
-    })
+    fetch(request)
+      .then((res) => {
+        // Opportunistically cache successful same-origin responses for
+        // offline fallback later. Don't cache API routes (/api/*) — those
+        // must always be live.
+        const url = new URL(request.url);
+        if (res.ok && url.origin === self.location.origin && !url.pathname.startsWith('/api/')) {
+          const clone = res.clone();
+          caches.open(CACHE_VERSION).then((cache) => cache.put(request, clone));
+        }
+        return res;
+      })
+      .catch(() => caches.match(request).then((cached) => cached || caches.match('/index.html')))
   );
 });
