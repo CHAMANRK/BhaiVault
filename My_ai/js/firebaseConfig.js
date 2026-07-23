@@ -13,12 +13,12 @@
 // ═══════════════════════════════════════════════════════════════════════
 
 const firebaseConfig = {
-  apiKey: "REPLACE_ME",
-  authDomain: "REPLACE_ME.firebaseapp.com",
-  projectId: "REPLACE_ME",
-  storageBucket: "REPLACE_ME.appspot.com",
-  messagingSenderId: "REPLACE_ME",
-  appId: "REPLACE_ME",
+  apiKey: "AIzaSyDhezT9tpm0FEGfWX9ktvYoEJ9sABtsycw",
+  authDomain: "chaman-ai.firebaseapp.com",
+  projectId: "chaman-ai",
+  storageBucket: "chaman-ai.firebasestorage.app",
+  messagingSenderId: "60719361681",
+  appId: "1:60719361681:web:60163f41bcfb5a11961930",
 };
 
 firebase.initializeApp(firebaseConfig);
