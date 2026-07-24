@@ -73,7 +73,14 @@ module.exports = async function handler(req, res) {
     return;
   }
 
-  const { allowed, remaining } = await checkGuestLimit(decoded);
+  let allowed, remaining;
+  try {
+    ({ allowed, remaining } = await checkGuestLimit(decoded));
+  } catch (e) {
+    console.error('[api/chat] checkGuestLimit failed:', e);
+    res.status(500).json({ error: 'User record check fail hua — Firebase Admin env vars ya Firestore rules check karo. Detail: ' + e.message });
+    return;
+  }
   if (!allowed) {
     res.status(429).json({
       error: `Aaj ke ${GUEST_DAILY_LIMIT} guest messages khatam ho gaye — Google se login karo unlimited ke liye`,
