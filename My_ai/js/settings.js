@@ -66,8 +66,14 @@ function setModelS(m) {
 // ONBOARDING (basic profile: naam, age, etc)
 // ════════════════════════════════════
 
+// PHASE 1 NOTE: onboarding used to open with a "add your own AI provider
+// key" step here (type: 'fallback') — a leftover from before the server
+// got its own key pool (lib/keyManager.js). Removed: it contradicted the
+// whole point of that migration and made the (optional, rarely-needed)
+// "use my own key" override feel like a mandatory first-run gate. That
+// override still exists — Settings → AI Providers — for anyone who
+// actually wants it, it just doesn't belong in onboarding anymore.
 const OB_STEPS = [
-  { key: 'fallback', emoji: '🔗', q: 'Apne AI providers add karo', sub: 'Koi bhi ek "primary" nahi hai — jitne chaho utne add karo (OpenRouter, Groq, Mistral AI, ya koi bhi free provider). Jis order mein add karoge wahi try-order banega. Baad mein Settings se bhi manage kar sakte ho', type: 'fallback', required: false },
   { key: 'name', emoji: '👋', q: 'Tera naam kya hai?', sub: 'Taaki main tujhe sahi se bulau', type: 'text', placeholder: 'Jaise: Chaman', required: true },
   { key: 'age', emoji: '🎂', q: 'Age kitni hai?', sub: 'Optional hai, skip bhi kar sakta hai', type: 'number', placeholder: 'Jaise: 20', required: false },
   { key: 'work', emoji: '💼', q: 'Tu kya karta hai?', sub: 'Kaam, padhai, ya interest — jo bhi ho', type: 'text', placeholder: 'Jaise: Developer, Student...', required: false },
@@ -329,4 +335,4 @@ function toggleEye(inputId, btn) {
   btn.innerHTML = show
     ? '<svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>'
     : '<svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
-}
+    }
