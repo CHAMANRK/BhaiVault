@@ -1,9 +1,0 @@
-{
-  "name": "chaman-ai",
-  "version": "2.0.0",
-  "private": true,
-  "description": "Chaman AI — Phase 1+2 backend (Vercel serverless)",
-  "dependencies": {
-    "firebase-admin": "^14.2.0"
-  }
-}
