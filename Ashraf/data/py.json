@@ -1,0 +1,2368 @@
+{
+  "language": "Python",
+  "course_title": "Python Course",
+  "lessons": [
+    {
+      "lesson_number": 1,
+      "title": "Python Kya Hai?",
+      "difficulty": "easy",
+      "concept": "Socho tum ek assistant ko instructions dete ho aur wo exactly wahi kaam karta hai. Python bhi computer ko simple English jaisi language mein instructions dene ka tarika hai. Isse apps, AI, websites aur automation bante hain.",
+      "example_code": "print(\"Hello, World!\")",
+      "code_breakdown": [
+        {
+          "part": "print",
+          "explain": "Ye Python ka built-in function hai. Screen par output dikhane ke liye use hota hai. Baad mein numbers, variables aur calculations bhi print kar sakte ho."
+        },
+        {
+          "part": "(",
+          "explain": "Opening parenthesis. Function ko diya gaya data iske andar likhte hain."
+        },
+        {
+          "part": "\"Hello, World!\"",
+          "explain": "Ye ek String hai. Text ko single quotes (' ') ya double quotes (\" \") dono mein likh sakte ho."
+        },
+        {
+          "part": ")",
+          "explain": "Closing parenthesis. Ye batata hai ki function ka data yahin khatam ho gaya."
+        }
+      ],
+      "quiz_after_breakdown": [
+        {
+          "type": "mcq",
+          "question": "Screen par text dikhane ke liye kaunsa function use hota hai?",
+          "options": [
+            "input",
+            "print",
+            "show"
+          ],
+          "answer": "print"
+        },
+        {
+          "type": "fill_blank",
+          "question": "Text ko screen par dikhane ke liye ______ use karte hain.",
+          "answer": "print"
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "Apna naam screen par print karo.",
+          "starter_code": "print(\"______\")"
+        }
+      ],
+      "quiz_after_practice": [
+        {
+          "type": "mcq",
+          "question": "Kya print() numbers bhi dikha sakta hai?",
+          "options": [
+            "Haan",
+            "Nahi",
+            "Sirf text"
+          ],
+          "answer": "Haan"
+        }
+      ],
+      "mini_task": "3 alag print() statements likho. Pehle mein apna naam, doosre mein apni age aur teesre mein apna favourite game print karo.",
+      "why_it_matters": "Har Python program mein output dikhana basic skill hai. Debugging aur testing mein print() bahut use hota hai.",
+      "common_mistake": "Text ke around quotes lagana bhool jana. Bina quotes ke Python error de sakta hai."
+    },
+    {
+      "lesson_number": 2,
+      "title": "Variables Aur Data Store Karna",
+      "difficulty": "easy",
+      "concept": "Socho tumhare paas alag-alag dabbe hain jin par labels lage hain. Har dabbe mein alag cheez rakh sakte ho. Python mein variable bhi waise hi data store karta hai taaki baad mein use kar sako.",
+      "example_code": "name = \"Chaman\"\nage = 18\nprint(name)\nprint(age)",
+      "code_breakdown": [
+        {
+          "part": "name",
+          "explain": "Ye variable ka naam hai. Iski jagah koi bhi meaningful naam rakh sakte ho, jaise city, marks ya score."
+        },
+        {
+          "part": "=",
+          "explain": "Assignment operator. Right side ki value ko left side wale variable mein store karta hai. Ye comparison nahi karta."
+        },
+        {
+          "part": "\"Chaman\"",
+          "explain": "Ye String value hai. Text ko quotes ke andar likhte hain."
+        },
+        {
+          "part": "age",
+          "explain": "Ye doosra variable hai jo age store kar raha hai."
+        },
+        {
+          "part": "18",
+          "explain": "Ye Number (integer) hai. Numbers ke liye quotes nahi lagate."
+        },
+        {
+          "part": "print(name)",
+          "explain": "Variable ke andar jo value hai, usse screen par dikhata hai."
+        },
+        {
+          "part": "print(age)",
+          "explain": "Age variable ki stored value ko output mein dikhata hai."
+        }
+      ],
+      "quiz_after_breakdown": [
+        {
+          "type": "mcq",
+          "question": "Variable mein value store karne ke liye kaunsa symbol use hota hai?",
+          "options": [
+            "=",
+            "==",
+            "+"
+          ],
+          "answer": "="
+        },
+        {
+          "type": "fill_blank",
+          "question": "Text ko variable mein rakhne ke liye ______ use karte hain.",
+          "answer": "quotes"
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "Ek variable city banao aur usme apne city ka naam store karo.",
+          "starter_code": "city = \"______\"\nprint(city)"
+        }
+      ],
+      "quiz_after_practice": [
+        {
+          "type": "mcq",
+          "question": "print(city) kya dikhayega?",
+          "options": [
+            "Variable ka naam",
+            "Variable ki value",
+            "Error hamesha"
+          ],
+          "answer": "Variable ki value"
+        }
+      ],
+      "mini_task": "3 variables banao: name, age aur country. Phir teeno ko alag-alag print() se screen par dikhao.",
+      "why_it_matters": "Real projects mein user ka naam, score, balance aur settings sab variables mein hi store hote hain.",
+      "common_mistake": "String ko bina quotes ke likhna ya variable ka naam galat spell kar dena."
+    },
+    {
+      "lesson_number": 3,
+      "title": "Data Types",
+      "difficulty": "easy",
+      "concept": "Socho tumhare ghar mein alag-alag dabbe hain—ek mein books, ek mein paise aur ek mein on/off switch. Python bhi alag tarah ke data ko alag type mein rakhta hai. Sahi data type use karne se program sahi kaam karta hai.",
+      "example_code": "name = \"Chaman\"\nage = 18\nis_student = True\nprint(name)\nprint(age)\nprint(is_student)",
+      "code_breakdown": [
+        {
+          "part": "name",
+          "explain": "Ye variable hai jo String store kar raha hai. Variable ka naam meaningful rakhna best practice hai."
+        },
+        {
+          "part": "=",
+          "explain": "Assignment operator. Right side ki value ko left side wale variable mein store karta hai."
+        },
+        {
+          "part": "\"Chaman\"",
+          "explain": "Ye String hai. String matlab text. Text ko single quotes (' ') ya double quotes (\" \") dono mein likh sakte ho."
+        },
+        {
+          "part": "age",
+          "explain": "Ye variable Number store kar raha hai."
+        },
+        {
+          "part": "18",
+          "explain": "Ye Integer (int) hai. Pure numbers ke liye int use hota hai."
+        },
+        {
+          "part": "is_student",
+          "explain": "Ye variable Boolean value store kar raha hai."
+        },
+        {
+          "part": "True",
+          "explain": "Boolean value. Sirf True ya False ho sakti hai. Python mein T aur F capital letters se likhte hain."
+        },
+        {
+          "part": "print(name)",
+          "explain": "String variable ki value screen par dikhata hai."
+        },
+        {
+          "part": "print(age)",
+          "explain": "Number variable ki value screen par dikhata hai."
+        },
+        {
+          "part": "print(is_student)",
+          "explain": "Boolean value screen par dikhata hai."
+        }
+      ],
+      "quiz_after_breakdown": [
+        {
+          "type": "mcq",
+          "question": "True aur False kis data type ke examples hain?",
+          "options": [
+            "String",
+            "Boolean",
+            "Integer"
+          ],
+          "answer": "Boolean"
+        },
+        {
+          "type": "fill_blank",
+          "question": "Text ko Python mein ______ kehte hain.",
+          "answer": "String"
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "Ek Boolean variable banao jiska naam is_admin ho aur uski value True rakho.",
+          "starter_code": "is_admin = ______\nprint(is_admin)"
+        }
+      ],
+      "quiz_after_practice": [
+        {
+          "type": "mcq",
+          "question": "18 kis type ka data hai?",
+          "options": [
+            "String",
+            "Integer",
+            "Boolean"
+          ],
+          "answer": "Integer"
+        }
+      ],
+      "mini_task": "4 variables banao: name (String), age (Integer), height (Decimal) aur is_student (Boolean). Sabko print() karo.",
+      "why_it_matters": "Apps, games aur AI models sab alag data types ke saath kaam karte hain.",
+      "common_mistake": "True ko \"True\" likh dena. Quotes ke andar likhne se wo String ban jata hai, Boolean nahi."
+    },
+    {
+      "lesson_number": 4,
+      "title": "User Input Lena",
+      "difficulty": "hard",
+      "concept": "Socho tum kisi se uska naam puchte ho aur phir uska jawab use karte ho. Python mein input() bhi user se information leta hai taaki program har baar naya data use kar sake.",
+      "example_code": "name = input(\"Apna naam likho: \")\nprint(\"Hello\", name)",
+      "code_breakdown": [
+        {
+          "part": "name",
+          "explain": "Ye variable user ka diya hua data store karega."
+        },
+        {
+          "part": "=",
+          "explain": "Assignment operator. Input se mili value ko variable mein store karta hai."
+        },
+        {
+          "part": "input",
+          "explain": "Ye built-in function hai jo user se keyboard se data leta hai."
+        },
+        {
+          "part": "(",
+          "explain": "Function ke arguments isi ke andar likhe jate hain."
+        },
+        {
+          "part": "\"Apna naam likho: \"",
+          "explain": "Ye prompt message hai. User ko batata hai ki kya likhna hai. Iski jagah koi bhi message likh sakte ho."
+        },
+        {
+          "part": ")",
+          "explain": "Function call ko close karta hai."
+        },
+        {
+          "part": "print",
+          "explain": "Output screen par dikhata hai."
+        },
+        {
+          "part": "\"Hello\"",
+          "explain": "Ye ek String hai jo output ka hissa banegi."
+        },
+        {
+          "part": ",",
+          "explain": "Comma print() mein multiple values ko alag karta hai. Python unke beech automatically space de deta hai."
+        },
+        {
+          "part": "name",
+          "explain": "Ye user ke input ki value print karega."
+        }
+      ],
+      "quiz_after_breakdown": [
+        {
+          "type": "mcq",
+          "question": "User se data lene ke liye kaunsa function use hota hai?",
+          "options": [
+            "print",
+            "input",
+            "show"
+          ],
+          "answer": "input"
+        },
+        {
+          "type": "fill_blank",
+          "question": "Keyboard se data lene ke liye ______ function use hota hai.",
+          "answer": "input"
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "User se city ka naam lo.",
+          "starter_code": "city = ______(\"Apna city likho: \")"
+        },
+        {
+          "instruction": "User ka city print karo.",
+          "starter_code": "print(\"City:\", ______)"
+        }
+      ],
+      "quiz_after_practice": [
+        {
+          "type": "mcq",
+          "question": "input() se mila data by default kis type ka hota hai?",
+          "options": [
+            "String",
+            "Integer",
+            "Boolean"
+          ],
+          "answer": "String"
+        },
+        {
+          "type": "mcq",
+          "question": "Kya input() har baar alag value le sakta hai?",
+          "options": [
+            "Haan",
+            "Nahi"
+          ],
+          "answer": "Haan"
+        }
+      ],
+      "mini_task": "User se naam aur favourite game pucho. Phir print() se 'Hello <naam>, tumhara favourite game <game> hai.' dikhhao.",
+      "why_it_matters": "Login forms, search boxes aur chat apps sab user input par hi kaam karte hain.",
+      "common_mistake": "Sochna ki input() number dega. By default input() hamesha String return karta hai."
+    },
+    {
+      "lesson_number": 5,
+      "title": "Numbers Aur Basic Math",
+      "difficulty": "easy",
+      "concept": "Socho tum calculator use kar rahe ho. Python bhi numbers ke saath bilkul calculator ki tarah addition, subtraction, multiplication aur division kar sakta hai. Isse calculations automatic ho jati hain.",
+      "example_code": "a = 10\nb = 5\nprint(a + b)\nprint(a - b)\nprint(a * b)\nprint(a / b)",
+      "code_breakdown": [
+        {
+          "part": "a",
+          "explain": "Ye variable hai jo pehla number store karta hai. Iski jagah koi bhi valid naam use kar sakte ho."
+        },
+        {
+          "part": "=",
+          "explain": "Assignment operator. Right side ki value ko variable mein store karta hai."
+        },
+        {
+          "part": "10",
+          "explain": "Ye Integer number hai."
+        },
+        {
+          "part": "b",
+          "explain": "Ye doosra variable hai jo number store karta hai."
+        },
+        {
+          "part": "5",
+          "explain": "Ye bhi Integer number hai."
+        },
+        {
+          "part": "print",
+          "explain": "Output screen par dikhata hai."
+        },
+        {
+          "part": "+",
+          "explain": "Addition operator. Do numbers ko jodta hai."
+        },
+        {
+          "part": "-",
+          "explain": "Subtraction operator. Ek number ko dusre se ghatata hai."
+        },
+        {
+          "part": "*",
+          "explain": "Multiplication operator. Do numbers ka product nikalta hai."
+        },
+        {
+          "part": "/",
+          "explain": "Division operator. Ek number ko dusre se divide karta hai aur result decimal bhi ho sakta hai."
+        },
+        {
+          "part": "()",
+          "explain": "Parentheses function call ke liye use hote hain."
+        }
+      ],
+      "quiz_after_breakdown": [
+        {
+          "type": "mcq",
+          "question": "Multiplication ke liye kaunsa operator use hota hai?",
+          "options": [
+            "*",
+            "x",
+            "+"
+          ],
+          "answer": "*"
+        },
+        {
+          "type": "fill_blank",
+          "question": "Addition ke liye ______ operator use hota hai.",
+          "answer": "+"
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "20 aur 4 ka multiplication print karo.",
+          "starter_code": "print(20 ______ 4)"
+        }
+      ],
+      "quiz_after_practice": [
+        {
+          "type": "mcq",
+          "question": "10 + 5 ka result kya hoga?",
+          "options": [
+            "15",
+            "105",
+            "50"
+          ],
+          "answer": "15"
+        }
+      ],
+      "mini_task": "Do variables banao (price aur quantity). Total price calculate karke print karo.",
+      "why_it_matters": "Shopping apps, banking apps aur games sab calculations par depend karte hain.",
+      "common_mistake": "\"x\" ko multiplication samajhna. Python mein multiplication ke liye hamesha * use hota hai."
+    },
+    {
+      "lesson_number": 6,
+      "title": "Type Conversion",
+      "difficulty": "hard",
+      "concept": "Kabhi-kabhi data ka type badalna padta hai. Jaise kisi form se age text ke form mein aati hai, lekin calculation ke liye use number banana padta hai. Is process ko type conversion kehte hain.",
+      "example_code": "age = input(\"Age: \")\nage = int(age)\nprint(age + 5)",
+      "code_breakdown": [
+        {
+          "part": "age",
+          "explain": "Ye variable user ka input store karta hai."
+        },
+        {
+          "part": "=",
+          "explain": "Assignment operator. Value ko variable mein store karta hai."
+        },
+        {
+          "part": "input",
+          "explain": "User se keyboard se data leta hai. Ye hamesha String return karta hai."
+        },
+        {
+          "part": "\"Age: \"",
+          "explain": "Ye prompt message hai jo user ko dikhai deta hai."
+        },
+        {
+          "part": "int",
+          "explain": "String ko Integer mein convert karta hai. Sirf valid number text hi convert hoga."
+        },
+        {
+          "part": "(age)",
+          "explain": "Ye batata hai ki kis value ko convert karna hai."
+        },
+        {
+          "part": "print",
+          "explain": "Output screen par dikhata hai."
+        },
+        {
+          "part": "age + 5",
+          "explain": "Converted number mein 5 add karta hai. Agar int() na use karein to error ya galat result mil sakta hai."
+        }
+      ],
+      "quiz_after_breakdown": [
+        {
+          "type": "mcq",
+          "question": "String ko Integer banane ke liye kya use hota hai?",
+          "options": [
+            "str()",
+            "int()",
+            "float()"
+          ],
+          "answer": "int()"
+        },
+        {
+          "type": "fill_blank",
+          "question": "input() by default ______ return karta hai.",
+          "answer": "String"
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "Marks ko Integer mein convert karo.",
+          "starter_code": "marks = int(______)"
+        },
+        {
+          "instruction": "Converted marks mein 10 add karke print karo.",
+          "starter_code": "print(______ + 10)"
+        }
+      ],
+      "quiz_after_practice": [
+        {
+          "type": "mcq",
+          "question": "Agar age = \"20\" ho aur int(age) use karein, to age + 5 kya hoga?",
+          "options": [
+            "25",
+            "205",
+            "Error"
+          ],
+          "answer": "25"
+        },
+        {
+          "type": "mcq",
+          "question": "Kya input() bina int() ke number par calculation ke liye reliable hai?",
+          "options": [
+            "Haan",
+            "Nahi"
+          ],
+          "answer": "Nahi"
+        }
+      ],
+      "mini_task": "User se do numbers lo, dono ko int() se convert karo aur unka sum, difference aur product print karo.",
+      "why_it_matters": "Forms, calculators aur APIs se aane wale data ko sahi type mein convert karna har Python project ka common kaam hai.",
+      "common_mistake": "input() se mile text ko bina int() ke directly calculate karna."
+    },
+    {
+      "lesson_number": 7,
+      "title": "Comparison Operators",
+      "difficulty": "easy",
+      "concept": "Socho tum do students ke marks compare kar rahe ho ki kaun zyada hai ya kya dono barabar hain. Python ke comparison operators bhi values ko compare karke True ya False batate hain.",
+      "example_code": "a = 10\nb = 20\nprint(a == b)\nprint(a != b)\nprint(a < b)\nprint(a > b)\nprint(a >= b)\nprint(a <= b)",
+      "code_breakdown": [
+        {
+          "part": "a",
+          "explain": "Pehla variable jo comparison ke liye value store karta hai."
+        },
+        {
+          "part": "=",
+          "explain": "Assignment operator. Value ko variable mein store karta hai."
+        },
+        {
+          "part": "10",
+          "explain": "Integer value."
+        },
+        {
+          "part": "b",
+          "explain": "Doosra variable."
+        },
+        {
+          "part": "20",
+          "explain": "Integer value."
+        },
+        {
+          "part": "print",
+          "explain": "Comparison ka result screen par dikhata hai."
+        },
+        {
+          "part": "==",
+          "explain": "Equality operator. Check karta hai ki dono values barabar hain ya nahi. '=' se alag hai."
+        },
+        {
+          "part": "!=",
+          "explain": "Not Equal operator. True tab deta hai jab values alag hoti hain."
+        },
+        {
+          "part": "<",
+          "explain": "Less Than operator. Left value chhoti ho to True."
+        },
+        {
+          "part": ">",
+          "explain": "Greater Than operator. Left value badi ho to True."
+        },
+        {
+          "part": ">=",
+          "explain": "Greater Than or Equal. Badi ya barabar dono par True."
+        },
+        {
+          "part": "<=",
+          "explain": "Less Than or Equal. Chhoti ya barabar dono par True."
+        }
+      ],
+      "quiz_after_breakdown": [
+        {
+          "type": "mcq",
+          "question": "Barabar check karne ke liye kaunsa operator use hota hai?",
+          "options": [
+            "=",
+            "==",
+            "!="
+          ],
+          "answer": "=="
+        },
+        {
+          "type": "fill_blank",
+          "question": "Not Equal operator ______ hai.",
+          "answer": "!="
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "Check karo kya 15, 15 ke barabar hai.",
+          "starter_code": "print(15 ______ 15)"
+        }
+      ],
+      "quiz_after_practice": [
+        {
+          "type": "mcq",
+          "question": "20 > 10 ka result kya hoga?",
+          "options": [
+            "True",
+            "False",
+            "Error"
+          ],
+          "answer": "True"
+        }
+      ],
+      "mini_task": "Do variables marks1 aur marks2 banao. Check karo kya dono equal hain aur kya marks1, marks2 se bada hai.",
+      "why_it_matters": "Login system, exams aur game logic sab comparison operators use karte hain.",
+      "common_mistake": "'=' aur '==' ko same samajhna. '=' value store karta hai, '==' compare karta hai."
+    },
+    {
+      "lesson_number": 8,
+      "title": "if Statement",
+      "difficulty": "hard",
+      "concept": "Real life mein hum conditions ke hisaab se decision lete hain. Jaise agar baarish ho to chhata le jao. Python mein if statement bhi condition True hone par hi code chalata hai.",
+      "example_code": "age = 18\nif age >= 18:\n    print(\"Adult\")",
+      "code_breakdown": [
+        {
+          "part": "age",
+          "explain": "Ye variable age store karta hai."
+        },
+        {
+          "part": "=",
+          "explain": "Assignment operator."
+        },
+        {
+          "part": "18",
+          "explain": "Integer value."
+        },
+        {
+          "part": "if",
+          "explain": "Python keyword jo condition check karta hai."
+        },
+        {
+          "part": "age >= 18",
+          "explain": "Ye condition hai. Agar True hogi tabhi niche wala code chalega."
+        },
+        {
+          "part": ">=",
+          "explain": "Greater Than or Equal operator."
+        },
+        {
+          "part": ":",
+          "explain": "Colon batata hai ki if block yahin se shuru ho raha hai. Python mein ye bahut zaroori hai."
+        },
+        {
+          "part": "    print(\"Adult\")",
+          "explain": "Ye indented block hai. 4 spaces (indentation) batati hain ki ye if ke andar ka code hai. Python mein indentation compulsory hoti hai."
+        },
+        {
+          "part": "\"Adult\"",
+          "explain": "String jo condition True hone par print hogi."
+        }
+      ],
+      "quiz_after_breakdown": [
+        {
+          "type": "mcq",
+          "question": "if statement ke baad kaunsa symbol zaroori hota hai?",
+          "options": [
+            ";",
+            ":",
+            ","
+          ],
+          "answer": ":"
+        },
+        {
+          "type": "fill_blank",
+          "question": "Python mein block dikhane ke liye ______ use hoti hai.",
+          "answer": "indentation"
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "Agar marks 33 ya usse zyada hain to 'Pass' print karo.",
+          "starter_code": "marks = 40\nif marks >= 33:\n    print(\"______\")"
+        },
+        {
+          "instruction": "Agar score 100 hai to 'Winner' print karo.",
+          "starter_code": "score = 100\nif score == 100:\n    print(\"______\")"
+        }
+      ],
+      "quiz_after_practice": [
+        {
+          "type": "mcq",
+          "question": "Agar if ki condition False ho jaye to uske andar ka code chalega?",
+          "options": [
+            "Haan",
+            "Nahi"
+          ],
+          "answer": "Nahi"
+        },
+        {
+          "type": "mcq",
+          "question": "Python mein indentation zaroori hai?",
+          "options": [
+            "Haan",
+            "Nahi"
+          ],
+          "answer": "Haan"
+        }
+      ],
+      "mini_task": "User se age lo, int() se convert karo. Agar age 18 ya usse zyada ho to 'You can vote' print karo.",
+      "why_it_matters": "Har smart application decisions leti hai. Decision making ki shuruaat if statement se hoti hai.",
+      "common_mistake": "Colon (:) ya indentation bhool jana. Dono ke bina Python error dega."
+    },
+    {
+      "lesson_number": 9,
+      "title": "if...else Decision",
+      "difficulty": "hard",
+      "concept": "Socho tum gate par khade guard ho. Agar ID card sahi hai to entry milegi, warna mana kar diya jayega. Python mein if...else bhi do alag raaste choose karta hai.",
+      "example_code": "age = 16\nif age >= 18:\n    print(\"Adult\")\nelse:\n    print(\"Minor\")",
+      "code_breakdown": [
+        {
+          "part": "age",
+          "explain": "Ye variable age store karta hai."
+        },
+        {
+          "part": "=",
+          "explain": "Assignment operator jo value store karta hai."
+        },
+        {
+          "part": "16",
+          "explain": "Integer value."
+        },
+        {
+          "part": "if",
+          "explain": "Condition check karne ka keyword."
+        },
+        {
+          "part": "age >= 18",
+          "explain": "Ye condition hai. True hone par if block chalega."
+        },
+        {
+          "part": ":",
+          "explain": "Colon batata hai ki block yahin se start hota hai."
+        },
+        {
+          "part": "print(\"Adult\")",
+          "explain": "Condition True hone par ye output chalega."
+        },
+        {
+          "part": "else",
+          "explain": "Agar if ki condition False ho jaye to else block execute hota hai. else ke saath koi condition nahi likhte."
+        },
+        {
+          "part": "print(\"Minor\")",
+          "explain": "Condition False hone par ye output chalega."
+        }
+      ],
+      "quiz_after_breakdown": [
+        {
+          "type": "mcq",
+          "question": "Agar if ki condition False ho jaye to kya chalega?",
+          "options": [
+            "if block",
+            "else block",
+            "Error"
+          ],
+          "answer": "else block"
+        },
+        {
+          "type": "fill_blank",
+          "question": "False condition ke liye ______ keyword use hota hai.",
+          "answer": "else"
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "Agar marks 33 se kam hain to 'Fail' print karo.",
+          "starter_code": "marks = 20\nif marks >= 33:\n    print(\"Pass\")\n______:\n    print(\"______\")"
+        },
+        {
+          "instruction": "Agar password sahi ho to 'Login' warna 'Denied' print karo.",
+          "starter_code": "password = \"1234\"\nif password == \"1234\":\n    print(\"______\")\nelse:\n    print(\"Denied\")"
+        }
+      ],
+      "quiz_after_practice": [
+        {
+          "type": "mcq",
+          "question": "Kya else ke saath condition likhte hain?",
+          "options": [
+            "Haan",
+            "Nahi"
+          ],
+          "answer": "Nahi"
+        },
+        {
+          "type": "mcq",
+          "question": "if...else mein kitne possible paths hote hain?",
+          "options": [
+            "1",
+            "2",
+            "5"
+          ],
+          "answer": "2"
+        }
+      ],
+      "mini_task": "User se password lo. Agar password 'python123' ho to 'Access Granted' print karo, warna 'Access Denied'.",
+      "why_it_matters": "Login systems, ATM machines aur mobile lock screen sab if...else logic par chalte hain.",
+      "common_mistake": "else ke baad condition likh dena ya indentation bhool jana."
+    },
+    {
+      "lesson_number": 10,
+      "title": "elif Multiple Decisions",
+      "difficulty": "hard",
+      "concept": "Socho exam result mein sirf Pass ya Fail nahi hota. A+, A, B aur Fail bhi ho sakta hai. Python ka elif ek se zyada conditions check karne ke liye use hota hai.",
+      "example_code": "marks = 82\nif marks >= 90:\n    print(\"Grade A+\")\nelif marks >= 75:\n    print(\"Grade A\")\nelse:\n    print(\"Grade B\")",
+      "code_breakdown": [
+        {
+          "part": "marks",
+          "explain": "Ye variable marks store karta hai."
+        },
+        {
+          "part": "if",
+          "explain": "Sabse pehli condition check karta hai."
+        },
+        {
+          "part": "elif",
+          "explain": "Agar if False ho to elif check hota hai. Kitne bhi elif likh sakte ho."
+        },
+        {
+          "part": "else",
+          "explain": "Agar saari conditions False ho jaye to else chalega."
+        },
+        {
+          "part": "marks >= 90",
+          "explain": "Pehli comparison condition."
+        },
+        {
+          "part": "marks >= 75",
+          "explain": "Doosri comparison condition jo tab check hogi jab pehli False hogi."
+        },
+        {
+          "part": ":",
+          "explain": "Har if, elif aur else ke baad colon lagana zaroori hai."
+        },
+        {
+          "part": "print(...)",
+          "explain": "Jo condition True hogi uska output print hoga. Baaki conditions check nahi hongi."
+        }
+      ],
+      "quiz_after_breakdown": [
+        {
+          "type": "mcq",
+          "question": "Ek se zyada conditions check karne ke liye kaunsa keyword use hota hai?",
+          "options": [
+            "elif",
+            "repeat",
+            "switch"
+          ],
+          "answer": "elif"
+        },
+        {
+          "type": "fill_blank",
+          "question": "if aur else ke beech ______ likha ja sakta hai.",
+          "answer": "elif"
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "Age 13 ya usse zyada ho to 'Teen' print karo.",
+          "starter_code": "age = 15\nif age >= 18:\n    print(\"Adult\")\n______ age >= 13:\n    print(\"Teen\")\nelse:\n    print(\"Child\")"
+        },
+        {
+          "instruction": "Score 100 ho to Winner print karo.",
+          "starter_code": "score = 100\nif score < 100:\n    print(\"Try Again\")\n______ score == 100:\n    print(\"______\")\nelse:\n    print(\"Unknown\")"
+        },
+        {
+          "instruction": "Temperature ke hisaab se message dikhao.",
+          "starter_code": "temp = 35\nif temp < 20:\n    print(\"Cold\")\n______ temp < 30:\n    print(\"Warm\")\nelse:\n    print(\"Hot\")"
+        }
+      ],
+      "quiz_after_practice": [
+        {
+          "type": "mcq",
+          "question": "Agar pehli condition True ho jaye to elif check hoga?",
+          "options": [
+            "Haan",
+            "Nahi"
+          ],
+          "answer": "Nahi"
+        },
+        {
+          "type": "mcq",
+          "question": "Ek program mein kitne elif use kar sakte ho?",
+          "options": [
+            "Sirf 1",
+            "Jitne zarurat ho",
+            "Sirf 2"
+          ],
+          "answer": "Jitne zarurat ho"
+        }
+      ],
+      "mini_task": "User se marks lo. 90+ par A+, 75+ par A, 50+ par Pass aur warna Fail print karo.",
+      "why_it_matters": "Grading systems, shopping discounts aur game levels mein multiple conditions bahut common hoti hain.",
+      "common_mistake": "Har condition ke liye alag if likh dena. Linked conditions ke liye if → elif → else chain use karo."
+    },
+    {
+      "lesson_number": 11,
+      "title": "Logical Operators (and, or, not)",
+      "difficulty": "hard",
+      "concept": "Socho mobile unlock tabhi hoga jab sahi PIN aur fingerprint dono match karein. Kabhi sirf ek condition bhi kaafi hoti hai. Python ke logical operators multiple conditions ko combine karte hain.",
+      "example_code": "age = 20\nhas_id = True\nif age >= 18 and has_id:\n    print(\"Entry Allowed\")",
+      "code_breakdown": [
+        {
+          "part": "age",
+          "explain": "Ye variable age store karta hai."
+        },
+        {
+          "part": "=",
+          "explain": "Assignment operator jo value store karta hai."
+        },
+        {
+          "part": "20",
+          "explain": "Integer value."
+        },
+        {
+          "part": "has_id",
+          "explain": "Boolean variable jo batata hai ID hai ya nahi."
+        },
+        {
+          "part": "True",
+          "explain": "Boolean value. Sirf True ya False hoti hai."
+        },
+        {
+          "part": "if",
+          "explain": "Condition check karne ka keyword."
+        },
+        {
+          "part": "age >= 18",
+          "explain": "Pehli condition check karti hai ki age 18 ya usse zyada hai."
+        },
+        {
+          "part": "and",
+          "explain": "Logical operator. Dono conditions True hongi tabhi result True hoga."
+        },
+        {
+          "part": "has_id",
+          "explain": "Doosri condition. Boolean hone ki wajah se direct check ho rahi hai."
+        },
+        {
+          "part": ":",
+          "explain": "Colon block ki shuruaat batata hai."
+        },
+        {
+          "part": "print(\"Entry Allowed\")",
+          "explain": "Condition True hone par ye output chalega."
+        },
+        {
+          "part": "or",
+          "explain": "Alternative logical operator. Agar koi ek condition bhi True ho to result True hota hai."
+        },
+        {
+          "part": "not",
+          "explain": "Ye True ko False aur False ko True bana deta hai."
+        }
+      ],
+      "quiz_after_breakdown": [
+        {
+          "type": "mcq",
+          "question": "Dono conditions True honi chahiye. Kaunsa operator use hoga?",
+          "options": [
+            "and",
+            "or",
+            "not"
+          ],
+          "answer": "and"
+        },
+        {
+          "type": "fill_blank",
+          "question": "Sirf ek condition True ho to ______ operator use karte hain.",
+          "answer": "or"
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "Check karo ki age 18+ aur citizen True hai.",
+          "starter_code": "if age >= 18 ______ citizen:\n    print(\"Eligible\")"
+        },
+        {
+          "instruction": "Agar email ya phone verified ho to Login print karo.",
+          "starter_code": "if email_verified ______ phone_verified:\n    print(\"Login\")"
+        }
+      ],
+      "quiz_after_practice": [
+        {
+          "type": "mcq",
+          "question": "not True ka result kya hoga?",
+          "options": [
+            "True",
+            "False"
+          ],
+          "answer": "False"
+        },
+        {
+          "type": "mcq",
+          "question": "and operator mein ek condition False ho to result kya hoga?",
+          "options": [
+            "True",
+            "False"
+          ],
+          "answer": "False"
+        }
+      ],
+      "mini_task": "User se age aur citizen status lo. Agar age 18+ hai aur citizen True hai to 'Vote Allowed' print karo, warna 'Not Allowed'.",
+      "why_it_matters": "Login systems, permissions aur security rules mein logical operators har jagah use hote hain.",
+      "common_mistake": "and aur or ka difference bhool jana. Yaad rakho: and = sab True, or = koi ek True."
+    },
+    {
+      "lesson_number": 12,
+      "title": "while Loop",
+      "difficulty": "hard",
+      "concept": "Socho tum 10 push-ups kar rahe ho. Jab tak count 10 nahi hota, wahi kaam repeat hota rehta hai. Python ka while loop bhi condition True hone tak code repeat karta hai.",
+      "example_code": "count = 1\nwhile count <= 5:\n    print(count)\n    count = count + 1",
+      "code_breakdown": [
+        {
+          "part": "count",
+          "explain": "Counter variable jo loop kitni baar chalega ye track karta hai."
+        },
+        {
+          "part": "=",
+          "explain": "Assignment operator."
+        },
+        {
+          "part": "1",
+          "explain": "Loop ki starting value."
+        },
+        {
+          "part": "while",
+          "explain": "Keyword jo condition True hone tak loop chalata hai."
+        },
+        {
+          "part": "count <= 5",
+          "explain": "Loop tab tak chalega jab tak ye condition True rahegi."
+        },
+        {
+          "part": ":",
+          "explain": "Loop block ki shuruaat batata hai."
+        },
+        {
+          "part": "print(count)",
+          "explain": "Har loop mein current count print hota hai."
+        },
+        {
+          "part": "count = count + 1",
+          "explain": "Counter ko 1 se badhata hai. Iske bina loop kabhi khatam nahi hoga."
+        },
+        {
+          "part": "+",
+          "explain": "Addition operator jo value badhata hai."
+        }
+      ],
+      "quiz_after_breakdown": [
+        {
+          "type": "mcq",
+          "question": "while loop kab tak chalta hai?",
+          "options": [
+            "Ek baar",
+            "Jab tak condition True ho",
+            "Hamesha 10 baar"
+          ],
+          "answer": "Jab tak condition True ho"
+        },
+        {
+          "type": "fill_blank",
+          "question": "Loop ko khatam karne ke liye counter ko ______ karna padta hai.",
+          "answer": "update"
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "1 se 3 tak numbers print karo.",
+          "starter_code": "num = 1\nwhile num <= 3:\n    print(num)\n    num = num + ______"
+        },
+        {
+          "instruction": "Counter ka naam i rakho.",
+          "starter_code": "i = 1\nwhile i <= 2:\n    print(i)\n    i = i + ______"
+        },
+        {
+          "instruction": "Loop ko 5 tak chalao.",
+          "starter_code": "count = 1\nwhile count <= ______:\n    print(count)\n    count = count + 1"
+        }
+      ],
+      "quiz_after_practice": [
+        {
+          "type": "mcq",
+          "question": "Agar counter update na ho to kya ho sakta hai?",
+          "options": [
+            "Infinite Loop",
+            "Program turant band",
+            "Syntax Error"
+          ],
+          "answer": "Infinite Loop"
+        },
+        {
+          "type": "mcq",
+          "question": "while ek kis type ka statement hai?",
+          "options": [
+            "Loop",
+            "Variable",
+            "Function"
+          ],
+          "answer": "Loop"
+        }
+      ],
+      "mini_task": "while loop ka use karke 1 se 10 tak numbers aur unka square print karo.",
+      "why_it_matters": "Games, automation aur background tasks mein loops baar-baar kaam karne ke liye use hote hain.",
+      "common_mistake": "Counter update karna bhool jana, jiski wajah se infinite loop ban jata hai."
+    },
+    {
+      "lesson_number": 13,
+      "title": "for Loop aur range()",
+      "difficulty": "hard",
+      "concept": "Socho teacher bolte hain '1 se 5 tak sabke naam bulao'. Tumhe manually 5 baar nahi bolna padta. Python ka for loop bhi kisi sequence ko ek-ek karke automatically repeat karta hai.",
+      "example_code": "for i in range(1, 6):\n    print(i)",
+      "code_breakdown": [
+        {
+          "part": "for",
+          "explain": "Ye keyword loop start karta hai. Sequence ki har value ke liye code ek baar chalta hai."
+        },
+        {
+          "part": "i",
+          "explain": "Loop variable. Har round mein nayi value store hoti hai. Iski jagah koi bhi valid naam use kar sakte ho."
+        },
+        {
+          "part": "in",
+          "explain": "Ye batata hai ki variable kis sequence se values lega."
+        },
+        {
+          "part": "range",
+          "explain": "Built-in function jo numbers ki sequence banata hai."
+        },
+        {
+          "part": "(",
+          "explain": "Function ke arguments isi ke andar likhe jaate hain."
+        },
+        {
+          "part": "1, 6",
+          "explain": "Pehla number start hai. Doosra stop hai, lekin stop value include nahi hoti. Isliye output 1 se 5 tak aayega."
+        },
+        {
+          "part": ")",
+          "explain": "Function call ko close karta hai."
+        },
+        {
+          "part": ":",
+          "explain": "Loop block ki shuruaat batata hai."
+        },
+        {
+          "part": "print(i)",
+          "explain": "Har iteration mein current value print hoti hai."
+        }
+      ],
+      "quiz_after_breakdown": [
+        {
+          "type": "mcq",
+          "question": "Numbers ki sequence banane ke liye kaunsa function use hota hai?",
+          "options": [
+            "list()",
+            "range()",
+            "input()"
+          ],
+          "answer": "range()"
+        },
+        {
+          "type": "fill_blank",
+          "question": "Loop start karne ke liye ______ keyword use hota hai.",
+          "answer": "for"
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "1 se 3 tak numbers print karo.",
+          "starter_code": "for i in range(1, ______):\n    print(i)"
+        },
+        {
+          "instruction": "5 se 7 tak numbers print karo.",
+          "starter_code": "for n in range(5, ______):\n    print(n)"
+        }
+      ],
+      "quiz_after_practice": [
+        {
+          "type": "mcq",
+          "question": "range(1, 4) ka last printed number kya hoga?",
+          "options": [
+            "3",
+            "4",
+            "5"
+          ],
+          "answer": "3"
+        },
+        {
+          "type": "mcq",
+          "question": "for loop kis cheez ke liye use hota hai?",
+          "options": [
+            "Code repeat karne ke liye",
+            "Input lene ke liye",
+            "Variable delete karne ke liye"
+          ],
+          "answer": "Code repeat karne ke liye"
+        }
+      ],
+      "mini_task": "for loop ka use karke 1 se 10 tak numbers aur unka cube print karo.",
+      "why_it_matters": "Lists, files aur database records ko process karne ke liye for loop sabse zyada use hota hai.",
+      "common_mistake": "Sochna ki range() ka last number bhi print hoga. Stop value hamesha exclude hoti hai."
+    },
+    {
+      "lesson_number": 14,
+      "title": "break aur continue",
+      "difficulty": "hard",
+      "concept": "Socho race chal rahi hai. Kabhi tum beech mein race chhod dete ho (break), aur kabhi ek obstacle skip karke aage badhte ho (continue). Python mein bhi ye loop ko control karte hain.",
+      "example_code": "for i in range(1, 6):\n    if i == 3:\n        continue\n    if i == 5:\n        break\n    print(i)",
+      "code_breakdown": [
+        {
+          "part": "for",
+          "explain": "Loop start karta hai."
+        },
+        {
+          "part": "i",
+          "explain": "Loop variable jo har round mein value leta hai."
+        },
+        {
+          "part": "range(1, 6)",
+          "explain": "1 se 5 tak values generate karta hai."
+        },
+        {
+          "part": "if",
+          "explain": "Condition check karta hai."
+        },
+        {
+          "part": "i == 3",
+          "explain": "Check karta hai ki current value 3 hai ya nahi."
+        },
+        {
+          "part": "continue",
+          "explain": "Current iteration ko skip karta hai aur next iteration par chala jata hai."
+        },
+        {
+          "part": "i == 5",
+          "explain": "Dusri condition jo value 5 check karti hai."
+        },
+        {
+          "part": "break",
+          "explain": "Loop ko turant poori tarah stop kar deta hai."
+        },
+        {
+          "part": "print(i)",
+          "explain": "Sirf wahi values print hongi jo continue se skip aur break se pehle hain."
+        }
+      ],
+      "quiz_after_breakdown": [
+        {
+          "type": "mcq",
+          "question": "Loop ko turant band karne ke liye kya use hota hai?",
+          "options": [
+            "continue",
+            "break",
+            "pass"
+          ],
+          "answer": "break"
+        },
+        {
+          "type": "fill_blank",
+          "question": "Current iteration skip karne ke liye ______ use hota hai.",
+          "answer": "continue"
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "Number 4 aane par loop stop karo.",
+          "starter_code": "if i == 4:\n    ______"
+        },
+        {
+          "instruction": "Number 2 ko skip karo.",
+          "starter_code": "if i == 2:\n    ______"
+        },
+        {
+          "instruction": "Baaki numbers print karo.",
+          "starter_code": "print(______)"
+        }
+      ],
+      "quiz_after_practice": [
+        {
+          "type": "mcq",
+          "question": "continue kya karta hai?",
+          "options": [
+            "Loop band karta hai",
+            "Current iteration skip karta hai",
+            "Program band karta hai"
+          ],
+          "answer": "Current iteration skip karta hai"
+        },
+        {
+          "type": "mcq",
+          "question": "break ke baad loop dobara chalega?",
+          "options": [
+            "Haan",
+            "Nahi"
+          ],
+          "answer": "Nahi"
+        }
+      ],
+      "mini_task": "1 se 20 tak loop chalao. 7 ko skip karo aur 15 aate hi loop stop kar do.",
+      "why_it_matters": "Searching, games aur menu-driven programs mein break aur continue bahut useful hote hain.",
+      "common_mistake": "break aur continue ka kaam ulta samajhna. break poora loop rokta hai, continue sirf current round skip karta hai."
+    },
+    {
+      "lesson_number": 15,
+      "title": "Lists (Data ki List)",
+      "difficulty": "hard",
+      "concept": "Socho tumhare phone mein Contacts list hai jisme ek hi jagah bahut saare names hote hain. Python ki List bhi ek container hai jisme multiple values ko ek saath store kar sakte ho.",
+      "example_code": "fruits = [\"Apple\", \"Banana\", \"Mango\"]\nprint(fruits)\nprint(fruits[0])",
+      "code_breakdown": [
+        {
+          "part": "fruits",
+          "explain": "Ye list variable ka naam hai. Iski jagah koi bhi meaningful naam rakh sakte ho."
+        },
+        {
+          "part": "=",
+          "explain": "Assignment operator jo value ko variable mein store karta hai."
+        },
+        {
+          "part": "[ ]",
+          "explain": "Square brackets List banane ke liye use hote hain. Empty list bhi bana sakte ho: []."
+        },
+        {
+          "part": "\"Apple\"",
+          "explain": "List ka pehla String item."
+        },
+        {
+          "part": ",",
+          "explain": "Comma list ke items ko alag karta hai."
+        },
+        {
+          "part": "\"Banana\"",
+          "explain": "List ka doosra item."
+        },
+        {
+          "part": "\"Mango\"",
+          "explain": "List ka teesra item."
+        },
+        {
+          "part": "print(fruits)",
+          "explain": "Puri list screen par dikhata hai."
+        },
+        {
+          "part": "fruits[0]",
+          "explain": "Indexing. Python mein counting 0 se shuru hoti hai. 0 pehla item, 1 doosra, 2 teesra."
+        },
+        {
+          "part": "print(fruits[0])",
+          "explain": "Sirf pehla item print karta hai."
+        }
+      ],
+      "quiz_after_breakdown": [
+        {
+          "type": "mcq",
+          "question": "Python List kis symbol se banti hai?",
+          "options": [
+            "( )",
+            "[ ]",
+            "{ }"
+          ],
+          "answer": "[ ]"
+        },
+        {
+          "type": "fill_blank",
+          "question": "Python List ka pehla index ______ hota hai.",
+          "answer": "0"
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "Colors naam ki list banao.",
+          "starter_code": "colors = [\"Red\", \"______\", \"Green\"]"
+        },
+        {
+          "instruction": "List ka pehla item print karo.",
+          "starter_code": "print(colors[______])"
+        }
+      ],
+      "quiz_after_practice": [
+        {
+          "type": "mcq",
+          "question": "fruits[1] kis item ko return karega agar list ['Apple', 'Banana', 'Mango'] ho?",
+          "options": [
+            "Apple",
+            "Banana",
+            "Mango"
+          ],
+          "answer": "Banana"
+        },
+        {
+          "type": "mcq",
+          "question": "Ek List mein kitni values store kar sakte ho?",
+          "options": [
+            "Sirf 1",
+            "Multiple",
+            "Sirf 10"
+          ],
+          "answer": "Multiple"
+        }
+      ],
+      "mini_task": "Apne 5 favourite games ki list banao aur pehla aur aakhri game print karo.",
+      "why_it_matters": "Contacts, shopping cart, playlists aur database records sab Lists ki tarah hi manage hote hain.",
+      "common_mistake": "Index 1 se start samajhna. Python mein pehla index hamesha 0 hota hai."
+    },
+    {
+      "lesson_number": 16,
+      "title": "List Methods (append, insert, remove)",
+      "difficulty": "hard",
+      "concept": "Socho shopping list mein naya item add karna, beech mein item insert karna ya kisi item ko hata dena. Python List methods bhi yehi kaam aasani se karti hain.",
+      "example_code": "fruits = [\"Apple\", \"Banana\"]\nfruits.append(\"Mango\")\nfruits.insert(1, \"Orange\")\nfruits.remove(\"Banana\")\nprint(fruits)",
+      "code_breakdown": [
+        {
+          "part": "append()",
+          "explain": "List ke end mein naya item add karta hai."
+        },
+        {
+          "part": "\"Mango\"",
+          "explain": "Ye naya item hai jo list ke end mein add hoga."
+        },
+        {
+          "part": "insert()",
+          "explain": "Kisi specific index par item add karta hai."
+        },
+        {
+          "part": "1",
+          "explain": "Ye index hai jahan item insert hoga."
+        },
+        {
+          "part": "\"Orange\"",
+          "explain": "Ye insert hone wala item hai."
+        },
+        {
+          "part": "remove()",
+          "explain": "List se matching value ko remove karta hai."
+        },
+        {
+          "part": "\"Banana\"",
+          "explain": "Ye value list se delete hogi."
+        },
+        {
+          "part": "print(fruits)",
+          "explain": "Updated list screen par dikhata hai."
+        }
+      ],
+      "quiz_after_breakdown": [
+        {
+          "type": "mcq",
+          "question": "List ke end mein item add karne ke liye kya use hota hai?",
+          "options": [
+            "append()",
+            "remove()",
+            "insert()"
+          ],
+          "answer": "append()"
+        },
+        {
+          "type": "fill_blank",
+          "question": "List se item delete karne ke liye ______ use hota hai.",
+          "answer": "remove()"
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "City list ke end mein 'Delhi' add karo.",
+          "starter_code": "cities.append(\"______\")"
+        },
+        {
+          "instruction": "Index 0 par 'Mumbai' insert karo.",
+          "starter_code": "cities.insert(______, \"Mumbai\")"
+        },
+        {
+          "instruction": "List se 'Delhi' remove karo.",
+          "starter_code": "cities.______(\"Delhi\")"
+        }
+      ],
+      "quiz_after_practice": [
+        {
+          "type": "mcq",
+          "question": "insert(0, \"A\") kya karega?",
+          "options": [
+            "End mein add karega",
+            "Start mein add karega",
+            "Delete karega"
+          ],
+          "answer": "Start mein add karega"
+        },
+        {
+          "type": "mcq",
+          "question": "append() item ko kahan add karta hai?",
+          "options": [
+            "Start",
+            "End",
+            "Beech mein"
+          ],
+          "answer": "End"
+        }
+      ],
+      "mini_task": "Ek shopping list banao. append() se 2 items add karo, insert() se ek item start mein add karo aur remove() se ek item delete karke final list print karo.",
+      "why_it_matters": "To-do apps, carts, chat history aur playlists ko update karne ke liye ye methods bahut use hoti hain.",
+      "common_mistake": "append() aur insert() ko same samajhna. append() hamesha end mein add karta hai, insert() kisi bhi position par."
+    },
+    {
+      "lesson_number": 17,
+      "title": "List Slicing",
+      "difficulty": "hard",
+      "concept": "Socho tumhare paas 10 photos hain aur tum sirf pehli 3 ya beech ki 2 photos dekhna chahte ho. Python ki slicing se List ka sirf wahi hissa nikal sakte ho jo tumhe chahiye.",
+      "example_code": "numbers = [10, 20, 30, 40, 50]\nprint(numbers[1:4])\nprint(numbers[:3])\nprint(numbers[2:])",
+      "code_breakdown": [
+        {
+          "part": "numbers",
+          "explain": "Ye List variable hai."
+        },
+        {
+          "part": "=",
+          "explain": "Assignment operator."
+        },
+        {
+          "part": "[10, 20, 30, 40, 50]",
+          "explain": "Ye Integer values ki List hai."
+        },
+        {
+          "part": "print()",
+          "explain": "Output screen par dikhata hai."
+        },
+        {
+          "part": "numbers[1:4]",
+          "explain": "Index 1 se start aur index 4 se pehle tak items deta hai. Output: 20, 30, 40."
+        },
+        {
+          "part": ":",
+          "explain": "Colon slicing ke liye use hota hai. Left side start aur right side stop index hota hai."
+        },
+        {
+          "part": "numbers[:3]",
+          "explain": "Start na likhne ka matlab index 0 se shuru karo."
+        },
+        {
+          "part": "numbers[2:]",
+          "explain": "Stop na likhne ka matlab last item tak le jao."
+        }
+      ],
+      "quiz_after_breakdown": [
+        {
+          "type": "mcq",
+          "question": "numbers[:2] kis index se start hota hai?",
+          "options": [
+            "0",
+            "1",
+            "2"
+          ],
+          "answer": "0"
+        },
+        {
+          "type": "fill_blank",
+          "question": "List ka ek hissa lene ko ______ kehte hain.",
+          "answer": "slicing"
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "Index 2 se last tak print karo.",
+          "starter_code": "print(data[______:])"
+        },
+        {
+          "instruction": "Start se index 4 se pehle tak print karo.",
+          "starter_code": "print(data[:______])"
+        }
+      ],
+      "quiz_after_practice": [
+        {
+          "type": "mcq",
+          "question": "numbers[1:3] mein kitne items aayenge?",
+          "options": [
+            "1",
+            "2",
+            "3"
+          ],
+          "answer": "2"
+        },
+        {
+          "type": "mcq",
+          "question": "Slicing original List ko change karti hai?",
+          "options": [
+            "Haan",
+            "Nahi"
+          ],
+          "answer": "Nahi"
+        }
+      ],
+      "mini_task": "10 favourite movies ki List banao. Pehli 5 movies aur last 3 movies slicing se print karo.",
+      "why_it_matters": "Data analysis, AI aur web development mein List ke selected parts par kaam karna bahut common hai.",
+      "common_mistake": "Sochna ki stop index bhi include hota hai. Python mein stop index kabhi include nahi hota."
+    },
+    {
+      "lesson_number": 18,
+      "title": "Nested Loops",
+      "difficulty": "hard",
+      "concept": "Socho school mein har class ke andar bahut saare students hain. Pehle class choose hoti hai, phir us class ke students. Nested loop bhi ek loop ke andar doosra loop chalata hai.",
+      "example_code": "for row in range(1, 4):\n    for col in range(1, 4):\n        print(row, col)",
+      "code_breakdown": [
+        {
+          "part": "for",
+          "explain": "Loop start karne ka keyword."
+        },
+        {
+          "part": "row",
+          "explain": "Outer loop ka variable."
+        },
+        {
+          "part": "range(1, 4)",
+          "explain": "Outer loop 1 se 3 tak chalega."
+        },
+        {
+          "part": ":",
+          "explain": "Loop block ki shuruaat batata hai."
+        },
+        {
+          "part": "for col in range(1, 4):",
+          "explain": "Ye inner loop hai jo outer loop ke har round mein poora chalta hai."
+        },
+        {
+          "part": "col",
+          "explain": "Inner loop ka variable."
+        },
+        {
+          "part": "print(row, col)",
+          "explain": "Har combination ko print karta hai, jaise (1,1), (1,2), (1,3)."
+        },
+        {
+          "part": ",",
+          "explain": "print() mein multiple values ko alag karta hai."
+        }
+      ],
+      "quiz_after_breakdown": [
+        {
+          "type": "mcq",
+          "question": "Nested loop mein kitne loops hote hain?",
+          "options": [
+            "1",
+            "2 ya usse zyada",
+            "Sirf 3"
+          ],
+          "answer": "2 ya usse zyada"
+        },
+        {
+          "type": "fill_blank",
+          "question": "Ek loop ke andar doosra loop ho to use ______ loop kehte hain.",
+          "answer": "nested"
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "Outer loop ko 2 tak chalao.",
+          "starter_code": "for i in range(1, ______):"
+        },
+        {
+          "instruction": "Inner loop ka variable j rakho.",
+          "starter_code": "for ______ in range(1, 3):"
+        },
+        {
+          "instruction": "Dono variables print karo.",
+          "starter_code": "print(______, ______)"
+        }
+      ],
+      "quiz_after_practice": [
+        {
+          "type": "mcq",
+          "question": "Outer loop ke har round mein inner loop kya karta hai?",
+          "options": [
+            "Ek baar chalta hai",
+            "Poora chalta hai",
+            "Kabhi nahi chalta"
+          ],
+          "answer": "Poora chalta hai"
+        },
+        {
+          "type": "mcq",
+          "question": "Nested loops ka use pattern printing mein hota hai?",
+          "options": [
+            "Haan",
+            "Nahi"
+          ],
+          "answer": "Haan"
+        }
+      ],
+      "mini_task": "Nested loops ka use karke 1 se 5 tak ka multiplication grid print karo.",
+      "why_it_matters": "Games, matrices, Excel-like tables aur image processing mein nested loops bahut important hote hain.",
+      "common_mistake": "Outer aur inner loop ki indentation galat kar dena, jisse logic change ho jata hai."
+    },
+    {
+      "lesson_number": 19,
+      "title": "Functions (Reusable Code)",
+      "difficulty": "hard",
+      "concept": "Socho tum ek chai ki recipe likhte ho aur jab bhi chai banana ho wahi recipe follow karte ho. Python mein Function bhi ek reusable recipe hai. Ek baar likho, jitni baar chaho use karo.",
+      "example_code": "def greet():\n    print(\"Hello!\")\n\ngreet()",
+      "code_breakdown": [
+        {
+          "part": "def",
+          "explain": "Ye Python keyword hai jo naya function banane ke liye use hota hai."
+        },
+        {
+          "part": "greet",
+          "explain": "Ye function ka naam hai. Naam meaningful hona chahiye."
+        },
+        {
+          "part": "()",
+          "explain": "Parentheses function ke parameters ke liye hote hain. Abhi ye khaali hain kyunki function koi input nahi leta."
+        },
+        {
+          "part": ":",
+          "explain": "Colon batata hai ki function ka block yahan se shuru hota hai."
+        },
+        {
+          "part": "print(\"Hello!\")",
+          "explain": "Ye function ke andar chalne wala code hai."
+        },
+        {
+          "part": "greet()",
+          "explain": "Isse function call hota hai. Jab tak function call nahi karoge tab tak andar ka code execute nahi hoga."
+        }
+      ],
+      "quiz_after_breakdown": [
+        {
+          "type": "mcq",
+          "question": "Function banane ke liye kaunsa keyword use hota hai?",
+          "options": [
+            "func",
+            "def",
+            "make"
+          ],
+          "answer": "def"
+        },
+        {
+          "type": "fill_blank",
+          "question": "Function ko chalane ke liye usse ______ karte hain.",
+          "answer": "call"
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "welcome naam ka function banao.",
+          "starter_code": "def ______():\n    print(\"Welcome\")"
+        },
+        {
+          "instruction": "Function ko call karo.",
+          "starter_code": "______()"
+        }
+      ],
+      "quiz_after_practice": [
+        {
+          "type": "mcq",
+          "question": "Agar function call na ho to kya uska code chalega?",
+          "options": [
+            "Haan",
+            "Nahi"
+          ],
+          "answer": "Nahi"
+        },
+        {
+          "type": "mcq",
+          "question": "Function ka main fayda kya hai?",
+          "options": [
+            "Code repeat karna",
+            "Code reuse karna",
+            "Program band karna"
+          ],
+          "answer": "Code reuse karna"
+        }
+      ],
+      "mini_task": "Ek function banao jo 'Python is Awesome!' print kare. Use 3 baar call karo.",
+      "why_it_matters": "Real projects mein hazaron lines ka code hota hai. Functions code ko clean aur reusable banate hain.",
+      "common_mistake": "Function bana dena lekin usse call karna bhool jana."
+    },
+    {
+      "lesson_number": 20,
+      "title": "Function Parameters",
+      "difficulty": "hard",
+      "concept": "Socho pizza order karte waqt tum topping batate ho. Recipe same rehti hai, bas topping badalti hai. Function parameters bhi waise hi hote hain—same function ko alag data ke saath use kar sakte ho.",
+      "example_code": "def greet(name):\n    print(\"Hello\", name)\n\ngreet(\"Chaman\")\ngreet(\"Ali\")",
+      "code_breakdown": [
+        {
+          "part": "def",
+          "explain": "Function banane ka keyword."
+        },
+        {
+          "part": "greet",
+          "explain": "Function ka naam."
+        },
+        {
+          "part": "name",
+          "explain": "Ye parameter hai. Function call ke waqt jo value doge wo is variable mein store hogi."
+        },
+        {
+          "part": "()",
+          "explain": "Parentheses parameters ko rakhne ke liye use hote hain."
+        },
+        {
+          "part": "print(\"Hello\", name)",
+          "explain": "Greeting ke saath parameter ki value print karta hai."
+        },
+        {
+          "part": "\"Hello\"",
+          "explain": "Ye String hai."
+        },
+        {
+          "part": ",",
+          "explain": "print() mein multiple values ko alag karta hai."
+        },
+        {
+          "part": "greet(\"Chaman\")",
+          "explain": "Function call hai. 'Chaman' argument hai jo parameter name mein store hoga."
+        },
+        {
+          "part": "\"Chaman\"",
+          "explain": "Ye argument hai jo function ko bheja gaya hai."
+        },
+        {
+          "part": "greet(\"Ali\")",
+          "explain": "Same function ko doosri value ke saath dubara call kiya gaya hai."
+        }
+      ],
+      "quiz_after_breakdown": [
+        {
+          "type": "mcq",
+          "question": "Function ke andar data receive karne wale variable ko kya kehte hain?",
+          "options": [
+            "Parameter",
+            "Loop",
+            "Index"
+          ],
+          "answer": "Parameter"
+        },
+        {
+          "type": "fill_blank",
+          "question": "Function ko bheji gayi value ko ______ kehte hain.",
+          "answer": "argument"
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "age naam ka parameter banao.",
+          "starter_code": "def show_age(______):\n    print(age)"
+        },
+        {
+          "instruction": "Function ko 18 value ke saath call karo.",
+          "starter_code": "show_age(______)"
+        },
+        {
+          "instruction": "Function ko 25 value ke saath dubara call karo.",
+          "starter_code": "show_age(______)"
+        }
+      ],
+      "quiz_after_practice": [
+        {
+          "type": "mcq",
+          "question": "Ek function ko alag-alag arguments ke saath call kar sakte hain?",
+          "options": [
+            "Haan",
+            "Nahi"
+          ],
+          "answer": "Haan"
+        },
+        {
+          "type": "mcq",
+          "question": "Parameter kahan likha jata hai?",
+          "options": [
+            "Function definition mein",
+            "Sirf print() mein",
+            "Loop ke andar"
+          ],
+          "answer": "Function definition mein"
+        }
+      ],
+      "mini_task": "Ek function create karo jo product ka naam parameter ke through le aur 'Product: <naam>' print kare. Use 5 alag products ke saath call karo.",
+      "why_it_matters": "Web apps, APIs aur AI programs mein reusable functions parameters ke bina possible nahi hote.",
+      "common_mistake": "Parameter aur argument ko same cheez samajhna. Parameter function ke andar hota hai, argument function call ke waqt diya jata hai."
+    },
+    {
+      "lesson_number": 21,
+      "title": "return Statement",
+      "difficulty": "hard",
+      "concept": "Socho tum calculator mein 5 + 3 karte ho. Calculator sirf screen par nahi dikhata, balki result bhi wapas deta hai jise tum aage use kar sakte ho. Python mein return function ka result wapas bhejta hai.",
+      "example_code": "def add(a, b):\n    return a + b\n\nresult = add(5, 3)\nprint(result)",
+      "code_breakdown": [
+        {
+          "part": "def",
+          "explain": "Naya function banane ka keyword."
+        },
+        {
+          "part": "add",
+          "explain": "Function ka naam. Ye do numbers ko add karega."
+        },
+        {
+          "part": "a, b",
+          "explain": "Ye do parameters hain jo function ke andar values receive karte hain."
+        },
+        {
+          "part": "return",
+          "explain": "Function ka result wapas bhejta hai. return ke baad function turant khatam ho jata hai."
+        },
+        {
+          "part": "a + b",
+          "explain": "Do parameters ko add karke result banata hai."
+        },
+        {
+          "part": "result",
+          "explain": "Ye variable function se mila hua return value store karta hai."
+        },
+        {
+          "part": "add(5, 3)",
+          "explain": "Function call. 5 aur 3 arguments hain."
+        },
+        {
+          "part": "print(result)",
+          "explain": "Returned value ko screen par dikhata hai."
+        }
+      ],
+      "quiz_after_breakdown": [
+        {
+          "type": "mcq",
+          "question": "Function se value wapas bhejne ke liye kya use hota hai?",
+          "options": [
+            "print",
+            "return",
+            "input"
+          ],
+          "answer": "return"
+        },
+        {
+          "type": "fill_blank",
+          "question": "Function ka result wapas bhejne ke liye ______ likhte hain.",
+          "answer": "return"
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "square naam ka function banao jo number ka square return kare.",
+          "starter_code": "def square(n):\n    ______ n * n"
+        },
+        {
+          "instruction": "Function ka result value variable mein store karo.",
+          "starter_code": "value = square(______)"
+        },
+        {
+          "instruction": "Stored result print karo.",
+          "starter_code": "print(______)"
+        }
+      ],
+      "quiz_after_practice": [
+        {
+          "type": "mcq",
+          "question": "return ke baad function kya karta hai?",
+          "options": [
+            "Chalta rehta hai",
+            "Khatam ho jata hai",
+            "Restart hota hai"
+          ],
+          "answer": "Khatam ho jata hai"
+        },
+        {
+          "type": "mcq",
+          "question": "return ki value ko variable mein store kar sakte hain?",
+          "options": [
+            "Haan",
+            "Nahi"
+          ],
+          "answer": "Haan"
+        }
+      ],
+      "mini_task": "Ek multiply(a, b) function banao jo multiplication return kare. Result ko variable mein store karke print karo.",
+      "why_it_matters": "Real-world projects mein functions data return karte hain jise baad mein aur calculations ya APIs mein use kiya jata hai.",
+      "common_mistake": "Sirf print() kar dena aur return na karna. print sirf dikhata hai, return value wapas deta hai."
+    },
+    {
+      "lesson_number": 22,
+      "title": "Variable Scope",
+      "difficulty": "hard",
+      "concept": "Socho tumhare ghar ka ek room hai jahan ki cheezen sirf us room mein use hoti hain, aur kuch cheezen poore ghar mein. Python mein bhi kuch variables sirf function ke andar hote hain (local) aur kuch poore program mein (global).",
+      "example_code": "name = \"Chaman\"\n\ndef show_name():\n    city = \"Delhi\"\n    print(name)\n    print(city)\n\nshow_name()\nprint(name)",
+      "code_breakdown": [
+        {
+          "part": "name = \"Chaman\"",
+          "explain": "Ye global variable hai. Isse function ke andar aur bahar dono jagah use kar sakte ho."
+        },
+        {
+          "part": "def",
+          "explain": "Function define karta hai."
+        },
+        {
+          "part": "show_name",
+          "explain": "Function ka naam."
+        },
+        {
+          "part": "city = \"Delhi\"",
+          "explain": "Ye local variable hai. Sirf is function ke andar available hai."
+        },
+        {
+          "part": "print(name)",
+          "explain": "Global variable ko function ke andar access kiya ja sakta hai."
+        },
+        {
+          "part": "print(city)",
+          "explain": "Local variable function ke andar use ho raha hai."
+        },
+        {
+          "part": "show_name()",
+          "explain": "Function call karta hai."
+        },
+        {
+          "part": "print(name)",
+          "explain": "Global variable function ke bahar bhi available hai."
+        }
+      ],
+      "quiz_after_breakdown": [
+        {
+          "type": "mcq",
+          "question": "Function ke andar bana variable kya kehlata hai?",
+          "options": [
+            "Global",
+            "Local",
+            "Static"
+          ],
+          "answer": "Local"
+        },
+        {
+          "type": "fill_blank",
+          "question": "Poore program mein available variable ko ______ variable kehte hain.",
+          "answer": "global"
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "score naam ka global variable banao.",
+          "starter_code": "______ = 100"
+        },
+        {
+          "instruction": "game naam ka local variable function ke andar banao.",
+          "starter_code": "def play():\n    ______ = \"Chess\""
+        },
+        {
+          "instruction": "Global variable print karo.",
+          "starter_code": "print(______)"
+        }
+      ],
+      "quiz_after_practice": [
+        {
+          "type": "mcq",
+          "question": "Kya local variable ko function ke bahar use kar sakte hain?",
+          "options": [
+            "Haan",
+            "Nahi"
+          ],
+          "answer": "Nahi"
+        },
+        {
+          "type": "mcq",
+          "question": "Global variable kahan use ho sakta hai?",
+          "options": [
+            "Sirf function ke andar",
+            "Sirf function ke bahar",
+            "Andar aur bahar dono"
+          ],
+          "answer": "Andar aur bahar dono"
+        }
+      ],
+      "mini_task": "Ek global variable app_name banao. Ek function ke andar local variable version banao aur dono values print karo.",
+      "why_it_matters": "Bade software projects mein variables ka scope samajhna bugs se bachata hai aur code ko maintain karna aasaan banata hai.",
+      "common_mistake": "Local variable ko function ke bahar access karne ki koshish karna, jisse NameError aata hai."
+    },
+    {
+      "lesson_number": 23,
+      "title": "Strings aur Useful Methods",
+      "difficulty": "hard",
+      "concept": "Socho tum WhatsApp message edit kar rahe ho—kabhi sab letters CAPITAL karte ho, kabhi small, kabhi extra spaces hata dete ho. Python ki String methods bhi text ko modify karne mein help karti hain.",
+      "example_code": "text = \"  python Programming  \"\nprint(text.upper())\nprint(text.lower())\nprint(text.strip())\nprint(text.replace(\"Programming\", \"Coding\"))",
+      "code_breakdown": [
+        {
+          "part": "text",
+          "explain": "Ye variable String store karta hai."
+        },
+        {
+          "part": "=",
+          "explain": "Assignment operator jo value store karta hai."
+        },
+        {
+          "part": "\"  python Programming  \"",
+          "explain": "Ye String hai. Iske start aur end mein extra spaces bhi hain."
+        },
+        {
+          "part": "print()",
+          "explain": "Output screen par dikhata hai."
+        },
+        {
+          "part": "upper()",
+          "explain": "String ke sab letters ko UPPERCASE bana deta hai."
+        },
+        {
+          "part": "lower()",
+          "explain": "String ke sab letters ko lowercase bana deta hai."
+        },
+        {
+          "part": "strip()",
+          "explain": "Start aur end ke extra spaces hata deta hai."
+        },
+        {
+          "part": "replace()",
+          "explain": "Ek text ko doosre text se replace karta hai."
+        },
+        {
+          "part": "\"Programming\"",
+          "explain": "Ye purana text hai jo replace hoga."
+        },
+        {
+          "part": "\"Coding\"",
+          "explain": "Ye naya text hai jo purane text ki jagah aayega."
+        }
+      ],
+      "quiz_after_breakdown": [
+        {
+          "type": "mcq",
+          "question": "Extra spaces hatane ke liye kaunsi method use hoti hai?",
+          "options": [
+            "strip()",
+            "upper()",
+            "lower()"
+          ],
+          "answer": "strip()"
+        },
+        {
+          "type": "fill_blank",
+          "question": "Sab letters ko CAPITAL banane ke liye ______ use hota hai.",
+          "answer": "upper()"
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "String ko lowercase mein convert karo.",
+          "starter_code": "print(name.______)"
+        },
+        {
+          "instruction": "Extra spaces hatao.",
+          "starter_code": "print(name.______)"
+        },
+        {
+          "instruction": "Hello ko Hi se replace karo.",
+          "starter_code": "print(text.replace(\"Hello\", \"______\"))"
+        }
+      ],
+      "quiz_after_practice": [
+        {
+          "type": "mcq",
+          "question": "replace() kya karta hai?",
+          "options": [
+            "Text delete karta hai",
+            "Text replace karta hai",
+            "Number add karta hai"
+          ],
+          "answer": "Text replace karta hai"
+        },
+        {
+          "type": "mcq",
+          "question": "lower() ka result kya hota hai?",
+          "options": [
+            "Small letters",
+            "Capital letters",
+            "Numbers"
+          ],
+          "answer": "Small letters"
+        }
+      ],
+      "mini_task": "User se naam lo. strip(), upper() aur lower() ka use karke teen alag outputs print karo.",
+      "why_it_matters": "Search, login, chat apps aur AI text processing mein String methods roz use hoti hain.",
+      "common_mistake": "Sochna ki String methods original String ko change kar deti hain. Ye nayi String return karti hain."
+    },
+    {
+      "lesson_number": 24,
+      "title": "Dictionaries (Key-Value Data)",
+      "difficulty": "hard",
+      "concept": "Socho phone contact mein har naam ke saath uska number hota hai. Dictionary bhi isi tarah key aur uski value ko pair mein store karti hai.",
+      "example_code": "student = {\n    \"name\": \"Chaman\",\n    \"age\": 18,\n    \"city\": \"Delhi\"\n}\nprint(student[\"name\"])\nprint(student[\"age\"])",
+      "code_breakdown": [
+        {
+          "part": "student",
+          "explain": "Dictionary variable ka naam."
+        },
+        {
+          "part": "{ }",
+          "explain": "Curly braces Dictionary banane ke liye use hote hain."
+        },
+        {
+          "part": "\"name\"",
+          "explain": "Ye key hai. Iski help se value access karte hain."
+        },
+        {
+          "part": ":",
+          "explain": "Key aur value ko alag karta hai."
+        },
+        {
+          "part": "\"Chaman\"",
+          "explain": "Ye key 'name' ki value hai."
+        },
+        {
+          "part": ",",
+          "explain": "Har key-value pair ko alag karta hai."
+        },
+        {
+          "part": "\"age\": 18",
+          "explain": "Ek aur key-value pair."
+        },
+        {
+          "part": "student[\"name\"]",
+          "explain": "Key ke through value access karta hai."
+        },
+        {
+          "part": "print()",
+          "explain": "Output screen par dikhata hai."
+        }
+      ],
+      "quiz_after_breakdown": [
+        {
+          "type": "mcq",
+          "question": "Dictionary kis symbol se banti hai?",
+          "options": [
+            "[ ]",
+            "{ }",
+            "( )"
+          ],
+          "answer": "{ }"
+        },
+        {
+          "type": "fill_blank",
+          "question": "Dictionary mein data ______ aur value ke pair mein hota hai.",
+          "answer": "key"
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "price key ki value 500 rakho.",
+          "starter_code": "item = {\"price\": ______}"
+        },
+        {
+          "instruction": "price print karo.",
+          "starter_code": "print(item[\"______\"])"
+        },
+        {
+          "instruction": "color key add karo.",
+          "starter_code": "item[\"color\"] = \"______\""
+        }
+      ],
+      "quiz_after_practice": [
+        {
+          "type": "mcq",
+          "question": "Dictionary mein value access karne ke liye kya use hota hai?",
+          "options": [
+            "Key",
+            "Loop",
+            "Function"
+          ],
+          "answer": "Key"
+        },
+        {
+          "type": "mcq",
+          "question": "Ek Dictionary mein multiple key-value pairs ho sakte hain?",
+          "options": [
+            "Haan",
+            "Nahi"
+          ],
+          "answer": "Haan"
+        }
+      ],
+      "mini_task": "Apni profile ki Dictionary banao jisme name, age, city aur hobby ho. Phir sab values print karo.",
+      "why_it_matters": "JSON, APIs aur databases ka bahut saara data Dictionary jaisi structure mein hota hai.",
+      "common_mistake": "List aur Dictionary ke brackets confuse karna. List = [ ], Dictionary = { }."
+    },
+    {
+      "lesson_number": 25,
+      "title": "Mini Project - Student Result System",
+      "difficulty": "hard",
+      "concept": "Ab tak tum variables, input, conditions, functions aur dictionaries seekh chuke ho. Ab in sab concepts ko mila kar ek chhota real-world project banayenge jo student ka result batayega.",
+      "example_code": "def get_grade(marks):\n    if marks >= 90:\n        return \"A\"\n    elif marks >= 75:\n        return \"B\"\n    elif marks >= 50:\n        return \"C\"\n    else:\n        return \"Fail\"\n\nname = input(\"Name: \")\nmarks = int(input(\"Marks: \"))\nprint(\"Student:\", name)\nprint(\"Grade:\", get_grade(marks))",
+      "code_breakdown": [
+        {
+          "part": "def get_grade(marks)",
+          "explain": "Ye function marks receive karta hai aur grade decide karta hai."
+        },
+        {
+          "part": "if / elif / else",
+          "explain": "Marks ke hisaab se alag-alag conditions check hoti hain."
+        },
+        {
+          "part": "return",
+          "explain": "Final grade function se wapas bhejta hai."
+        },
+        {
+          "part": "input()",
+          "explain": "User se naam aur marks leta hai."
+        },
+        {
+          "part": "int()",
+          "explain": "Marks ko String se Integer mein convert karta hai."
+        },
+        {
+          "part": "print()",
+          "explain": "Student ka naam aur final grade screen par dikhata hai."
+        },
+        {
+          "part": "get_grade(marks)",
+          "explain": "Function call karke marks ke hisaab se grade leta hai."
+        }
+      ],
+      "quiz_after_breakdown": [
+        {
+          "type": "mcq",
+          "question": "Is project mein grade decide karne ka kaam kaun karta hai?",
+          "options": [
+            "get_grade()",
+            "print()",
+            "input()"
+          ],
+          "answer": "get_grade()"
+        },
+        {
+          "type": "fill_blank",
+          "question": "Marks ko number banane ke liye ______ use hota hai.",
+          "answer": "int()"
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "80 marks ke liye function call karo.",
+          "starter_code": "print(get_grade(______))"
+        },
+        {
+          "instruction": "User ka naam lo.",
+          "starter_code": "name = ______(\"Name: \")"
+        },
+        {
+          "instruction": "Marks ko Integer mein convert karo.",
+          "starter_code": "marks = ______(input(\"Marks: \"))"
+        }
+      ],
+      "quiz_after_practice": [
+        {
+          "type": "mcq",
+          "question": "Ye project kis concept ka combination hai?",
+          "options": [
+            "Sirf Variables",
+            "Multiple Python Concepts",
+            "Sirf Loops"
+          ],
+          "answer": "Multiple Python Concepts"
+        },
+        {
+          "type": "mcq",
+          "question": "Real projects mein chhote functions banana achhi practice hai?",
+          "options": [
+            "Haan",
+            "Nahi"
+          ],
+          "answer": "Haan"
+        }
+      ],
+      "mini_task": "Project ko upgrade karo: Student ka name, marks aur city lo. Dictionary mein store karo, function se grade nikalo aur final report print karo.",
+      "why_it_matters": "Ye project real software development ka pehla step hai. Isi tarah chhote modules mila kar bade applications bante hain.",
+      "common_mistake": "Saara code ek hi jagah likh dena. Function use karne se code clean aur reusable rehta hai."
+    }
+  ]
+}
