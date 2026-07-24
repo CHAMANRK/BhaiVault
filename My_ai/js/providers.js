@@ -19,7 +19,7 @@
 
 const PROVIDER_PRESETS = {
   openrouter: { label: 'OpenRouter', base: 'https://openrouter.ai/api/v1/chat/completions', model: 'meta-llama/llama-3.3-70b-instruct:free' },
-  groq: { label: 'Groq', base: 'https://api.groq.com/openai/v1/chat/completions', model: 'openai/gpt-oss-120b' },
+  groq: { label: 'Groq', base: 'https://api.groq.com/openai/v1/chat/completions', model: 'llama-3.3-70b-versatile' },
   mistral: { label: 'Mistral AI', base: 'https://api.mistral.ai/v1/chat/completions', model: 'mistral-small-latest' },
   together: { label: 'Together AI', base: 'https://api.together.xyz/v1/chat/completions', model: 'meta-llama/Llama-3.3-70B-Instruct-Turbo-Free' },
   cerebras: { label: 'Cerebras', base: 'https://api.cerebras.ai/v1/chat/completions', model: 'llama-3.3-70b' },
@@ -337,4 +337,4 @@ async function attemptServerCall(bubbleEl, promptInputs, messages) {
   cursor.remove();
   if (!full) throw new Error('khaali response aaya');
   return { text: full, label: providerLabel, model: providerModel, stoppedForExec, stoppedForSearch, stoppedForTool };
-}
+    }
