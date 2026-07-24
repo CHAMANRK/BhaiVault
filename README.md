@@ -205,5 +205,6 @@ Personal use ke liye free hai. Apne dosto ke saath share karo. 🙌
 ---
 
 <div align="center">
-Made with ❤️ — No cloud. No tracking. Just your passwords.
+Made with ❤️ Najeef
+    No cloud. No tracking. Just your passwords.
 </div>
