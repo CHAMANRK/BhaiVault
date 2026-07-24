@@ -160,6 +160,10 @@ async function streamChat(bubbleEl, promptInputs, messages) {
     // UX: "on failure/degradation, response just feels a bit slow — no
     // scary error messages exposed to user"). If we get here, everything
     // failed server-side too — genuinely nothing left to fall back to.
+    // The exact reason (e.message, from api/chat.js) is intentionally kept
+    // out of the toast for UX — but it's still useful for debugging, so
+    // log it to console (check via chrome://inspect or Vercel function logs).
+    console.error('[Chaman AI] server call failed:', e.message);
     toast('⚠️ Abhi thoda slow/down chal raha hai, thodi der mein try karo');
     throw e;
   }
