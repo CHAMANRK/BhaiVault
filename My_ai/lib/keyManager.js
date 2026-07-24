@@ -30,7 +30,7 @@ const PROVIDER_CONFIG = {
     label: 'Groq',
     base: 'https://api.groq.com/openai/v1/chat/completions',
     models: {
-      big: 'openai/gpt-oss-120b',      // complex/coding queries — same model as before Phase 7
+      big: 'llama-3.3-70b-versatile',      // complex/coding queries — best available on Groq free tier
       fast: 'llama-3.1-8b-instant',    // simple queries + bare-mode utility calls (follow-ups, summaries)
     },
     keysEnv: 'GROQ_KEYS', // Vercel env var, comma-separated: "key1,key2,key3"
@@ -75,7 +75,7 @@ const PROVIDER_CONFIG = {
 // daily token volume), then Mistral, then OpenRouter last (free lineup
 // there is the most volatile of the four, so it's the fallback-of-
 // fallbacks rather than a primary).
-const PROVIDER_ORDER = ['groq', 'cerebras', 'mistral', 'openrouter'];
+const PROVIDER_ORDER = ['groq', 'cerebras', 'mistral', 'openrouter']; // Groq is primary as requested
 
 // In-memory health state: { [provider]: { [keyIndex]: { deadUntil: ms, failCount: n } } }
 const health = {};
