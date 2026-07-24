@@ -1,0 +1,2307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chaman Bhai Production - Aviator Demo (Fun Coins Only)</title>
+<style>
+  :root{
+    --cyan:#00e5ff;
+    --purple:#7b61ff;
+    --bg:#0a0e17;
+    --panel:rgba(20,25,40,0.65);
+    --crash-red:#ff3b5c;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    font-family:'Space Mono', monospace, sans-serif;
+    background:radial-gradient(circle at 50% 0%, #131a2b 0%, #06080f 70%);
+    color:#fff;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:16px;
+  }
+  /* ---------- WELCOME SCREEN ---------- */
+  .welcome-screen{
+    position:fixed;
+    top:0;left:0;right:0;bottom:0;
+    background:radial-gradient(circle at 50% 30%, #131a2b 0%, #06080f 70%);
+    z-index:500;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    padding:24px;
+    gap:0;
+    transition:opacity 0.4s, transform 0.4s;
+  }
+  .welcome-screen.hiding{
+    opacity:0;
+    transform:scale(1.04);
+    pointer-events:none;
+  }
+  .welcome-logo{
+    font-size:11px;
+    color:var(--cyan);
+    letter-spacing:2px;
+    opacity:0.6;
+    margin-bottom:6px;
+    text-align:center;
+  }
+  .welcome-title{
+    font-size:32px;
+    font-weight:bold;
+    background:linear-gradient(135deg,#fff 30%,var(--cyan));
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    background-clip:text;
+    text-align:center;
+    line-height:1.1;
+    margin-bottom:4px;
+  }
+  .welcome-sub{
+    font-size:11px;
+    color:#556;
+    text-align:center;
+    margin-bottom:28px;
+  }
+  .welcome-card{
+    width:100%;
+    max-width:360px;
+    background:rgba(20,25,40,0.7);
+    border:1px solid rgba(123,97,255,0.2);
+    border-radius:20px;
+    padding:20px;
+    backdrop-filter:blur(14px);
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+  }
+  .welcome-section-label{
+    font-size:9px;
+    color:#556;
+    letter-spacing:1.2px;
+    text-transform:uppercase;
+    margin-bottom:2px;
+  }
+  .welcome-coins-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    background:rgba(255,215,0,0.06);
+    border:1px solid rgba(255,215,0,0.15);
+    border-radius:12px;
+    padding:10px 14px;
+  }
+  .welcome-coins-left{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-size:20px;
+    font-weight:bold;
+    color:#ffd700;
+  }
+  .welcome-coins-left .icon{ font-size:18px; }
+  .welcome-reset-btn{
+    background:rgba(255,59,92,0.12);
+    border:1px solid rgba(255,59,92,0.3);
+    color:#ff8a9a;
+    font-size:11px;
+    font-weight:bold;
+    padding:6px 12px;
+    border-radius:9px;
+    cursor:pointer;
+  }
+  .welcome-acct-row{
+    display:flex;
+    gap:8px;
+  }
+  .welcome-account-select{
+    flex:1;
+    background:rgba(255,255,255,0.06);
+    border:1px solid rgba(255,255,255,0.1);
+    color:#fff;
+    border-radius:10px;
+    padding:10px 12px;
+    font-size:13px;
+    font-family:inherit;
+    cursor:pointer;
+  }
+  .welcome-account-select option{ background:#0e1422; color:#fff; }
+  .welcome-manage-btn{
+    background:rgba(123,97,255,0.15);
+    border:1px solid rgba(123,97,255,0.35);
+    color:#b8aaff;
+    font-size:11px;
+    font-weight:bold;
+    padding:10px 12px;
+    border-radius:10px;
+    cursor:pointer;
+    white-space:nowrap;
+  }
+  .welcome-start-btn{
+    width:100%;
+    padding:16px;
+    border-radius:14px;
+    border:none;
+    font-size:17px;
+    font-weight:bold;
+    cursor:pointer;
+    color:#fff;
+    background:linear-gradient(135deg,#00c853,#00e5ff);
+    letter-spacing:1px;
+    margin-top:4px;
+    box-shadow:0 4px 20px rgba(0,229,255,0.2);
+  }
+  .welcome-start-btn:active{ transform:scale(0.98); }
+  .welcome-disclaimer{
+    font-size:10px;
+    color:#445;
+    text-align:center;
+    margin-top:16px;
+    line-height:1.5;
+  }
+
+  /* ---------- IN-GAME MINIMAL HEADER ---------- */
+  .ingame-header{
+    width:100%;
+    max-width:480px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:8px;
+    padding:0 2px;
+  }
+  .ingame-coins-pill{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    background:rgba(20,25,40,0.7);
+    border:1px solid rgba(255,215,0,0.2);
+    border-radius:20px;
+    padding:6px 12px;
+    font-size:14px;
+    font-weight:bold;
+    color:#ffd700;
+  }
+  .ingame-right{
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .ingame-gear-btn{
+    background:rgba(255,255,255,0.06);
+    border:1px solid rgba(255,255,255,0.1);
+    color:#889;
+    font-size:16px;
+    width:34px;
+    height:34px;
+    border-radius:50%;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .ingame-gear-btn:active{ background:rgba(255,255,255,0.12); }
+  .ingame-claim-btn{
+    background:linear-gradient(135deg,var(--purple),var(--cyan));
+    border:none;
+    color:#fff;
+    font-weight:bold;
+    font-size:11px;
+    padding:7px 11px;
+    border-radius:20px;
+    cursor:pointer;
+    white-space:nowrap;
+  }
+  .ingame-claim-btn:disabled{ background:#333; color:#666; cursor:not-allowed; }
+
+  /* ---------- TOPBAR (old — keeping for reference, hidden) ---------- */
+  .topbar,.account-bar,.reset-row{ display:none; }
+
+  .game-card{
+    width:100%;
+    max-width:480px;
+    background:var(--panel);
+    border:1px solid rgba(123,97,255,0.25);
+    border-radius:20px;
+    backdrop-filter:blur(14px);
+    box-shadow:0 8px 32px rgba(0,0,0,0.4);
+    overflow:hidden;
+  }
+  .history-strip{
+    display:flex;
+    gap:6px;
+    padding:10px 12px;
+    overflow-x:auto;
+    border-bottom:1px solid rgba(255,255,255,0.05);
+  }
+  .history-chip{
+    flex:0 0 auto;
+    font-size:11px;
+    padding:4px 8px;
+    border-radius:8px;
+    background:rgba(255,255,255,0.05);
+    color:#9be7ff;
+  }
+  .history-chip.low{color:#ff7a90;}
+  .history-chip.high{color:#7CFFB2;}
+  canvas{
+    width:100%;
+    height:280px;
+    display:block;
+    background:linear-gradient(180deg,#0c1220 0%, #070a12 100%);
+  }
+  .multiplier-overlay{
+    position:relative;
+  }
+  .mult-text{
+    position:absolute;
+    top:40%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    font-size:42px;
+    font-weight:bold;
+    color:#fff;
+    text-shadow:0 0 20px rgba(0,229,255,0.6);
+    transition:color 0.2s;
+  }
+  .mult-text.crashed{color:var(--crash-red);text-shadow:0 0 20px rgba(255,59,92,0.6);}
+  .status-text{
+    position:absolute;
+    top:62%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    font-size:13px;
+    color:#aaa;
+    letter-spacing:1px;
+  }
+  /* big countdown overlay shown during waiting phase */
+  .countdown-overlay{
+    position:absolute;
+    top:0;left:0;right:0;bottom:0;
+    display:none;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:4px;
+    pointer-events:none;
+  }
+  .countdown-overlay.show{ display:flex; }
+  .countdown-label{
+    font-size:11px;
+    color:#667;
+    letter-spacing:2px;
+    text-transform:uppercase;
+  }
+  .countdown-number{
+    font-size:72px;
+    font-weight:bold;
+    color:#fff;
+    text-shadow:0 0 30px rgba(123,97,255,0.7);
+    line-height:1;
+    font-variant-numeric:tabular-nums;
+    animation:countdown-pulse 1s ease-in-out infinite;
+  }
+  @keyframes countdown-pulse{
+    0%,100%{ opacity:1; transform:scale(1); }
+    50%{ opacity:0.7; transform:scale(0.95); }
+  }
+  .controls{
+    padding:16px;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+  }
+  .bet-row{
+    display:flex;
+    gap:8px;
+  }
+  .bet-input{
+    flex:1;
+    background:rgba(255,255,255,0.06);
+    border:1px solid rgba(255,255,255,0.1);
+    color:#fff;
+    border-radius:12px;
+    padding:12px;
+    font-size:15px;
+    font-family:inherit;
+  }
+  .quick-btns{
+    display:flex;
+    gap:6px;
+  }
+  .quick-btns button{
+    flex:1;
+    background:rgba(255,255,255,0.06);
+    border:1px solid rgba(255,255,255,0.08);
+    color:#cde;
+    border-radius:10px;
+    padding:8px;
+    font-size:12px;
+    cursor:pointer;
+  }
+  .main-action{
+    padding:16px;
+    border-radius:14px;
+    border:none;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+    color:#fff;
+    transition:transform 0.1s;
+  }
+  .main-action:active{transform:scale(0.98);}
+  .main-action.bet{
+    background:linear-gradient(135deg,#00c853,#00e5ff);
+  }
+  .main-action.cashout{
+    background:linear-gradient(135deg,#ff9100,#ffd700);
+    color:#1a1200;
+  }
+  .main-action.waiting{
+    background:#2a2f3d;
+    color:#888;
+    cursor:not-allowed;
+  }
+  .main-action.placed{
+    background:#1d3a2a;
+    color:#7CFFB2;
+    cursor:not-allowed;
+  }
+  /* ---------- TOAST (colored) ---------- */
+  .toast{
+    position:fixed;
+    bottom:20px;
+    left:50%;
+    transform:translateX(-50%);
+    background:rgba(20,25,40,0.97);
+    border:1px solid var(--cyan);
+    padding:10px 18px;
+    border-radius:12px;
+    font-size:13px;
+    opacity:0;
+    transition:opacity 0.3s;
+    pointer-events:none;
+    z-index:100;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    white-space:nowrap;
+  }
+  .toast.show{opacity:1;}
+  .toast.toast-win{ border-color:#7CFFB2; color:#7CFFB2; }
+  .toast.toast-loss{ border-color:#ff3b5c; color:#ff8a9a; }
+  .toast.toast-info{ border-color:var(--cyan); color:#9be7ff; }
+  .toast.toast-gold{ border-color:#ffd700; color:#ffd700; }
+
+  /* ---------- COUNTDOWN PROGRESS BAR ---------- */
+  .countdown-bar-wrap{
+    position:absolute;
+    bottom:0; left:0; right:0;
+    height:4px;
+    background:rgba(255,255,255,0.06);
+    overflow:hidden;
+  }
+  .countdown-bar-fill{
+    height:100%;
+    width:100%;
+    background:linear-gradient(90deg,var(--purple),var(--cyan));
+    transform-origin:left center;
+    transition:none;
+  }
+
+  /* ---------- MULTIPLIER COLOR STATES ---------- */
+  .mult-text.glow-green{ color:#7CFFB2; text-shadow:0 0 24px rgba(124,255,178,0.7); }
+  .mult-text.glow-orange{ color:#ff9100; text-shadow:0 0 28px rgba(255,145,0,0.7); }
+  .mult-text.glow-gold{
+    color:#ffd700;
+    text-shadow:0 0 32px rgba(255,215,0,0.9);
+    animation:gold-pulse 0.6s infinite alternate;
+  }
+  @keyframes gold-pulse{
+    from{ text-shadow:0 0 20px rgba(255,215,0,0.6); }
+    to{   text-shadow:0 0 40px rgba(255,215,0,1), 0 0 60px rgba(255,145,0,0.5); }
+  }
+  .mode-tabs{
+    display:flex;
+    gap:6px;
+    padding:0 16px 10px 16px;
+  }
+  .mode-tab{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:1px;
+    text-align:center;
+    padding:10px;
+    border-radius:10px;
+    background:rgba(255,255,255,0.04);
+    color:#889;
+    font-size:13px;
+    font-weight:bold;
+    cursor:pointer;
+    border:1px solid rgba(255,255,255,0.06);
+  }
+  .mode-tab.active{
+    background:linear-gradient(135deg,var(--purple),var(--cyan));
+    color:#fff;
+  }
+  .auto-panel{
+    display:none;
+    flex-direction:column;
+    gap:10px;
+    padding:0 16px 16px 16px;
+  }
+  .auto-panel.show{display:flex;}
+  .auto-field{
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+  }
+  .auto-field label{
+    font-size:11px;
+    color:#889;
+    letter-spacing:0.5px;
+  }
+  .auto-status{
+    font-size:12px;
+    color:#9be7ff;
+    text-align:center;
+    padding:6px;
+    background:rgba(255,255,255,0.03);
+    border-radius:8px;
+  }
+  .main-action.stop{
+    background:linear-gradient(135deg,#ff3b5c,#ff9100);
+  }
+  .bet-mode-btn.active{
+    background:linear-gradient(135deg,var(--purple),var(--cyan));
+    color:#fff;
+    border-color:transparent;
+  }
+  .modal-backdrop{
+    display:none;
+    position:fixed;
+    top:0;left:0;right:0;bottom:0;
+    background:rgba(0,0,0,0.6);
+    z-index:600;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+  }
+  .modal-backdrop.show{display:flex;}
+  .modal-box{
+    background:#0e1422;
+    border:1px solid rgba(123,97,255,0.4);
+    border-radius:16px;
+    padding:20px;
+    width:100%;
+    max-width:380px;
+  }
+  .modal-box h3{
+    font-size:15px;
+    color:var(--cyan);
+    margin-bottom:10px;
+  }
+  .modal-box p{
+    font-size:13px;
+    color:#ccd;
+    line-height:1.5;
+    margin-bottom:16px;
+  }
+  .modal-actions{
+    display:flex;
+    gap:8px;
+  }
+  .modal-actions button{
+    flex:1;
+    padding:12px;
+    border-radius:10px;
+    border:none;
+    font-weight:bold;
+    cursor:pointer;
+    font-size:13px;
+  }
+  .modal-actions .confirm{background:linear-gradient(135deg,#ff3b5c,#ff9100);color:#fff;}
+  .modal-actions .cancel{background:rgba(255,255,255,0.08);color:#ccc;}
+  .disclaimer{
+    max-width:480px;
+    text-align:center;
+    font-size:10px;
+    color:#555;
+    margin-top:14px;
+    line-height:1.5;
+  }
+
+  /* ---------- ACCOUNT BAR ---------- */
+  .account-bar{
+    width:100%;
+    max-width:480px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin-bottom:8px;
+    background:rgba(20,25,40,0.55);
+    border:1px solid rgba(123,97,255,0.2);
+    border-radius:14px;
+    padding:8px 12px;
+    backdrop-filter:blur(10px);
+  }
+  .account-label{
+    font-size:10px;
+    color:#667;
+    letter-spacing:0.5px;
+    white-space:nowrap;
+  }
+  .account-select{
+    flex:1;
+    background:rgba(255,255,255,0.06);
+    border:1px solid rgba(255,255,255,0.1);
+    color:#fff;
+    border-radius:10px;
+    padding:6px 10px;
+    font-size:12px;
+    font-family:inherit;
+    cursor:pointer;
+  }
+  .account-select option{
+    background:#0e1422;
+    color:#fff;
+  }
+  .acct-btn{
+    background:rgba(123,97,255,0.15);
+    border:1px solid rgba(123,97,255,0.35);
+    color:#b8aaff;
+    font-size:11px;
+    font-weight:bold;
+    padding:6px 10px;
+    border-radius:10px;
+    cursor:pointer;
+    white-space:nowrap;
+  }
+  .acct-btn.danger{
+    background:rgba(255,59,92,0.12);
+    border-color:rgba(255,59,92,0.3);
+    color:#ff8a9a;
+  }
+
+  /* ---------- RESET COUNTER BADGE ---------- */
+  .reset-row{
+    display:flex;
+    align-items:center;
+    justify-content:flex-end;
+    gap:8px;
+  }
+  .reset-counter-badge{
+    font-size:10px;
+    color:#667;
+    background:rgba(255,255,255,0.04);
+    border:1px solid rgba(255,255,255,0.07);
+    border-radius:8px;
+    padding:4px 10px;
+    letter-spacing:0.3px;
+  }
+  .reset-counter-badge span{
+    color:#ff8a9a;
+    font-weight:bold;
+  }
+
+  /* ---------- ACCOUNT MODAL ---------- */
+  .acct-input{
+    width:100%;
+    background:rgba(255,255,255,0.06);
+    border:1px solid rgba(255,255,255,0.12);
+    color:#fff;
+    border-radius:10px;
+    padding:10px 12px;
+    font-size:14px;
+    font-family:inherit;
+    margin-bottom:14px;
+  }
+  .acct-input::placeholder{color:#556;}
+  .acct-list{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+    margin-bottom:14px;
+    max-height:200px;
+    overflow-y:auto;
+  }
+  .acct-list-item{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    background:rgba(255,255,255,0.04);
+    border:1px solid rgba(255,255,255,0.07);
+    border-radius:10px;
+    padding:8px 12px;
+  }
+  .acct-list-item.active-acct{
+    border-color:rgba(0,229,255,0.4);
+    background:rgba(0,229,255,0.06);
+  }
+  .acct-list-item .acct-name{
+    font-size:13px;
+    color:#cde;
+  }
+  .acct-list-item .acct-coins{
+    font-size:11px;
+    color:#ffd700;
+  }
+  .acct-list-item .acct-del{
+    background:rgba(255,59,92,0.15);
+    border:1px solid rgba(255,59,92,0.3);
+    color:#ff8a9a;
+    border-radius:7px;
+    padding:3px 8px;
+    font-size:11px;
+    cursor:pointer;
+    margin-left:8px;
+  }
+  .acct-active-tag{
+    font-size:9px;
+    color:#00e5ff;
+    background:rgba(0,229,255,0.1);
+    border-radius:5px;
+    padding:2px 6px;
+    margin-left:6px;
+  }
+
+  /* ---------- PREMIUM TAB ---------- */
+  .mode-tab.premium{ background:linear-gradient(135deg,#7b61ff22,#ffd70022); border-color:rgba(255,215,0,0.25); color:#ffd700; }
+  .mode-tab.premium.active{ background:linear-gradient(135deg,#7b61ff,#ffd700); color:#1a1200; }
+  .prem-tab-timer{
+    font-size:9px;
+    font-weight:normal;
+    letter-spacing:0.5px;
+    opacity:0.85;
+    line-height:1;
+    color:inherit;
+  }
+  /* badge inside coins-box */
+  .coins-box .prem-global-badge{
+    border:none;
+    background:none;
+    padding:0;
+    border-radius:0;
+    gap:4px;
+  }
+  .premium-panel{ display:none; flex-direction:column; gap:0; }
+  .premium-panel.show{ display:flex; }
+
+  .prem-buy-screen{ padding:16px; display:flex; flex-direction:column; gap:12px; align-items:center; }
+  .prem-lock-icon{ font-size:36px; margin-bottom:4px; }
+  .prem-buy-title{ font-size:14px; font-weight:bold; color:#ffd700; text-align:center; letter-spacing:0.5px; }
+  .prem-buy-desc{ font-size:11px; color:#889; text-align:center; line-height:1.6; max-width:300px; }
+
+  .prem-tier-card{
+    width:100%; border-radius:14px; padding:14px 16px;
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+    cursor:pointer; transition:transform 0.1s; border:1px solid;
+  }
+  .prem-tier-card:active{ transform:scale(0.98); }
+  .prem-tier-card.basic{ background:linear-gradient(135deg,rgba(123,97,255,0.18),rgba(0,229,255,0.08)); border-color:rgba(123,97,255,0.4); }
+  .prem-tier-card.pro{ background:linear-gradient(135deg,rgba(255,215,0,0.15),rgba(255,145,0,0.1)); border-color:rgba(255,215,0,0.4); }
+  .prem-tier-card.disabled-card{ opacity:0.35; cursor:not-allowed; pointer-events:none; }
+  .prem-tier-info .tier-name{ font-size:13px; font-weight:bold; color:#fff; }
+  .prem-tier-info .tier-detail{ font-size:10px; color:#889; margin-top:2px; }
+  .prem-tier-price{ text-align:right; }
+  .prem-tier-price .price-amt{ font-size:13px; font-weight:bold; color:#ffd700; }
+  .prem-tier-price .price-dur{ font-size:10px; color:#889; margin-top:2px; }
+  .prem-locked-note{ font-size:10px; color:#556; text-align:center; padding:0 8px; }
+
+  .prem-active-screen{ padding:12px 16px 4px 16px; display:flex; flex-direction:column; gap:10px; }
+  .prem-timer-bar{
+    display:flex; align-items:center; justify-content:space-between;
+    background:linear-gradient(135deg,rgba(255,215,0,0.1),rgba(123,97,255,0.1));
+    border:1px solid rgba(255,215,0,0.3); border-radius:12px; padding:10px 14px;
+  }
+  .prem-tier-badge{ font-size:9px; font-weight:bold; letter-spacing:1px; color:#ffd700; opacity:0.7; }
+  .prem-timer-countdown{ font-size:20px; font-weight:bold; color:#ffd700; font-variant-numeric:tabular-nums; }
+  .prem-status-dot{ width:10px; height:10px; border-radius:50%; background:#7CFFB2; box-shadow:0 0 8px #7CFFB2; animation:pulse-dot 1.2s infinite; }
+  @keyframes pulse-dot{ 0%,100%{opacity:1;} 50%{opacity:0.3;} }
+  .prem-info-note{ font-size:10px; color:#667; text-align:center; padding:0 4px 8px 4px; line-height:1.5; }
+  .prem-bet-mode-btn.active{
+    background:linear-gradient(135deg,var(--purple),var(--cyan));
+    color:#fff;
+    border-color:transparent;
+  }
+
+  /* ---------- PROMO CODE SECTION ---------- */
+  .promo-section{
+    width:100%;
+    border-top:1px solid rgba(255,255,255,0.06);
+    padding:14px 16px 16px 16px;
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+  }
+  .promo-label{
+    font-size:10px;
+    color:#889;
+    letter-spacing:0.8px;
+    text-transform:uppercase;
+  }
+  .promo-row{
+    display:flex;
+    gap:8px;
+  }
+  .promo-input{
+    flex:1;
+    background:rgba(255,255,255,0.05);
+    border:1px solid rgba(255,215,0,0.2);
+    color:#fff;
+    border-radius:10px;
+    padding:10px 12px;
+    font-size:13px;
+    font-family:inherit;
+    letter-spacing:1px;
+    text-transform:uppercase;
+  }
+  .promo-input::placeholder{ color:#556; text-transform:none; letter-spacing:0; }
+  .promo-input:focus{ outline:none; border-color:rgba(255,215,0,0.5); }
+  .promo-redeem-btn{
+    background:linear-gradient(135deg,#7b61ff,#ffd700);
+    border:none;
+    color:#1a1200;
+    font-weight:bold;
+    font-size:12px;
+    padding:10px 14px;
+    border-radius:10px;
+    cursor:pointer;
+    white-space:nowrap;
+  }
+  .promo-redeem-btn:active{ transform:scale(0.97); }
+  .promo-msg{
+    font-size:11px;
+    text-align:center;
+    min-height:16px;
+    transition:color 0.2s;
+  }
+  .promo-msg.ok{ color:#7CFFB2; }
+  .promo-msg.err{ color:#ff8a9a; }
+  .promo-msg.special{ color:#ffd700; }
+
+  /* ---------- GLOBAL PREMIUM ACTIVE BADGE ---------- */
+  .prem-global-badge{
+    display:none;
+    align-items:center;
+    gap:5px;
+    background:linear-gradient(135deg,rgba(123,97,255,0.25),rgba(255,215,0,0.2));
+    border:1px solid rgba(255,215,0,0.35);
+    border-radius:20px;
+    padding:3px 9px;
+    font-size:10px;
+    font-weight:bold;
+    color:#ffd700;
+    white-space:nowrap;
+    letter-spacing:0.5px;
+  }
+  .prem-global-badge.show{ display:flex; }
+  .prem-global-badge .prem-dot{
+    width:6px; height:6px; border-radius:50%;
+    background:#7CFFB2;
+    box-shadow:0 0 5px #7CFFB2;
+    animation:pulse-dot 1.2s infinite;
+  }
+  /* slim banner below tabs */
+  .prem-active-banner{
+    display:none;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
+    padding:5px 12px;
+    background:linear-gradient(90deg,rgba(123,97,255,0.12),rgba(255,215,0,0.08),rgba(123,97,255,0.12));
+    border-bottom:1px solid rgba(255,215,0,0.15);
+    font-size:10px;
+    color:#ffd700;
+    letter-spacing:0.5px;
+  }
+  .prem-active-banner.show{ display:flex; }
+  .prem-active-banner .prem-dot{
+    width:5px; height:5px; border-radius:50%;
+    background:#7CFFB2;
+    box-shadow:0 0 4px #7CFFB2;
+    animation:pulse-dot 1.2s infinite;
+  }
+
+  /* ---------- SPECIAL PROMO MODAL ---------- */
+  .special-modal-backdrop{
+    display:none;
+    position:fixed;
+    top:0;left:0;right:0;bottom:0;
+    background:rgba(0,0,0,0.75);
+    z-index:700;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    backdrop-filter:blur(6px);
+  }
+  .special-modal-backdrop.show{ display:flex; }
+  .special-modal-card{
+    background:linear-gradient(145deg,#0e0a1a,#130f20);
+    border:1px solid rgba(255,215,0,0.35);
+    border-radius:20px;
+    padding:28px 22px 22px 22px;
+    width:100%;
+    max-width:340px;
+    text-align:center;
+    position:relative;
+    box-shadow:0 0 40px rgba(255,215,0,0.12), 0 8px 32px rgba(0,0,0,0.6);
+    animation:special-pop 0.35s cubic-bezier(0.34,1.56,0.64,1);
+  }
+  @keyframes special-pop{
+    from{ transform:scale(0.7); opacity:0; }
+    to{   transform:scale(1);   opacity:1; }
+  }
+  .special-modal-stars{
+    font-size:28px;
+    letter-spacing:4px;
+    margin-bottom:10px;
+    animation:star-spin 2s linear infinite;
+    display:inline-block;
+  }
+  @keyframes star-spin{
+    0%  { filter:hue-rotate(0deg); }
+    100%{ filter:hue-rotate(360deg); }
+  }
+  .special-modal-title{
+    font-size:16px;
+    font-weight:bold;
+    color:#ffd700;
+    letter-spacing:1px;
+    margin-bottom:6px;
+  }
+  .special-modal-badge{
+    display:inline-block;
+    background:linear-gradient(135deg,#7b61ff,#ffd700);
+    color:#1a1200;
+    font-size:9px;
+    font-weight:bold;
+    letter-spacing:1.5px;
+    padding:3px 10px;
+    border-radius:20px;
+    margin-bottom:14px;
+  }
+  .special-modal-msg{
+    font-size:12px;
+    color:#ccd;
+    line-height:1.7;
+    margin-bottom:18px;
+  }
+  .special-modal-msg em{
+    color:#ffd700;
+    font-style:normal;
+    font-weight:bold;
+  }
+  .special-modal-timer{
+    font-size:11px;
+    color:#7CFFB2;
+    background:rgba(124,255,178,0.08);
+    border:1px solid rgba(124,255,178,0.2);
+    border-radius:8px;
+    padding:8px 14px;
+    margin-bottom:16px;
+    display:inline-block;
+  }
+  .special-modal-close{
+    background:linear-gradient(135deg,#7b61ff,#ffd700);
+    border:none;
+    color:#1a1200;
+    font-weight:bold;
+    font-size:13px;
+    padding:11px 32px;
+    border-radius:12px;
+    cursor:pointer;
+    width:100%;
+  }
+  .special-modal-close:active{ transform:scale(0.97); }
+</style>
+</head>
+<body>
+
+<!-- ========== WELCOME SCREEN ========== -->
+<div class="welcome-screen" id="welcomeScreen">
+  <div class="welcome-logo">CHAMAN BHAI PRODUCTION</div>
+  <div class="welcome-title">✈️ Aviator</div>
+  <div class="welcome-sub">Virtual coins only · For fun</div>
+
+  <div class="welcome-card">
+    <!-- Coins + Reset -->
+    <div>
+      <div class="welcome-section-label">Your Balance</div>
+      <div class="welcome-coins-row">
+        <div class="welcome-coins-left">
+          <span class="icon">🪙</span>
+          <span id="welcomeCoinAmt">0</span>
+        </div>
+        <button class="welcome-reset-btn" onclick="openResetModal()">↺ Reset</button>
+      </div>
+    </div>
+
+    <!-- Account -->
+    <div>
+      <div class="welcome-section-label">Account</div>
+      <div class="welcome-acct-row">
+        <select class="welcome-account-select" id="welcomeAccountSelect" onchange="switchAccount(this.value)"></select>
+        <button class="welcome-manage-btn" onclick="openAccountModal()">⚙ Manage</button>
+      </div>
+    </div>
+
+    <!-- Claim daily -->
+    <button class="ingame-claim-btn" id="welcomeClaimBtn" style="width:100%;padding:12px;border-radius:12px;font-size:13px;">Claim +1000</button>
+
+    <!-- Start -->
+    <button class="welcome-start-btn" onclick="startGame()">PLAY NOW 🚀</button>
+  </div>
+
+  <div class="welcome-disclaimer">Virtual coins only · No real money · Demo only</div>
+</div>
+
+<!-- ========== IN-GAME MINIMAL HEADER ========== -->
+<div class="ingame-header" id="ingameHeader" style="display:none;">
+  <div class="ingame-coins-pill">
+    🪙 <span id="coinAmt">0</span>
+    <div class="prem-global-badge" id="premGlobalBadge" style="margin-left:4px;">
+      <span class="prem-dot"></span>⭐ <span id="premGlobalTimer">--:--</span>
+    </div>
+  </div>
+  <div class="ingame-right">
+    <button class="ingame-claim-btn" id="claimBtn">Claim +1000</button>
+    <button class="ingame-gear-btn" onclick="openSettingsModal()" title="Settings">⚙</button>
+  </div>
+</div>
+
+<div class="game-card">
+  <div class="history-strip" id="historyStrip"></div>
+  <div class="multiplier-overlay">
+    <canvas id="gameCanvas"></canvas>
+    <div class="mult-text" id="multText" style="display:none;">1.00x</div>
+    <div class="status-text" id="statusText" style="display:none;"></div>
+    <div class="countdown-overlay" id="countdownOverlay">
+      <div class="countdown-label">STARTING IN</div>
+      <div class="countdown-number" id="countdownNumber">5</div>
+    </div>
+    <div class="countdown-bar-wrap" id="countdownBarWrap" style="display:none;">
+      <div class="countdown-bar-fill" id="countdownBarFill"></div>
+    </div>
+  </div>
+  <div class="mode-tabs">
+    <div class="mode-tab active" id="manualTab" onclick="switchMode('manual')">MANUAL</div>
+    <div class="mode-tab" id="autoTab" onclick="switchMode('auto')">AUTO</div>
+    <div class="mode-tab premium" id="premiumTab" onclick="switchMode('premium')">⭐ PREMIUM<span id="premTabTimer" class="prem-tab-timer" style="display:none;">--:--</span></div>
+  </div>
+  <!-- slim banner: visible on manual/auto tabs when premium active -->
+  <div class="prem-active-banner" id="premActiveBanner">
+    <span class="prem-dot"></span>
+    <span>PREMIUM ACTIVE — </span><span id="premBannerTimer">--:--</span><span> left</span>
+  </div>
+
+  <div class="controls" id="manualPanel">
+    <div class="bet-row">
+      <input type="number" class="bet-input" id="betInput" value="100" min="10" step="10">
+    </div>
+    <div class="quick-btns">
+      <button onclick="setBet(100)">100</button>
+      <button onclick="setBet(500)">500</button>
+      <button onclick="setBet(1000)">1000</button>
+      <button onclick="setBetTotal()">Total</button>
+      <button onclick="setBetHalfTotal()">Total/2</button>
+      <button onclick="setBetThirdTotal()">Total/3</button>
+    </div>
+    <button class="main-action bet" id="actionBtn">PLACE BET</button>
+  </div>
+
+  <div class="auto-panel" id="autoPanel">
+    <div class="auto-field">
+      <label>BET MODE</label>
+      <div class="quick-btns" id="autoBetModeBtns">
+        <button class="bet-mode-btn active" data-mode="fixed" onclick="setAutoBetMode('fixed')">Fixed</button>
+        <button class="bet-mode-btn" data-mode="total" onclick="setAutoBetMode('total')">Total</button>
+        <button class="bet-mode-btn" data-mode="half" onclick="setAutoBetMode('half')">Total/2</button>
+        <button class="bet-mode-btn" data-mode="third" onclick="setAutoBetMode('third')">Total/3</button>
+      </div>
+    </div>
+    <div class="auto-field" id="autoFixedBetField">
+      <label>BET AMOUNT PER ROUND</label>
+      <input type="number" class="bet-input" id="autoBetInput" value="100" min="10" step="10">
+      <div class="quick-btns">
+        <button onclick="setAutoBet(100)">100</button>
+        <button onclick="setAutoBet(500)">500</button>
+        <button onclick="setAutoBet(1000)">1000</button>
+      </div>
+    </div>
+    <div class="auto-field" id="autoDynamicNote" style="display:none;">
+      <div class="auto-status">Bet recalculates fresh each round from current balance</div>
+    </div>
+    <div class="auto-field">
+      <label>AUTO CASHOUT AT (×)</label>
+      <input type="number" class="bet-input" id="autoCashoutInput" value="2.00" min="1.01" step="0.01">
+    </div>
+    <div class="auto-field">
+      <label>NUMBER OF ROUNDS TO PLAY</label>
+      <input type="number" class="bet-input" id="autoRoundsInput" value="10" min="1" step="1">
+    </div>
+    <div class="auto-status" id="autoStatus">Set values and press Start Auto</div>
+    <button class="main-action bet" id="autoActionBtn" onclick="toggleAuto()">START AUTO</button>
+  </div>
+
+  <!-- PREMIUM PANEL -->
+  <div class="premium-panel" id="premiumPanel">
+
+    <!-- BUY SCREEN (shown when not active) -->
+    <div class="prem-buy-screen" id="premBuyScreen">
+      <div class="prem-lock-icon">⭐</div>
+      <div class="prem-buy-title">PREMIUM AUTO</div>
+      <div class="prem-buy-desc">
+        Smart cashout engine — automatically exits <strong style="color:#ffd700">0.04×</strong> before the crash point every round.
+      </div>
+      <!-- Basic tier card -->
+      <div class="prem-tier-card basic" id="premBasicCard" onclick="buyPremium('basic')">
+        <div class="prem-tier-info">
+          <div class="tier-name">⚡ Basic</div>
+          <div class="tier-detail">First time only · One-time unlock</div>
+        </div>
+        <div class="prem-tier-price">
+          <div class="price-amt">🪙 25,000</div>
+          <div class="price-dur">20 minutes</div>
+        </div>
+      </div>
+      <!-- Pro tier card -->
+      <div class="prem-tier-card pro" id="premProCard" onclick="buyPremium('pro')">
+        <div class="prem-tier-info">
+          <div class="tier-name">🔥 Pro</div>
+          <div class="tier-detail">Basic users only · Upgraded engine</div>
+        </div>
+        <div class="prem-tier-price">
+          <div class="price-amt">🪙 1,00,000</div>
+          <div class="price-dur">5 minutes</div>
+        </div>
+      </div>
+      <div class="prem-locked-note" id="premLockedNote"></div>
+    </div>
+
+    <!-- PROMO CODE SECTION (always visible in premium panel) -->
+    <div class="promo-section" id="promoSection">
+      <div class="promo-label">🎟️ Developer Promo Code</div>
+      <div class="promo-row">
+        <input class="promo-input" type="text" id="promoInput" placeholder="Enter promo code..." maxlength="20">
+        <button class="promo-redeem-btn" onclick="redeemPromo()">REDEEM</button>
+      </div>
+      <div class="promo-msg" id="promoMsg"></div>
+    </div>
+
+    <!-- ACTIVE SCREEN (shown when premium running) -->
+    <div class="prem-active-screen" id="premActiveScreen" style="display:none;">
+      <div class="prem-timer-bar">
+        <div class="prem-timer-left">
+          <div class="prem-tier-badge" id="premTierBadge">BASIC PREMIUM</div>
+          <div class="prem-timer-countdown" id="premTimerCountdown">20:00</div>
+        </div>
+        <div class="prem-status-dot" id="premStatusDot"></div>
+      </div>
+      <!-- Same bet controls as Auto -->
+      <div class="auto-field">
+        <label>BET MODE</label>
+        <div class="quick-btns" id="premBetModeBtns">
+          <button class="prem-bet-mode-btn active" data-mode="fixed" onclick="setPremBetMode('fixed')">Fixed</button>
+          <button class="prem-bet-mode-btn" data-mode="total" onclick="setPremBetMode('total')">Total</button>
+          <button class="prem-bet-mode-btn" data-mode="half" onclick="setPremBetMode('half')">Total/2</button>
+          <button class="prem-bet-mode-btn" data-mode="third" onclick="setPremBetMode('third')">Total/3</button>
+        </div>
+      </div>
+      <div class="auto-field" id="premFixedBetField">
+        <label>BET AMOUNT PER ROUND</label>
+        <input type="number" class="bet-input" id="premBetInput" value="100" min="10" step="10">
+        <div class="quick-btns">
+          <button onclick="document.getElementById('premBetInput').value=100">100</button>
+          <button onclick="document.getElementById('premBetInput').value=500">500</button>
+          <button onclick="document.getElementById('premBetInput').value=1000">1000</button>
+        </div>
+      </div>
+      <div class="auto-field" id="premDynamicNote" style="display:none;">
+        <div class="auto-status">Bet recalculates fresh each round from current balance</div>
+      </div>
+      <div class="auto-field">
+        <label>NUMBER OF ROUNDS TO PLAY</label>
+        <input type="number" class="bet-input" id="premRoundsInput" value="10" min="1" step="1">
+      </div>
+      <div class="auto-status" id="premStatus">Premium engine ready</div>
+      <button class="main-action bet" id="premActionBtn" onclick="togglePremium()">START PREMIUM</button>
+      <div class="prem-info-note">Engine auto-cashes out 0.04× before crash — no manual target needed.</div>
+    </div>
+
+  </div>
+
+<div class="disclaimer">
+  Virtual coins only. No real money, no withdrawals, no purchases.<br>
+  For entertainment / demo purposes only.
+</div>
+
+<!-- Settings Modal (in-game gear button) -->
+<div class="modal-backdrop" id="settingsModal">
+  <div class="modal-box">
+    <h3>⚙ Settings</h3>
+    <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:16px;">
+      <!-- Account -->
+      <div>
+        <div style="font-size:10px;color:#667;letter-spacing:0.8px;margin-bottom:6px;">ACCOUNT</div>
+        <div style="display:flex;gap:8px;">
+          <select class="account-select" id="accountSelect" onchange="switchAccount(this.value)" style="flex:1;"></select>
+          <button class="acct-btn" onclick="closeModal('settingsModal');openAccountModal();">Manage</button>
+        </div>
+      </div>
+      <!-- Coins -->
+      <div style="display:flex;align-items:center;justify-content:space-between;background:rgba(255,215,0,0.05);border:1px solid rgba(255,215,0,0.12);border-radius:10px;padding:10px 14px;">
+        <span style="font-size:13px;color:#ffd700;font-weight:bold;">🪙 <span id="settingsCoinAmt">0</span></span>
+        <button class="welcome-reset-btn" onclick="closeModal('settingsModal');openResetModal();">↺ Reset</button>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="cancel" onclick="closeModal('settingsModal')">Close</button>
+      <button class="confirm" style="background:rgba(255,59,92,0.2);color:#ff8a9a;border:1px solid rgba(255,59,92,0.3);" onclick="goToWelcome()">🏠 Exit to Menu</button>
+    </div>
+  </div>
+</div>
+
+<!-- Reset Confirm Modal -->
+<div class="modal-backdrop" id="resetModal">
+  <div class="modal-box">
+    <h3>Reset Coins?</h3>
+    <p>This will set your balance back to 5000 coins. Your round history will also clear. This cannot be undone.</p>
+    <div class="modal-actions">
+      <button class="cancel" onclick="closeModal('resetModal')">Cancel</button>
+      <button class="confirm" onclick="resetCoins()">Reset to 5000</button>
+    </div>
+  </div>
+</div>
+
+<!-- Account Management Modal -->
+<div class="modal-backdrop" id="accountModal">
+  <div class="modal-box">
+    <h3>👤 Accounts</h3>
+    <div class="acct-list" id="acctList"></div>
+    <input class="acct-input" type="text" id="newAcctName" placeholder="New account name..." maxlength="20">
+    <div class="modal-actions">
+      <button class="cancel" onclick="closeModal('accountModal')">Close</button>
+      <button class="confirm" style="background:linear-gradient(135deg,var(--purple),var(--cyan));" onclick="createAccount()">+ Create</button>
+    </div>
+  </div>
+</div>
+
+<!-- Special Promo Modal -->
+<div class="special-modal-backdrop" id="specialPromoModal">
+  <div class="special-modal-card">
+    <div class="special-modal-stars">⭐✨🌟</div>
+    <div class="special-modal-title">You Got a Special Code!</div>
+    <div class="special-modal-badge">EXCLUSIVE ACCESS</div>
+    <div class="special-modal-msg" id="specialPromoModalMsg"></div>
+    <div class="special-modal-timer">✅ 10 Minutes Premium — Active Now</div>
+    <button class="special-modal-close" onclick="closeSpecialPromoModal()">Let's Go! 🚀</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ---------- STORAGE KEYS (persisted in localStorage) ----------
+const COINS_KEY      = "aviator_demo_coins";
+const CLAIM_KEY      = "aviator_demo_last_claim";
+const HISTORY_KEY    = "aviator_demo_history";
+const ACCOUNTS_KEY   = "aviator_demo_accounts";
+const ACTIVE_ACCT_KEY= "aviator_demo_active_account";
+const RESET_COUNT_KEY= "aviator_demo_reset_count";
+const DEFAULT_COINS  = 5000;
+
+// ---------- ACCOUNT SYSTEM ----------
+// Account object shape: { id, name, coins, lastClaim, history, resetCount,
+//   premiumTier: null|"basic"|"pro", premiumExpiry: timestamp, basicUsed: bool }
+
+function loadAccounts(){
+  try{ return JSON.parse(localStorage.getItem(ACCOUNTS_KEY)) || null; }
+  catch(e){ return null; }
+}
+
+function saveAccounts(accts){
+  localStorage.setItem(ACCOUNTS_KEY, JSON.stringify(accts));
+}
+
+function getActiveId(){
+  return localStorage.getItem(ACTIVE_ACCT_KEY) || null;
+}
+
+function setActiveId(id){
+  localStorage.setItem(ACTIVE_ACCT_KEY, id);
+}
+
+// Migrate old single-account data into the accounts system on first run
+function initAccounts(){
+  let accts = loadAccounts();
+  if(!accts){
+    // First ever load — migrate any existing localStorage data
+    const oldCoins   = parseInt(localStorage.getItem(COINS_KEY));
+    const oldClaim   = parseInt(localStorage.getItem(CLAIM_KEY)) || 0;
+    let   oldHistory = [];
+    try{ oldHistory = JSON.parse(localStorage.getItem(HISTORY_KEY) || "[]"); }catch(e){}
+    const defaultAccount = {
+      id: "acct_" + Date.now(),
+      name: "Player 1",
+      coins: isNaN(oldCoins) ? DEFAULT_COINS : oldCoins,
+      lastClaim: oldClaim,
+      history: oldHistory,
+      resetCount: parseInt(localStorage.getItem(RESET_COUNT_KEY)) || 0
+    };
+    accts = [defaultAccount];
+    saveAccounts(accts);
+    setActiveId(defaultAccount.id);
+  }
+  // Ensure active id still exists
+  const activeId = getActiveId();
+  if(!accts.find(a => a.id === activeId)){
+    setActiveId(accts[0].id);
+  }
+  return accts;
+}
+
+let allAccounts = initAccounts();
+
+function getActiveAccount(){
+  const id = getActiveId();
+  return allAccounts.find(a => a.id === id) || allAccounts[0];
+}
+
+function saveActiveAccount(){
+  const acct = getActiveAccount();
+  acct.coins        = coins;
+  acct.lastClaim    = lastClaim;
+  acct.history      = roundHistory;
+  acct.resetCount   = resetCount;
+  acct.premiumTier  = premiumTier;
+  acct.premiumExpiry= premiumExpiry;
+  acct.basicUsed    = basicUsed;
+  saveAccounts(allAccounts);
+}
+
+// ---------- STATE ----------
+let activeAcct   = getActiveAccount();
+let coins        = activeAcct.coins;
+let lastClaim    = activeAcct.lastClaim;
+let roundHistory = activeAcct.history;
+let resetCount   = activeAcct.resetCount || 0;
+
+// Premium state (per account)
+let premiumTier   = activeAcct.premiumTier   || null;  // null | "basic" | "pro"
+let premiumExpiry = activeAcct.premiumExpiry || 0;     // timestamp
+let basicUsed     = activeAcct.basicUsed     || false; // agar basic ek baar use ho chuka
+
+let gameState = "waiting"; // waiting | running | crashed
+let currentMultiplier = 1.00;
+let crashPoint = 0;
+let betPlaced = false;
+let betAmount = 0;
+let cashedOut = false;
+let roundStartTime = 0;
+let animFrame = null;
+let waitingCountdownInterval = null;
+
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
+const multText = document.getElementById('multText');
+const statusText = document.getElementById('statusText');
+const actionBtn = document.getElementById('actionBtn');
+const betInput = document.getElementById('betInput');
+const toast = document.getElementById('toast');
+const historyStrip = document.getElementById('historyStrip');
+const resetModal = document.getElementById('resetModal');
+
+// Mode tabs
+const manualTab = document.getElementById('manualTab');
+const autoTab = document.getElementById('autoTab');
+const manualPanel = document.getElementById('manualPanel');
+const autoPanel = document.getElementById('autoPanel');
+
+// Auto mode elements
+const autoBetInput = document.getElementById('autoBetInput');
+const autoCashoutInput = document.getElementById('autoCashoutInput');
+const autoRoundsInput = document.getElementById('autoRoundsInput');
+const autoStatus = document.getElementById('autoStatus');
+const autoActionBtn = document.getElementById('autoActionBtn');
+
+let currentMode = "manual"; // manual | auto
+let autoRunning = false;
+let autoRoundsTotal = 0;
+let autoRoundsPlayed = 0;
+let autoBetAmount = 0;
+let autoCashoutTarget = 0;
+
+function resizeCanvas(){
+  canvas.width = canvas.clientWidth * window.devicePixelRatio;
+  canvas.height = canvas.clientHeight * window.devicePixelRatio;
+}
+window.addEventListener('resize', resizeCanvas);
+
+// Safety net: browsers throttle timers when tab is backgrounded.
+// When the tab becomes visible again, force-correct any stuck state.
+document.addEventListener('visibilitychange', () => {
+  if(document.visibilityState === 'visible'){
+    if(gameState === 'running'){
+      const elapsed = (performance.now() - roundStartTime) / 1000;
+      const m = Math.pow(Math.E, 0.18 * elapsed);
+      if(m >= crashPoint){
+        currentMultiplier = crashPoint;
+        multText.textContent = currentMultiplier.toFixed(2) + "x";
+        crashRound();
+      }
+    } else if(gameState === 'crashed' && !waitingCountdownInterval){
+      startWaitingPhase();
+    }
+  }
+});
+
+const countdownBarWrap = document.getElementById('countdownBarWrap');
+const countdownBarFill = document.getElementById('countdownBarFill');
+
+// ---------- COINS (persisted via accounts) ----------
+function updateCoinsDisplay(){
+  // in-game header
+  const el = document.getElementById('coinAmt');
+  if(el) el.textContent = coins.toLocaleString();
+  // welcome screen
+  const wel = document.getElementById('welcomeCoinAmt');
+  if(wel) wel.textContent = coins.toLocaleString();
+  // settings modal
+  const set = document.getElementById('settingsCoinAmt');
+  if(set) set.textContent = coins.toLocaleString();
+  saveActiveAccount();
+}
+
+// type: 'win' | 'loss' | 'info' | 'gold'
+function showToast(msg, type='info'){
+  toast.className = 'toast toast-' + type;
+  // Icon
+  const icons = { win:'✅', loss:'❌', info:'ℹ️', gold:'⭐' };
+  toast.innerHTML = `<span>${icons[type]||'ℹ️'}</span><span>${msg}</span>`;
+  toast.classList.add('show');
+  clearTimeout(toast._timer);
+  toast._timer = setTimeout(()=> toast.classList.remove('show'), 2500);
+}
+
+function checkClaimAvailability(){
+  const now = Date.now();
+  const diff = now - lastClaim;
+  const DAY = 24*60*60*1000;
+  const canClaim = diff >= DAY;
+  const hoursLeft = Math.ceil((DAY - diff)/(60*60*1000));
+  const label = canClaim ? "Claim +1000" : `Wait ${hoursLeft}h`;
+
+  // Sync all claim buttons
+  ['claimBtn','welcomeClaimBtn'].forEach(id => {
+    const btn = document.getElementById(id);
+    if(!btn) return;
+    btn.disabled = !canClaim;
+    btn.textContent = label;
+  });
+}
+
+function handleClaim(){
+  const now = Date.now();
+  if(now - lastClaim >= 24*60*60*1000){
+    coins += 1000;
+    lastClaim = now;
+    updateCoinsDisplay();
+    showToast("+1000 coins claim ho gaye!", "win");
+    checkClaimAvailability();
+  }
+}
+
+// Claim buttons — delegated
+document.addEventListener('click', e => {
+  if(e.target.id === 'claimBtn' || e.target.id === 'welcomeClaimBtn') handleClaim();
+});
+
+setInterval(checkClaimAvailability, 60000);
+
+// ---------- RESET COINS ----------
+function openResetModal(){
+  resetModal.classList.add('show');
+}
+function closeModal(id){
+  document.getElementById(id).classList.remove('show');
+}
+function resetCoins(){
+  coins = DEFAULT_COINS;
+  roundHistory = [];
+  resetCount++;
+  updateCoinsDisplay();
+  renderHistory();
+  closeModal('resetModal');
+  showToast(`Balance reset — 5000 coins (Reset #${resetCount})`, "info");
+}
+
+// ---------- MODE SWITCHING ----------
+function switchMode(mode){
+  if(autoRunning){ showToast("Stop auto mode first"); return; }
+  currentMode = mode;
+  document.getElementById('manualTab').classList.toggle('active', mode==='manual');
+  document.getElementById('autoTab').classList.toggle('active', mode==='auto');
+  document.getElementById('premiumTab').classList.toggle('active', mode==='premium');
+  document.getElementById('manualPanel').classList.toggle('show', mode==='manual');
+  document.getElementById('autoPanel').classList.toggle('show', mode==='auto');
+  document.getElementById('premiumPanel').classList.toggle('show', mode==='premium');
+  // Banner: show on non-premium tabs only
+  const banner = document.getElementById('premActiveBanner');
+  if(banner) banner.classList.toggle('show', isPremiumActive() && mode !== 'premium');
+  if(mode==='premium') renderPremiumUI();
+}
+
+// ---------- BET INPUT HELPERS ----------
+function setBet(val){ betInput.value = val; }
+function setBetTotal(){ betInput.value = coins; }
+function setBetHalfTotal(){ betInput.value = Math.max(10, Math.floor(coins/2)); }
+function setBetThirdTotal(){ betInput.value = Math.max(10, Math.floor(coins*3/4)); }
+
+function setAutoBet(val){ autoBetInput.value = val; }
+
+// ---------- AUTO BET MODE (fixed amount OR dynamic % of current balance) ----------
+let autoBetMode = "fixed"; // fixed | total | half | third
+
+function setAutoBetMode(mode){
+  autoBetMode = mode;
+  document.querySelectorAll('.bet-mode-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.mode === mode);
+  });
+  const fixedField = document.getElementById('autoFixedBetField');
+  const dynamicNote = document.getElementById('autoDynamicNote');
+  if(mode === 'fixed'){
+    fixedField.style.display = '';
+    dynamicNote.style.display = 'none';
+  } else {
+    fixedField.style.display = 'none';
+    dynamicNote.style.display = '';
+  }
+}
+
+// Calculates the bet amount for the CURRENT round based on selected auto mode.
+// For dynamic modes (total/half/third), this is recalculated fresh every round
+// using the live coin balance — not a fixed number locked in at start.
+function getAutoBetAmountForThisRound(){
+  if(autoBetMode === 'fixed'){
+    return parseInt(autoBetInput.value) || 0;
+  } else if(autoBetMode === 'total'){
+    return Math.max(10, Math.floor(coins));
+  } else if(autoBetMode === 'half'){
+    return Math.max(10, Math.floor(coins/2));
+  } else if(autoBetMode === 'third'){
+    return Math.max(10, Math.floor(coins*3/4));
+  }
+  return 0;
+}
+
+// ---------- HISTORY (persisted via accounts) ----------
+function pushHistory(mult){
+  roundHistory.unshift(mult);
+  if(roundHistory.length > 20) roundHistory.pop();
+  saveActiveAccount();
+  renderHistory();
+}
+
+function renderHistory(){
+  historyStrip.innerHTML = "";
+  roundHistory.forEach(m => {
+    const chip = document.createElement('div');
+    chip.className = 'history-chip ' + (m < 1.5 ? 'low' : (m >= 3 ? 'high' : ''));
+    chip.textContent = m.toFixed(2) + 'x';
+    historyStrip.appendChild(chip);
+  });
+}
+
+// ---------- PREMIUM ENGINE ----------
+const PREM_BASIC_COST = 25000;
+const PREM_PRO_COST   = 100000;
+const PREM_BASIC_MS   = 20 * 60 * 1000; // 20 min
+const PREM_PRO_MS     =  5 * 60 * 1000; //  5 min
+
+let premRunning       = false;
+let premRoundsTotal   = 0;
+let premRoundsPlayed  = 0;
+let premBetAmountThis = 0;
+let premBetMode       = "fixed";
+let premTimerInterval = null;
+
+const premBuyScreen    = document.getElementById('premBuyScreen');
+const premActiveScreen = document.getElementById('premActiveScreen');
+const premTimerCountdown = document.getElementById('premTimerCountdown');
+const premTierBadge    = document.getElementById('premTierBadge');
+const premStatusEl     = document.getElementById('premStatus');
+const premActionBtn    = document.getElementById('premActionBtn');
+const premBasicCard    = document.getElementById('premBasicCard');
+const premProCard      = document.getElementById('premProCard');
+const premLockedNote   = document.getElementById('premLockedNote');
+
+function isPremiumActive(){
+  return premiumTier !== null && Date.now() < premiumExpiry;
+}
+
+function renderPremiumUI(){
+  // Check expiry first
+  if(premiumTier && Date.now() >= premiumExpiry){
+    premiumTier = null;
+    if(premRunning) stopPremium("Time khatam — premium expire ho gaya");
+    saveActiveAccount();
+  }
+
+  const promoSection = document.getElementById('promoSection');
+  if(isPremiumActive()){
+    premBuyScreen.style.display    = 'none';
+    premActiveScreen.style.display = 'flex';
+    if(promoSection) promoSection.style.display = 'none';
+    premTierBadge.textContent = premiumTier === 'pro' ? '🔥 PRO PREMIUM' : '⭐ BASIC PREMIUM';
+    startPremTimerDisplay();
+  } else {
+    premBuyScreen.style.display    = 'flex';
+    premActiveScreen.style.display = 'none';
+    if(promoSection) promoSection.style.display = 'flex';
+    stopPremTimerDisplay();
+
+    // Basic card — sirf tab dikhao agar basicUsed nahi hua
+    if(basicUsed){
+      premBasicCard.classList.add('disabled-card');
+      premLockedNote.textContent = "Basic already use ho chuka hai. Pro upgrade karo.";
+    } else {
+      premBasicCard.classList.remove('disabled-card');
+      premLockedNote.textContent = "";
+    }
+
+    // Pro card — sirf agar basicUsed hai
+    if(basicUsed){
+      premProCard.classList.remove('disabled-card');
+    } else {
+      premProCard.classList.add('disabled-card');
+      if(!basicUsed) premLockedNote.textContent = "Pehle Basic buy karo, phir Pro unlock hoga.";
+    }
+  }
+}
+
+function buyPremium(tier){
+  if(tier === 'basic'){
+    if(basicUsed){ showToast("Basic already use ho chuka hai"); return; }
+    if(coins < PREM_BASIC_COST){ showToast(`Basic ke liye ${PREM_BASIC_COST.toLocaleString()} coins chahiye`); return; }
+    coins -= PREM_BASIC_COST;
+    premiumTier   = 'basic';
+    premiumExpiry = Date.now() + PREM_BASIC_MS;
+    basicUsed     = true;
+  } else if(tier === 'pro'){
+    if(!basicUsed){ showToast("Pehle Basic buy karo"); return; }
+    if(coins < PREM_PRO_COST){ showToast(`Pro ke liye ${PREM_PRO_COST.toLocaleString()} coins chahiye`); return; }
+    coins -= PREM_PRO_COST;
+    premiumTier   = 'pro';
+    premiumExpiry = Date.now() + PREM_PRO_MS;
+  }
+  updateCoinsDisplay();
+  renderPremiumUI();
+  showToast(`${tier === 'pro' ? '🔥 Pro' : '⭐ Basic'} Premium active! Timer chalu ho gaya.`);
+}
+
+function updateGlobalPremBadges(remaining){
+  const active = remaining > 0;
+  const mins = Math.floor(remaining / 60000);
+  const secs = Math.floor((remaining % 60000) / 1000);
+  const timeStr = `${String(mins).padStart(2,'0')}:${String(secs).padStart(2,'0')}`;
+
+  // Topbar badge (inside coins-box)
+  const globalBadge = document.getElementById('premGlobalBadge');
+  const globalTimer = document.getElementById('premGlobalTimer');
+  if(globalBadge){ globalBadge.classList.toggle('show', active); }
+  if(globalTimer && active){ globalTimer.textContent = timeStr; }
+
+  // Premium tab mini timer — display:none when inactive so tab height stays same
+  const tabTimer = document.getElementById('premTabTimer');
+  if(tabTimer){
+    tabTimer.style.display = active ? 'block' : 'none';
+    if(active) tabTimer.textContent = timeStr;
+  }
+
+  // Slim banner (show only when NOT on premium tab)
+  const banner = document.getElementById('premActiveBanner');
+  const bannerTimer = document.getElementById('premBannerTimer');
+  if(banner){ banner.classList.toggle('show', active && currentMode !== 'premium'); }
+  if(bannerTimer && active){ bannerTimer.textContent = timeStr; }
+}
+
+function startPremTimerDisplay(){
+  stopPremTimerDisplay();
+  premTimerInterval = setInterval(()=>{
+    const remaining = premiumExpiry - Date.now();
+    if(remaining <= 0){
+      premTimerCountdown.textContent = "00:00";
+      updateGlobalPremBadges(0);
+      stopPremTimerDisplay();
+      // Mid-round expire check — Option C: turant cashout
+      if(premRunning && gameState === 'running' && betPlaced && !cashedOut){
+        cashedOut = true;
+        const winAmount = Math.floor(betAmount * currentMultiplier);
+        coins += winAmount;
+        updateCoinsDisplay();
+        showToast(`⏰ Expire! Cashout @ ${currentMultiplier.toFixed(2)}x — +${winAmount} coins`, 'gold');
+        premRoundsPlayed++;
+      }
+      stopPremium("Premium expire ho gaya");
+      renderPremiumUI();
+      return;
+    }
+    const mins = Math.floor(remaining / 60000);
+    const secs = Math.floor((remaining % 60000) / 1000);
+    premTimerCountdown.textContent = `${String(mins).padStart(2,'0')}:${String(secs).padStart(2,'0')}`;
+    updateGlobalPremBadges(remaining);
+  }, 500);
+}
+
+function stopPremTimerDisplay(){
+  if(premTimerInterval){ clearInterval(premTimerInterval); premTimerInterval = null; }
+  updateGlobalPremBadges(0);
+}
+
+function setPremBetMode(mode){
+  premBetMode = mode;
+  document.querySelectorAll('.prem-bet-mode-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.mode === mode);
+  });
+  document.getElementById('premFixedBetField').style.display = mode === 'fixed' ? '' : 'none';
+  document.getElementById('premDynamicNote').style.display   = mode !== 'fixed' ? '' : 'none';
+}
+
+function getPremBetAmountForRound(){
+  if(premBetMode === 'fixed')  return parseInt(document.getElementById('premBetInput').value) || 0;
+  if(premBetMode === 'total')  return Math.max(10, Math.floor(coins));
+  if(premBetMode === 'half')   return Math.max(10, Math.floor(coins / 2));
+  if(premBetMode === 'third')  return Math.max(10, Math.floor(coins * 3 / 4));
+  return 0;
+}
+
+function togglePremium(){
+  if(premRunning){ stopPremium("User ne band kiya"); return; }
+  if(!isPremiumActive()){ showToast("Premium active nahi hai"); return; }
+
+  const rounds = parseInt(document.getElementById('premRoundsInput').value);
+  if(!rounds || rounds < 1){ showToast("Rounds enter karo"); return; }
+
+  if(premBetMode === 'fixed'){
+    const bet = parseInt(document.getElementById('premBetInput').value);
+    if(!bet || bet < 10){ showToast("Minimum bet 10 coins"); return; }
+    if(bet > coins){ showToast("Coins kam hain!"); return; }
+  }
+
+  premRoundsTotal  = rounds;
+  premRoundsPlayed = 0;
+  premRunning      = true;
+  premActionBtn.className  = "main-action stop";
+  premActionBtn.textContent = "STOP PREMIUM";
+  premStatusEl.textContent  = `Premium chalu — ${rounds} rounds queue mein`;
+
+  // Agar waiting phase mein hain to turant bet lagao
+  if(gameState === 'waiting' && !betPlaced){
+    const b = getPremBetAmountForRound();
+    if(b >= 10 && b <= coins){
+      premBetAmountThis = b;
+      coins    -= b;
+      betAmount = b;
+      betPlaced = true;
+      updateCoinsDisplay();
+    }
+  }
+}
+
+function stopPremium(reason){
+  premRunning = false;
+  if(premActionBtn){
+    premActionBtn.className  = "main-action bet";
+    premActionBtn.textContent = "START PREMIUM";
+  }
+  if(premStatusEl) premStatusEl.textContent = reason;
+  saveActiveAccount();
+}
+
+// ---------- CRASH POINT GENERATION ----------
+// Simple weighted random: most rounds crash low, occasional high multiplier
+function generateCrashPoint(){
+  const r = Math.random();
+  if(r < 0.55) return 1 + Math.random()*1.0;        // 1.00x - 2.00x (55%)
+  if(r < 0.80) return 2 + Math.random()*2.0;        // 2.00x - 4.00x (25%)
+  if(r < 0.95) return 4 + Math.random()*6.0;        // 4.00x - 10.00x (15%)
+  return 10 + Math.random()*30.0;                    // 10x - 40x (5%)
+}
+
+// ---------- GAME LOOP ----------
+function startWaitingPhase(){
+  gameState = "waiting";
+  betPlaced = false;
+  cashedOut = false;
+  currentMultiplier = 1.00;
+  multText.style.display = 'none';
+  statusText.style.display = 'none';
+  multText.classList.remove('crashed','glow-green','glow-orange','glow-gold');
+  actionBtn.className = "main-action bet";
+  actionBtn.textContent = "PLACE BET";
+  actionBtn.disabled = false;
+  drawIdle();
+
+  // Auto mode: place bet automatically
+  if(autoRunning){
+    if(autoRoundsPlayed >= autoRoundsTotal){
+      stopAuto("Finished all rounds");
+    } else {
+      const thisRoundBet = getAutoBetAmountForThisRound();
+      if(!thisRoundBet || thisRoundBet < 10 || thisRoundBet > coins){
+        stopAuto("Stopped — not enough coins");
+      } else {
+        autoBetAmount = thisRoundBet;
+        coins -= autoBetAmount;
+        betAmount = autoBetAmount;
+        betPlaced = true;
+        updateCoinsDisplay();
+        autoStatus.textContent = `Round ${autoRoundsPlayed+1}/${autoRoundsTotal} — bet ${autoBetAmount}, target ${autoCashoutTarget.toFixed(2)}x`;
+      }
+    }
+  }
+
+  // Premium mode: place bet automatically
+  if(premRunning){
+    if(!isPremiumActive()){ stopPremium("Premium expire ho gaya"); }
+    else if(premRoundsPlayed >= premRoundsTotal){ stopPremium("Finished all rounds"); }
+    else {
+      const b = getPremBetAmountForRound();
+      if(!b || b < 10 || b > coins){ stopPremium("Stopped — coins kam hain"); }
+      else {
+        premBetAmountThis = b;
+        coins    -= b;
+        betAmount = b;
+        betPlaced = true;
+        updateCoinsDisplay();
+        premStatusEl.textContent = `Round ${premRoundsPlayed+1}/${premRoundsTotal} — bet ${b} coins`;
+      }
+    }
+  }
+
+  // Big countdown overlay
+  const countdownOverlay  = document.getElementById('countdownOverlay');
+  const countdownNumber   = document.getElementById('countdownNumber');
+  countdownOverlay.classList.add('show');
+
+  let countdownDuration = 5000;
+  let countdownStart = Date.now();
+
+  // Bottom progress bar
+  countdownBarWrap.style.display = 'block';
+  countdownBarFill.style.transition = 'none';
+  countdownBarFill.style.transform = 'scaleX(1)';
+
+  if(waitingCountdownInterval) clearInterval(waitingCountdownInterval);
+  waitingCountdownInterval = setInterval(()=>{
+    const elapsed   = Date.now() - countdownStart;
+    const remaining = countdownDuration - elapsed;
+    if(remaining <= 0){
+      clearInterval(waitingCountdownInterval);
+      waitingCountdownInterval = null;
+      countdownBarWrap.style.display = 'none';
+      countdownBarFill.style.transform = 'scaleX(0)';
+      countdownOverlay.classList.remove('show');
+      startRunningPhase();
+    } else {
+      const frac = remaining / countdownDuration;
+      countdownBarFill.style.transform = `scaleX(${frac})`;
+      countdownNumber.textContent = Math.ceil(remaining/1000);
+    }
+  }, 50);
+}
+
+
+function startRunningPhase(){
+  gameState = "running";
+  crashPoint = generateCrashPoint();
+  roundStartTime = performance.now();
+  multText.style.display = 'block';
+  statusText.style.display = 'block';
+  statusText.textContent = "FLY! 🚀";
+
+  if(betPlaced && !cashedOut){
+    actionBtn.className = "main-action cashout";
+    actionBtn.textContent = "CASHOUT @ " + currentMultiplier.toFixed(2) + "x";
+    actionBtn.disabled = false;
+  } else {
+    actionBtn.className = "main-action waiting";
+    actionBtn.textContent = "ROUND IN PROGRESS";
+    actionBtn.disabled = true;
+  }
+
+  function loop(now){
+    const elapsed = (now - roundStartTime) / 1000;
+    currentMultiplier = Math.pow(Math.E, 0.18 * elapsed);
+
+    // Auto mode: cashout at target
+    if(autoRunning && betPlaced && !cashedOut && currentMultiplier >= autoCashoutTarget){
+      currentMultiplier = autoCashoutTarget;
+      cashedOut = true;
+      const winAmount = Math.floor(betAmount * currentMultiplier);
+      coins += winAmount;
+      updateCoinsDisplay();
+      autoRoundsPlayed++;
+      autoStatus.textContent = `Round ${autoRoundsPlayed}/${autoRoundsTotal} — won ${winAmount} coins @ ${currentMultiplier.toFixed(2)}x`;
+    }
+
+    // Premium mode: cashout at crashPoint - 0.04
+    if(premRunning && betPlaced && !cashedOut && isPremiumActive()){
+      const premTarget = Math.max(1.01, crashPoint - 0.04);
+      if(currentMultiplier >= premTarget){
+        currentMultiplier = premTarget;
+        cashedOut = true;
+        const winAmount = Math.floor(betAmount * currentMultiplier);
+        coins += winAmount;
+        updateCoinsDisplay();
+        premRoundsPlayed++;
+        premStatusEl.textContent = `Round ${premRoundsPlayed}/${premRoundsTotal} — won ${winAmount} @ ${currentMultiplier.toFixed(2)}x ✓`;
+        actionBtn.className = "main-action placed";
+        actionBtn.textContent = "CASHED OUT @ " + currentMultiplier.toFixed(2) + "x";
+        actionBtn.disabled = true;
+      }
+    }
+
+    if(currentMultiplier >= crashPoint){
+      currentMultiplier = crashPoint;
+      drawCurve(elapsed, true);
+      multText.textContent = currentMultiplier.toFixed(2) + "x";
+      crashRound();
+      return;
+    }
+
+    // Multiplier color glow based on value
+    multText.classList.remove('glow-green','glow-orange','glow-gold','crashed');
+    if(currentMultiplier >= 10)      multText.classList.add('glow-gold');
+    else if(currentMultiplier >= 5)  multText.classList.add('glow-orange');
+    else if(currentMultiplier >= 2)  multText.classList.add('glow-green');
+
+    multText.textContent = currentMultiplier.toFixed(2) + "x";
+    if(betPlaced && !cashedOut){
+      actionBtn.textContent = "CASHOUT @ " + currentMultiplier.toFixed(2) + "x";
+    }
+    drawCurve(elapsed, false);
+    animFrame = requestAnimationFrame(loop);
+  }
+  animFrame = requestAnimationFrame(loop);
+}
+
+function crashRound(){
+  gameState = "crashed";
+  cancelAnimationFrame(animFrame);
+  multText.classList.remove('glow-green','glow-orange','glow-gold');
+  multText.classList.add('crashed');
+  statusText.textContent = "CRASHED";
+  pushHistory(currentMultiplier);
+
+  if(betPlaced && !cashedOut){
+    showToast(`Crashed @ ${currentMultiplier.toFixed(2)}x — lost ${betAmount} coins`, 'loss');
+    if(autoRunning){
+      autoRoundsPlayed++;
+      stopAuto(`Stopped — lost at ${currentMultiplier.toFixed(2)}x (target was ${autoCashoutTarget.toFixed(2)}x)`);
+    }
+    if(premRunning){
+      premRoundsPlayed++;
+      premStatusEl.textContent = `Round ${premRoundsPlayed}/${premRoundsTotal} — crash too low @ ${currentMultiplier.toFixed(2)}x`;
+    }
+  }
+
+  actionBtn.className = "main-action waiting";
+  actionBtn.textContent = "ROUND ENDED";
+  actionBtn.disabled = true;
+
+  setTimeout(startWaitingPhase, 2000);
+}
+
+// ---------- AUTO MODE ENGINE ----------
+function toggleAuto(){
+  if(autoRunning){
+    stopAuto("Stopped by user");
+    return;
+  }
+  const target = parseFloat(autoCashoutInput.value);
+  const rounds = parseInt(autoRoundsInput.value);
+
+  if(autoBetMode === 'fixed'){
+    const bet = parseInt(autoBetInput.value);
+    if(!bet || bet < 10){ showToast("Minimum bet is 10 coins"); return; }
+    if(bet > coins){ showToast("Not enough coins!"); return; }
+  }
+  if(!target || target < 1.01){ showToast("Cashout target must be ≥ 1.01x"); return; }
+  if(!rounds || rounds < 1){ showToast("Enter number of rounds"); return; }
+
+  autoCashoutTarget = target;
+  autoRoundsTotal = rounds;
+  autoRoundsPlayed = 0;
+  autoRunning = true;
+
+  autoBetInput.disabled = true;
+  autoCashoutInput.disabled = true;
+  autoRoundsInput.disabled = true;
+  document.querySelectorAll('.bet-mode-btn').forEach(btn => btn.disabled = true);
+  autoActionBtn.className = "main-action stop";
+  autoActionBtn.textContent = "STOP AUTO";
+  autoStatus.textContent = `Auto running — ${rounds} rounds queued`;
+
+  if(gameState === "waiting" && !betPlaced){
+    const thisRoundBet = getAutoBetAmountForThisRound();
+    if(thisRoundBet && thisRoundBet >= 10 && thisRoundBet <= coins){
+      autoBetAmount = thisRoundBet;
+      coins -= autoBetAmount;
+      betAmount = autoBetAmount;
+      betPlaced = true;
+      updateCoinsDisplay();
+    }
+  }
+}
+
+function stopAuto(reason){
+  autoRunning = false;
+  autoBetInput.disabled = false;
+  autoCashoutInput.disabled = false;
+  autoRoundsInput.disabled = false;
+  document.querySelectorAll('.bet-mode-btn').forEach(btn => btn.disabled = false);
+  autoActionBtn.className = "main-action bet";
+  autoActionBtn.textContent = "START AUTO";
+  autoStatus.textContent = reason;
+}
+
+// ---------- DRAWING ----------
+function drawIdle(){
+  resizeCanvas();
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+}
+
+function drawCurve(elapsed, crashed){
+  resizeCanvas();
+  const w = canvas.width;
+  const h = canvas.height;
+  ctx.clearRect(0,0,w,h);
+
+  ctx.strokeStyle = "rgba(255,255,255,0.04)";
+  ctx.lineWidth = 1;
+  for(let i=0;i<6;i++){
+    const y = h - (h/6)*i;
+    ctx.beginPath();
+    ctx.moveTo(0,y);
+    ctx.lineTo(w,y);
+    ctx.stroke();
+  }
+
+  const maxT = Math.max(elapsed, 0.1);
+  const points = [];
+  const steps = 60;
+  for(let i=0;i<=steps;i++){
+    const t = (maxT/steps)*i;
+    const m = Math.pow(Math.E, 0.18*t);
+    const x = (i/steps) * w * 0.85;
+    const y = h - Math.min((m-1) * (h/4), h*0.85);
+    points.push([x,y]);
+  }
+
+  ctx.beginPath();
+  ctx.moveTo(0,h);
+  points.forEach(p => ctx.lineTo(p[0], p[1]));
+  ctx.lineTo(points[points.length-1][0], h);
+  ctx.closePath();
+  const grad = ctx.createLinearGradient(0,0,0,h);
+  if(crashed){
+    grad.addColorStop(0, "rgba(255,59,92,0.35)");
+    grad.addColorStop(1, "rgba(255,59,92,0)");
+  } else {
+    grad.addColorStop(0, "rgba(0,229,255,0.35)");
+    grad.addColorStop(1, "rgba(123,97,255,0.02)");
+  }
+  ctx.fillStyle = grad;
+  ctx.fill();
+
+  ctx.beginPath();
+  points.forEach((p,i)=> i===0 ? ctx.moveTo(p[0],p[1]) : ctx.lineTo(p[0],p[1]));
+  ctx.strokeStyle = crashed ? "#ff3b5c" : "#00e5ff";
+  ctx.lineWidth = 3 * window.devicePixelRatio;
+  ctx.stroke();
+
+  const last = points[points.length-1];
+  ctx.beginPath();
+  ctx.arc(last[0], last[1], 6*window.devicePixelRatio, 0, Math.PI*2);
+  ctx.fillStyle = crashed ? "#ff3b5c" : "#fff";
+  ctx.fill();
+}
+
+// ---------- ACTION BUTTON ----------
+actionBtn.addEventListener('click', () => {
+  if(gameState === "waiting" && !betPlaced){
+    const amt = parseInt(betInput.value);
+    if(!amt || amt < 10){
+      showToast("Minimum bet is 10 coins");
+      return;
+    }
+    if(amt > coins){
+      showToast("Not enough coins!");
+      return;
+    }
+    coins -= amt;
+    betAmount = amt;
+    betPlaced = true;
+    updateCoinsDisplay();
+    actionBtn.className = "main-action placed";
+    actionBtn.textContent = "BET PLACED ✓";
+    actionBtn.disabled = true;
+    showToast(`Bet lagaya: ${amt} coins`, 'info');
+  } else if(gameState === "running" && betPlaced && !cashedOut){
+    cashedOut = true;
+    const winAmount = Math.floor(betAmount * currentMultiplier);
+    coins += winAmount;
+    updateCoinsDisplay();
+    actionBtn.className = "main-action placed";
+    actionBtn.textContent = "✓ CASHED OUT";
+    actionBtn.disabled = true;
+    const type = currentMultiplier >= 5 ? 'gold' : 'win';
+    showToast(`${currentMultiplier.toFixed(2)}x pe cashout — +${winAmount} coins!`, type);
+  }
+});
+
+// ---------- ACCOUNT MANAGEMENT ----------
+function renderAccountSelect(){
+  ['accountSelect','welcomeAccountSelect'].forEach(id => {
+    const sel = document.getElementById(id);
+    if(!sel) return;
+    sel.innerHTML = "";
+    allAccounts.forEach(acct => {
+      const opt = document.createElement('option');
+      opt.value = acct.id;
+      opt.textContent = acct.name + " 🪙" + acct.coins.toLocaleString();
+      if(acct.id === getActiveId()) opt.selected = true;
+      sel.appendChild(opt);
+    });
+  });
+}
+
+function switchAccount(id){
+  if(autoRunning){ showToast("Stop auto mode first"); renderAccountSelect(); return; }
+  if(premRunning){ stopPremium("Stopped — account switched"); }
+  saveActiveAccount();
+  setActiveId(id);
+  const acct = getActiveAccount();
+  coins         = acct.coins;
+  lastClaim     = acct.lastClaim;
+  roundHistory  = acct.history || [];
+  resetCount    = acct.resetCount || 0;
+  premiumTier   = acct.premiumTier   || null;
+  premiumExpiry = acct.premiumExpiry || 0;
+  basicUsed     = acct.basicUsed     || false;
+  updateCoinsDisplay();
+  checkClaimAvailability();
+  renderHistory();
+  renderAccountSelect();
+  renderPremiumUI();
+  showToast(`Account: ${acct.name}`, 'info');
+}
+
+function openAccountModal(){
+  renderAcctList();
+  document.getElementById('newAcctName').value = "";
+  document.getElementById('accountModal').classList.add('show');
+}
+
+function renderAcctList(){
+  const list = document.getElementById('acctList');
+  list.innerHTML = "";
+  const activeId = getActiveId();
+  allAccounts.forEach(acct => {
+    const item = document.createElement('div');
+    item.className = 'acct-list-item' + (acct.id === activeId ? ' active-acct' : '');
+    item.innerHTML = `
+      <div>
+        <span class="acct-name">${acct.name}</span>
+        ${acct.id === activeId ? '<span class="acct-active-tag">ACTIVE</span>' : ''}
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;">
+        <span class="acct-coins">🪙 ${acct.coins.toLocaleString()}</span>
+        <span style="font-size:10px;color:#667;">↺${acct.resetCount||0}</span>
+        ${allAccounts.length > 1 && acct.id !== activeId
+          ? `<button class="acct-del" onclick="deleteAccount('${acct.id}')">✕</button>`
+          : ''}
+        ${acct.id !== activeId
+          ? `<button class="acct-btn" style="font-size:10px;padding:4px 8px;" onclick="switchAccount('${acct.id}');closeModal('accountModal');">Switch</button>`
+          : ''}
+      </div>`;
+    list.appendChild(item);
+  });
+}
+
+function createAccount(){
+  const nameInput = document.getElementById('newAcctName');
+  const name = nameInput.value.trim();
+  if(!name){ showToast("Account ka naam likho"); return; }
+  if(allAccounts.length >= 6){ showToast("Max 6 accounts allowed"); return; }
+  if(allAccounts.find(a => a.name.toLowerCase() === name.toLowerCase())){
+    showToast("Is naam ka account already hai"); return;
+  }
+  const newAcct = {
+    id: "acct_" + Date.now(),
+    name: name,
+    coins: DEFAULT_COINS,
+    lastClaim: 0,
+    history: [],
+    resetCount: 0
+  };
+  allAccounts.push(newAcct);
+  saveAccounts(allAccounts);
+  nameInput.value = "";
+  renderAcctList();
+  renderAccountSelect();
+  showToast(`Account "${name}" ready!`, 'win');
+}
+
+function deleteAccount(id){
+  if(allAccounts.length <= 1){ showToast("Kam se kam ek account chahiye"); return; }
+  const acct = allAccounts.find(a => a.id === id);
+  if(!acct) return;
+  allAccounts = allAccounts.filter(a => a.id !== id);
+  saveAccounts(allAccounts);
+  renderAcctList();
+  renderAccountSelect();
+  showToast(`Account "${acct.name}" hataya gaya`, 'loss');
+}
+
+// ---------- PROMO CODE ENGINE ----------
+const PROMO_USED_KEY = "aviator_promo_used"; // stores array of used normal codes (global, not per account)
+const PROMO_DURATION_MS = 10 * 60 * 1000;    // 10 minutes
+
+// Normal codes — ek baar globally use honge (kisi bhi device/account ne use kiya = done)
+const PROMO_NORMAL_CODES = ["CHAMAN","CHAMAN85","CHAMANVIP","WITHCHAMAN","NAJEEF","NAJIFUL","637164","409085"];
+
+// Special codes — unlimited times, har account + har device pe kaam karenge
+const PROMO_SPECIAL_CODES = ["SAHISTA","REHAN+SAHISTA"];
+
+function getUsedPromoCodes(){
+  try{ return JSON.parse(localStorage.getItem(PROMO_USED_KEY)) || []; }
+  catch(e){ return []; }
+}
+
+function markPromoUsed(code){
+  const used = getUsedPromoCodes();
+  if(!used.includes(code)){ used.push(code); }
+  localStorage.setItem(PROMO_USED_KEY, JSON.stringify(used));
+}
+
+// Special promo modal messages per code
+const SPECIAL_PROMO_MESSAGES = {
+  "SAHISTA": `You're one of the <em>very few</em> people with this code.<br><br>The developer doesn't hand these out to just anyone — <em>Sahista</em> is clearly someone special to them. 🌸<br><br>Enjoy your premium access, lucky one.`,
+  "REHAN+SAHISTA": `A code made for <em>two</em>. That's rare.<br><br>Whoever <em>Rehan</em> and <em>Sahista</em> are to the developer — they mean something. This code exists just for them. 💛<br><br>You're holding something personal. Use it well.`
+};
+
+function showSpecialPromoModal(code){
+  const msg = SPECIAL_PROMO_MESSAGES[code] || `You have a very special code. The developer made this just for someone they care about. That someone is apparently <em>you</em>. Lucky. 🌟`;
+  document.getElementById('specialPromoModalMsg').innerHTML = msg;
+  document.getElementById('specialPromoModal').classList.add('show');
+}
+
+function closeSpecialPromoModal(){
+  document.getElementById('specialPromoModal').classList.remove('show');
+}
+
+function redeemPromo(){
+  const input = document.getElementById('promoInput');
+  const msgEl = document.getElementById('promoMsg');
+  const raw   = (input.value || "").trim().toUpperCase();
+
+  if(!raw){
+    msgEl.className = "promo-msg err";
+    msgEl.textContent = "Promo code daalo pehle!";
+    return;
+  }
+
+  const isSpecial = PROMO_SPECIAL_CODES.includes(raw);
+  const isNormal  = PROMO_NORMAL_CODES.includes(raw);
+
+  if(!isSpecial && !isNormal){
+    msgEl.className = "promo-msg err";
+    msgEl.textContent = "❌ Invalid promo code.";
+    return;
+  }
+
+  if(isNormal){
+    const used = getUsedPromoCodes();
+    if(used.includes(raw)){
+      msgEl.className = "promo-msg err";
+      msgEl.textContent = "❌ Code already use ho chuka hai!";
+      return;
+    }
+  }
+
+  // Valid! Give 10 min premium
+  const alreadyActive = isPremiumActive();
+  if(alreadyActive){
+    premiumExpiry = Math.max(premiumExpiry, Date.now()) + PROMO_DURATION_MS;
+  } else {
+    premiumTier   = "basic";
+    premiumExpiry = Date.now() + PROMO_DURATION_MS;
+    basicUsed     = true;
+  }
+
+  if(isNormal) markPromoUsed(raw);
+
+  saveActiveAccount();
+  input.value = "";
+  msgEl.textContent = "";
+
+  renderPremiumUI();
+
+  if(isSpecial){
+    // Show beautiful special modal
+    showSpecialPromoModal(raw);
+  } else {
+    showToast("🎟️ Promo redeemed! 10 min Premium chalu!", "win");
+  }
+}
+
+// ---------- WELCOME / NAVIGATION ----------
+function startGame(){
+  const ws = document.getElementById('welcomeScreen');
+  const ih = document.getElementById('ingameHeader');
+  ws.classList.add('hiding');
+  setTimeout(()=>{ ws.style.display='none'; ih.style.display='flex'; }, 400);
+}
+
+function goToWelcome(){
+  closeModal('settingsModal');
+  if(autoRunning) stopAuto("Stopped — went to menu");
+  if(premRunning) stopPremium("Stopped — went to menu");
+  const ws = document.getElementById('welcomeScreen');
+  const ih = document.getElementById('ingameHeader');
+  ws.style.display='flex';
+  ws.classList.remove('hiding');
+  ih.style.display='none';
+  updateCoinsDisplay();
+  renderAccountSelect();
+  checkClaimAvailability();
+}
+
+function openSettingsModal(){
+  updateCoinsDisplay();
+  renderAccountSelect();
+  document.getElementById('settingsModal').classList.add('show');
+}
+
+// ---------- INIT ----------
+updateCoinsDisplay();
+checkClaimAvailability();
+renderHistory();
+renderAccountSelect();
+renderPremiumUI();
+resizeCanvas();
+startWaitingPhase();
+</script>
+
+</body>
+</html>

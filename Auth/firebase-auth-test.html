@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Firebase Auth — Test Lab</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #000;
+    --surface: #0a0a0a;
+    --card: #111;
+    --border: #222;
+    --border-glow: #333;
+    --silver: #c0c0c0;
+    --silver-bright: #e8e8e8;
+    --silver-dim: #666;
+    --accent: #a0a0a0;
+    --green: #00e676;
+    --red: #ff1744;
+    --yellow: #ffd600;
+    --mono: 'Space Mono', monospace;
+    --sans: 'Rajdhani', sans-serif;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--silver);
+    font-family: var(--mono);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.012) 2px, rgba(255,255,255,0.012) 4px);
+    pointer-events: none;
+    z-index: 9999;
+  }
+  header {
+    border-bottom: 1px solid var(--border);
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--surface);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .logo {
+    width: 34px; height: 34px;
+    background: linear-gradient(135deg, #444, #eee, #444);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 17px;
+  }
+  header h1 {
+    font-family: var(--sans);
+    font-size: 19px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    color: var(--silver-bright);
+  }
+  header .ver {
+    font-size: 10px;
+    color: var(--silver-dim);
+    letter-spacing: 1px;
+    margin-left: auto;
+  }
+  .main {
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 22px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+  /* User Card */
+  #user-card {
+    background: var(--card);
+    border: 1px solid var(--border-glow);
+    border-radius: 12px;
+    padding: 16px 18px;
+    display: none;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+    animation: fadeIn 0.3s ease;
+  }
+  #user-card.show { display: flex; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
+  #user-avatar {
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #2a2a2a, #666);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+    border: 2px solid var(--border-glow);
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+  #user-avatar img { width: 100%; height: 100%; object-fit: cover; }
+  .user-info { flex: 1; min-width: 0; }
+  .user-info .uname {
+    font-family: var(--sans);
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--silver-bright);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .user-info .uuid {
+    font-size: 9px;
+    color: var(--silver-dim);
+    margin-top: 2px;
+    word-break: break-all;
+  }
+  .user-info .uprov {
+    display: inline-block;
+    margin-top: 5px;
+    padding: 2px 8px;
+    background: #1a1a1a;
+    border: 1px solid var(--border-glow);
+    border-radius: 4px;
+    font-size: 9px;
+    color: var(--silver);
+    letter-spacing: 1px;
+  }
+  .user-actions { display: flex; gap: 8px; }
+  .section-label {
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: var(--silver-dim);
+    text-transform: uppercase;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--border);
+  }
+  .provider-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+    gap: 14px;
+  }
+  .pcard {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .pcard:hover {
+    border-color: var(--border-glow);
+    box-shadow: 0 0 18px rgba(180,180,180,0.04);
+  }
+  .pcard-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .pcard-icon {
+    width: 34px; height: 34px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .pcard-title {
+    font-family: var(--sans);
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--silver-bright);
+    letter-spacing: 1.5px;
+  }
+  .pcard-sub { font-size: 9px; color: var(--silver-dim); margin-top: 1px; }
+  .status-dot {
+    margin-left: auto;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: #2a2a2a;
+    flex-shrink: 0;
+  }
+  .status-dot.active { background: var(--green); box-shadow: 0 0 6px var(--green); }
+  /* Inputs */
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="tel"] {
+    width: 100%;
+    background: #0c0c0c;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 9px 11px;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--silver);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  input:focus { border-color: var(--silver-dim); }
+  input::placeholder { color: #2e2e2e; }
+  /* Buttons */
+  .btn {
+    padding: 8px 14px;
+    border-radius: 6px;
+    border: 1px solid var(--border-glow);
+    background: #141414;
+    color: var(--silver);
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+    text-align: center;
+  }
+  .btn:hover { background: #1e1e1e; color: var(--silver-bright); border-color: var(--accent); }
+  .btn:active { transform: scale(0.97); }
+  .btn:disabled { opacity: 0.3; cursor: not-allowed; transform: none; }
+  .btn-primary {
+    background: #1a1a1a;
+    border-color: var(--silver-dim);
+    color: var(--silver-bright);
+  }
+  .btn-primary:hover { border-color: var(--silver-bright); box-shadow: 0 0 10px rgba(200,200,200,0.08); }
+  .btn-danger { border-color: #2a0a0a; color: #ff6b6b; }
+  .btn-danger:hover { background: #150303; border-color: var(--red); }
+  .btn-reset { border-color: #1e1a00; color: var(--yellow); }
+  .btn-reset:hover { background: #0d0b00; border-color: var(--yellow); }
+  .btn-success { border-color: #001a08; color: var(--green); }
+  .btn-success:hover { background: #00080400; border-color: var(--green); }
+  .btn-full { width: 100%; }
+  .btn-sm { padding: 6px 10px; font-size: 10px; }
+  .btn-row { display: flex; gap: 8px; }
+  .btn-row .btn { flex: 1; }
+  .btn-google {
+    background: #fff;
+    color: #333;
+    border-color: #ccc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    width: 100%;
+    padding: 10px 14px;
+  }
+  .btn-google:hover { background: #f0f0f0; color: #111; border-color: #aaa; }
+  .sep { height: 1px; background: var(--border); }
+  .hint { font-size: 10px; color: var(--silver-dim); line-height: 1.6; }
+  .otp-row { display: flex; gap: 8px; }
+  .otp-row input { flex: 1; }
+  /* Log */
+  #log-console {
+    background: #050505;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .log-header {
+    background: var(--card);
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  .log-dots { display: flex; gap: 6px; }
+  .log-dots span { width: 10px; height: 10px; border-radius: 50%; }
+  .log-dots span:nth-child(1) { background: #ff5f57; }
+  .log-dots span:nth-child(2) { background: #ffbd2e; }
+  .log-dots span:nth-child(3) { background: #28c840; }
+  .log-title { font-size: 10px; color: var(--silver-dim); letter-spacing: 2px; }
+  .log-clear { margin-left: auto; font-size: 10px; color: var(--silver-dim); cursor: pointer; }
+  .log-clear:hover { color: var(--silver); }
+  #log-body {
+    height: 210px;
+    overflow-y: auto;
+    padding: 12px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    font-size: 11px;
+  }
+  #log-body::-webkit-scrollbar { width: 3px; }
+  #log-body::-webkit-scrollbar-thumb { background: var(--border-glow); border-radius: 2px; }
+  .log-line { display: flex; gap: 10px; line-height: 1.5; }
+  .log-time { color: #2e2e2e; flex-shrink: 0; font-size: 9px; padding-top: 1px; }
+  .log-line.success .log-msg { color: var(--green); }
+  .log-line.error .log-msg { color: var(--red); }
+  .log-line.info .log-msg { color: var(--silver-dim); }
+  .log-line.warn .log-msg { color: var(--yellow); }
+  .log-msg { word-break: break-word; }
+  #recaptcha-container { min-height: 0; }
+  .pcard-icon.guest-i { background: #1a1a1a; }
+  .pcard-icon.google-i { background: #fff; border-radius: 6px; }
+  .pcard-icon.email-i { background: #0a1520; }
+  .pcard-icon.phone-i { background: #0a1a0a; }
+  .pcard-icon.link-i  { background: #1a100a; }
+  @media(max-width:600px) {
+    .provider-grid { grid-template-columns: 1fr; }
+    header h1 { font-size: 15px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">🔥</div>
+  <h1>AUTH TEST LAB</h1>
+  <div class="ver">FIREBASE · v10</div>
+</header>
+
+<div class="main">
+
+  <!-- Active User Card -->
+  <div id="user-card">
+    <div id="user-avatar">👤</div>
+    <div class="user-info">
+      <div class="uname" id="u-name">—</div>
+      <div class="uuid" id="u-uid">UID: —</div>
+      <span class="uprov" id="u-prov">—</span>
+    </div>
+    <div class="user-actions">
+      <button class="btn btn-danger btn-sm" onclick="signOutUser()">SIGN OUT</button>
+      <button class="btn btn-danger btn-sm" onclick="deleteUserAccount()">DELETE</button>
+    </div>
+  </div>
+
+  <div class="section-label">◈ Sign-in Providers</div>
+
+  <div class="provider-grid">
+
+    <!-- ① GUEST -->
+    <div class="pcard">
+      <div class="pcard-header">
+        <div class="pcard-icon guest-i">👤</div>
+        <div>
+          <div class="pcard-title">GUEST</div>
+          <div class="pcard-sub">Anonymous Auth</div>
+        </div>
+        <div class="status-dot" id="dot-guest"></div>
+      </div>
+      <button class="btn btn-primary btn-full" onclick="loginGuest()">ENTER AS GUEST</button>
+      <button class="btn btn-reset btn-full btn-sm" onclick="signOutUser()">RESET / SIGN OUT</button>
+    </div>
+
+    <!-- ② GOOGLE -->
+    <div class="pcard">
+      <div class="pcard-header">
+        <div class="pcard-icon google-i">
+          <svg width="18" height="18" viewBox="0 0 48 48">
+            <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+            <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+            <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+            <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.35-8.16 2.35-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+          </svg>
+        </div>
+        <div>
+          <div class="pcard-title">GOOGLE</div>
+          <div class="pcard-sub">OAuth 2.0 Popup</div>
+        </div>
+        <div class="status-dot" id="dot-google"></div>
+      </div>
+      <button class="btn btn-google" onclick="loginGoogle()">
+        <svg width="16" height="16" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.35-8.16 2.35-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+        Continue with Google
+      </button>
+      <button class="btn btn-reset btn-full btn-sm" onclick="signOutUser()">RESET / SIGN OUT</button>
+    </div>
+
+    <!-- ③ EMAIL / PASSWORD -->
+    <div class="pcard">
+      <div class="pcard-header">
+        <div class="pcard-icon email-i">✉️</div>
+        <div>
+          <div class="pcard-title">EMAIL</div>
+          <div class="pcard-sub">Password Auth</div>
+        </div>
+        <div class="status-dot" id="dot-email"></div>
+      </div>
+      <input type="email" id="email-in" placeholder="email@example.com" />
+      <input type="password" id="pass-in" placeholder="Password (min 6 chars)" />
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="loginEmail()">LOGIN</button>
+        <button class="btn" onclick="registerEmail()">REGISTER</button>
+      </div>
+      <div class="sep"></div>
+      <div class="btn-row">
+        <button class="btn btn-reset btn-sm" onclick="resetEmailPassword()">RESET PWD</button>
+        <button class="btn btn-success btn-sm" onclick="sendVerification()">VERIFY EMAIL</button>
+      </div>
+      <button class="btn btn-reset btn-full btn-sm" onclick="signOutUser()">RESET / SIGN OUT</button>
+    </div>
+
+    <!-- ④ PHONE OTP -->
+    <div class="pcard">
+      <div class="pcard-header">
+        <div class="pcard-icon phone-i">📱</div>
+        <div>
+          <div class="pcard-title">PHONE OTP</div>
+          <div class="pcard-sub">SMS Verification</div>
+        </div>
+        <div class="status-dot" id="dot-phone"></div>
+      </div>
+      <div id="recaptcha-container"></div>
+      <div class="otp-row">
+        <input type="tel" id="phone-in" placeholder="+91 98765 43210" />
+        <button class="btn btn-primary btn-sm" onclick="sendOTP()">SEND OTP</button>
+      </div>
+      <div class="otp-row" id="otp-row" style="display:none">
+        <input type="text" id="otp-in" placeholder="Enter 6-digit OTP" maxlength="6" />
+        <button class="btn btn-success btn-sm" onclick="verifyOTP()">VERIFY</button>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-reset btn-sm" onclick="resendOTP()">RESEND OTP</button>
+        <button class="btn btn-reset btn-sm" onclick="resetPhone()">RESET</button>
+      </div>
+    </div>
+
+    <!-- ⑤ MAGIC LINK -->
+    <div class="pcard">
+      <div class="pcard-header">
+        <div class="pcard-icon link-i">🔗</div>
+        <div>
+          <div class="pcard-title">MAGIC LINK</div>
+          <div class="pcard-sub">Passwordless Email</div>
+        </div>
+        <div class="status-dot" id="dot-link"></div>
+      </div>
+      <input type="email" id="magic-in" placeholder="your@email.com" />
+      <button class="btn btn-primary btn-full" onclick="sendMagicLink()">SEND MAGIC LINK</button>
+      <div class="sep"></div>
+      <div class="hint">📨 Check email → click the link → page auto-detects & logs you in.</div>
+      <div class="btn-row">
+        <button class="btn btn-reset btn-sm" onclick="sendMagicLink()">RESEND LINK</button>
+        <button class="btn btn-reset btn-sm" onclick="resetMagic()">RESET</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Console -->
+  <div id="log-console">
+    <div class="log-header">
+      <div class="log-dots"><span></span><span></span><span></span></div>
+      <div class="log-title">CONSOLE</div>
+      <div class="log-clear" onclick="clearLogs()">[ CLEAR ]</div>
+    </div>
+    <div id="log-body"></div>
+  </div>
+
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import {
+  getAuth, onAuthStateChanged, signOut, deleteUser,
+  GoogleAuthProvider, signInWithPopup,
+  createUserWithEmailAndPassword, signInWithEmailAndPassword,
+  sendPasswordResetEmail, sendEmailVerification,
+  RecaptchaVerifier, signInWithPhoneNumber,
+  sendSignInLinkToEmail, isSignInWithEmailLink, signInWithEmailLink,
+  signInAnonymously
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+const app = initializeApp({
+  apiKey: "AIzaSyCz1qSl0DmpZCggj_XJgw-sNxiuVksG_50",
+  authDomain: "auth-test-74306.firebaseapp.com",
+  projectId: "auth-test-74306",
+  storageBucket: "auth-test-74306.firebasestorage.app",
+  messagingSenderId: "89080817645",
+  appId: "1:89080817645:web:cb9bd0b2042cf01420e9e4"
+});
+const auth = getAuth(app);
+
+// ── Logger ──────────────────────────────────────────────
+const _log = window._log = (msg, type = 'info') => {
+  const body = document.getElementById('log-body');
+  const t = new Date().toLocaleTimeString('en-IN', { hour12: false });
+  const el = document.createElement('div');
+  el.className = `log-line ${type}`;
+  el.innerHTML = `<span class="log-time">${t}</span><span class="log-msg">${msg}</span>`;
+  body.appendChild(el);
+  body.scrollTop = body.scrollHeight;
+};
+window.clearLogs = () => { document.getElementById('log-body').innerHTML = ''; };
+
+// ── Auth State ───────────────────────────────────────────
+const PROV_MAP = { 'google.com':'google', 'password':'email', 'phone':'phone', 'emailLink':'link' };
+onAuthStateChanged(auth, user => {
+  const card = document.getElementById('user-card');
+  ['guest','google','email','phone','link'].forEach(k =>
+    document.getElementById('dot-'+k).className = 'status-dot');
+
+  if (user) {
+    card.classList.add('show');
+    document.getElementById('u-name').textContent =
+      user.displayName || user.email || user.phoneNumber || 'Anonymous User';
+    document.getElementById('u-uid').textContent = 'UID: ' + user.uid;
+    const provs = user.providerData.map(p => p.providerId);
+    document.getElementById('u-prov').textContent = provs.join(', ') || 'anonymous';
+
+    const av = document.getElementById('user-avatar');
+    av.innerHTML = user.photoURL ? `<img src="${user.photoURL}"/>` : (user.isAnonymous ? '👤' : '🔐');
+
+    if (user.isAnonymous) document.getElementById('dot-guest').className = 'status-dot active';
+    provs.forEach(p => {
+      const k = PROV_MAP[p];
+      if (k) document.getElementById('dot-'+k).className = 'status-dot active';
+    });
+  } else {
+    card.classList.remove('show');
+  }
+});
+
+// ── Global ───────────────────────────────────────────────
+window.signOutUser = async () => {
+  try { await signOut(auth); _log('👋 Signed out', 'warn'); }
+  catch(e) { _log('❌ '+e.message, 'error'); }
+};
+window.deleteUserAccount = async () => {
+  if (!auth.currentUser) return _log('❌ No user signed in', 'error');
+  if (!confirm('Permanently delete this account?')) return;
+  try { await deleteUser(auth.currentUser); _log('🗑️ Account deleted', 'warn'); }
+  catch(e) { _log('❌ '+e.message+' (re-login required for delete)', 'error'); }
+};
+
+// ── ① GUEST ──────────────────────────────────────────────
+window.loginGuest = async () => {
+  try {
+    _log('⏳ Signing in anonymously...', 'info');
+    const { user } = await signInAnonymously(auth);
+    _log('✅ Guest login success · UID: '+user.uid, 'success');
+  } catch(e) { _log('❌ Guest: '+e.message, 'error'); }
+};
+
+// ── ② GOOGLE ─────────────────────────────────────────────
+window.loginGoogle = async () => {
+  try {
+    _log('⏳ Opening Google popup...', 'info');
+    const { user } = await signInWithPopup(auth, new GoogleAuthProvider());
+    _log('✅ Google login · '+user.email, 'success');
+  } catch(e) { _log('❌ Google: '+e.message, 'error'); }
+};
+
+// ── ③ EMAIL / PASSWORD ────────────────────────────────────
+window.loginEmail = async () => {
+  const e = document.getElementById('email-in').value.trim();
+  const p = document.getElementById('pass-in').value;
+  if (!e||!p) return _log('⚠️ Email & password required', 'warn');
+  try {
+    _log('⏳ Logging in...', 'info');
+    const { user } = await signInWithEmailAndPassword(auth, e, p);
+    _log('✅ Email login · '+user.email, 'success');
+  } catch(ex) { _log('❌ '+ex.message, 'error'); }
+};
+window.registerEmail = async () => {
+  const e = document.getElementById('email-in').value.trim();
+  const p = document.getElementById('pass-in').value;
+  if (!e||!p) return _log('⚠️ Email & password required', 'warn');
+  try {
+    _log('⏳ Registering...', 'info');
+    const { user } = await createUserWithEmailAndPassword(auth, e, p);
+    _log('✅ Registered · '+user.email, 'success');
+  } catch(ex) { _log('❌ '+ex.message, 'error'); }
+};
+window.resetEmailPassword = async () => {
+  const e = document.getElementById('email-in').value.trim()
+    || (auth.currentUser?.email);
+  if (!e) return _log('⚠️ Enter email first', 'warn');
+  try {
+    await sendPasswordResetEmail(auth, e);
+    _log('📧 Password reset email sent → '+e, 'success');
+  } catch(ex) { _log('❌ '+ex.message, 'error'); }
+};
+window.sendVerification = async () => {
+  if (!auth.currentUser) return _log('❌ Login first', 'error');
+  try {
+    await sendEmailVerification(auth.currentUser);
+    _log('📧 Verification email sent → '+auth.currentUser.email, 'success');
+  } catch(ex) { _log('❌ '+ex.message, 'error'); }
+};
+
+// ── ④ PHONE OTP ───────────────────────────────────────────
+let confirmResult = null, rcVerifier = null;
+
+const initRecaptcha = () => {
+  if (rcVerifier) return;
+  rcVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
+    size: 'normal',
+    callback: () => _log('✅ reCAPTCHA solved', 'success'),
+    'expired-callback': () => _log('⚠️ reCAPTCHA expired, click Resend', 'warn')
+  });
+  rcVerifier.render();
+  _log('ℹ️ reCAPTCHA rendered', 'info');
+};
+
+window.sendOTP = async () => {
+  const phone = document.getElementById('phone-in').value.trim();
+  if (!phone) return _log('⚠️ Enter phone with country code e.g. +91...', 'warn');
+  try {
+    initRecaptcha();
+    _log('⏳ Sending OTP to '+phone+'...', 'info');
+    confirmResult = await signInWithPhoneNumber(auth, phone, rcVerifier);
+    document.getElementById('otp-row').style.display = 'flex';
+    _log('✅ OTP sent! Enter the 6-digit code.', 'success');
+  } catch(e) {
+    _log('❌ OTP send: '+e.message, 'error');
+    if (rcVerifier) { rcVerifier.clear(); rcVerifier = null; }
+  }
+};
+window.verifyOTP = async () => {
+  const code = document.getElementById('otp-in').value.trim();
+  if (!code||!confirmResult) return _log('⚠️ Send OTP first', 'warn');
+  try {
+    _log('⏳ Verifying OTP...', 'info');
+    const { user } = await confirmResult.confirm(code);
+    _log('✅ Phone verified · '+user.phoneNumber, 'success');
+    document.getElementById('otp-row').style.display = 'none';
+  } catch(e) { _log('❌ OTP verify: '+e.message, 'error'); }
+};
+window.resendOTP = () => {
+  if (rcVerifier) { rcVerifier.clear(); rcVerifier = null; }
+  document.getElementById('recaptcha-container').innerHTML = '';
+  confirmResult = null;
+  document.getElementById('otp-row').style.display = 'none';
+  _log('ℹ️ reCAPTCHA cleared. Click SEND OTP again.', 'info');
+  setTimeout(initRecaptcha, 300);
+};
+window.resetPhone = () => {
+  window.resendOTP();
+  document.getElementById('phone-in').value = '';
+  document.getElementById('otp-in').value = '';
+  window.signOutUser();
+};
+
+// ── ⑤ MAGIC LINK ─────────────────────────────────────────
+const ML_KEY = 'mlEmailForSignIn';
+window.sendMagicLink = async () => {
+  const email = document.getElementById('magic-in').value.trim();
+  if (!email) return _log('⚠️ Enter email for magic link', 'warn');
+  try {
+    await sendSignInLinkToEmail(auth, email, {
+      url: window.location.href,
+      handleCodeInApp: true
+    });
+    localStorage.setItem(ML_KEY, email);
+    _log('✅ Magic link sent → '+email+' · Check inbox!', 'success');
+  } catch(e) { _log('❌ Magic link: '+e.message, 'error'); }
+};
+window.resetMagic = () => {
+  localStorage.removeItem(ML_KEY);
+  document.getElementById('magic-in').value = '';
+  _log('ℹ️ Magic link session cleared', 'info');
+  window.signOutUser();
+};
+
+// Auto-detect magic link on load
+if (isSignInWithEmailLink(auth, window.location.href)) {
+  let email = localStorage.getItem(ML_KEY);
+  if (!email) email = prompt('Enter your email to complete sign-in:');
+  if (email) {
+    _log('⏳ Completing magic link sign-in...', 'info');
+    signInWithEmailLink(auth, email, window.location.href)
+      .then(({ user }) => {
+        localStorage.removeItem(ML_KEY);
+        history.replaceState({}, '', location.pathname);
+        _log('✅ Magic link login · '+user.email, 'success');
+      })
+      .catch(e => _log('❌ Magic link verify: '+e.message, 'error'));
+  }
+}
+
+_log('🔥 Firebase Auth Test Lab ready', 'info');
+_log('ℹ️ Make sure all providers are enabled in Firebase Console → Auth → Sign-in method', 'info');
+</script>
+</body>
+</html>

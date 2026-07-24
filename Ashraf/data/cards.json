@@ -1,0 +1,93 @@
+[
+  {
+    "id": "html",
+    "title": "HTML",
+    "subtitle": "Web Page ka Structure",
+    "icon": "🌐",
+    "what_is_it": "HTML ek markup language hai jo website ka basic structure aur content define karti hai.",
+    "benefits": [
+      "Website ke pages, forms aur content khud bana paoge.",
+      "Frontend Web Development ki foundation isi se shuru hoti hai.",
+      "Portfolio website, blog, landing page aur simple web pages bana sakte ho."
+    ],
+    "miss_if_not_learn": "Agar HTML nahi seekhoge to website ka structure samajhna mushkil hoga. CSS aur JavaScript bhi effectively use nahi kar paoge.",
+    "difficulty": "Easy",
+    "learning_time": "2-3 hafte",
+    "example_code": "<h1>Hello World</h1>",
+    "lessons": 25,
+    "file": "data/html.json"
+  },
+  {
+    "id": "css",
+    "title": "CSS",
+    "subtitle": "Website ko Beautiful Banane ki Language",
+    "icon": "🎨",
+    "what_is_it": "CSS website ki styling, colors, layout aur responsive design control karti hai.",
+    "benefits": [
+      "Professional-looking aur mobile-friendly websites bana paoge.",
+      "UI/UX aur Frontend Developer roles ke liye important skill hai.",
+      "Animations, cards, buttons aur modern layouts design kar sakte ho."
+    ],
+    "miss_if_not_learn": "Agar CSS nahi seekhoge to website sirf plain text jaisi lagegi. Users ko achha experience dena mushkil ho jayega.",
+    "difficulty": "Easy",
+    "learning_time": "3-4 hafte",
+    "example_code": "h1 { color: blue; }",
+    "lessons": 25,
+    "file": "data/css.json"
+  },
+  {
+    "id": "javascript",
+    "title": "JavaScript",
+    "subtitle": "Website ko Interactive Banane ki Language",
+    "icon": "⚡",
+    "what_is_it": "JavaScript website me logic aur interactivity add karti hai.",
+    "benefits": [
+      "Buttons, forms, login systems aur dynamic features bana sakte ho.",
+      "Frontend aur Full Stack Developer jobs ke liye core skill hai.",
+      "Games, web apps, dashboards aur API-based projects bana sakte ho."
+    ],
+    "miss_if_not_learn": "Agar JavaScript nahi seekhoge to websites static rahengi. Modern web apps banana mushkil ho jayega.",
+    "difficulty": "Medium",
+    "learning_time": "2-3 mahine",
+    "example_code": "console.log('Hello World');",
+    "lessons": 25,
+    "file": "data/js.json"
+  },
+  {
+    "id": "python",
+    "title": "Python",
+    "subtitle": "Simple aur Powerful Programming Language",
+    "icon": "🐍",
+    "what_is_it": "Python ek beginner-friendly programming language hai jo automation, AI, backend aur data analysis me use hoti hai.",
+    "benefits": [
+      "Automation scripts likhkar repetitive kaam aasaan bana sakte ho.",
+      "AI, Machine Learning, Data Science aur Backend Development me career bana sakte ho.",
+      "Bots, APIs, desktop tools aur web applications develop kar sakte ho."
+    ],
+    "miss_if_not_learn": "Agar Python nahi seekhoge to AI aur automation jaise popular fields me entry thodi mushkil ho sakti hai.",
+    "difficulty": "Easy",
+    "learning_time": "2-4 mahine",
+    "example_code": "print('Hello World')",
+    "lessons": 25,
+    "file": "data/py.json"
+  },
+  {
+    "id": "mix",
+    "title": "Real Projects",
+    "subtitle": "HTML + CSS + JS ko Milaakar Banao",
+    "icon": "🚀",
+    "what_is_it": "Ye course tumhe HTML, CSS aur JavaScript teeno ko combine karke real websites aur mini-apps banana sikhata hai.",
+    "benefits": [
+      "Profile card, todo list, calculator, quiz app jaise 20 real projects banaoge.",
+      "Teeno languages ka combined use samajh aaega, jo asli development hai.",
+      "Portfolio ke liye ready-made projects mil jayenge."
+    ],
+    "miss_if_not_learn": "Bina practice ke sirf theory se real app banana mushkil lagega. Ye course wahi gap bharta hai.",
+    "difficulty": "Medium",
+    "learning_time": "1-2 mahine",
+    "example_code": "// HTML + CSS + JS ek saath",
+    "lessons": 20,
+    "file": "data/mix.json",
+    "locked_hint": "Pehle HTML, CSS aur JS complete karo"
+  }
+]
