@@ -74,10 +74,7 @@ function setModelS(m) {
 // actually wants it, it just doesn't belong in onboarding anymore.
 const OB_STEPS = [
   { key: 'name', emoji: '👋', q: 'Tera naam kya hai?', sub: 'Taaki main tujhe sahi se bulau', type: 'text', placeholder: 'Jaise: Chaman', required: true },
-  { key: 'age', emoji: '🎂', q: 'Age kitni hai?', sub: 'Optional hai, skip bhi kar sakta hai', type: 'number', placeholder: 'Jaise: 20', required: false },
-  { key: 'work', emoji: '💼', q: 'Tu kya karta hai?', sub: 'Kaam, padhai, ya interest — jo bhi ho', type: 'text', placeholder: 'Jaise: Developer, Student...', required: false },
-  { key: 'lang', emoji: '💬', q: 'Kis language mein baat karu?', sub: 'Baad mein Settings se bhi badal sakte ho', type: 'chips', options: ['Hinglish', 'Pure Hindi', 'English'], required: false },
-  { key: 'extra', emoji: '📝', q: 'Kuch aur jo mujhe pata hona chahiye?', sub: 'Koi project, pasand, habit — kuch bhi (optional)', type: 'textarea', placeholder: 'Yahan likho...', required: false }
+  { key: 'age', emoji: '🎂', q: 'Age kitni hai?', sub: 'Optional hai, skip bhi kar sakta hai', type: 'number', placeholder: 'Jaise: 20', required: false }
 ];
 
 let obIndex = 0;
@@ -257,16 +254,10 @@ function advanceOb() {
 
 function finishOnboarding() {
   cfg.permMemory = cfg.permMemory || [];
-  const prefixes = ['Naam →', 'Age →', 'Kaam/Interest →', 'Extra info →'];
+  const prefixes = ['Naam →', 'Age →'];
   cfg.permMemory = cfg.permMemory.filter(m => !prefixes.some(p => m.startsWith(p)));
   if (obAnswers.name) cfg.permMemory.push(`Naam → ${obAnswers.name}`);
   if (obAnswers.age) cfg.permMemory.push(`Age → ${obAnswers.age}`);
-  if (obAnswers.work) cfg.permMemory.push(`Kaam/Interest → ${obAnswers.work}`);
-  if (obAnswers.extra) cfg.permMemory.push(`Extra info → ${obAnswers.extra}`);
-  if (obAnswers.lang) {
-    const map = { 'Hinglish': 'hinglish', 'Pure Hindi': 'hindi', 'English': 'english' };
-    cfg.lang = map[obAnswers.lang] || cfg.lang;
-  }
   cfg.onboarded = true;
   LS.set('chaman_cfg', cfg);
   document.getElementById('onboard-screen').classList.add('hidden');
@@ -327,4 +318,4 @@ function toggleEye(inputId, btn) {
   btn.innerHTML = show
     ? '<svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>'
     : '<svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
-    }
+}
