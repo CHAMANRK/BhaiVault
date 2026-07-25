@@ -981,9 +981,10 @@ function animate() {
   if (keys.backward) moveZ -= 1;
 
   if (Math.abs(joyVec.x) > 0.08 || Math.abs(joyVec.y) > 0.08) {
-    moveX += joyVec.x;
-moveZ += -joyVec.y;
+    moveX += joyVec.x; // Right -> Right, Left -> Left
+    moveZ += joyVec.y; // Aage -> Aage, Peeche -> Peeche
   }
+  
 
   const inputLen = Math.min(1, Math.hypot(moveX, moveZ));
 
