@@ -982,7 +982,7 @@ function animate() {
 
   if (Math.abs(joyVec.x) > 0.08 || Math.abs(joyVec.y) > 0.08) {
     moveX += joyVec.x; // Right -> Right, Left -> Left
-    moveZ += joyVec.y; // Aage -> Aage, Peeche -> Peeche
+    moveZ += -joyVec.y; // Aage -> Aage, Peeche -> Peeche
   }
   
 
