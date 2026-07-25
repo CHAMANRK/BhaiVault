@@ -982,8 +982,9 @@ function animate() {
 
   if (Math.abs(joyVec.x) > 0.08 || Math.abs(joyVec.y) > 0.08) {
   moveX += joyVec.x; 
-  moveZ += joyVec.y; // <-- Yahan se minus (-) hata diya gaya hai
+  moveZ -= joyVec.y; // Aage -> Aage, Peeche -> Peeche (Yahan minus zaroori hai!)
   }
+  
   
   
 
