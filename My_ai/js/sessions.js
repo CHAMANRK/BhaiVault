@@ -89,42 +89,55 @@ async function autosaveSession() {
   try {
     if (!currentSessionId) currentSessionId = newSessionId();
 
-    const firstUserMsg = currentSession.find(m => m.role === 'user')?.content;
+    // Snapshot BEFORE any `await` below. autosaveSession() is deliberately
+    // called fire-and-forget (newChat(), the /verify-t and /remove handlers
+    // in chat-core.js all do `autosaveSession()` then immediately wipe
+    // `currentSession`/`currentSessionId` for the next chat, without
+    // awaiting this). Without this snapshot, the code after the first
+    // `await` below would read those globals AFTER they'd already been
+    // reset to []/null by the caller — silently saving an empty session
+    // (or throwing, since the server requires a non-null id) instead of
+    // the chat that was actually open when this was called. This was the
+    // "New Chat button dabane par purani chat save nahi hoti" bug.
+    const sessionId = currentSessionId;
+    const session = currentSession;
+
+    const firstUserMsg = session.find(m => m.role === 'user')?.content;
     const title = deriveSessionTitle(firstUserMsg);
 
     // Refresh the AI-generated summary only occasionally (first exchange,
     // then every ~6 messages) — regenerating it every single turn would be
     // an extra AI call per message for no real benefit to the preview/context.
-    const msgCount = currentSession.length;
-    const existingMeta = isGuestUser() ? (cfg.sessions || []).find(s => s.id === currentSessionId) : null;
+    const msgCount = session.length;
+    const existingMeta = isGuestUser() ? (cfg.sessions || []).find(s => s.id === sessionId) : null;
     const shouldRefreshSummary = msgCount <= 3 || msgCount % 6 === 0 || !(existingMeta?.summary);
     let summary = existingMeta?.summary || '';
     if (shouldRefreshSummary) {
       try {
         const sumSysMsg = 'Yeh conversation ka brief summary do — sirf key points, decisions, topics discussed. 2-4 sentences max. Hinglish mein.';
-        const sumUserMsg = 'Conversation:\n' + currentSession.map(m => `${m.role}: ${String(m.content).slice(0, 300)}`).join('\n');
+        const sumUserMsg = 'Conversation:\n' + session.map(m => `${m.role}: ${String(m.content).slice(0, 300)}`).join('\n');
         const gen = await callServerBare(sumSysMsg, sumUserMsg, 200);
         if (gen) summary = gen;
       } catch {}
-      if (!summary) summary = currentSession.slice(0, 2).map(m => String(m.content).slice(0, 100)).join(' | ');
+      if (!summary) summary = session.slice(0, 2).map(m => String(m.content).slice(0, 100)).join(' | ');
     }
 
     if (isGuestUser()) {
       upsertLocalSessionMeta({
-        id: currentSessionId,
+        id: sessionId,
         title,
         date: sessionDateLabel(Date.now()),
         updatedAt: Date.now(),
         msgCount,
         summary,
-        messages: currentSession.slice(-400), // mirrors lib/sessionStore.js MAX_MESSAGES_PER_SESSION
+        messages: session.slice(-400), // mirrors lib/sessionStore.js MAX_MESSAGES_PER_SESSION
       });
     } else {
-      await callSessionsApi('save', { id: currentSessionId, title, messages: currentSession, summary });
+      await callSessionsApi('save', { id: sessionId, title, messages: session, summary });
       // Local metadata cache only (no messages) — for the sidebar list +
       // prompt context, see file header.
       upsertLocalSessionMeta({
-        id: currentSessionId,
+        id: sessionId,
         title,
         date: sessionDateLabel(Date.now()),
         updatedAt: Date.now(),
@@ -132,7 +145,7 @@ async function autosaveSession() {
         summary,
       });
     }
-    _lastSavedMsgCount = msgCount;
+    _lastSavedMsgCount = (sessionId === currentSessionId) ? msgCount : _lastSavedMsgCount; // don't stomp the NEW (still-open) chat's counter if it moved on while we were saving the old one
     maybeRefreshOldSummary(); // fire-and-forget — see PHASE 7 note above; never blocks the save itself
   } catch (e) {
     console.warn('[sessions] autosave failed:', e.message); // _lastSavedMsgCount untouched — next tick retries
@@ -360,4 +373,4 @@ async function clearAllSessions() {
   cfg.oldSummary = ''; // PHASE 7 — nothing left to carry a summary of
   _oldSummaryFoldedCount = 0;
   LS.set('chaman_cfg', cfg);
-}
+    }
