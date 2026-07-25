@@ -56,6 +56,7 @@ function upsertLocalSessionMeta(meta) {
 
 let _sessionSaveInFlight = false;
 let _lastSavedMsgCount = 0; // avoids redundant Firestore writes + AI summary calls from the periodic safety-net timer when nothing changed
+let _autosaveFailToastShown = false; // throttle: show the failure toast once per app session, not on every retry
 
 // PHASE 7 (plan Section 9, "Sliding window + rolling summary": send last
 // ~10-15 raw messages + a short summary of everything older, instead of
@@ -135,6 +136,14 @@ async function autosaveSession() {
     maybeRefreshOldSummary(); // fire-and-forget — see PHASE 7 note above; never blocks the save itself
   } catch (e) {
     console.warn('[sessions] autosave failed:', e.message); // _lastSavedMsgCount untouched — next tick retries
+    // Google users can't see console errors on mobile — surface it once per
+    // session so it's obvious the chat ISN'T syncing, instead of silently
+    // losing history. Guests are local-only and effectively never hit this
+    // path, so we don't bother them with it.
+    if (!isGuestUser() && !_autosaveFailToastShown) {
+      _autosaveFailToastShown = true;
+      toast('⚠️ Chat save nahi ho paya: ' + (e.message || 'unknown error'));
+    }
   } finally {
     _sessionSaveInFlight = false;
   }
