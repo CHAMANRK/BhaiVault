@@ -1,0 +1,1484 @@
+{
+  "language": "CSS",
+  "course_title": "CSS Course",
+  "lessons": [
+    {
+      "lesson_number": 1,
+      "title": "CSS Kya Hai?",
+      "difficulty": "easy",
+      "concept": "Socho HTML tumhare website ka ek kachcha ghar (skeleton) hai. CSS us ghar ka paint, furniture, aur decoration hai. CSS ke bina website sirf basic text hoti hai, lekin CSS usse attractive aur professional banati hai.",
+      "example_code": "h1 {\n  color: blue;\n}",
+      "code_breakdown": [
+        {
+          "part": "h1",
+          "explain": "Ye 'Selector' hai. Ye CSS ko batata hai ki styling kaunse HTML tag (yahan h1) par apply karni hai."
+        },
+        {
+          "part": "{ }",
+          "explain": "Curly braces CSS ke rules ko ek group mein rakhte hain. Iske andar hum saari properties likhte hain."
+        },
+        {
+          "part": "color",
+          "explain": "Ye ek 'Property' hai. Ye batati hai ki hume kya change karna hai (jaise text ka rang)."
+        },
+        {
+          "part": ":",
+          "explain": "Colon property aur uski value ko alag karta hai."
+        },
+        {
+          "part": "blue",
+          "explain": "Ye 'Value' hai. Property ko kya effect dena hai, wo yahan likhte hain."
+        },
+        {
+          "part": ";",
+          "explain": "Semicolon ye batata hai ki ye line (rule) yahan khatam ho gayi."
+        }
+      ],
+      "quiz_after_breakdown": [
+        {
+          "type": "mcq",
+          "question": "CSS rule ko khatam karne ke liye kya use karte hain?",
+          "options": [
+            ":",
+            ";",
+            "}"
+          ],
+          "answer": ";"
+        },
+        {
+          "type": "fill_blank",
+          "question": "HTML ko style karne ke liye ______ use karte hain.",
+          "answer": "CSS"
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "H1 ka color red karo.",
+          "starter_code": "h1 {\n  color: ______;\n}"
+        }
+      ],
+      "quiz_after_practice": [
+        {
+          "type": "mcq",
+          "question": "Kya CSS bina HTML ke kaam kar sakti hai?",
+          "options": [
+            "Haan",
+            "Nahi"
+          ],
+          "answer": "Nahi"
+        }
+      ],
+      "mini_task": "Ek HTML file banao, h1 mein 'Chaman Tech' likho, aur CSS se uska color green kar do.",
+      "why_it_matters": "Professional web design ke liye CSS seekhna mandatory hai, warna website sirf purani boring text jaisi dikhegi.",
+      "common_mistake": "Semicolon (;) bhool jana. Agar semicolon nahi lagaya, to browser agla rule nahi padh payega."
+    },
+    {
+      "lesson_number": 2,
+      "title": "Colors Aur Background",
+      "difficulty": "easy",
+      "concept": "Website ke colors user ka dhyan khinchte hain. CSS mein tum text ka color badal sakte ho ya poore background ko ek naya look de sakte ho. Sahi color combination website ko professional banata hai.",
+      "example_code": "body {\n  background-color: #f5f5f5;\n}\np {\n  color: #333;\n}",
+      "code_breakdown": [
+        {
+          "part": "body",
+          "explain": "Ye poore page ka selector hai. Iske andar jo likhenge, wo puri website par apply hoga."
+        },
+        {
+          "part": "background-color",
+          "explain": "Poore element ka pichwada (background) rangne ke liye."
+        },
+        {
+          "part": "#f5f5f5",
+          "explain": "Ye ek Hex color code hai. CSS mein colors ko hum naam (blue) ya code (#f5f5f5) se likhte hain."
+        }
+      ],
+      "quiz_after_breakdown": [
+        {
+          "type": "mcq",
+          "question": "Poore page ka background badalne ke liye kaunsa selector sahi hai?",
+          "options": [
+            "h1",
+            "body",
+            "p"
+          ],
+          "answer": "body"
+        },
+        {
+          "type": "fill_blank",
+          "question": "Color code shuru karne ke liye ______ symbol use hota hai.",
+          "answer": "#"
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "Body ka background black karo.",
+          "starter_code": "body {\n  background-color: ______;\n}"
+        }
+      ],
+      "quiz_after_practice": [
+        {
+          "type": "mcq",
+          "question": "Kya hum CSS mein sirf color ke naam (jaise 'red') use kar sakte hain?",
+          "options": [
+            "Haan",
+            "Nahi, sirf codes"
+          ],
+          "answer": "Haan"
+        }
+      ],
+      "mini_task": "Apne page ka background 'lightblue' aur text color 'darkblue' karo.",
+      "why_it_matters": "Branding ke liye sahi colors choose karna kisi bhi business website ka pehla step hota hai.",
+      "common_mistake": "Background-color aur color property mein confusion. 'color' sirf text ke liye hai, 'background-color' poore dhabbe (element) ke liye."
+    },
+    {
+      "lesson_number": 3,
+      "title": "Fonts Aur Text Styling",
+      "difficulty": "easy",
+      "concept": "Text website ka sabse zaroori hissa hai. CSS mein fonts ka size, weight (boldness), aur style change karke hum content ko readable aur attractive banate hain. Achha typography user ka interest badhata hai.",
+      "example_code": "h1 {\n  font-size: 32px;\n  font-weight: bold;\n}\np {\n  font-family: sans-serif;\n}",
+      "code_breakdown": [
+        {
+          "part": "font-size",
+          "explain": "Text ko bada ya chhota karne ke liye. Hum 'px' (pixels) ka use karte hain."
+        },
+        {
+          "part": "font-weight",
+          "explain": "Text ko kitna mota (bold) rakhna hai. 'bold' ya numbers (400, 700) use hote hain."
+        },
+        {
+          "part": "font-family",
+          "explain": "Text ka design/face (jaise Arial, sans-serif). Ye batata hai ki font kaisa dikhega."
+        }
+      ],
+      "quiz_after_breakdown": [
+        {
+          "type": "mcq",
+          "question": "Text ko bada karne ke liye kaunsi property hai?",
+          "options": [
+            "font-weight",
+            "font-size",
+            "text-size"
+          ],
+          "answer": "font-size"
+        },
+        {
+          "type": "fill_blank",
+          "question": "Font ka style change karne ke liye ______ property use hoti hai.",
+          "answer": "font-family"
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "Paragraph ka font size 20px karo.",
+          "starter_code": "p {\n  font-size: ______;\n}"
+        }
+      ],
+      "quiz_after_practice": [
+        {
+          "type": "mcq",
+          "question": "Kya 32px font size 18px se bada dikhega?",
+          "options": [
+            "Haan",
+            "Nahi"
+          ],
+          "answer": "Haan"
+        }
+      ],
+      "mini_task": "Ek h1 aur ek p banao. H1 ko bold aur 40px, p ko sans-serif font aur 20px set karo.",
+      "why_it_matters": "Readable text ke bina user website chhod kar chala jayega. Typography achhi design ki jaan hai.",
+      "common_mistake": "Font size ke sath 'px' likhna bhool jana. Browser ko unit (px) batana zaroori hai."
+    },
+    {
+      "lesson_number": 4,
+      "title": "Margin Aur Padding",
+      "difficulty": "hard",
+      "concept": "CSS 'Box Model' par chalti hai. Padding element ke andar ki space (content aur border ke beech) hai, aur Margin element ke bahar ki space (do elements ke beech) hai. Inse website khuli-khuli aur saaf dikhti hai.",
+      "example_code": ".card {\n  margin: 20px;\n  padding: 15px;\n  border: 1px solid black;\n}",
+      "code_breakdown": [
+        {
+          "part": "padding",
+          "explain": "Element ke andar ka gap. Isse content border se door ho jata hai."
+        },
+        {
+          "part": "margin",
+          "explain": "Element ke bahar ka gap. Isse do elements ek dusre se door ho jate hain."
+        },
+        {
+          "part": "border",
+          "explain": "Element ke charo taraf ki outline. Margin aur padding ko samajhne ke liye border dekhna zaroori hai."
+        }
+      ],
+      "quiz_after_breakdown": [
+        {
+          "type": "mcq",
+          "question": "Element ke 'andar' space banane ke liye kya use karein?",
+          "options": [
+            "margin",
+            "padding",
+            "border"
+          ],
+          "answer": "padding"
+        },
+        {
+          "type": "fill_blank",
+          "question": "Do elements ke beech space ke liye ______ use hota hai.",
+          "answer": "margin"
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "Ek div ko 20px padding do.",
+          "starter_code": "div {\n  padding: ______;\n}"
+        },
+        {
+          "instruction": "Ek h1 ko 50px margin do.",
+          "starter_code": "h1 {\n  margin: ______;\n}"
+        }
+      ],
+      "quiz_after_practice": [
+        {
+          "type": "mcq",
+          "question": "Kya padding se element ka size badhta hai?",
+          "options": [
+            "Haan",
+            "Nahi"
+          ],
+          "answer": "Haan"
+        }
+      ],
+      "mini_task": "Do paragraphs banao. Dono ko 10px padding aur 30px margin do taaki wo alag-alag dikhein.",
+      "why_it_matters": "Bina margin aur padding ke website ek guchhe (crowded) jaisi dikhegi. Clean design ke liye spacing zaroori hai.",
+      "common_mistake": "Margin aur padding ko ek samajh lena. Yaad rakho: Margin = Bahar, Padding = Andar."
+    },
+    {
+      "lesson_number": 5,
+      "title": "Borders Aur Border Radius",
+      "difficulty": "easy",
+      "concept": "Border element ko ek frame deta hai. Border-radius se hum corners ko gol (rounded) kar sakte hain. Modern UI mein rounded corners bahut popular hain kyunki ye zyada friendly aur soft lagte hain.",
+      "example_code": ".box {\n  border: 2px solid black;\n  border-radius: 10px;\n}",
+      "code_breakdown": [
+        {
+          "part": "solid",
+          "explain": "Border ka style. 'solid' ek plain line hai. Iske alawa 'dashed' ya 'dotted' bhi ho sakta hai."
+        },
+        {
+          "part": "2px",
+          "explain": "Border ki motayi (thickness)."
+        },
+        {
+          "part": "border-radius",
+          "explain": "Corners ko round karne ke liye. 50% likhne se element circle ban jata hai."
+        }
+      ],
+      "quiz_after_breakdown": [
+        {
+          "type": "mcq",
+          "question": "Corners gol karne ke liye kaunsi property hai?",
+          "options": [
+            "border-size",
+            "border-radius",
+            "round-corners"
+          ],
+          "answer": "border-radius"
+        },
+        {
+          "type": "fill_blank",
+          "question": "Border ki motayi set karne ke liye ______ use karte hain.",
+          "answer": "px"
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "Border radius 20px karo.",
+          "starter_code": ".box {\n  border-radius: ______;\n}"
+        }
+      ],
+      "quiz_after_practice": [
+        {
+          "type": "mcq",
+          "question": "Kya 0px border-radius se corners gol honge?",
+          "options": [
+            "Haan",
+            "Nahi"
+          ],
+          "answer": "Nahi"
+        }
+      ],
+      "mini_task": "Ek box banao jiska border red ho aur corners 15px gol (rounded) hon.",
+      "why_it_matters": "Buttons, cards, aur profile pics ko modern look dene ke liye ye property best hai.",
+      "common_mistake": "Border ka style (solid/dashed) likhna bhool jana. Sirf size likhne se border nahi dikhega."
+    },
+    {
+      "lesson_number": 6,
+      "title": "CSS Selectors (Tag, Class, ID)",
+      "difficulty": "hard",
+      "concept": "Selectors CSS ka dil hain. Wo batate hain ki style kispe lagega. 'Tag' selector sab pe lagta hai, 'Class' (. ) group pe lagta hai, aur 'ID' (#) sirf ek unique element pe lagta hai.",
+      "example_code": "p { color: grey; }\n.btn { color: white; }\n#main-title { font-size: 50px; }",
+      "code_breakdown": [
+        {
+          "part": "p",
+          "explain": "Tag selector. Page ke saare <p> tags par apply hoga."
+        },
+        {
+          "part": ".btn",
+          "explain": "Class selector. HTML mein class=\"btn\" wale elements par apply hoga."
+        },
+        {
+          "part": "#main-title",
+          "explain": "ID selector. HTML mein id=\"main-title\" wale ek hi element par apply hoga."
+        }
+      ],
+      "quiz_after_breakdown": [
+        {
+          "type": "mcq",
+          "question": "Class selector ke liye kya prefix use hota hai?",
+          "options": [
+            "#",
+            ".",
+            "*"
+          ],
+          "answer": "."
+        },
+        {
+          "type": "fill_blank",
+          "question": "ID selector ke liye ______ symbol zaroori hai.",
+          "answer": "#"
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "Class 'header' ko target karo.",
+          "starter_code": "______header {\n  color: red;\n}"
+        },
+        {
+          "instruction": "ID 'logo' ko target karo.",
+          "starter_code": "______logo {\n  font-size: 20px;\n}"
+        }
+      ],
+      "quiz_after_practice": [
+        {
+          "type": "mcq",
+          "question": "Kya ek ID ko multiple elements pe use karna chahiye?",
+          "options": [
+            "Haan",
+            "Nahi"
+          ],
+          "answer": "Nahi"
+        }
+      ],
+      "mini_task": "Ek h1 (id='logo') aur 3 p (class='text') banao. CSS se logo ko bada aur text ko blue karo.",
+      "why_it_matters": "Professional dev mein classes sabse zyada use hoti hain. Selectors pe pakad hogi to code control karna easy hoga.",
+      "common_mistake": "Class selector mein dot (.) ya ID mein hash (#) bhool jana."
+    },
+    {
+      "lesson_number": 7,
+      "title": "Flexbox Basics: Aligning Elements",
+      "difficulty": "hard",
+      "concept": "Socho tumhari website ke elements ek line mein khade hain, aur tum unhe center mein lana chahte ho ya space dena chahte ho. Flexbox ek aisa 'Container' hai jo apne andar ke saare elements ko easily adjust kar deta hai. Ye modern layouts ke liye sabse trending aur useable tool hai.",
+      "example_code": ".container {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n}",
+      "code_breakdown": [
+        {
+          "part": "display: flex;",
+          "explain": "Ye line parent (container) ko 'Flexbox' mein badal deti hai. Iske bina andar ke elements flex behave nahi karenge."
+        },
+        {
+          "part": "justify-content",
+          "explain": "Ye elements ko 'Row' (left-to-right) mein align karta hai. Values: center, space-between, flex-start."
+        },
+        {
+          "part": "align-items",
+          "explain": "Ye elements ko 'Column' (top-to-bottom) mein vertically align karta hai."
+        }
+      ],
+      "quiz_after_breakdown": [
+        {
+          "type": "mcq",
+          "question": "Flexbox activate karne ke liye kaunsi property hai?",
+          "options": [
+            "display: flex;",
+            "align: flex;",
+            "flex: true;"
+          ],
+          "answer": "display: flex;"
+        },
+        {
+          "type": "fill_blank",
+          "question": "Items ko horizontal center mein lane ke liye ______ use hota hai.",
+          "answer": "justify-content"
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "Container mein items ko beech mein (center) lao.",
+          "starter_code": ".container {\n  display: flex;\n  justify-content: ______;\n}"
+        },
+        {
+          "instruction": "Items ko vertical center mein karo.",
+          "starter_code": ".container {\n  display: flex;\n  align-items: ______;\n}"
+        }
+      ],
+      "quiz_after_practice": [
+        {
+          "type": "mcq",
+          "question": "Kya display: flex parent par lagta hai ya child par?",
+          "options": [
+            "Parent",
+            "Child"
+          ],
+          "answer": "Parent"
+        }
+      ],
+      "mini_task": "Ek navbar banao jisme 3 links hon, unhe 'space-between' property se puri width mein spread karo.",
+      "why_it_matters": "Navbar, button groups, aur card grids banane ke liye Flexbox standard hai.",
+      "common_mistake": "Display: flex child par lagana. Yaad rakho, flex hamesha parent container par lagta hai."
+    },
+    {
+      "lesson_number": 8,
+      "title": "CSS Grid: Complex Layouts",
+      "difficulty": "hard",
+      "concept": "Flexbox ek dimension (ek line) ke liye achha hai, lekin jab tumhe 'Table jaisa' 2D layout (rows aur columns dono) banana ho, toh Grid kaam aata hai. Ye galleries aur complex dashboards ke liye best hai.",
+      "example_code": ".grid-container {\n  display: grid;\n  grid-template-columns: 1fr 1fr 1fr;\n}",
+      "code_breakdown": [
+        {
+          "part": "display: grid;",
+          "explain": "Ye container ko grid system mein convert karta hai."
+        },
+        {
+          "part": "grid-template-columns",
+          "explain": "Columns ki sankhya batata hai. '1fr' ka matlab hai 1 fraction (equal space)."
+        },
+        {
+          "part": "1fr 1fr 1fr",
+          "explain": "Iska matlab hai 3 barabar hisse (3 columns)."
+        }
+      ],
+      "quiz_after_breakdown": [
+        {
+          "type": "mcq",
+          "question": "Grid mein columns banane ke liye kya property hai?",
+          "options": [
+            "grid-columns",
+            "grid-template-columns",
+            "columns"
+          ],
+          "answer": "grid-template-columns"
+        },
+        {
+          "type": "fill_blank",
+          "question": "Grid mein equal space ke liye ______ unit use karte hain.",
+          "answer": "fr"
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "2 columns banao.",
+          "starter_code": ".grid {\n  display: grid;\n  grid-template-columns: ______ ______;\n}"
+        },
+        {
+          "instruction": "4 columns ka grid banao.",
+          "starter_code": ".grid {\n  display: grid;\n  grid-template-columns: 1fr 1fr 1fr ______;\n}"
+        }
+      ],
+      "quiz_after_practice": [
+        {
+          "type": "mcq",
+          "question": "Grid layout ka use kab karna chahiye?",
+          "options": [
+            "Jab sirf ek line ho",
+            "Jab complex 2D layout chahiye ho"
+          ],
+          "answer": "Jab complex 2D layout chahiye ho"
+        }
+      ],
+      "mini_task": "Ek 3-column image gallery banao jisme har column barabar size ka ho.",
+      "why_it_matters": "Professional dashboard aur photo galleries grid ke bina banana bahut mushkil hai.",
+      "common_mistake": "Fr unit ki jagah px use karna. 'fr' flexible hota hai, isliye responsive layout ke liye yehi best hai."
+    },
+    {
+      "lesson_number": 9,
+      "title": "Hover Effects",
+      "difficulty": "easy",
+      "concept": "Socho tum lift ka button dabate ho aur wo light up ho jata hai. Hover effect tab kaam karta hai jab user ka mouse element ke upar aata hai. Ye user ko batata hai ki 'Haan, ye cheez clickable hai'.",
+      "example_code": "button {\n  background: grey;\n}\nbutton:hover {\n  background: blue;\n}",
+      "code_breakdown": [
+        {
+          "part": ":hover",
+          "explain": "Ye ek 'Pseudo-class' hai. Ye tabhi active hota hai jab user mouse cursor element par le jata hai."
+        },
+        {
+          "part": "background: blue;",
+          "explain": "Hover hone par hum property ki value change kar dete hain (grey se blue)."
+        }
+      ],
+      "quiz_after_breakdown": [
+        {
+          "type": "mcq",
+          "question": "Hover effect ke liye kaunsa pseudo-class hai?",
+          "options": [
+            ":click",
+            ":hover",
+            ":mouse"
+          ],
+          "answer": ":hover"
+        },
+        {
+          "type": "fill_blank",
+          "question": "Hover effect ______ action par trigger hota hai.",
+          "answer": "mouse"
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "Button ka color hover par red karo.",
+          "starter_code": "button:hover {\n  background: ______;\n}"
+        }
+      ],
+      "quiz_after_practice": [
+        {
+          "type": "mcq",
+          "question": "Kya hover effect mobile par dikhega?",
+          "options": [
+            "Haan",
+            "Nahi, kyunki mobile pe mouse nahi hota"
+          ],
+          "answer": "Nahi, kyunki mobile pe mouse nahi hota"
+        }
+      ],
+      "mini_task": "Ek button banao, normal state mein uska color black ho aur hover par white text ke saath blue ho jaye.",
+      "why_it_matters": "Buttons, links, aur navigation menu ke liye hover effect user ko feedback deta hai.",
+      "common_mistake": "Pseudo-class aur selector ke beech space dena. Hamesha `button:hover` likho, `button :hover` nahi."
+    },
+    {
+      "lesson_number": 10,
+      "title": "Transitions: Smooth Effects",
+      "difficulty": "hard",
+      "concept": "Agar tum sirf hover use karoge, to color ekdum se change hoga (jhatke se). Transition us change ko 'smooth' banata hai. Ye website ko premium aur smooth feel deta hai.",
+      "example_code": "button {\n  background: grey;\n  transition: 0.3s;\n}\nbutton:hover {\n  background: blue;\n}",
+      "code_breakdown": [
+        {
+          "part": "transition",
+          "explain": "Ye property batati hai ki CSS change kitni der mein hona chahiye."
+        },
+        {
+          "part": "0.3s",
+          "explain": "Time (0.3 seconds). Jitna zyada time, utna slow transition."
+        }
+      ],
+      "quiz_after_breakdown": [
+        {
+          "type": "mcq",
+          "question": "Transition ka main kaam kya hai?",
+          "options": [
+            "Color badalna",
+            "Change ko smooth banana",
+            "Element hatana"
+          ],
+          "answer": "Change ko smooth banana"
+        },
+        {
+          "type": "fill_blank",
+          "question": "0.3s mein 's' ka matlab ______ hai.",
+          "answer": "seconds"
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "Transition time 1 second karo.",
+          "starter_code": "button {\n  transition: ______;\n}"
+        },
+        {
+          "instruction": "Transition property add karo.",
+          "starter_code": "div {\n  background: red;\n  ______: 0.5s;\n}"
+        }
+      ],
+      "quiz_after_practice": [
+        {
+          "type": "mcq",
+          "question": "Kya 0.1s transition 1s se zyada fast hai?",
+          "options": [
+            "Haan",
+            "Nahi"
+          ],
+          "answer": "Haan"
+        }
+      ],
+      "mini_task": "Ek box banao jiska size hover karne par bada ho jaye, aur transition use karke use smooth banao.",
+      "why_it_matters": "Aajkal ki sabhi modern apps (Instagram/Netflix) transition ka use karti hain, ye user interface ko pro banata hai.",
+      "common_mistake": "Transition property ko sirf hover par likhna. Transition hamesha main element (button) par lagana chahiye, hover par nahi."
+    },
+    {
+      "lesson_number": 11,
+      "title": "Header Styling: Pehla Impression",
+      "difficulty": "hard",
+      "concept": "Header website ka gate hota hai. Bina style ke ye sirf text hai, lekin background color, padding, aur alignment ke saath ye ek professional branding space ban jata hai. Flexbox ka use karke hum logo aur menu ko dur-dur set karenge.",
+      "example_code": "header {\n  background: #2563eb;\n  color: white;\n  display: flex;\n  justify-content: space-between;\n  padding: 20px;\n}",
+      "code_breakdown": [
+        {
+          "part": "background: #2563eb;",
+          "explain": "Professional blue color. Professional sites hamesha branded colors use karti hain."
+        },
+        {
+          "part": "justify-content: space-between;",
+          "explain": "Ye logo ko left aur menu ko right mein ekdum kinare par chipka deta hai."
+        },
+        {
+          "part": "padding: 20px;",
+          "explain": "Header ko saans lene ke liye jagah dena, taki text chipka hua na lage."
+        }
+      ],
+      "quiz_after_breakdown": [
+        {
+          "type": "mcq",
+          "question": "Header mein logo aur menu ko opposite sides par lane ke liye kya best hai?",
+          "options": [
+            "text-align: center",
+            "justify-content: space-between",
+            "margin: auto"
+          ],
+          "answer": "justify-content: space-between"
+        },
+        {
+          "type": "fill_blank",
+          "question": "Header ko breathing space dene ke liye ______ property use hoti hai.",
+          "answer": "padding"
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "Header ka background black karo.",
+          "starter_code": "header {\n  background: ______;\n}"
+        },
+        {
+          "instruction": "Padding 30px karo.",
+          "starter_code": "header {\n  padding: ______;\n}"
+        }
+      ],
+      "quiz_after_practice": [
+        {
+          "type": "mcq",
+          "question": "Kya display: flex bina justify-content kaam karega?",
+          "options": [
+            "Haan",
+            "Nahi, alignment nahi hogi"
+          ],
+          "answer": "Nahi, alignment nahi hogi"
+        }
+      ],
+      "mini_task": "Ek header banao jisme h1 (Logo) aur ul (Menu) ho, unhe flex se horizontal align karo.",
+      "why_it_matters": "Har website header se hi start hoti hai. Clean header user ko trust deta hai.",
+      "common_mistake": "Padding bhool jana. Bina padding ke header bahut patla aur ajeeb dikhta hai."
+    },
+    {
+      "lesson_number": 12,
+      "title": "Nav Menu Styling",
+      "difficulty": "hard",
+      "concept": "Navigation links (a tag) by default blue aur underline hote hain, jo design ko kharab karte hain. CSS se hum unhe buttons jaisa ya clean text jaisa bana sakte hain. Ye menu ko click karne layak aur sundar banata hai.",
+      "example_code": "nav a {\n  color: white;\n  text-decoration: none;\n  margin-right: 15px;\n  font-weight: 600;\n}",
+      "code_breakdown": [
+        {
+          "part": "text-decoration: none;",
+          "explain": "Link ke neeche wali underline hatane ke liye. Professional sites mein underline nahi hoti."
+        },
+        {
+          "part": "margin-right",
+          "explain": "Menu ke har item ke beech gap banane ke liye."
+        },
+        {
+          "part": "font-weight: 600;",
+          "explain": "Text ko thoda bold/thick dikhane ke liye."
+        }
+      ],
+      "quiz_after_breakdown": [
+        {
+          "type": "mcq",
+          "question": "Link ki underline hatane ke liye kya use hota hai?",
+          "options": [
+            "border: none",
+            "text-decoration: none",
+            "underline: off"
+          ],
+          "answer": "text-decoration: none"
+        },
+        {
+          "type": "fill_blank",
+          "question": "Links ke beech gap ke liye ______ use hota hai.",
+          "answer": "margin"
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "Underline hatao.",
+          "starter_code": "nav a {\n  text-decoration: ______;\n}"
+        },
+        {
+          "instruction": "Gap 20px karo.",
+          "starter_code": "nav a {\n  margin-right: ______;\n}"
+        }
+      ],
+      "quiz_after_practice": [
+        {
+          "type": "mcq",
+          "question": "Kya menu items ko ek line mein lane ke liye flex use kar sakte hain?",
+          "options": [
+            "Haan",
+            "Nahi"
+          ],
+          "answer": "Haan"
+        }
+      ],
+      "mini_task": "Apne nav menu ke links ko white color do, underline hatao, aur har link ke beech 20px ka gap rakho.",
+      "why_it_matters": "Clean navigation user ko batata hai ki website par kahan-kahan jana hai.",
+      "common_mistake": "Sirf ek link ko style karna. Nav ke saare links ko ek saath style karne ke liye `nav a` selector ka use karo."
+    },
+    {
+      "lesson_number": 13,
+      "title": "Image Styling: Professional Look",
+      "difficulty": "easy",
+      "concept": "Ek simple image aur ek well-styled image mein farq hota hai. CSS se hum image ko frame (border) de sakte hain, uske corners round kar sakte hain, ya usse responsive (container ke hisaab se adjust) bana sakte hain. Ye portfolio website ke liye crucial hai.",
+      "example_code": "img {\n  width: 100%;\n  max-width: 300px;\n  border-radius: 10px;\n  box-shadow: 0 4px 6px rgba(0,0,0,0.1);\n}",
+      "code_breakdown": [
+        {
+          "part": "max-width: 300px;",
+          "explain": "Image ki max width set karta hai taki wo screen se bahar na nikle."
+        },
+        {
+          "part": "border-radius: 10px;",
+          "explain": "Image ke corners ko halka sa round karne ke liye, jo use modern banata hai."
+        },
+        {
+          "part": "box-shadow",
+          "explain": "Image ko 'depth' (uthaw) dene ke liye. Ye shadow effect create karta hai."
+        }
+      ],
+      "quiz_after_breakdown": [
+        {
+          "type": "mcq",
+          "question": "Image ko responsive (flexible) banane ke liye best width kya hai?",
+          "options": [
+            "width: 100%",
+            "width: 500px",
+            "width: auto"
+          ],
+          "answer": "width: 100%"
+        },
+        {
+          "type": "fill_blank",
+          "question": "Image mein shadow effect ke liye ______ property use hoti hai.",
+          "answer": "box-shadow"
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "Image ke corners ko 50% round (circle) karo.",
+          "starter_code": "img {\n  border-radius: ______;\n}"
+        }
+      ],
+      "quiz_after_practice": [
+        {
+          "type": "mcq",
+          "question": "Kya width: 100% image ko container ke bahar nikalne dega?",
+          "options": [
+            "Haan",
+            "Nahi"
+          ],
+          "answer": "Nahi"
+        }
+      ],
+      "mini_task": "Apni profile photo ko 200px width do, border-radius 15px karo aur halki si box-shadow lagao.",
+      "why_it_matters": "Professional profiles mein image styling aapke personal brand ko enhance karti hai.",
+      "common_mistake": "Image ko fixed width (px) dena. Hamesha width: 100% aur max-width use karo takki mobile par image choti-badi ho sake."
+    },
+    {
+      "lesson_number": 14,
+      "title": "Stylish Tables",
+      "difficulty": "hard",
+      "concept": "Tables ko bina CSS ke dekhna boring aur messy hota hai. CSS se hum table ki lines (borders), spacing (padding), aur rows ke colors (zebra stripes) set karke data ko clear aur readable banate hain. Dashboards mein ye bohot use hota hai.",
+      "example_code": "table {\n  width: 100%;\n  border-collapse: collapse;\n}\nth, td {\n  padding: 12px;\n  border: 1px solid #ddd;\n  text-align: left;\n}",
+      "code_breakdown": [
+        {
+          "part": "border-collapse: collapse;",
+          "explain": "Default mein table ki double lines hoti hain. Ye use single, clean line mein convert kar deta hai."
+        },
+        {
+          "part": "th, td",
+          "explain": "Ek saath header (th) aur data (td) ko style karne ke liye comma use karte hain."
+        },
+        {
+          "part": "padding: 12px;",
+          "explain": "Text ko box ke beech mein space dene ke liye, taki wo chipka hua na lage."
+        }
+      ],
+      "quiz_after_breakdown": [
+        {
+          "type": "mcq",
+          "question": "Table ki double lines ko hata kar single line banane ke liye kya attribute hai?",
+          "options": [
+            "border: none",
+            "border-collapse: collapse",
+            "table-style: clean"
+          ],
+          "answer": "border-collapse: collapse"
+        },
+        {
+          "type": "fill_blank",
+          "question": "Header aur data ko ek saath style karne ke liye ______ lagate hain.",
+          "answer": "comma"
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "Table ka border collapse karo.",
+          "starter_code": "table {\n  border-collapse: ______;\n}"
+        },
+        {
+          "instruction": "Text ko center align karo.",
+          "starter_code": "th, td {\n  text-align: ______;\n}"
+        }
+      ],
+      "quiz_after_practice": [
+        {
+          "type": "mcq",
+          "question": "Kya padding bina border ke dikhegi?",
+          "options": [
+            "Haan, par gap dikhega",
+            "Nahi"
+          ],
+          "answer": "Haan, par gap dikhega"
+        }
+      ],
+      "mini_task": "Ek pricing table banao jisme 'Product' aur 'Price' columns hon, unhe border do aur padding badha kar clean look do.",
+      "why_it_matters": "Data reporting ke liye tables standard hain; bina styling ke ye user ko confuse karti hain.",
+      "common_mistake": "Table ko width 100% na dena, jisse wo screen ke beech mein chhoti dikhti hai."
+    },
+    {
+      "lesson_number": 15,
+      "title": "Form Inputs Ko Professional Look Dena",
+      "difficulty": "hard",
+      "concept": "Default HTML inputs bahut purane aur boring dikhte hain. CSS se hum unhe width dekar, padding badha kar, aur border-radius se rounded corners dekar modern bana sakte hain. Ek achha form user ko trust dilata hai ki website secure hai.",
+      "example_code": "input {\n  width: 100%;\n  padding: 12px;\n  margin-bottom: 15px;\n  border: 2px solid #ccc;\n  border-radius: 8px;\n}",
+      "code_breakdown": [
+        {
+          "part": "width: 100%;",
+          "explain": "Input box ko container ki puri width dene ke liye, taki wo mobile par sahi dikhe."
+        },
+        {
+          "part": "border: 2px solid #ccc;",
+          "explain": "Standard grey border. #ccc ek light grey shade hai jo professional lagta hai."
+        },
+        {
+          "part": "border-radius: 8px;",
+          "explain": "Corners ko halka sa smooth karne ke liye, jo modern UI ka sign hai."
+        }
+      ],
+      "quiz_after_breakdown": [
+        {
+          "type": "mcq",
+          "question": "Input box mein typing area aur border ke beech space ke liye kya use karein?",
+          "options": [
+            "margin",
+            "padding",
+            "width"
+          ],
+          "answer": "padding"
+        },
+        {
+          "type": "fill_blank",
+          "question": "Input ko rounded corners dene ke liye ______ property hai.",
+          "answer": "border-radius"
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "Input ko 10px ka border-radius do.",
+          "starter_code": "input {\n  border-radius: ______;\n}"
+        },
+        {
+          "instruction": "Padding 15px karo.",
+          "starter_code": "input {\n  padding: ______;\n}"
+        }
+      ],
+      "quiz_after_practice": [
+        {
+          "type": "mcq",
+          "question": "Kya input ko width: 100% dene se wo mobile screen se bahar jayega?",
+          "options": [
+            "Haan",
+            "Nahi"
+          ],
+          "answer": "Nahi"
+        }
+      ],
+      "mini_task": "Ek Login form banao jisme Email aur Password fields hon. Dono ko 100% width, 12px padding aur 8px border-radius do.",
+      "why_it_matters": "Form conversion rate (kitne log form bharte hain) design par depend karta hai.",
+      "common_mistake": "Input fields ko ek doosre se chipka dena. Margin-bottom dena na bhoolo!"
+    },
+    {
+      "lesson_number": 16,
+      "title": "Button Styling aur States",
+      "difficulty": "hard",
+      "concept": "Button website ka sabse important action button hota hai. Isse attractive banana (background color, text color, cursor) zaruri hai. Sath hi, ':hover' aur ':active' states se user ko feedback milta hai ki button click hua hai.",
+      "example_code": "button {\n  background: #2563eb;\n  color: white;\n  padding: 10px 20px;\n  border: none;\n  cursor: pointer;\n}\nbutton:active {\n  transform: scale(0.95);\n}",
+      "code_breakdown": [
+        {
+          "part": "cursor: pointer;",
+          "explain": "Jab mouse button par jaye, to wo arrow se 'hand' icon ban jata hai. Ye batata hai ki element clickable hai."
+        },
+        {
+          "part": "padding: 10px 20px;",
+          "explain": "10px top/bottom aur 20px left/right space. Button ko shape dene ka best tarika."
+        },
+        {
+          "part": ":active",
+          "explain": "Ye tab trigger hota hai jab user button ko 'click' karke hold karta hai."
+        }
+      ],
+      "quiz_after_breakdown": [
+        {
+          "type": "mcq",
+          "question": "Clickable icon (hand) lane ke liye kaunsi property hai?",
+          "options": [
+            "cursor: click",
+            "cursor: pointer",
+            "icon: hand"
+          ],
+          "answer": "cursor: pointer"
+        },
+        {
+          "type": "fill_blank",
+          "question": "Button click hone ka effect ______ pseudo-class se aata hai.",
+          "answer": ":active"
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "Button ko no border do.",
+          "starter_code": "button {\n  border: ______;\n}"
+        },
+        {
+          "instruction": "Cursor pointer set karo.",
+          "starter_code": "button {\n  cursor: ______;\n}"
+        }
+      ],
+      "quiz_after_practice": [
+        {
+          "type": "mcq",
+          "question": "Transform: scale(0.95) se kya hoga?",
+          "options": [
+            "Button bada hoga",
+            "Button halka sa chhota/press hoga"
+          ],
+          "answer": "Button halka sa chhota/press hoga"
+        }
+      ],
+      "mini_task": "Ek Submit button banao jiska background blue, text white aur border none ho. Hover par color dark blue aur click karne par press effect (transform) daalo.",
+      "why_it_matters": "User ka experience button ke feedback se hi banta hai.",
+      "common_mistake": "Button ka border hata kar 'none' ki jagah '0' ya 'transparent' na likhna. `border: none;` sabse sahi hai."
+    },
+    {
+      "lesson_number": 17,
+      "title": "Box Shadow: Depth aur Style",
+      "difficulty": "hard",
+      "concept": "Socho ek kagaz ka tukda table par pada hai aur ek uske upar thoda utha hua hai. Shadow se element 'premium' aur '3D' lagta hai. Aaj kal ki har trending website (Google, Apple, etc.) cards ko shadow deti hai taki wo background se alag dikhein.",
+      "example_code": ".card {\n  background: white;\n  box-shadow: 0 4px 10px rgba(0,0,0,0.2);\n}",
+      "code_breakdown": [
+        {
+          "part": "0",
+          "explain": "X-offset (Shadow ki horizontal position)."
+        },
+        {
+          "part": "4px",
+          "explain": "Y-offset (Shadow niche kitni jayegi)."
+        },
+        {
+          "part": "10px",
+          "explain": "Blur radius (Shadow kitni faili hui hogi)."
+        },
+        {
+          "part": "rgba(0,0,0,0.2)",
+          "explain": "Shadow ka rang (black) aur opacity (0.2 matlab 20% dark)."
+        }
+      ],
+      "quiz_after_breakdown": [
+        {
+          "type": "mcq",
+          "question": "Shadow ko failane ke liye kaunsi value change karenge?",
+          "options": [
+            "X-offset",
+            "Blur radius",
+            "Opacity"
+          ],
+          "answer": "Blur radius"
+        },
+        {
+          "type": "fill_blank",
+          "question": "Shadow ki lightness/darkness ______ se control hoti hai.",
+          "answer": "opacity"
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "Blur radius 20px karo.",
+          "starter_code": ".card {\n  box-shadow: 0 4px ______ rgba(0,0,0,0.2);\n}"
+        }
+      ],
+      "quiz_after_practice": [
+        {
+          "type": "mcq",
+          "question": "Kya shadow se element ka actual size badhta hai?",
+          "options": [
+            "Haan",
+            "Nahi"
+          ],
+          "answer": "Nahi"
+        }
+      ],
+      "mini_task": "Ek card banao jisme 'soft' shadow ho (blur 20px, opacity 0.1).",
+      "why_it_matters": "Shadow design ko flat (boring) se depth wale (premium) mein badal deta hai.",
+      "common_mistake": "Shadow bahut dark rakhna. Hamesha opacity kam (0.1 ya 0.2) rakho taki wo natural lage."
+    },
+    {
+      "lesson_number": 18,
+      "title": "Text Shadow: Heading ko highlight karna",
+      "difficulty": "easy",
+      "concept": "Jaisa box ka shadow hota hai, waisa hi text ka bhi hota hai. Text shadow se heading background par 'pop' karti hai. Ye poster design ya bold headlines ke liye bohot useful hai.",
+      "example_code": "h1 {\n  text-shadow: 2px 2px 5px grey;\n}",
+      "code_breakdown": [
+        {
+          "part": "2px 2px",
+          "explain": "Shadow ki position (horizontal aur vertical)."
+        },
+        {
+          "part": "5px",
+          "explain": "Blur effect (jitna zyada, utna soft shadow)."
+        },
+        {
+          "part": "grey",
+          "explain": "Shadow ka rang."
+        }
+      ],
+      "quiz_after_breakdown": [
+        {
+          "type": "mcq",
+          "question": "Text shadow ke liye kaunsi property hai?",
+          "options": [
+            "box-shadow",
+            "text-shadow",
+            "shadow"
+          ],
+          "answer": "text-shadow"
+        },
+        {
+          "type": "fill_blank",
+          "question": "Text shadow ka blur effect ______ unit mein likhte hain.",
+          "answer": "px"
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "Text shadow ka blur 10px karo.",
+          "starter_code": "h1 {\n  text-shadow: 2px 2px ______ grey;\n}"
+        }
+      ],
+      "quiz_after_practice": [
+        {
+          "type": "mcq",
+          "question": "Kya hum text-shadow mein color badal sakte hain?",
+          "options": [
+            "Haan",
+            "Nahi"
+          ],
+          "answer": "Haan"
+        }
+      ],
+      "mini_task": "Ek heading 'Chaman' likho aur uspar halki black text-shadow lagao.",
+      "why_it_matters": "Design mein hierarchy banane ke liye headings ko highlight karna zaruri hai.",
+      "common_mistake": "Bahut gheri (dark) shadow use karna jisse text padhna mushkil ho jaye. Hamesha subtle shadow use karo."
+    },
+    {
+      "lesson_number": 19,
+      "title": "Media Queries: Mobile Friendly Design",
+      "difficulty": "hard",
+      "concept": "Socho tumne ek bada poster banaya jo laptop screen par achha dikhta hai, lekin mobile par wo bahut bada hai. Media query ek aisi 'shart' (condition) hai jo browser ko batati hai: 'Agar screen chhoti ho (mobile), toh ye styles use karo, aur agar badi ho (desktop), toh ye.'",
+      "example_code": "@media (max-width: 600px) {\n  body {\n    background: lightblue;\n  }\n}",
+      "code_breakdown": [
+        {
+          "part": "@media",
+          "explain": "Ye keyword browser ko batata hai ki hum 'Media Query' (screen size rule) likh rahe hain."
+        },
+        {
+          "part": "(max-width: 600px)",
+          "explain": "Condition: Agar screen ka size 600px ya usse kam hai, tabhi ye code chale."
+        },
+        {
+          "part": "{ ... }",
+          "explain": "Iske andar wo CSS likhte hain jo sirf mobile par apply hogi."
+        }
+      ],
+      "quiz_after_breakdown": [
+        {
+          "type": "mcq",
+          "question": "Media query ke liye kaunsa keyword use hota hai?",
+          "options": [
+            "@style",
+            "@media",
+            "@screen"
+          ],
+          "answer": "@media"
+        },
+        {
+          "type": "fill_blank",
+          "question": "Mobile ke liye screen ki width ______ mein define karte hain.",
+          "answer": "px"
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "Condition likho agar screen 500px se chhoti ho.",
+          "starter_code": "@media (max-width: ______) {\n  /* CSS */\n}"
+        }
+      ],
+      "quiz_after_practice": [
+        {
+          "type": "mcq",
+          "question": "Agar screen 800px hai, toh kya 600px wali query chalegi?",
+          "options": [
+            "Haan",
+            "Nahi"
+          ],
+          "answer": "Nahi"
+        }
+      ],
+      "mini_task": "Ek page banao jiska background desktop pe white ho, lekin mobile (600px) pe light-yellow ho jaye.",
+      "why_it_matters": "Google sirf 'Mobile-Friendly' websites ko hi achhi ranking deta hai. Responsiveness aaj ke time mein optional nahi, zaroori hai.",
+      "common_mistake": "Media query mein closing curly brace `}` bhool jana. Media query mein 2 braces hote hain: ek query ke liye, ek rule ke liye."
+    },
+    {
+      "lesson_number": 20,
+      "title": "Responsive Layout (Flex-wrap)",
+      "difficulty": "hard",
+      "concept": "Jab hum items ko flex (row) mein rakhte hain, toh screen chhoti hone par wo ek-dusre ke upar chadne lagte hain. `flex-wrap` unhe jagah khatam hone par apne aap neeche (next line) bhej deta hai. Ye cards ko mobile par 'stack' karne ke liye best hai.",
+      "example_code": ".container {\n  display: flex;\n  flex-wrap: wrap;\n}",
+      "code_breakdown": [
+        {
+          "part": "flex-wrap: wrap;",
+          "explain": "Ye property items ko force karti hai ki agar jagah kam ho, toh agli line mein chale jao."
+        },
+        {
+          "part": "flex-basis",
+          "explain": "Item ki starting width batane ke liye (jaise 30%)."
+        }
+      ],
+      "quiz_after_breakdown": [
+        {
+          "type": "mcq",
+          "question": "Flexbox mein elements ko neeche bhej (wrap) karne ke liye kya property hai?",
+          "options": [
+            "flex-wrap",
+            "flex-line",
+            "wrap-items"
+          ],
+          "answer": "flex-wrap"
+        },
+        {
+          "type": "fill_blank",
+          "question": "Flex-wrap ki value ______ karne se wrap shuru hota hai.",
+          "answer": "wrap"
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "Container ko wrap enable karo.",
+          "starter_code": ".container {\n  flex-wrap: ______;\n}"
+        }
+      ],
+      "quiz_after_practice": [
+        {
+          "type": "mcq",
+          "question": "Kya wrap use karne se items desktop pe bhi neeche chale jayenge?",
+          "options": [
+            "Nahi, sirf tab jab jagah kam hogi",
+            "Haan, hamesha"
+          ],
+          "answer": "Nahi, sirf tab jab jagah kam hogi"
+        }
+      ],
+      "mini_task": "3 cards banao jinka width 30% ho. `flex-wrap: wrap` use karo taaki mobile par wo ek-ek karke neeche aa jayein.",
+      "why_it_matters": "E-commerce grids aur photo galleries bina wrap ke mobile par bohot gande dikhte hain.",
+      "common_mistake": "Items ko fixed width (px) mein rakhna. Items ko hamesha percentage (%) mein rakho taaki wo screen ke saath chote-bade ho sakein."
+    },
+    {
+      "lesson_number": 21,
+      "title": "Clean CSS: Architecture aur Best Practices",
+      "difficulty": "hard",
+      "concept": "Code likhna aasaan hai, par 'clean' code likhna mushkil. Pro-developers 'Comments', 'Grouping', aur 'Class-based styling' use karte hain. Agar tumhara CSS file 500 lines ka hai aur organized nahi hai, toh ek mahine baad tum khud apna code nahi samajh paoge.",
+      "example_code": "/* --- Header Section --- */\n.header-main { padding: 20px; }\n\n/* --- Buttons --- */\n.btn-primary { background: blue; }",
+      "code_breakdown": [
+        {
+          "part": "/* ... */",
+          "explain": "CSS Comments. Ye tumhare code ko organize karte hain aur dusre developers (ya tumhe) batate hain ki kaunsa hissa kya karta hai."
+        },
+        {
+          "part": "Grouping",
+          "explain": "Ek hi tarah ki styles (jaise buttons, cards) ko CSS file mein ek saath likhna."
+        }
+      ],
+      "quiz_after_breakdown": [
+        {
+          "type": "mcq",
+          "question": "CSS mein comment likhne ka sahi tareeka kaunsa hai?",
+          "options": [
+            "// comment",
+            "/* comment */",
+            ""
+          ],
+          "answer": "/* comment */"
+        },
+        {
+          "type": "fill_blank",
+          "question": "Clean code ke liye ______ ka use karna zaroori hai.",
+          "answer": "comments"
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "Header section ke liye ek comment likho.",
+          "starter_code": "______ Header Section ______\n.header { padding: 20px; }"
+        }
+      ],
+      "quiz_after_practice": [
+        {
+          "type": "mcq",
+          "question": "Kya browser comments ko output mein dikhata hai?",
+          "options": [
+            "Haan",
+            "Nahi"
+          ],
+          "answer": "Nahi"
+        }
+      ],
+      "mini_task": "Apni CSS file mein 'Nav', 'Main Content', aur 'Footer' ke liye comments daalo aur code ko group karo.",
+      "why_it_matters": "Real-world projects mein hazaron lines ka CSS hota hai. Clean structure bina developers ka kaam karna impossible hai.",
+      "common_mistake": "CSS file ko bina comments aur sectioning ke chhod dena. Hamesha code ko block-by-block organise karo."
+    },
+    {
+      "lesson_number": 22,
+      "title": "CSS Variables: Pro ka Secret",
+      "difficulty": "hard",
+      "concept": "Socho tumhari website mein blue color 50 jagah use hua hai. Agar tumhe color change karna ho, toh 50 jagah change karoge? Variables (CSS Custom Properties) ka use karke tum ek variable mein color save karte ho, aur bas ek jagah badalne se puri website ka color update ho jata hai.",
+      "example_code": ":root {\n  --main-color: #2563eb;\n}\nbutton {\n  background: var(--main-color);\n}",
+      "code_breakdown": [
+        {
+          "part": ":root",
+          "explain": "Iske andar hum globally access hone wale variables define karte hain."
+        },
+        {
+          "part": "--variable-name",
+          "explain": "Variable ka naam hamesha '--' se shuru hona chahiye."
+        },
+        {
+          "part": "var(--name)",
+          "explain": "Variable ki value ko use karne ka tareeka."
+        }
+      ],
+      "quiz_after_breakdown": [
+        {
+          "type": "mcq",
+          "question": "CSS variables hamesha kis selector mein define hote hain?",
+          "options": [
+            "body",
+            ":root",
+            "html"
+          ],
+          "answer": ":root"
+        },
+        {
+          "type": "fill_blank",
+          "question": "Variable ka naam ______ symbol se shuru hota hai.",
+          "answer": "--"
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "Variable use karke color set karo.",
+          "starter_code": ".card {\n  background: var(______);\n}"
+        }
+      ],
+      "quiz_after_practice": [
+        {
+          "type": "mcq",
+          "question": "Variables change karne ka fayda kya hai?",
+          "options": [
+            "Sirf ek jagah change se puri site update",
+            "Website fast hoti hai"
+          ],
+          "answer": "Sirf ek jagah change se puri site update"
+        }
+      ],
+      "mini_task": "Ek variable banao '--primary-color' aur use apne heading aur button dono par apply karo.",
+      "why_it_matters": "Dark mode aur theme switching (jaise Light vs Dark) banane ke liye CSS variables hi use hote hain.",
+      "common_mistake": "Variable name mein '--' bhool jana ya `var()` function ka use na karna."
+    },
+    {
+      "lesson_number": 23,
+      "title": "Z-Index aur Positioning",
+      "difficulty": "hard",
+      "concept": "Socho website ek paper hai. Position property elements ko us paper par fixed (hamesha wahi rehna) ya absolute (kisi box ke andar kahi bhi) rakhne mein madad karti hai. Z-index batata hai ki kaunsa element kiske 'upar' (layers) dikhega. Sticky Headers banane ke liye ye best hai.",
+      "example_code": ".header {\n  position: sticky;\n  top: 0;\n  z-index: 100;\n}",
+      "code_breakdown": [
+        {
+          "part": "position: sticky;",
+          "explain": "Element scroll karte waqt page ke top par chipka rahega."
+        },
+        {
+          "part": "z-index: 100;",
+          "explain": "Ye 'layer' number hai. Jitna bada number, utna upar element dikhega."
+        }
+      ],
+      "quiz_after_breakdown": [
+        {
+          "type": "mcq",
+          "question": "Sticky header banane ke liye best position kya hai?",
+          "options": [
+            "fixed",
+            "sticky",
+            "static"
+          ],
+          "answer": "sticky"
+        },
+        {
+          "type": "fill_blank",
+          "question": "Elements ko layer upar karne ke liye ______ property use hoti hai.",
+          "answer": "z-index"
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "Header ko top par fix karo.",
+          "starter_code": ".header {\n  position: ______;\n  top: 0;\n}"
+        }
+      ],
+      "quiz_after_practice": [
+        {
+          "type": "mcq",
+          "question": "Kya z-index negative ho sakta hai?",
+          "options": [
+            "Haan",
+            "Nahi"
+          ],
+          "answer": "Haan"
+        }
+      ],
+      "mini_task": "Ek header banao jo scroll karte waqt screen ke top par hamesha dikhe.",
+      "why_it_matters": "Sticky headers professional websites ki pehchan hain, ye navigation ko easy banate hain.",
+      "common_mistake": "Sticky element ke saath 'top: 0' na likhna. Sticky tab tak kaam nahi karega jab tak tum position batate nahi."
+    },
+    {
+      "lesson_number": 24,
+      "title": "Google Fonts Integration",
+      "difficulty": "easy",
+      "concept": "Browser mein sirf default fonts (Arial/Times) hote hain. 'Google Fonts' tumhari website ko ek premium look deta hai kyunki tum wahan se hazaaron custom fonts (jaise 'Poppins' ya 'Roboto') import kar sakte ho. Design mein font ka font-family se bada role hota hai.",
+      "example_code": "/* Import in HTML: <link ...> */\nbody {\n  font-family: 'Poppins', sans-serif;\n}",
+      "code_breakdown": [
+        {
+          "part": "<link>",
+          "explain": "HTML head mein ye code Google fonts ko tumhari site se connect karta hai."
+        },
+        {
+          "part": "font-family",
+          "explain": "Google fonts website se milne wala exact naam yahan copy-paste karna hota hai."
+        }
+      ],
+      "quiz_after_breakdown": [
+        {
+          "type": "mcq",
+          "question": "Custom fonts ke liye kaunsi service trending hai?",
+          "options": [
+            "Google Fonts",
+            "Microsoft Fonts",
+            "Local Fonts"
+          ],
+          "answer": "Google Fonts"
+        },
+        {
+          "type": "fill_blank",
+          "question": "Font link karne ke liye ______ tag use hota hai.",
+          "answer": "link"
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "Poppins font set karo.",
+          "starter_code": "body {\n  font-family: '______', sans-serif;\n}"
+        }
+      ],
+      "quiz_after_practice": [
+        {
+          "type": "mcq",
+          "question": "Kya custom fonts load hone mein time lete hain?",
+          "options": [
+            "Haan",
+            "Nahi"
+          ],
+          "answer": "Haan"
+        }
+      ],
+      "mini_task": "Google Fonts par jao, 'Poppins' font choose karo aur apni Puri website par apply karo.",
+      "why_it_matters": "Default fonts website ko purana (1990s jaisa) dikhate hain, custom fonts website ko 'modern' banate hain.",
+      "common_mistake": "Font ka naam galat likhna. Hamesha Google Fonts se exact spelling copy karo."
+    },
+    {
+      "lesson_number": 25,
+      "title": "Final Project: Complete Portfolio Polish",
+      "difficulty": "hard",
+      "concept": "Ab tumhare paas HTML (structure) aur CSS (style) dono ka knowledge hai. Project finish karne ka matlab hai: sab kuch center mein ho, colors consistent hon, fonts modern hon, aur mobile par sab perfectly wrap ho raha ho. Ye tumhari pehli professional achievement hai.",
+      "example_code": "/* Pure project ko check karo */\nbody { font-family: 'Poppins'; }\n.container { display: flex; flex-wrap: wrap; }",
+      "code_breakdown": [
+        {
+          "part": "Consolidation",
+          "explain": "Ab tak seekhe huye saare tags aur properties ko ek saath ek file mein organize karna."
+        },
+        {
+          "part": "Responsive Test",
+          "explain": "Browser mein 'Inspect' > 'Toggle Device Toolbar' karke check karna ki sab sahi hai ya nahi."
+        }
+      ],
+      "quiz_after_breakdown": [
+        {
+          "type": "mcq",
+          "question": "Project finish karte waqt sabse zaroori cheez kya hai?",
+          "options": [
+            "Responsiveness",
+            "Bahut saare colors",
+            "Animation"
+          ],
+          "answer": "Responsiveness"
+        },
+        {
+          "type": "fill_blank",
+          "question": "Mobile test ke liye ______ tool use hota hai.",
+          "answer": "inspect"
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "Sabse pehle container ko responsive banao.",
+          "starter_code": ".container {\n  display: flex;\n  ______: wrap;\n}"
+        }
+      ],
+      "quiz_after_practice": [
+        {
+          "type": "mcq",
+          "question": "Kya pro-developer code cleanup karte hain?",
+          "options": [
+            "Haan",
+            "Nahi"
+          ],
+          "answer": "Haan"
+        }
+      ],
+      "mini_task": "Apni complete portfolio website ko final design do, Google fonts lagao, aur mobile/desktop dono ke liye fix karo.",
+      "why_it_matters": "Yahi portfolio tumhein internship ya freelance client dilwa sakta hai.",
+      "common_mistake": "Design completion par test na karna. Hamesha mobile view check karo!"
+    }
+  ]
+}

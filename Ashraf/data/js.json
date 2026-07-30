@@ -1,0 +1,1440 @@
+{
+  "language": "JavaScript",
+  "course_title": "JavaScript Course",
+  "lessons": [
+    {
+      "lesson_number": 1,
+      "title": "JavaScript Kya Hai?",
+      "difficulty": "easy",
+      "concept": "HTML ghar ka structure hai, CSS paint hai, aur JavaScript us ghar mein lagi 'smart home' technology hai (jaise lights auto-on hona, doorbell bajna). JavaScript website ko static se interactive aur intelligent banata hai.",
+      "example_code": "console.log('Hello Chaman!');",
+      "code_breakdown": [
+        {
+          "part": "console.log()",
+          "explain": "Ye ek function hai jo browser ke console (dev tools) mein output dikhata hai. Debugging ke liye ye sabse zyada use hota hai."
+        },
+        {
+          "part": "'Hello Chaman!'",
+          "explain": "Ye ek 'String' hai. Text ko humesha quotes (' ' ya \" \") ke andar likhte hain."
+        },
+        {
+          "part": ";",
+          "explain": "Semicolon ye batata hai ki line ka code yahan complete ho gaya."
+        }
+      ],
+      "quiz_after_breakdown": [
+        {
+          "type": "mcq",
+          "question": "JavaScript console mein message dikhane ke liye kaunsa function use hota hai?",
+          "options": [
+            "alert()",
+            "console.log()",
+            "print()"
+          ],
+          "answer": "console.log()"
+        },
+        {
+          "type": "fill_blank",
+          "question": "Text ko JavaScript mein ______ ke andar likhte hain.",
+          "answer": "quotes"
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "Console mein 'JS seekh raha hu' print karo.",
+          "starter_code": "console.log('______');"
+        }
+      ],
+      "quiz_after_practice": [
+        {
+          "type": "mcq",
+          "question": "Kya JavaScript ke bina website interactive ho sakti hai?",
+          "options": [
+            "Haan",
+            "Nahi"
+          ],
+          "answer": "Nahi"
+        }
+      ],
+      "mini_task": "Browser ke Console mein jao aur wahan apna naam print karo.",
+      "why_it_matters": "Sabse pehle ye samajhna zaroori hai ki code kaise execute hota hai. Console coding ka 'playground' hai.",
+      "common_mistake": "Quotes bhool jana. Agar bina quotes ke text likhoge to error aayega."
+    },
+    {
+      "lesson_number": 2,
+      "title": "Variables (let aur const)",
+      "difficulty": "hard",
+      "concept": "Variables chote 'dabbey' (boxes) hain jisme hum data store karte hain. `const` ka matlab hai 'constant' (jo kabhi na badle), aur `let` ka matlab hai jo value baad mein update ki ja sake.",
+      "example_code": "const myName = 'Chaman';\nlet age = 18;\nage = 19;",
+      "code_breakdown": [
+        {
+          "part": "const",
+          "explain": "Variable declare karne ka keyword. Iski value change nahi ho sakti."
+        },
+        {
+          "part": "let",
+          "explain": "Variable declare karne ka keyword. Iski value future mein change ho sakti hai."
+        },
+        {
+          "part": "=",
+          "explain": "Assignment operator. Ye right side wali value ko left side wale variable mein daal deta hai."
+        }
+      ],
+      "quiz_after_breakdown": [
+        {
+          "type": "mcq",
+          "question": "Agar value kabhi na badle, toh kya use karein?",
+          "options": [
+            "let",
+            "const",
+            "var"
+          ],
+          "answer": "const"
+        },
+        {
+          "type": "fill_blank",
+          "question": "Value update karne ke liye ______ keyword best hai.",
+          "answer": "let"
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "Const se apna naam store karo.",
+          "starter_code": "const name = '______';"
+        },
+        {
+          "instruction": "Let se age variable banao.",
+          "starter_code": "let age = ______;"
+        }
+      ],
+      "quiz_after_practice": [
+        {
+          "type": "mcq",
+          "question": "Kya const variable ko dubara update kar sakte hain?",
+          "options": [
+            "Haan",
+            "Nahi"
+          ],
+          "answer": "Nahi"
+        }
+      ],
+      "mini_task": "Do variables banao: `const city` (apna shehar) aur `let temperature` (aaj ka temp). Temperature ki value baad mein change karke dekho.",
+      "why_it_matters": "Real apps (jaise Instagram profile) mein username 'const' hota hai aur followers count 'let' (kyunki wo badhte rehte hain).",
+      "common_mistake": "Const variable ko change karne ki koshish karna. Isse browser error dega."
+    },
+    {
+      "lesson_number": 3,
+      "title": "Data Types",
+      "difficulty": "easy",
+      "concept": "JavaScript mein hum alag-alag tarah ka data handle karte hain. Socho tum ek form bhar rahe ho—naam (String), umar (Number), aur kya tum student ho (Boolean). Har data type ka apna kaam hota hai.",
+      "example_code": "const name = 'Chaman';\nconst age = 18;\nconst isCoder = true;",
+      "code_breakdown": [
+        {
+          "part": "String (' ')",
+          "explain": "Text format. Jo bhi quotes mein likhte hain, wo string hai."
+        },
+        {
+          "part": "Number",
+          "explain": "Maths ke liye. Isme quotes nahi lagate, direct number likhte hain."
+        },
+        {
+          "part": "Boolean",
+          "explain": "Sahi ya galat (True/False). Logic banane mein bohot kaam aata hai."
+        }
+      ],
+      "quiz_after_breakdown": [
+        {
+          "type": "mcq",
+          "question": "True ya False kis data type mein aate hain?",
+          "options": [
+            "String",
+            "Number",
+            "Boolean"
+          ],
+          "answer": "Boolean"
+        },
+        {
+          "type": "fill_blank",
+          "question": "Text likhne ke liye ______ type use karte hain.",
+          "answer": "String"
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "Ek number variable banao.",
+          "starter_code": "const marks = ______;"
+        }
+      ],
+      "quiz_after_practice": [
+        {
+          "type": "mcq",
+          "question": "Kya '18' ek number hai?",
+          "options": [
+            "Haan",
+            "Nahi, ye string hai"
+          ],
+          "answer": "Nahi, ye string hai"
+        }
+      ],
+      "mini_task": "Teen variable banao: apna naam (String), apni age (Number), aur kya tum JS seekh rahe ho (Boolean).",
+      "why_it_matters": "Database se jo data aata hai, wo hamesha inhi types mein hota hai.",
+      "common_mistake": "Number ko quotes mein likhna. Yaad rakho, '18' ek text (string) hai, 18 ek number hai."
+    },
+    {
+      "lesson_number": 4,
+      "title": "Operators",
+      "difficulty": "hard",
+      "concept": "Operators wo symbol hain jo calculations ya comparisons karte hain. Jaise '+' se sum nikalna, ya '===' se check karna ki kya dono values barabar hain. Ye tumhare program ka 'Brain' hain.",
+      "example_code": "let sum = 10 + 5;\nlet isEqual = (10 === 10);",
+      "code_breakdown": [
+        {
+          "part": "+, -, *, /",
+          "explain": "Arithmetic operators: Addition, Subtraction, Multiplication, Division."
+        },
+        {
+          "part": "===",
+          "explain": "Strict comparison. Ye check karta hai ki value aur type dono barabar hain."
+        },
+        {
+          "part": "&& (AND)",
+          "explain": "Logic check: Dono conditions sahi honi chahiye."
+        }
+      ],
+      "quiz_after_breakdown": [
+        {
+          "type": "mcq",
+          "question": "Value check karne ke liye best operator kaunsa hai?",
+          "options": [
+            "=",
+            "==",
+            "==="
+          ],
+          "answer": "==="
+        },
+        {
+          "type": "fill_blank",
+          "question": "10 * 5 ka result ______ hota hai.",
+          "answer": "50"
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "Do numbers ko multiply karo.",
+          "starter_code": "let result = 5 ______ 5;"
+        },
+        {
+          "instruction": "Check karo kya 5, 5 ke barabar hai.",
+          "starter_code": "let check = (5 ______ 5);"
+        }
+      ],
+      "quiz_after_practice": [
+        {
+          "type": "mcq",
+          "question": "Kya && operator mein ek bhi condition galat hone par result true hoga?",
+          "options": [
+            "Haan",
+            "Nahi"
+          ],
+          "answer": "Nahi"
+        }
+      ],
+      "mini_task": "Do variables banao (a=10, b=5). Unka sum, product aur ye check karo ki kya a, b se bada hai.",
+      "why_it_matters": "Calculators, gaming logic, aur shopping cart total calculate karne ke liye operators chahiye.",
+      "common_mistake": "Assignment operator (=) aur comparison operator (===) mein confuse hona."
+    },
+    {
+      "lesson_number": 5,
+      "title": "if...else Decision Making",
+      "difficulty": "hard",
+      "concept": "Real life mein hum decisions lete hain: 'Agar baarish hogi, toh chhatri lenge, nahi toh nahi lenge'. JavaScript mein `if...else` bilkul wahi kaam karta hai. Ye program ko batata hai ki kaunsi condition par kya output dena hai.",
+      "example_code": "const age = 18;\nif (age >= 18) {\n  console.log('Adult');\n} else {\n  console.log('Minor');\n}",
+      "code_breakdown": [
+        {
+          "part": "if ( )",
+          "explain": "Condition check karne wala block. Agar bracket ke andar ki baat 'true' hai, toh hi ye code chalega."
+        },
+        {
+          "part": "{ }",
+          "explain": "Code block. Iske andar hum wo kaam likhte hain jo condition sahi hone par karna hai."
+        },
+        {
+          "part": "else",
+          "explain": "Agar 'if' wali condition fail ho gayi, toh 'else' wala kaam hoga."
+        }
+      ],
+      "quiz_after_breakdown": [
+        {
+          "type": "mcq",
+          "question": "Agar 'if' ki condition false ho jaye, toh kya chalta hai?",
+          "options": [
+            "if code",
+            "else code",
+            "error"
+          ],
+          "answer": "else code"
+        },
+        {
+          "type": "fill_blank",
+          "question": "Condition check karne ke liye ______ keyword use hota hai.",
+          "answer": "if"
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "Agar marks 33 se zyada hain toh 'Pass' print karo.",
+          "starter_code": "if (marks > 33) {\n  console.log('______');\n}"
+        },
+        {
+          "instruction": "Nahi toh 'Fail' print karo.",
+          "starter_code": "} else {\n  console.log('______');\n}"
+        }
+      ],
+      "quiz_after_practice": [
+        {
+          "type": "mcq",
+          "question": "Kya else block har if ke saath zaroori hai?",
+          "options": [
+            "Haan",
+            "Nahi"
+          ],
+          "answer": "Nahi"
+        }
+      ],
+      "mini_task": "Ek variable `isLoggedIn` banao (true/false). Agar true hai toh 'Welcome' print karo, warna 'Please Login'.",
+      "why_it_matters": "Login, Permissions, Validation—sab kuch 'if-else' logic par tikka hai.",
+      "common_mistake": "Condition mein sirf ek `=` sign use karna. Yaad rakho, comparison ke liye `===` ya `>=` use hota hai."
+    },
+    {
+      "lesson_number": 6,
+      "title": "Functions: Reusable Code",
+      "difficulty": "hard",
+      "concept": "Socho tumne ek recipe likhi—tum use baar-baar dekh kar dish bana sakte ho. Function wahi recipe hai. Ek baar code likho, aur usse naam se bula kar (call karke) jitni baar chahe use karo. Isse code chhota aur organized rehta hai.",
+      "example_code": "function sayHi(name) {\n  console.log('Hi ' + name);\n}\nsayHi('Chaman');",
+      "code_breakdown": [
+        {
+          "part": "function",
+          "explain": "Ye keyword batata hai ki hum ek function bana rahe hain."
+        },
+        {
+          "part": "(name)",
+          "explain": "Parameter. Ye ek variable hai jo function ko bahar se data lene mein madad karta hai."
+        },
+        {
+          "part": "sayHi()",
+          "explain": "Function ko 'Call' karna. Jab tak tum call nahi karoge, function andar ka code nahi chalayega."
+        }
+      ],
+      "quiz_after_breakdown": [
+        {
+          "type": "mcq",
+          "question": "Function banane ke liye kaunsa keyword use hota hai?",
+          "options": [
+            "call",
+            "function",
+            "run"
+          ],
+          "answer": "function"
+        },
+        {
+          "type": "fill_blank",
+          "question": "Function ko chalane ke liye use ______ karte hain.",
+          "answer": "call"
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "Function ka naam 'greet' rakho.",
+          "starter_code": "function ______() {\n  console.log('Hello');\n}"
+        },
+        {
+          "instruction": "Function ko call karo.",
+          "starter_code": "______();"
+        }
+      ],
+      "quiz_after_practice": [
+        {
+          "type": "mcq",
+          "question": "Kya function bina call kiye chal sakta hai?",
+          "options": [
+            "Haan",
+            "Nahi"
+          ],
+          "answer": "Nahi"
+        }
+      ],
+      "mini_task": "Ek function `square` banao jo ek number le aur uska square (number * number) print kare.",
+      "why_it_matters": "Bade projects mein hazaron lines hoti hain; bina functions ke code manage karna impossible hai.",
+      "common_mistake": "Function define karna par call karna bhool jana. Function tabhi kaam karega jab use trigger (call) karoge."
+    },
+    {
+      "lesson_number": 7,
+      "title": "Arrow Functions (Modern JS)",
+      "difficulty": "hard",
+      "concept": "Pehle humne `function` keyword seekha tha. Arrow function ek chhota aur modern tarika hai function likhne ka. Aajkal ki sabhi trending frameworks (jaise React) mein yahi use hota hai kyunki ye code ko bahut clean aur readable banata hai.",
+      "example_code": "const add = (a, b) => {\n  return a + b;\n};",
+      "code_breakdown": [
+        {
+          "part": "const add",
+          "explain": "Function ko ek variable mein store kiya gaya hai."
+        },
+        {
+          "part": "(a, b) =>",
+          "explain": "Ye 'arrow' hai. Ye parameters leta hai aur function body ki taraf point karta hai."
+        },
+        {
+          "part": "{ }",
+          "explain": "Function ki body, jahan humara logic likha hota hai."
+        }
+      ],
+      "quiz_after_breakdown": [
+        {
+          "type": "mcq",
+          "question": "Arrow function mein kaunsa symbol arrow ki tarah kaam karta hai?",
+          "options": [
+            "->",
+            "=>",
+            "==>"
+          ],
+          "answer": "=>"
+        },
+        {
+          "type": "fill_blank",
+          "question": "Arrow function ko aksar ______ mein store karte hain.",
+          "answer": "variable"
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "Arrow function ka syntax pura karo.",
+          "starter_code": "const sayHello = () ______ {\n  console.log('Hi');\n};"
+        }
+      ],
+      "quiz_after_practice": [
+        {
+          "type": "mcq",
+          "question": "Kya arrow function purane 'function' keyword se chhota hai?",
+          "options": [
+            "Haan",
+            "Nahi"
+          ],
+          "answer": "Haan"
+        }
+      ],
+      "mini_task": "Ek arrow function `multiply` banao jo do numbers ko multiply karke result de.",
+      "why_it_matters": "Modern development mein arrow functions coding speed badhate hain aur scope ke issues ko fix karte hain.",
+      "common_mistake": "Arrow (`=>`) ki jagah sirf `->` likhna. JS mein arrow function ke liye `=>` hi zaroori hai."
+    },
+    {
+      "lesson_number": 8,
+      "title": "Arrays: Data ki List",
+      "difficulty": "hard",
+      "concept": "Socho ek library mein bahut saari kitabein hain. Array ek aisi list hai jisme tum bahut saara data (jaise names, numbers, ya products) ek saath store kar sakte ho. Bina arrays ke shopping cart ya friend list banana impossible hai.",
+      "example_code": "const fruits = ['Apple', 'Mango', 'Banana'];\nconsole.log(fruits[0]);",
+      "code_breakdown": [
+        {
+          "part": "[ ]",
+          "explain": "Square brackets array banane ke liye hote hain."
+        },
+        {
+          "part": "'Apple', 'Mango'",
+          "explain": "Array ke elements. Inhe comma (,) se alag karte hain."
+        },
+        {
+          "part": "[0]",
+          "explain": "Index. Array counting 0 se shuru hoti hai. '0' ka matlab pehla item hai."
+        }
+      ],
+      "quiz_after_breakdown": [
+        {
+          "type": "mcq",
+          "question": "Array ka pehla item kaunse index par hota hai?",
+          "options": [
+            "1",
+            "0",
+            "first"
+          ],
+          "answer": "0"
+        },
+        {
+          "type": "fill_blank",
+          "question": "Array banane ke liye ______ brackets use hote hain.",
+          "answer": "square"
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "3 items wali array banao.",
+          "starter_code": "const games = ['PUBG', 'FreeFire', '______'];"
+        }
+      ],
+      "quiz_after_practice": [
+        {
+          "type": "mcq",
+          "question": "Kya array mein alag-alag data types (number aur string) ho sakte hain?",
+          "options": [
+            "Haan",
+            "Nahi"
+          ],
+          "answer": "Haan"
+        }
+      ],
+      "mini_task": "Apni 3 favourite movies ki list banao aur console mein doosri (second) movie print karo.",
+      "why_it_matters": "Frontend mein backend se jo bhi data aata hai (products/users), wo aksar Arrays ki form mein hi hota hai.",
+      "common_mistake": "Index ko 1 se shuru karna. Yaad rakho, programming mein pehla item hamesha 0 hota hai."
+    },
+    {
+      "lesson_number": 9,
+      "title": "Loops: Kaam ko Automate karna",
+      "difficulty": "hard",
+      "concept": "Socho tumhe 100 baar 'Hello' print karna hai. Kya tum 100 baar code likhoge? Nahi! Loops ek hi kaam ko baar-baar repeat karte hain jab tak condition puri na ho jaye. Ye coding mein 'lazy' banne ka sabse smart tarika hai.",
+      "example_code": "for (let i = 1; i <= 5; i++) {\n  console.log('Count: ' + i);\n}",
+      "code_breakdown": [
+        {
+          "part": "let i = 1",
+          "explain": "Ye 'Initialization' hai. Loop kahan se shuru hoga (yahan 1 se)."
+        },
+        {
+          "part": "i <= 5",
+          "explain": "Condition. Loop tab tak chalega jab tak i, 5 ya usse chhota hai."
+        },
+        {
+          "part": "i++",
+          "explain": "Increment. Har baar loop chalne ke baad i ki value ek badha do."
+        }
+      ],
+      "quiz_after_breakdown": [
+        {
+          "type": "mcq",
+          "question": "Loop mein increment ke liye kaunsa operator use hota hai?",
+          "options": [
+            "i--",
+            "i++",
+            "i+"
+          ],
+          "answer": "i++"
+        },
+        {
+          "type": "fill_blank",
+          "question": "Loop ki shuruaat ______ se hoti hai.",
+          "answer": "initialization"
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "Loop ko 10 tak chalao.",
+          "starter_code": "for (let i = 1; i <= ______; i++) {\n  console.log(i);\n}"
+        }
+      ],
+      "quiz_after_practice": [
+        {
+          "type": "mcq",
+          "question": "Kya infinite loop (jo kabhi na ruke) achha hota hai?",
+          "options": [
+            "Haan",
+            "Nahi, ye browser crash kar dega"
+          ],
+          "answer": "Nahi, ye browser crash kar dega"
+        }
+      ],
+      "mini_task": "Ek loop likho jo 2, 4, 6, 8, 10 print kare (Hint: i = i + 2).",
+      "why_it_matters": "Websites par products ki list dikhane ke liye loops hi use hote hain.",
+      "common_mistake": "Condition galat likhna (jaise i <= 5 ki jagah i >= 5), jisse loop kabhi chalta hi nahi."
+    },
+    {
+      "lesson_number": 10,
+      "title": "DOM: Website ko Control karna",
+      "difficulty": "hard",
+      "concept": "DOM (Document Object Model) ka matlab hai ki JavaScript tumhare HTML ke har element ko ek object ki tarah dekhti hai. Isse hum heading badal sakte hain, color change kar sakte hain, ya button dabane par kuch kar sakte hain. Ye JavaScript ka sabse powerful part hai.",
+      "example_code": "const title = document.querySelector('h1');\ntitle.textContent = 'Welcome Chaman!';",
+      "code_breakdown": [
+        {
+          "part": "document",
+          "explain": "Ye tumhara pura HTML page hai."
+        },
+        {
+          "part": "querySelector('h1')",
+          "explain": "HTML element ko dhundne ka tareeka (selector)."
+        },
+        {
+          "part": "textContent",
+          "explain": "Element ke andar ka text badalne wali property."
+        }
+      ],
+      "quiz_after_breakdown": [
+        {
+          "type": "mcq",
+          "question": "HTML element select karne ke liye kya use hota hai?",
+          "options": [
+            "document.find()",
+            "document.querySelector()",
+            "document.get()"
+          ],
+          "answer": "document.querySelector()"
+        },
+        {
+          "type": "fill_blank",
+          "question": "Text badalne ke liye ______ property best hai.",
+          "answer": "textContent"
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "H1 ko select karo.",
+          "starter_code": "const head = document.______(_______);"
+        }
+      ],
+      "quiz_after_practice": [
+        {
+          "type": "mcq",
+          "question": "Kya JavaScript se CSS bhi change ho sakti hai?",
+          "options": [
+            "Haan",
+            "Nahi"
+          ],
+          "answer": "Haan"
+        }
+      ],
+      "mini_task": "HTML mein ek h1 banao aur JavaScript se usse 'JS is Awesome' likh kar uska color red kar do.",
+      "why_it_matters": "Website mein har interactive feature (Dark mode, popups, sliders) DOM ke bina impossible hai.",
+      "common_mistake": "HTML load hone se pehle JS script chala dena. Hamesha script ko body ke last mein rakho."
+    },
+    {
+      "lesson_number": 11,
+      "title": "Button Click Event",
+      "difficulty": "hard",
+      "concept": "Website sirf tabhi smart hai jab wo user ki baat sune. `addEventListener` ek aisa listener hai jo button click ya mouse move jaisi cheezon ka intezar karta hai. Jab action hota hai, ye tumhara code trigger (chala) deta hai.",
+      "example_code": "const btn = document.querySelector('button');\nbtn.addEventListener('click', () => {\n  alert('Button clicked!');\n});",
+      "code_breakdown": [
+        {
+          "part": "addEventListener",
+          "explain": "Ye function HTML element ke saath 'event' ko jodta hai."
+        },
+        {
+          "part": "'click'",
+          "explain": "Event ka type. Hum 'click', 'mouseover', ya 'keydown' bhi likh sakte hain."
+        },
+        {
+          "part": "() => { }",
+          "explain": "Callback function. Ye code tab chalta hai jab click hota hai."
+        }
+      ],
+      "quiz_after_breakdown": [
+        {
+          "type": "mcq",
+          "question": "Action sunne ke liye kaunsa method best hai?",
+          "options": [
+            "addEventListener",
+            "listen()",
+            "onEvent"
+          ],
+          "answer": "addEventListener"
+        },
+        {
+          "type": "fill_blank",
+          "question": "Click event ke liye ______ string ka use hota hai.",
+          "answer": "click"
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "Button click listener banao.",
+          "starter_code": "btn.addEventListener('______', () => {\n  console.log('Done');\n});"
+        }
+      ],
+      "quiz_after_practice": [
+        {
+          "type": "mcq",
+          "question": "Kya ek hi button par 2 alag events ho sakte hain?",
+          "options": [
+            "Haan",
+            "Nahi"
+          ],
+          "answer": "Haan"
+        }
+      ],
+      "mini_task": "Ek button banao, click karne par console mein 'Clicked!' print karo aur alert mein apna naam dikhao.",
+      "why_it_matters": "Har modern action (login, submit, menu open) click events par hi chalta hai.",
+      "common_mistake": "Function call ( `()` ) lagana. Listener mein function ka naam ya logic dete hain, use turant call nahi karte."
+    },
+    {
+      "lesson_number": 12,
+      "title": "Mobile Menu Toggle (Interactivity)",
+      "difficulty": "hard",
+      "concept": "Mobile apps mein hamburger menu (teen lines) dabane par menu slide hota hai. JS mein hum bas ek CSS class ('active') add ya remove karte hain. Ye technique mobile navigation ke liye industry standard hai.",
+      "example_code": "const menu = document.querySelector('nav');\nmenu.classList.toggle('active');",
+      "code_breakdown": [
+        {
+          "part": "classList",
+          "explain": "Element ki saari CSS classes ka list."
+        },
+        {
+          "part": "toggle",
+          "explain": "Ye magical method hai. Agar class hai toh hata dega, agar nahi hai toh add kar dega."
+        }
+      ],
+      "quiz_after_breakdown": [
+        {
+          "type": "mcq",
+          "question": "Class add/remove ek saath karne ke liye best method kya hai?",
+          "options": [
+            "add()",
+            "toggle()",
+            "switch()"
+          ],
+          "answer": "toggle()"
+        },
+        {
+          "type": "fill_blank",
+          "question": "classList property ______ ko control karti hai.",
+          "answer": "classes"
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "Toggle method ka use karo.",
+          "starter_code": "nav.classList.______('active');"
+        }
+      ],
+      "quiz_after_practice": [
+        {
+          "type": "mcq",
+          "question": "Kya toggle bina CSS class ke kaam karega?",
+          "options": [
+            "Haan, par kuch dikhega nahi",
+            "Nahi"
+          ],
+          "answer": "Haan, par kuch dikhega nahi"
+        }
+      ],
+      "mini_task": "Ek div banao jo default hide (display: none) ho. Button click par toggle use karke use dikhao/chupao.",
+      "why_it_matters": "Responsive navbars, popups, aur modals banane ka yehi main tareeka hai.",
+      "common_mistake": "CSS mein class (jaise .active) define na karna. JS class add kar degi, par CSS ke bina koi change nahi dikhega."
+    },
+    {
+      "lesson_number": 13,
+      "title": "Dynamic Image Source Change",
+      "difficulty": "hard",
+      "concept": "Socho ek shopping website par tum product ki choti photo par click karte ho aur badi photo change ho jati hai. Ye sab HTML attribute `src` ko JavaScript se update karke hota hai. Isse website bina reload huye update hoti hai.",
+      "example_code": "const img = document.querySelector('img');\nimg.setAttribute('src', 'new-photo.jpg');",
+      "code_breakdown": [
+        {
+          "part": "setAttribute",
+          "explain": "Ye method kisi bhi HTML attribute (src, href, alt) ko change karne ke liye use hota hai."
+        },
+        {
+          "part": "'src'",
+          "explain": "Wo attribute jise hum change karna chahte hain."
+        },
+        {
+          "part": "'new-photo.jpg'",
+          "explain": "Nayi value jo hum attribute mein daalna chahte hain."
+        }
+      ],
+      "quiz_after_breakdown": [
+        {
+          "type": "mcq",
+          "question": "Attribute ki value badalne ke liye kaunsa method best hai?",
+          "options": [
+            "getAttribute",
+            "setAttribute",
+            "changeAttribute"
+          ],
+          "answer": "setAttribute"
+        },
+        {
+          "type": "fill_blank",
+          "question": "Image ka path change karne ke liye ______ attribute target karte hain.",
+          "answer": "src"
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "Image ka src 'cat.jpg' karo.",
+          "starter_code": "img.setAttribute('______', 'cat.jpg');"
+        }
+      ],
+      "quiz_after_practice": [
+        {
+          "type": "mcq",
+          "question": "Kya setAttribute sirf image par kaam karta hai?",
+          "options": [
+            "Nahi, kisi bhi attribute par",
+            "Haan, sirf image par"
+          ],
+          "answer": "Nahi, kisi bhi attribute par"
+        }
+      ],
+      "mini_task": "Ek image tag banao aur ek button click par us image ko kisi dusri image se replace karo.",
+      "why_it_matters": "Product galleries, image sliders, aur dynamic banners banane ke liye ye core skill hai.",
+      "common_mistake": "setAttribute mein sirf ek argument dena. Hamesha (attribute_name, new_value) dono dena zaroori hai."
+    },
+    {
+      "lesson_number": 14,
+      "title": "Form Validation (Basic)",
+      "difficulty": "hard",
+      "concept": "Agar user form mein kuch galat bhare ya khali chhod de, toh server par data bhej kar time waste kyun karein? JavaScript se hum client-side par hi check kar lete hain ki data sahi hai ya nahi. Ye security aur user experience dono ke liye zaroori hai.",
+      "example_code": "const input = document.querySelector('input');\nif (input.value === '') {\n  alert('Field is required!');\n}",
+      "code_breakdown": [
+        {
+          "part": "input.value",
+          "explain": "Ye property batati hai ki user ne box ke andar kya likha hai."
+        },
+        {
+          "part": "=== ''",
+          "explain": "Empty string check (kya box khali hai?)."
+        },
+        {
+          "part": "alert()",
+          "explain": "Browser ka popup message."
+        }
+      ],
+      "quiz_after_breakdown": [
+        {
+          "type": "mcq",
+          "question": "Input ke andar ki value nikalne ke liye kya property hai?",
+          "options": [
+            "text",
+            "value",
+            "data"
+          ],
+          "answer": "value"
+        },
+        {
+          "type": "fill_blank",
+          "question": "Empty check karne ke liye ______ string ka use karte hain.",
+          "answer": "empty"
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "Input khali hai ya nahi check karo.",
+          "starter_code": "if (input.______ === '') { alert('Error'); }"
+        }
+      ],
+      "quiz_after_practice": [
+        {
+          "type": "mcq",
+          "question": "Kya validation server par load kam karta hai?",
+          "options": [
+            "Haan",
+            "Nahi"
+          ],
+          "answer": "Haan"
+        }
+      ],
+      "mini_task": "Ek Signup form banao. Agar user naam khali chhod kar 'Submit' dabaye, toh alert mein 'Name required!' dikhao.",
+      "why_it_matters": "Spam entries aur incomplete data se bachne ke liye validaton har professional app mein hoti hai.",
+      "common_mistake": "Input ki value ko `input` tag ke saath confuse karna. `input.value` likhna mat bhoolna!"
+    },
+    {
+      "lesson_number": 15,
+      "title": "Mini Project: Interactive Portfolio",
+      "difficulty": "hard",
+      "concept": "Ab tak jo bhi DOM, Events aur Variables seekhe hain, unhe combine karne ka time hai. Ek portfolio website tabhi 'Interactive' hoti hai jab wo user ke clicks ka jawab de sake. Ye tumhare coding journey ka pehla milestone hai.",
+      "example_code": "const btn = document.querySelector('button');\nconst title = document.querySelector('h1');\nbtn.onclick = () => {\n  title.textContent = 'Welcome, Chaman!';\n};",
+      "code_breakdown": [
+        {
+          "part": "const btn/title",
+          "explain": "HTML ke elements ko JS variables mein store karna, taaki hum unhe baar-baar select na karein."
+        },
+        {
+          "part": "onclick",
+          "explain": "Event handler. Click event ko handle karne ka shorcut (addEventListener ka short version)."
+        }
+      ],
+      "quiz_after_breakdown": [
+        {
+          "type": "mcq",
+          "question": "Kya onclick aur addEventListener('click') ek hi kaam karte hain?",
+          "options": [
+            "Haan",
+            "Nahi"
+          ],
+          "answer": "Haan"
+        },
+        {
+          "type": "fill_blank",
+          "question": "Button click par logic run karne ke liye ______ use hota hai.",
+          "answer": "onclick"
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "Button click par alert dikhao.",
+          "starter_code": "btn.onclick = () => { ______('Hello!'); };"
+        }
+      ],
+      "quiz_after_practice": [
+        {
+          "type": "mcq",
+          "question": "Project banate waqt sabse pehla step kya hona chahiye?",
+          "options": [
+            "Elements select karna",
+            "Logic likhna",
+            "CSS likhna"
+          ],
+          "answer": "Elements select karna"
+        }
+      ],
+      "mini_task": "Ek button banao jo click karne par tumhari portfolio heading aur 'About Me' section ka text dono change kar de.",
+      "why_it_matters": "Real websites mein ek button click se kayi chizein update hoti hain (jaise cart count, theme, modal).",
+      "common_mistake": "HTML tags ko select karna bhool jana. JS tab tak kaam nahi karegi jab tak tum element ko 'link' (select) nahi karoge."
+    },
+    {
+      "lesson_number": 16,
+      "title": "Dark Mode Toggle",
+      "difficulty": "hard",
+      "concept": "Dark mode aajkal ki har app (Instagram, WhatsApp) ki zaroorat hai. JavaScript ki madad se hum poore page ki 'style' ko ek class (jaise .dark) toggle karke badal dete hain. Ye website ko smart aur user-friendly banata hai.",
+      "example_code": "document.body.classList.toggle('dark-mode');",
+      "code_breakdown": [
+        {
+          "part": "document.body",
+          "explain": "Poora webpage (body tag) select karne ke liye."
+        },
+        {
+          "part": "classList.toggle",
+          "explain": "Agar 'dark-mode' class nahi hai toh add karega, agar hai toh hata dega."
+        }
+      ],
+      "quiz_after_breakdown": [
+        {
+          "type": "mcq",
+          "question": "Poore webpage ka design badalne ke liye kise select karna chahiye?",
+          "options": [
+            "h1",
+            "document.body",
+            "div"
+          ],
+          "answer": "document.body"
+        },
+        {
+          "type": "fill_blank",
+          "question": "Class ko on/off karne ke liye ______ method use hota hai.",
+          "answer": "toggle"
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "Body mein class toggle karo.",
+          "starter_code": "document.body.classList.______( 'dark-mode' );"
+        }
+      ],
+      "quiz_after_practice": [
+        {
+          "type": "mcq",
+          "question": "Kya toggle karne se CSS file ki properties apne aap badal jayengi?",
+          "options": [
+            "Haan, agar .dark-mode class CSS mein likhi ho",
+            "Nahi"
+          ],
+          "answer": "Haan, agar .dark-mode class CSS mein likhi ho"
+        }
+      ],
+      "mini_task": "CSS mein `.dark-mode` class banao jisme background black aur text white ho. JS se button click par ise toggle karo.",
+      "why_it_matters": "Dark mode user experience (UX) ko bahut improve karta hai, khaas kar raat mein use karne walon ke liye.",
+      "common_mistake": "CSS file mein .dark-mode class likhna bhool jana. JS sirf class add karegi, design CSS mein hi likhna hoga."
+    },
+    {
+      "lesson_number": 17,
+      "title": "Objects: Data ko Organize karna",
+      "difficulty": "hard",
+      "concept": "Socho ek student ki sirf 'age' store karni ho toh variable kaafi hai. Lekin agar 'naam', 'age', aur 'city' sab store karna ho toh Objects best hain. Object ek container hai jo 'key' aur 'value' ke pair mein data rakhta hai.",
+      "example_code": "const user = {\n  name: 'Chaman',\n  age: 18,\n  city: 'Jamshedpur'\n};\nconsole.log(user.name);",
+      "code_breakdown": [
+        {
+          "part": "{ }",
+          "explain": "Curly braces object banane ke liye use hote hain."
+        },
+        {
+          "part": "key: value",
+          "explain": "Key (jaise 'name') variable ka naam hai aur 'value' (jaise 'Chaman') uska data hai."
+        },
+        {
+          "part": "user.name",
+          "explain": "Dot (.) notation se hum object ke andar ka specific data nikalte hain."
+        }
+      ],
+      "quiz_after_breakdown": [
+        {
+          "type": "mcq",
+          "question": "Object ke andar se data nikalne ke liye kya use karte hain?",
+          "options": [
+            "bracket []",
+            "dot .",
+            "comma ,"
+          ],
+          "answer": "dot ."
+        },
+        {
+          "type": "fill_blank",
+          "question": "Object banane ke liye ______ brackets use hote hain.",
+          "answer": "curly"
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "Object mein 'city' access karo.",
+          "starter_code": "console.log(user.______);"
+        }
+      ],
+      "quiz_after_practice": [
+        {
+          "type": "mcq",
+          "question": "Kya ek object mein hum string aur number dono rakh sakte hain?",
+          "options": [
+            "Haan",
+            "Nahi"
+          ],
+          "answer": "Haan"
+        }
+      ],
+      "mini_task": "Ek 'laptop' object banao jisme 'brand', 'price' aur 'isWorking' (boolean) ho.",
+      "why_it_matters": "Real websites mein user details aur product data hamesha objects ke form mein milta hai.",
+      "common_mistake": "Key-value pair ke beech ':' ki jagah '=' lagana. Object mein hamesha ':' use hota hai."
+    },
+    {
+      "lesson_number": 18,
+      "title": "Local Storage: Data Yaad Rakhna",
+      "difficulty": "hard",
+      "concept": "Socho tumne Dark Mode on kiya, lekin page refresh karte hi sab white ho gaya. Bura laga na? Local Storage browser ka ek chhota sa box hai jo tumhara data tab tak sambhaal kar rakhta hai jab tak tum khud na mitao. Refresh karne par bhi data wahin rehta hai.",
+      "example_code": "localStorage.setItem('theme', 'dark');\nconst myTheme = localStorage.getItem('theme');",
+      "code_breakdown": [
+        {
+          "part": "localStorage.setItem",
+          "explain": "Browser mein data save karne ka method."
+        },
+        {
+          "part": "getItem",
+          "explain": "Save kiya hua data wapas nikalne ka method."
+        },
+        {
+          "part": "'theme', 'dark'",
+          "explain": "Key (naam) aur Value (data)."
+        }
+      ],
+      "quiz_after_breakdown": [
+        {
+          "type": "mcq",
+          "question": "Data save karne ke liye kaunsa method hai?",
+          "options": [
+            "getItem",
+            "setItem",
+            "saveItem"
+          ],
+          "answer": "setItem"
+        },
+        {
+          "type": "fill_blank",
+          "question": "Browser memory ka naam ______ storage hai.",
+          "answer": "local"
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "Apna naam 'user' key mein save karo.",
+          "starter_code": "localStorage.setItem('user', '______');"
+        }
+      ],
+      "quiz_after_practice": [
+        {
+          "type": "mcq",
+          "question": "Kya page band karke wapas kholne par localStorage ka data rehta hai?",
+          "options": [
+            "Haan",
+            "Nahi"
+          ],
+          "answer": "Haan"
+        }
+      ],
+      "mini_task": "Ek input field banao. 'Save' button dabane par input ki value Local Storage mein save karo. Refresh karne ke baad woh value wapas dikhao.",
+      "why_it_matters": "User settings, shopping cart, aur dark mode preferences save karne ke liye ye best hai.",
+      "common_mistake": "Sirf object ko seedha setItem mein daalna. LocalStorage mein sirf 'String' format mein data save hota hai."
+    },
+    {
+      "lesson_number": 19,
+      "title": "Array + Loop = Dynamic List",
+      "difficulty": "hard",
+      "concept": "Socho ek e-commerce site par 50 products hain. Kya tum 50 baar HTML likhoge? Nahi! JavaScript mein hum ek Array mein products ka naam rakhte hain aur ek Loop chala kar unhein ek-ek karke HTML mein daal dete hain. Isse code chhota aur smart banta hai.",
+      "example_code": "const items = ['Pen', 'Book', 'Bag'];\nitems.forEach(item => {\n  console.log('List item: ' + item);\n});",
+      "code_breakdown": [
+        {
+          "part": "forEach",
+          "explain": "Ye loop ka modern aur sabse zyada use hone wala method hai. Ye har item ke liye function chalata hai."
+        },
+        {
+          "part": "item =>",
+          "explain": "Ye ek temporary variable hai jo har baar array ka naya item hold karta hai."
+        }
+      ],
+      "quiz_after_breakdown": [
+        {
+          "type": "mcq",
+          "question": "Array ke har item ko process karne ke liye best loop kaunsa hai?",
+          "options": [
+            "for",
+            "forEach",
+            "while"
+          ],
+          "answer": "forEach"
+        },
+        {
+          "type": "fill_blank",
+          "question": "Array elements ko iterate karne ke liye ______ method use karte hain.",
+          "answer": "forEach"
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "forEach ka syntax complete karo.",
+          "starter_code": "list.forEach(______ => {\n  console.log(______);\n});"
+        }
+      ],
+      "quiz_after_practice": [
+        {
+          "type": "mcq",
+          "question": "Kya forEach array mein naya item add karta hai?",
+          "options": [
+            "Haan",
+            "Nahi, sirf process karta hai"
+          ],
+          "answer": "Nahi, sirf process karta hai"
+        }
+      ],
+      "mini_task": "5 doston ki list (Array) banao aur loop chala kar console mein 'Hello [Friend Name]' print karo.",
+      "why_it_matters": "Dynamic lists (jaise Instagram feed ya product list) bina loop ke banana impossible hai.",
+      "common_mistake": "Arrow function mein item parameter ka naam dena bhool jana."
+    },
+    {
+      "lesson_number": 20,
+      "title": "Fetch API: Internet se Data lana",
+      "difficulty": "hard",
+      "concept": "Aaj ki websites ka data static nahi hota, wo internet (API) se aata hai. `fetch` JavaScript ka wo magic tool hai jo dusri website se data mangwata hai (jaise weather, news, ya user info). Ye professional apps ka sabse important part hai.",
+      "example_code": "fetch('https://api.github.com/users/octocat')\n  .then(res => res.json())\n  .then(data => console.log(data));",
+      "code_breakdown": [
+        {
+          "part": "fetch()",
+          "explain": "Internet se server call karne ka function."
+        },
+        {
+          "part": ".then()",
+          "explain": "Server se response aane ka wait karna."
+        },
+        {
+          "part": ".json()",
+          "explain": "Response ko readable JavaScript format (Object) mein badalna."
+        }
+      ],
+      "quiz_after_breakdown": [
+        {
+          "type": "mcq",
+          "question": "Server se data mangwane ke liye kya use hota hai?",
+          "options": [
+            "fetch()",
+            "get()",
+            "load()"
+          ],
+          "answer": "fetch()"
+        },
+        {
+          "type": "fill_blank",
+          "question": "Data ko object mein badalne ke liye ______ method hai.",
+          "answer": "json"
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "Fetch request ka syntax pura karo.",
+          "starter_code": "fetch('______')\n  .then(res => res.json())"
+        }
+      ],
+      "quiz_after_practice": [
+        {
+          "type": "mcq",
+          "question": "Kya fetch sync hota hai ya async (wait karta hai)?",
+          "options": [
+            "Sync",
+            "Async"
+          ],
+          "answer": "Async"
+        }
+      ],
+      "mini_task": "Kisi free public API (jaise 'JSONPlaceholder') se data fetch karke console mein print karo.",
+      "why_it_matters": "Bina API ke tumhari website sirf 'khali dabba' hai. API se hi website mein real-time data aata hai.",
+      "common_mistake": "Data aane se pehle hi use access karne ki koshish karna. Hamesha .then() ya await ka wait karo."
+    },
+    {
+      "lesson_number": 21,
+      "title": "Clean JavaScript: Best Practices",
+      "difficulty": "hard",
+      "concept": "JavaScript code likhna aasaan hai, par use 'clean' rakhna ek kala hai. Pro-developers 'Meaningful Naming', 'Modular Functions', aur 'Comments' ka use karte hain. Clean code ka matlab hai ki agar tum 6 mahine baad apna code dekho, toh tum turant samajh jao ki kya ho raha hai.",
+      "example_code": "// Calculate total price\nconst calculateTotal = (price, tax) => {\n  return price + tax;\n};",
+      "code_breakdown": [
+        {
+          "part": "//",
+          "explain": "Single line comment. Code explain karne ke liye zaroori hai."
+        },
+        {
+          "part": "calculateTotal",
+          "explain": "Meaningful variable/function name. 'x' ya 'y' ke bajaye aise naam rakho jo kaam bataye."
+        },
+        {
+          "part": "return",
+          "explain": "Function se final value bahar bhejne ke liye."
+        }
+      ],
+      "quiz_after_breakdown": [
+        {
+          "type": "mcq",
+          "question": "Code ko clean rakhne ke liye sabse zaroori kya hai?",
+          "options": [
+            "Meaningful names",
+            "Bahut saare comments",
+            "Short code"
+          ],
+          "answer": "Meaningful names"
+        },
+        {
+          "type": "fill_blank",
+          "question": "Function se value bahar lane ke liye ______ keyword use hota hai.",
+          "answer": "return"
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "Function ko meaningful naam do.",
+          "starter_code": "const ______ = (a, b) => { return a + b; };"
+        }
+      ],
+      "quiz_after_practice": [
+        {
+          "type": "mcq",
+          "question": "Kya lambe function names achhe hote hain?",
+          "options": [
+            "Haan, agar kaam saaf bataye",
+            "Nahi, hamesha chhote hone chahiye"
+          ],
+          "answer": "Haan, agar kaam saaf bataye"
+        }
+      ],
+      "mini_task": "Ek function banao jo discount calculate kare. Function ka naam aur variables ke naam aise rakho ki koi aur bhi samajh sake.",
+      "why_it_matters": "Professional teams mein code dusre developers ke saath share hota hai, isliye readability sabse important hai.",
+      "common_mistake": "Function ke naam 'func1', 'test' ya 'a' rakhna. Hamesha action-oriented naam rakho (jaise 'calculate', 'fetchData')."
+    },
+    {
+      "lesson_number": 22,
+      "title": "JS Debugging (Browser Tools)",
+      "difficulty": "easy",
+      "concept": "Coding mein galti (bugs) hona normal hai. Debugging ka matlab hai code mein aayi galti ko dhoondna aur thik karna. 'Inspect' element aur 'Console' tab tumhare sabse achhe dost hain. Ye seekhna tumhare development process ko 10x fast kar dega.",
+      "example_code": "console.log('Checkpoint: Data loaded');\nconsole.error('Something went wrong!');",
+      "code_breakdown": [
+        {
+          "part": "console.error()",
+          "explain": "Red color mein error message dikhata hai. Critical bugs dhoondne ke liye best hai."
+        },
+        {
+          "part": "Checkpoint",
+          "explain": "Code ke beech mein log lagana taaki pata chale ki execution kahan tak pahunchi hai."
+        }
+      ],
+      "quiz_after_breakdown": [
+        {
+          "type": "mcq",
+          "question": "Red error message ke liye kaunsa console method hai?",
+          "options": [
+            "console.warn()",
+            "console.error()",
+            "console.log()"
+          ],
+          "answer": "console.error()"
+        },
+        {
+          "type": "fill_blank",
+          "question": "Error dhoondne ki process ko ______ kehte hain.",
+          "answer": "debugging"
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "Error message print karo.",
+          "starter_code": "console.______('Error found!');"
+        }
+      ],
+      "quiz_after_practice": [
+        {
+          "type": "mcq",
+          "question": "Kya console.log() production site par dikhta hai?",
+          "options": [
+            "Haan",
+            "Nahi, sirf inspect panel mein"
+          ],
+          "answer": "Nahi, sirf inspect panel mein"
+        }
+      ],
+      "mini_task": "Ek code likho jisme jaan-bujh kar galti karo, aur phir console error ki madad se use dhoond kar fix karo.",
+      "why_it_matters": "Senior developers debugging mein hi apna 50% time spent karte hain. Ye skill tumhari problem-solving power badhata hai.",
+      "common_mistake": "Console error ko ignore karna. Hamesha error ki line number check karo, wo solution ki taraf le jayegi."
+    },
+    {
+      "lesson_number": 23,
+      "title": "Modules: Code ko Organize karna",
+      "difficulty": "hard",
+      "concept": "Professional projects mein hum ek hi file mein hazaron lines nahi likhte. Hum code ko alag-alag files mein todte hain (Modules). Isse ek file 'UI' sambhalti hai, dusri 'Data', aur teesri 'API'. Ye scalability ka golden rule hai.",
+      "example_code": "// Exporting (utils.js)\nexport const add = (a, b) => a + b;\n\n// Importing (main.js)\nimport { add } from './utils.js';",
+      "code_breakdown": [
+        {
+          "part": "export",
+          "explain": "Function ya variable ko dusri files ke liye available karna."
+        },
+        {
+          "part": "import",
+          "explain": "Dusri file ka code apni file mein lana."
+        }
+      ],
+      "quiz_after_breakdown": [
+        {
+          "type": "mcq",
+          "question": "Code ko alag files mein baantne ke liye kya use hota hai?",
+          "options": [
+            "Modules",
+            "Loops",
+            "Objects"
+          ],
+          "answer": "Modules"
+        },
+        {
+          "type": "fill_blank",
+          "question": "Code lane ke liye ______ keyword use karte hain.",
+          "answer": "import"
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "Function export karo.",
+          "starter_code": "______ const greet = () => 'Hi';"
+        }
+      ],
+      "quiz_after_practice": [
+        {
+          "type": "mcq",
+          "question": "Kya modules bina server ke local file mein chalte hain?",
+          "options": [
+            "Nahi, live server chahiye",
+            "Haan, hamesha"
+          ],
+          "answer": "Nahi, live server chahiye"
+        }
+      ],
+      "mini_task": "Apne logic ko `logic.js` mein rakho aur `main.js` mein import karke use karo.",
+      "why_it_matters": "Real-world apps mein file separation ke bina kaam karna impossible hai.",
+      "common_mistake": "HTML mein script tag mein `type='module'` na likhna. Modules use karne ke liye ye attribute zaroori hai."
+    },
+    {
+      "lesson_number": 24,
+      "title": "Async/Await: The Pro Way",
+      "difficulty": "hard",
+      "concept": "Pehle humne `.then()` seekha tha. `Async/Await` data fetch karne ka naya aur clean tarika hai. Ye code ko aise dikhata hai jaise wo seedha-seedha chal raha ho (synchronous), jisse errors dhundna aur logic samajhna bahut aasaan ho jata hai.",
+      "example_code": "async function getData() {\n  const res = await fetch('https://api.url');\n  const data = await res.json();\n  console.log(data);\n}",
+      "code_breakdown": [
+        {
+          "part": "async",
+          "explain": "Function ko batana ki ye asynchronous (time lene wala) kaam karega."
+        },
+        {
+          "part": "await",
+          "explain": "Code ko wahan rok dena jab tak server se data na aa jaye."
+        }
+      ],
+      "quiz_after_breakdown": [
+        {
+          "type": "mcq",
+          "question": "Data aane tak code rokne ke liye kya use karte hain?",
+          "options": [
+            "stop",
+            "await",
+            "wait"
+          ],
+          "answer": "await"
+        },
+        {
+          "type": "fill_blank",
+          "question": "Async function ke liye ______ keyword zaroori hai.",
+          "answer": "async"
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "Fetch ke aage await lagao.",
+          "starter_code": "const res = ______ fetch(url);"
+        }
+      ],
+      "quiz_after_practice": [
+        {
+          "type": "mcq",
+          "question": "Kya async function ke bina await use kar sakte hain?",
+          "options": [
+            "Haan",
+            "Nahi"
+          ],
+          "answer": "Nahi"
+        }
+      ],
+      "mini_task": "Purane .then() wale fetch code ko async/await mein rewrite karo.",
+      "why_it_matters": "Modern React aur Node.js developers ka ye standard tarika hai.",
+      "common_mistake": "Async function ke bahar await use karna. Await hamesha async function ke andar hi kaam karta hai."
+    },
+    {
+      "lesson_number": 25,
+      "title": "🏆 Final Challenge: Professional Web App",
+      "difficulty": "hard",
+      "concept": "Ab tumne Modules, Async/Await, DOM, Events, aur Storage sab seekh liya hai. Final project tumhara masterpiece hoga: Ek 'Dynamic Weather or Movie App'. Ye project tumhare portfolio ki jaan banega.",
+      "example_code": "/* Final check of project structure */\nimport { fetchData } from './api.js';\nrenderData(await fetchData());",
+      "code_breakdown": [
+        {
+          "part": "Integration",
+          "explain": "HTML structure, CSS design, aur JS logic ko ek professional flow mein jodna."
+        },
+        {
+          "part": "Deployment Readiness",
+          "explain": "Code ko cleanup karke production ready banana."
+        }
+      ],
+      "quiz_after_breakdown": [
+        {
+          "type": "mcq",
+          "question": "Portfolio mein sabse important cheez kya hai?",
+          "options": [
+            "Clean code & Responsive",
+            "Bahut saare animations",
+            "Heavy files"
+          ],
+          "answer": "Clean code & Responsive"
+        },
+        {
+          "type": "fill_blank",
+          "question": "Project finish karne ka matlab hai ______ tests pass karna.",
+          "answer": "functional"
+        }
+      ],
+      "practice_reps": [
+        {
+          "instruction": "UI update ka logic likho.",
+          "starter_code": "const displayData = (data) => { ______ = data.name; };"
+        }
+      ],
+      "quiz_after_practice": [
+        {
+          "type": "mcq",
+          "question": "Kya pro-developer project ke baad code cleanup karte hain?",
+          "options": [
+            "Haan",
+            "Nahi"
+          ],
+          "answer": "Haan"
+        }
+      ],
+      "mini_task": "Ek complete 'Smart Dashboard' banao: Local Storage se user ka naam save ho, API se data aaye, aur Modules ke through code organized ho.",
+      "why_it_matters": "Yahi project tumhari real-world coding capability prove karega.",
+      "common_mistake": "Ek saath sab kuch complex banane ki koshish karna. Pehle basic feature banao, phir features add karte jao!"
+    }
+  ]
+}

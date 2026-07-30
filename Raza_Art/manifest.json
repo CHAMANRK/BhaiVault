@@ -1,0 +1,40 @@
+{
+  "name": "Raza Art - Attendance Manager",
+  "short_name": "Raza Art",
+  "description": "Smart attendance tracking for your team",
+  "start_url": "/Raza_Art/",
+  "scope": "/Raza_Art/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0a0f1e",
+  "theme_color": "#00d4ff",
+  "icons": [
+    {
+      "src": "/Raza_Art/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/Raza_Art/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable any"
+    }
+  ],
+  "categories": ["business", "productivity"],
+  "shortcuts": [
+    {
+      "name": "Check In",
+      "short_name": "Check In",
+      "description": "Mark your attendance",
+      "url": "/Raza_Art/staff.html?action=checkin",
+      "icons": [
+        {
+          "src": "/Raza_Art/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ]
+}
