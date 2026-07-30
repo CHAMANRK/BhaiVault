@@ -109,6 +109,13 @@ const PROVIDERS = [
   },
 ];
 
+// Env var value "key1, key2 ,key3" -> ['key1','key2','key3']
+// Ek provider ke multiple keys ho sakte hain (rate-limit/quota spread karne ke liye).
+function splitKeys(raw) {
+  if (!raw) return [];
+  return raw.split(',').map(k => k.trim()).filter(Boolean);
+}
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     res.status(405).json({ error: 'POST use kar bhai' });
@@ -128,21 +135,24 @@ export default async function handler(req, res) {
   const errors = [];
 
   for (const provider of PROVIDERS) {
-    const key = process.env[provider.envKey];
-    if (!key) continue; // skip providers with no key configured
+    const keys = splitKeys(process.env[provider.envKey]);
+    if (!keys.length) continue; // provider ka koi key hi nahi diya gaya
 
-    try {
-      const { text, model } = await provider.run(key, messages);
-      res.status(200).json({ reply: text, provider: provider.name, model });
-      return;
-    } catch (err) {
-      errors.push(`${provider.name}: ${err.message}`);
-      // fall through to next provider
+    for (let i = 0; i < keys.length; i++) {
+      const key = keys[i];
+      try {
+        const { text, model } = await provider.run(key, messages);
+        res.status(200).json({ reply: text, provider: provider.name, model });
+        return;
+      } catch (err) {
+        errors.push(`${provider.name} (key ${i + 1}/${keys.length}): ${err.message}`);
+        // is provider ki agli key try karo; sab keys khatam ho jaye toh agle provider pe jao
+      }
     }
   }
 
   res.status(502).json({
-    error: 'Sab providers fail ho gaye. Env vars check kar Vercel dashboard mein.',
+    error: 'Sab providers/keys fail ho gaye. Env vars check kar Vercel dashboard mein.',
     details: errors,
   });
 }
