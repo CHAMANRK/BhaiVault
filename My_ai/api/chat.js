@@ -88,7 +88,7 @@ function extractAction(text) {
 }
 
 const TIMEOUT_MS = 12000;
-const SEARCH_TIMEOUT_MS = 8000;
+const SEARCH_TIMEOUT_MS = 7000; // per-endpoint timeout — do endpoints tak try ho sakte hain
 
 async function withTimeout(promise, ms) {
   const ctrl = new AbortController();
@@ -232,21 +232,92 @@ function parseDuckDuckGoHtml(html) {
   return results;
 }
 
+// "Lite" endpoint ka markup thoda alag hota hai (table rows, koi result__a class
+// nahi hoti) — ye tab use hota hai jab main html/ endpoint block/empty de.
+function parseDuckDuckGoLite(html) {
+  const linkRegex = /<a[^>]*rel="nofollow"[^>]*href="([^"]+)"[^>]*>([\s\S]*?)<\/a>/g;
+  const snippetRegex = /<td[^>]*class="result-snippet"[^>]*>([\s\S]*?)<\/td>/g;
+
+  const links = [];
+  let m;
+  while ((m = linkRegex.exec(html)) !== null) {
+    const href = m[1];
+    if (href.startsWith('#') || href.includes('duckduckgo.com/html')) continue;
+    links.push({ href, title: stripTags(m[2]) });
+  }
+  const snippets = [];
+  while ((m = snippetRegex.exec(html)) !== null) {
+    snippets.push(stripTags(m[1]));
+  }
+
+  const results = [];
+  for (let i = 0; i < Math.min(links.length, 5); i++) {
+    let href = links[i].href;
+    const uddgMatch = href.match(/uddg=([^&]+)/);
+    if (uddgMatch) {
+      try { href = decodeURIComponent(uddgMatch[1]); } catch { /* keep raw href */ }
+    }
+    results.push({ title: links[i].title, url: href, snippet: snippets[i] || '' });
+  }
+  return results;
+}
+
+const BROWSER_HEADERS = {
+  'User-Agent':
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36',
+  Accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+  'Accept-Language': 'en-US,en;q=0.9',
+};
+
+// Ek hi source (DDG) ke do endpoints try karta hai — pehla thoda-sa block/rate-limit
+// hone pe bhi doosra (lite) kaafi baar chal jaata hai, kyunki ye alag path/markup
+// hai aur DDG ki anti-bot filtering isko alag tareeke se treat karti hai.
 async function performWebSearch(query) {
-  const url = `https://html.duckduckgo.com/html/?q=${encodeURIComponent(query)}`;
-  return withTimeout(async (signal) => {
-    const r = await fetch(url, {
-      signal,
-      headers: {
-        // DDG ka no-JS endpoint bina User-Agent ke kabhi-kabhi block/empty result deta hai.
-        'User-Agent':
-          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36',
-      },
-    });
-    if (!r.ok) throw new Error(`DuckDuckGo HTTP ${r.status}`);
-    const html = await r.text();
-    return parseDuckDuckGoHtml(html);
-  }, SEARCH_TIMEOUT_MS);
+  let lastErr = null;
+
+  // Attempt 1: html.duckduckgo.com — POST form request (browser jaisa hi karta hai)
+  try {
+    const results = await withTimeout(async (signal) => {
+      const r = await fetch('https://html.duckduckgo.com/html/', {
+        method: 'POST',
+        signal,
+        headers: { ...BROWSER_HEADERS, 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: `q=${encodeURIComponent(query)}`,
+      });
+      if (!r.ok) throw new Error(`html endpoint HTTP ${r.status}`);
+      const html = await r.text();
+      return parseDuckDuckGoHtml(html);
+    }, SEARCH_TIMEOUT_MS);
+    if (results.length) return results;
+    lastErr = new Error('html endpoint: 0 results parsed (likely bot-blocked page)');
+  } catch (err) {
+    lastErr = err;
+  }
+
+  // Attempt 2 (fallback): lite.duckduckgo.com — halka markup, kabhi-kabhi tab
+  // chal jaata hai jab main endpoint block ho raha ho.
+  try {
+    const results = await withTimeout(async (signal) => {
+      const r = await fetch('https://lite.duckduckgo.com/lite/', {
+        method: 'POST',
+        signal,
+        headers: { ...BROWSER_HEADERS, 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: `q=${encodeURIComponent(query)}`,
+      });
+      if (!r.ok) throw new Error(`lite endpoint HTTP ${r.status}`);
+      const html = await r.text();
+      return parseDuckDuckGoLite(html);
+    }, SEARCH_TIMEOUT_MS);
+    if (results.length) return results;
+    lastErr = new Error('lite endpoint: 0 results parsed (likely bot-blocked page)');
+  } catch (err) {
+    lastErr = err;
+  }
+
+  // Dono attempts fail ho gaye — poori tarah se debug karne layak error throw
+  // karo (Vercel function logs mein "console.error" se dikhega).
+  console.error(`[web_search] "${query}" ke liye dono DuckDuckGo endpoints fail ho gaye: ${lastErr && lastErr.message}`);
+  throw lastErr || new Error('DuckDuckGo search fail ho gaya, wajah pata nahi.');
 }
 
 function formatSearchResultsForModel(query, results) {
