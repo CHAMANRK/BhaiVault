@@ -27,7 +27,56 @@ Kuch important rules:
 - Is version mein tere paas persistent memory ya purani chats ka record NAHI hai (reload pe sab reset ho jaata hai) — isliye "meri purani baatein yaad rakh" jaisa kuch invent mat karna; sirf isi conversation ke andar ka context use kar.
 - Agar koi feature ya info tere paas nahi hai, toh seedha bol de "mujhe pata nahi" ya "ye abhi implement nahi hua" — kabhi fake technical details (encryption, storage system, training data, company, etc.) mat bana.`;
 
-const TIMEOUT_MS = 12000;
+// ── Protocol Registry ───────────────────────────────────────────────
+// Model ke saath structured "actions" karne ke liye ek generic wrapper tag:
+//   [ACTION:name]{...json...}[/ACTION]
+// Naya protocol add karna ho toh bas neeche ek naya key daal do — system
+// prompt mein woh apne aap (alphabetically sorted) list ho jaayega, aur
+// parsing/extraction logic already generic hai, usse kuch chhedna nahi padega.
+const PROTOCOLS = {
+  ask_user: {
+    describe:
+`[ACTION:ask_user]{"type":"single|multi","question":"...","options":["opt1","opt2"]}[/ACTION]
+  - Sirf tab use kar jab jawab genuinely ambiguous ho, use ko clarify karna ho — har chhoti baat pe mat thok.
+  - "type":"single" -> user ek option tap karega, turant wahi answer ban ke chala jaayega.
+  - "type":"multi" -> user multiple options tick kar sakta hai, phir "Confirm" dabayega.
+  - "options" max 4 rakhna, jitni zaroorat utni hi (2, 3, ya 4) — kabhi se kam ya zyada mat de.
+  - Iss tag ke aage-peeche normal text bhi likh sakta hai (jaise thoda context), lekin tag exactly isi format mein hona chahiye taaki parse ho sake.`,
+  },
+};
+
+// System prompt ke liye saare registered protocols ki sorted, formatted list.
+function buildProtocolDocs() {
+  const names = Object.keys(PROTOCOLS).sort();
+  if (!names.length) return '';
+  const blocks = names.map((name) => PROTOCOLS[name].describe).join('\n\n');
+  return `\n\nTERE PAAS YE STRUCTURED ACTIONS AVAILABLE HAIN (zaroorat pade tabhi use kar):\n\n${blocks}`;
+}
+
+// Reply text ke andar se pehla [ACTION:name]{json}[/ACTION] block dhoondhta hai,
+// use text se nikaal (strip) deta hai, aur parsed action { name, payload } return karta hai.
+const ACTION_REGEX = /\[ACTION:(\w+)\]([\s\S]*?)\[\/ACTION\]/;
+
+function extractAction(text) {
+  const match = text.match(ACTION_REGEX);
+  if (!match) return { cleanText: text, action: null };
+
+  const [full, name, jsonStr] = match;
+  const cleanText = text.replace(full, '').trim();
+
+  if (!PROTOCOLS[name]) {
+    // Unknown protocol tag — ignore karo, bas text se hata do taaki user ko raw tag na dikhe.
+    return { cleanText, action: null };
+  }
+
+  try {
+    const payload = JSON.parse(jsonStr.trim());
+    return { cleanText, action: { name, payload } };
+  } catch {
+    // Malformed JSON — action drop karo, sirf clean text bhej do.
+    return { cleanText, action: null };
+  }
+}
 
 async function withTimeout(promise, ms) {
   const ctrl = new AbortController();
@@ -40,7 +89,7 @@ async function withTimeout(promise, ms) {
 }
 
 function toOpenAIMessages(messages) {
-  return [{ role: 'system', content: SYSTEM_PROMPT }, ...messages];
+  return [{ role: 'system', content: SYSTEM_PROMPT + buildProtocolDocs() }, ...messages];
 }
 
 async function callOpenAICompatible({ url, key, model, messages, extraHeaders = {} }) {
@@ -154,7 +203,8 @@ export default async function handler(req, res) {
       const key = keys[i];
       try {
         const { text, model } = await provider.run(key, messages);
-        res.status(200).json({ reply: text, provider: provider.name, model });
+        const { cleanText, action } = extractAction(text);
+        res.status(200).json({ reply: cleanText, provider: provider.name, model, action });
         return;
       } catch (err) {
         errors.push(`${provider.name} (key ${i + 1}/${keys.length}): ${err.message}`);
