@@ -132,6 +132,64 @@
     color:var(--paper);
     border-radius:2px;
   }
+  .bubble strong{color:var(--amber);font-weight:600;}
+  .bubble em{font-style:italic;color:#f3ead8;}
+  .bubble .inline-code{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:0.88em;
+    background:var(--ink-3);
+    border:1px solid var(--line);
+    border-radius:4px;
+    padding:1px 5px;
+    color:#f0c988;
+  }
+  .codeblock{
+    margin:8px 0;
+    border:1px solid var(--line);
+    border-radius:8px;
+    overflow:hidden;
+    background:var(--ink-3);
+  }
+  .codeblock-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:6px 10px;
+    background:var(--ink-2);
+    border-bottom:1px solid var(--line);
+  }
+  .codeblock-head .lang{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:10.5px;
+    color:var(--paper-dim);
+    text-transform:lowercase;
+    letter-spacing:0.03em;
+  }
+  .copy-btn{
+    all:unset;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:10.5px;
+    color:var(--amber);
+    border:1px solid var(--amber-dim);
+    border-radius:5px;
+    padding:3px 9px;
+    cursor:pointer;
+    line-height:1;
+  }
+  .copy-btn:active{transform:scale(0.94);}
+  .copy-btn.copied{color:var(--sage);border-color:var(--sage-dim);}
+  .codeblock pre{
+    margin:0;
+    padding:10px 12px;
+    overflow-x:auto;
+  }
+  .codeblock code{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:13px;
+    line-height:1.5;
+    color:#e6ddc9;
+    white-space:pre;
+  }
   .meta{
     font-family:'IBM Plex Mono',monospace;
     font-size:10px;
@@ -277,6 +335,66 @@
     return row;
   }
 
+  // ── chhota markdown renderer: **bold**, *italic*, `inline code`, ```code blocks``` ──
+  let cbCounter = 0;
+  const codeStore = {}; // id -> raw code text (copy button ke liye, escaped HTML se alag rakha)
+
+  function escapeHtml(str) {
+    return str
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
+  }
+
+  function renderMarkdown(raw) {
+    // step 1: fenced code blocks nikaal ke placeholder daal do (raw text par, escape se pehle)
+    let text = raw.replace(/```(\w*)\n?([\s\S]*?)```/g, (_, lang, code) => {
+      const id = 'cb' + (cbCounter++);
+      codeStore[id] = { lang: lang || '', code: code.replace(/\n$/, '') };
+      return `\u0000${id}\u0000`;
+    });
+
+    // step 2: baaki sab escape karo (XSS-safe)
+    text = escapeHtml(text);
+
+    // step 3: inline formatting
+    text = text.replace(/`([^`\n]+)`/g, (_, c) => `<code class="inline-code">${c}</code>`);
+    text = text.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+    text = text.replace(/(^|[^*])\*([^*\n]+)\*(?!\*)/g, '$1<em>$2</em>');
+    text = text.replace(/_([^_\n]+)_/g, '<em>$1</em>');
+    text = text.replace(/\n/g, '<br>');
+
+    // step 4: code block placeholders ko asli block se replace karo
+    text = text.replace(/\u0000(cb\d+)\u0000/g, (_, id) => {
+      const { lang, code } = codeStore[id];
+      return `<div class="codeblock" data-id="${id}">
+        <div class="codeblock-head">
+          <span class="lang">${escapeHtml(lang || 'text')}</span>
+          <button type="button" class="copy-btn" onclick="copyCode('${id}')">Copy</button>
+        </div>
+        <pre><code>${escapeHtml(code)}</code></pre>
+      </div>`;
+    });
+
+    return text;
+  }
+
+  window.copyCode = function (id) {
+    const entry = codeStore[id];
+    if (!entry) return;
+    navigator.clipboard.writeText(entry.code).then(() => {
+      const btn = document.querySelector(`.codeblock[data-id="${id}"] .copy-btn`);
+      if (!btn) return;
+      const original = btn.textContent;
+      btn.textContent = 'Copied!';
+      btn.classList.add('copied');
+      setTimeout(() => {
+        btn.textContent = original;
+        btn.classList.remove('copied');
+      }, 1500);
+    });
+  };
+
   function addAssistantBubble(text, meta, isError) {
     const row = document.createElement('div');
     row.className = 'row assistant';
@@ -284,7 +402,11 @@
     wrap.className = 'wrap';
     const bubble = document.createElement('div');
     bubble.className = 'bubble' + (isError ? ' err' : '');
-    bubble.textContent = text;
+    if (isError) {
+      bubble.textContent = text;
+    } else {
+      bubble.innerHTML = renderMarkdown(text);
+    }
     wrap.appendChild(bubble);
     if (meta) {
       const metaEl = document.createElement('div');
