@@ -190,6 +190,52 @@
     color:#e6ddc9;
     white-space:pre;
   }
+  .md-p{margin:0 0 10px;}
+  .md-p:last-child{margin-bottom:0;}
+  .md-h{
+    font-family:'Space Grotesk',sans-serif;
+    color:var(--amber);
+    line-height:1.3;
+    margin:14px 0 8px;
+  }
+  .bubble > .md-h:first-child{margin-top:0;}
+  h1.md-h{font-size:19px;}
+  h2.md-h{font-size:17px;}
+  h3.md-h{font-size:15.5px;}
+  h4.md-h,h5.md-h,h6.md-h{font-size:14.5px;color:var(--paper);}
+  .md-list{
+    margin:0 0 10px;
+    padding-left:20px;
+  }
+  .md-list li{margin-bottom:4px;line-height:1.5;}
+  .md-list:last-child{margin-bottom:0;}
+  .md-table-wrap{
+    overflow-x:auto;
+    margin:8px 0 10px;
+    border:1px solid var(--line);
+    border-radius:8px;
+  }
+  .md-table{
+    border-collapse:collapse;
+    width:100%;
+    font-size:13.5px;
+  }
+  .md-table th,.md-table td{
+    padding:7px 11px;
+    border-bottom:1px solid var(--line);
+    text-align:left;
+    white-space:nowrap;
+  }
+  .md-table th{
+    background:var(--ink-3);
+    color:var(--amber);
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11.5px;
+    text-transform:uppercase;
+    letter-spacing:0.03em;
+  }
+  .md-table tr:last-child td{border-bottom:none;}
+  .md-table tr:nth-child(even) td{background:rgba(255,255,255,0.02);}
   .meta{
     font-family:'IBM Plex Mono',monospace;
     font-size:10px;
@@ -335,9 +381,9 @@
     return row;
   }
 
-  // ── chhota markdown renderer: **bold**, *italic*, `inline code`, ```code blocks``` ──
+  // ── markdown renderer: headings, tables, lists, bold/italic/inline-code, fenced code blocks ──
   let cbCounter = 0;
-  const codeStore = {}; // id -> raw code text (copy button ke liye, escaped HTML se alag rakha)
+  const codeStore = {}; // id -> {lang, code} (copy button ke liye, escaped HTML se alag rakha)
 
   function escapeHtml(str) {
     return str
@@ -346,37 +392,139 @@
       .replace(/>/g, '&gt;');
   }
 
+  // sirf inline patterns (bold/italic/inline-code) — block-level text ke andar use hota hai
+  function inlineFormat(str) {
+    let text = escapeHtml(str);
+    text = text.replace(/`([^`\n]+)`/g, (_, c) => `<code class="inline-code">${c}</code>`);
+    text = text.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+    text = text.replace(/(^|[^*])\*([^*\n]+)\*(?!\*)/g, '$1<em>$2</em>');
+    text = text.replace(/_([^_\n]+)_/g, '<em>$1</em>');
+    return text;
+  }
+
+  function isSeparatorRow(line) {
+    return line != null && line.includes('-') && /^\s*\|?[\s:\-|]+\|?\s*$/.test(line);
+  }
+
+  function splitTableRow(line) {
+    let l = line.trim();
+    if (l.startsWith('|')) l = l.slice(1);
+    if (l.endsWith('|')) l = l.slice(0, -1);
+    return l.split('|').map(c => c.trim());
+  }
+
+  function tableHtml(headerCells, rows) {
+    const thead = `<tr>${headerCells.map(c => `<th>${inlineFormat(c)}</th>`).join('')}</tr>`;
+    const tbody = rows
+      .map(r => `<tr>${r.map(c => `<td>${inlineFormat(c)}</td>`).join('')}</tr>`)
+      .join('');
+    return `<div class="md-table-wrap"><table class="md-table"><thead>${thead}</thead><tbody>${tbody}</tbody></table></div>`;
+  }
+
+  function codeBlockHtml(id) {
+    const { lang, code } = codeStore[id];
+    return `<div class="codeblock" data-id="${id}">
+      <div class="codeblock-head">
+        <span class="lang">${escapeHtml(lang || 'text')}</span>
+        <button type="button" class="copy-btn" onclick="copyCode('${id}')">Copy</button>
+      </div>
+      <pre><code>${escapeHtml(code)}</code></pre>
+    </div>`;
+  }
+
   function renderMarkdown(raw) {
-    // step 1: fenced code blocks nikaal ke placeholder daal do (raw text par, escape se pehle)
-    let text = raw.replace(/```(\w*)\n?([\s\S]*?)```/g, (_, lang, code) => {
+    // step 1: fenced code blocks nikaal ke placeholder line daal do (raw text par, escape se pehle)
+    const withPlaceholders = raw.replace(/```(\w*)\n?([\s\S]*?)```/g, (_, lang, code) => {
       const id = 'cb' + (cbCounter++);
       codeStore[id] = { lang: lang || '', code: code.replace(/\n$/, '') };
       return `\u0000${id}\u0000`;
     });
 
-    // step 2: baaki sab escape karo (XSS-safe)
-    text = escapeHtml(text);
+    const lines = withPlaceholders.split('\n');
+    let html = '';
+    let i = 0;
 
-    // step 3: inline formatting
-    text = text.replace(/`([^`\n]+)`/g, (_, c) => `<code class="inline-code">${c}</code>`);
-    text = text.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
-    text = text.replace(/(^|[^*])\*([^*\n]+)\*(?!\*)/g, '$1<em>$2</em>');
-    text = text.replace(/_([^_\n]+)_/g, '<em>$1</em>');
-    text = text.replace(/\n/g, '<br>');
+    while (i < lines.length) {
+      const line = lines[i];
 
-    // step 4: code block placeholders ko asli block se replace karo
-    text = text.replace(/\u0000(cb\d+)\u0000/g, (_, id) => {
-      const { lang, code } = codeStore[id];
-      return `<div class="codeblock" data-id="${id}">
-        <div class="codeblock-head">
-          <span class="lang">${escapeHtml(lang || 'text')}</span>
-          <button type="button" class="copy-btn" onclick="copyCode('${id}')">Copy</button>
-        </div>
-        <pre><code>${escapeHtml(code)}</code></pre>
-      </div>`;
-    });
+      if (line.trim() === '') { i++; continue; }
 
-    return text;
+      // fenced code placeholder
+      if (/^\u0000cb\d+\u0000$/.test(line.trim())) {
+        html += line.trim();
+        i++;
+        continue;
+      }
+
+      // heading
+      const h = line.match(/^(#{1,6})\s+(.*)$/);
+      if (h) {
+        const level = h[1].length;
+        html += `<h${level} class="md-h">${inlineFormat(h[2])}</h${level}>`;
+        i++;
+        continue;
+      }
+
+      // table (current line has |, next line is the ---|--- separator)
+      if (line.includes('|') && isSeparatorRow(lines[i + 1])) {
+        const headerCells = splitTableRow(line);
+        i += 2;
+        const rows = [];
+        while (i < lines.length && lines[i].trim() !== '' && lines[i].includes('|')) {
+          rows.push(splitTableRow(lines[i]));
+          i++;
+        }
+        html += tableHtml(headerCells, rows);
+        continue;
+      }
+
+      // unordered list
+      if (/^\s*[-*]\s+/.test(line)) {
+        let items = '';
+        while (i < lines.length && /^\s*[-*]\s+/.test(lines[i])) {
+          items += `<li>${inlineFormat(lines[i].replace(/^\s*[-*]\s+/, ''))}</li>`;
+          i++;
+        }
+        html += `<ul class="md-list">${items}</ul>`;
+        continue;
+      }
+
+      // ordered list
+      if (/^\s*\d+\.\s+/.test(line)) {
+        let items = '';
+        while (i < lines.length && /^\s*\d+\.\s+/.test(lines[i])) {
+          items += `<li>${inlineFormat(lines[i].replace(/^\s*\d+\.\s+/, ''))}</li>`;
+          i++;
+        }
+        html += `<ol class="md-list">${items}</ol>`;
+        continue;
+      }
+
+      // paragraph: consecutive plain lines until something else starts
+      const paraLines = [];
+      while (
+        i < lines.length &&
+        lines[i].trim() !== '' &&
+        !/^#{1,6}\s+/.test(lines[i]) &&
+        !/^\s*[-*]\s+/.test(lines[i]) &&
+        !/^\s*\d+\.\s+/.test(lines[i]) &&
+        !/^\u0000cb\d+\u0000$/.test(lines[i].trim()) &&
+        !(lines[i].includes('|') && isSeparatorRow(lines[i + 1]))
+      ) {
+        paraLines.push(lines[i]);
+        i++;
+      }
+      if (paraLines.length) {
+        html += `<p class="md-p">${paraLines.map(inlineFormat).join('<br>')}</p>`;
+      } else {
+        i++; // safety net, avoid infinite loop
+      }
+    }
+
+    // step 2: code block placeholders ko asli block se replace karo
+    html = html.replace(/\u0000(cb\d+)\u0000/g, (_, id) => codeBlockHtml(id));
+
+    return html;
   }
 
   window.copyCode = function (id) {
