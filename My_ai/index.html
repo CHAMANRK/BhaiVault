@@ -1,0 +1,1342 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, interactive-widget=resizes-content">
+<title>Chaman AI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#12100e;
+    --ink-2:#1a1713;
+    --ink-3:#221e18;
+    --line:#332d24;
+    --paper:#ede7dd;
+    --paper-dim:#a89d8a;
+    --amber:#e8a33d;
+    --amber-dim:#8a6a30;
+    --sage:#7c9473;
+    --sage-dim:#3a4235;
+    --rust:#b24c2f;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html,body{height:100%;}
+  body{
+    margin:0;
+    background:var(--ink);
+    background-image:
+      radial-gradient(ellipse 800px 500px at 15% -10%, rgba(232,163,61,0.07), transparent),
+      radial-gradient(ellipse 600px 400px at 100% 10%, rgba(124,148,115,0.06), transparent);
+    color:var(--paper);
+    font-family:'IBM Plex Sans',system-ui,sans-serif;
+    display:flex;
+    flex-direction:column;
+    height:100vh;
+    height:100dvh; /* mobile chrome address-bar ke saath sahi height */
+    overflow:hidden;
+  }
+
+  /* ── header ── */
+  header{
+    flex:0 0 auto;
+    padding:14px 16px;
+    border-bottom:1px solid var(--line);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    background:linear-gradient(180deg, var(--ink-2), transparent);
+    position:relative;
+    z-index:5;
+  }
+  .icon-btn{
+    all:unset;
+    width:36px;height:36px;
+    display:flex;align-items:center;justify-content:center;
+    border-radius:8px;
+    cursor:pointer;
+  }
+  .icon-btn:active{background:var(--ink-3);}
+  .burger{display:flex;flex-direction:column;gap:4px;width:18px;}
+  .burger span{display:block;height:2px;width:100%;background:var(--paper);border-radius:1px;}
+
+  .chain{display:flex;gap:6px;align-items:center;}
+  .chain .dot{
+    width:7px;height:7px;border-radius:50%;
+    background:var(--line);
+    transition:background .3s, box-shadow .3s;
+  }
+  .chain .dot.live{
+    background:var(--amber);
+    box-shadow:0 0 8px rgba(232,163,61,0.7);
+  }
+
+  /* ── sessions drawer ── */
+  .overlay{
+    position:fixed;inset:0;
+    background:rgba(0,0,0,0.55);
+    opacity:0;pointer-events:none;
+    transition:opacity .25s;
+    z-index:20;
+  }
+  .overlay.open{opacity:1;pointer-events:auto;}
+
+  .drawer{
+    position:fixed;top:0;left:0;bottom:0;
+    width:78%;max-width:280px;
+    background:var(--ink-2);
+    border-right:1px solid var(--line);
+    transform:translateX(-100%);
+    transition:transform .28s cubic-bezier(.4,0,.2,1);
+    z-index:21;
+    display:flex;
+    flex-direction:column;
+    padding:18px 14px;
+  }
+  .drawer.open{transform:translateX(0);}
+  .drawer-head{padding:2px 4px 16px;}
+  .drawer-title{
+    font-family:'Space Grotesk',sans-serif;
+    font-weight:700;
+    font-size:18px;
+    color:var(--amber);
+    letter-spacing:-0.02em;
+  }
+  .new-chat-btn{
+    all:unset;
+    box-sizing:border-box;
+    display:block;
+    width:100%;
+    text-align:center;
+    padding:10px;
+    margin-bottom:16px;
+    border:1px solid var(--amber-dim);
+    border-radius:9px;
+    color:var(--amber);
+    font-family:'IBM Plex Sans',sans-serif;
+    font-size:13.5px;
+    font-weight:500;
+    cursor:pointer;
+  }
+  .new-chat-btn:active{background:rgba(232,163,61,0.08);}
+  .drawer-label{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:10.5px;
+    color:var(--paper-dim);
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    padding:0 4px 8px;
+  }
+  .session-list{
+    flex:1;
+    overflow-y:auto;
+    display:flex;
+    flex-direction:column;
+    gap:2px;
+  }
+  .session-item{
+    all:unset;
+    box-sizing:border-box;
+    display:block;
+    width:100%;
+    padding:10px 10px;
+    border-radius:8px;
+    color:var(--paper-dim);
+    font-size:13.5px;
+    line-height:1.4;
+    cursor:pointer;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    border-left:2px solid transparent;
+  }
+  .session-item:active{background:var(--ink-3);}
+  .session-item.active{
+    color:var(--paper);
+    background:var(--ink-3);
+    border-left-color:var(--amber);
+  }
+  .session-empty{
+    padding:10px;
+    color:var(--paper-dim);
+    font-size:12.5px;
+    font-style:italic;
+  }
+
+  /* ── chat area ── */
+  main{
+    flex:1 1 auto;
+    min-height:0; /* CRITICAL: without this, flex item won't shrink and pushes the form off-screen */
+    overflow-y:auto;
+    padding:22px 16px 12px;
+    display:flex;
+    flex-direction:column;
+    gap:16px;
+    scroll-behavior:smooth;
+  }
+  main::-webkit-scrollbar{width:0;}
+
+  .empty{
+    margin:auto;
+    text-align:center;
+    color:var(--paper-dim);
+    max-width:280px;
+  }
+  .empty .glyph-big{
+    font-family:'Space Grotesk',sans-serif;
+    font-size:28px;
+    color:var(--amber-dim);
+    margin-bottom:8px;
+  }
+  .empty p{font-size:13px;line-height:1.6;margin:0;}
+
+  .row{display:flex;max-width:100%;}
+  .row.user{justify-content:flex-end;}
+  .row.assistant{justify-content:flex-start;}
+
+  .bubble{
+    max-width:82%;
+    padding:11px 14px;
+    font-size:15px;
+    line-height:1.55;
+    white-space:pre-wrap;
+    word-wrap:break-word;
+  }
+  .row.user .bubble{
+    background:var(--sage-dim);
+    border:1px solid rgba(124,148,115,0.35);
+    color:#dfe8db;
+    border-radius:14px 14px 3px 14px;
+  }
+  .row.assistant .bubble{
+    background:transparent;
+    border-left:2px solid var(--amber-dim);
+    padding-left:13px;
+    color:var(--paper);
+    border-radius:2px;
+    max-width:100%; /* .wrap already caps width at 82% — bubble should fill it fully, not re-shrink */
+  }
+  .bubble strong{color:var(--amber);font-weight:600;}
+  .bubble em{font-style:italic;color:#f3ead8;}
+  .bubble .inline-code{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:0.88em;
+    background:var(--ink-3);
+    border:1px solid var(--line);
+    border-radius:4px;
+    padding:1px 5px;
+    color:#f0c988;
+  }
+  .codeblock{
+    margin:8px 0;
+    border:1px solid var(--line);
+    border-radius:8px;
+    overflow:hidden;
+    background:var(--ink-3);
+  }
+  .codeblock-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:6px 10px;
+    background:var(--ink-2);
+    border-bottom:1px solid var(--line);
+  }
+  .codeblock-head .lang{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:10.5px;
+    color:var(--paper-dim);
+    text-transform:lowercase;
+    letter-spacing:0.03em;
+  }
+  .copy-btn{
+    all:unset;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:10.5px;
+    color:var(--amber);
+    border:1px solid var(--amber-dim);
+    border-radius:5px;
+    padding:3px 9px;
+    cursor:pointer;
+    line-height:1;
+  }
+  .copy-btn:active{transform:scale(0.94);}
+  .copy-btn.copied{color:var(--sage);border-color:var(--sage-dim);}
+  .codeblock pre{
+    margin:0;
+    padding:10px 12px;
+    overflow-x:auto;
+  }
+  .codeblock code{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:13px;
+    line-height:1.5;
+    color:#e6ddc9;
+    white-space:pre;
+  }
+  .md-p{margin:0 0 10px;}
+  .md-p:last-child{margin-bottom:0;}
+  .md-h{
+    font-family:'Space Grotesk',sans-serif;
+    color:var(--amber);
+    line-height:1.3;
+    margin:14px 0 8px;
+  }
+  .bubble > .md-h:first-child{margin-top:0;}
+  h1.md-h{font-size:19px;}
+  h2.md-h{font-size:17px;}
+  h3.md-h{font-size:15.5px;}
+  h4.md-h,h5.md-h,h6.md-h{font-size:14.5px;color:var(--paper);}
+  .md-list{
+    margin:0 0 10px;
+    padding-left:20px;
+  }
+  .md-list li{margin-bottom:4px;line-height:1.5;}
+  .md-list:last-child{margin-bottom:0;}
+  .md-table-wrap{
+    overflow-x:auto;
+    margin:8px 0 10px;
+    border:1px solid var(--line);
+    border-radius:8px;
+  }
+  .md-table{
+    border-collapse:collapse;
+    width:100%;
+    font-size:13.5px;
+  }
+  .md-table th,.md-table td{
+    padding:7px 11px;
+    border-bottom:1px solid var(--line);
+    text-align:left;
+    white-space:nowrap;
+  }
+  .md-table th{
+    background:var(--ink-3);
+    color:var(--amber);
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11.5px;
+    text-transform:uppercase;
+    letter-spacing:0.03em;
+  }
+  .md-table tr:last-child td{border-bottom:none;}
+  .md-table tr:nth-child(even) td{background:rgba(255,255,255,0.02);}
+  .meta{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:10px;
+    color:var(--paper-dim);
+    margin-top:5px;
+    padding-left:13px;
+  }
+  .row.assistant .wrap{display:flex;flex-direction:column;max-width:82%;}
+
+  .thinking{
+    display:flex;align-items:center;padding-left:13px;padding-top:2px;padding-bottom:2px;
+    border-left:2px solid var(--amber-dim);
+  }
+  .thinking .rs-mark{
+    display:block;
+    animation:rsBreathe 1.5s ease-in-out infinite;
+  }
+  @keyframes rsBreathe{
+    0%,100%{ transform:scale(1); filter:brightness(1) drop-shadow(0 0 2px rgba(232,163,61,.35)); }
+    50%{ transform:scale(1.14); filter:brightness(1.3) drop-shadow(0 0 8px rgba(232,163,61,.8)); }
+  }
+
+  /* ── live web search status ── */
+  .search-status{
+    display:flex;
+    align-items:center;
+    gap:9px;
+    padding-left:13px;
+    padding-top:2px;padding-bottom:2px;
+    border-left:2px solid var(--amber-dim);
+    color:var(--paper-dim);
+    font-family:'IBM Plex Mono',monospace;
+    font-size:12.5px;
+    transition:border-color .25s, color .25s;
+  }
+  .search-status .glass{
+    display:inline-block;
+    font-size:14px;
+    animation:search-scan 1.1s ease-in-out infinite;
+    transform-origin:70% 70%;
+  }
+  @keyframes search-scan{
+    0%,100%{transform:rotate(-10deg) scale(1);}
+    50%{transform:rotate(10deg) scale(1.18);}
+  }
+  .search-status.found .glass,
+  .search-status.failed .glass{animation:none;}
+  .search-status .status-text .dots::after{
+    content:'';
+    display:inline-block;
+    width:1.2em;
+    text-align:left;
+    animation:search-dots 1.2s steps(4,end) infinite;
+  }
+  @keyframes search-dots{
+    0%{content:'';}
+    25%{content:'.';}
+    50%{content:'..';}
+    75%{content:'...';}
+    100%{content:'';}
+  }
+  .search-status .scan-bar{
+    position:relative;
+    width:46px;height:2px;
+    border-radius:2px;
+    background:var(--line);
+    overflow:hidden;
+    flex:0 0 auto;
+  }
+  .search-status .scan-bar::after{
+    content:'';
+    position:absolute;top:0;left:-40%;
+    width:40%;height:100%;
+    background:var(--amber);
+    border-radius:2px;
+    animation:scan-move 1s ease-in-out infinite;
+  }
+  .search-status.found .scan-bar::after{background:var(--sage);animation:none;left:0;width:100%;}
+  .search-status.failed .scan-bar::after{background:var(--rust);animation:none;left:0;width:100%;}
+  @keyframes scan-move{
+    0%{left:-40%;}
+    100%{left:100%;}
+  }
+  .search-status.found{border-left-color:var(--sage-dim);color:var(--sage);}
+  .search-status.failed{border-left-color:var(--rust);color:var(--rust);}
+
+  .err{color:var(--rust);}
+
+  /* ── typewriter cursor ── */
+  .bubble.typing::after{
+    content:'';
+    display:inline-block;
+    width:2px;
+    height:1em;
+    margin-left:2px;
+    background:var(--amber);
+    vertical-align:text-bottom;
+    animation:blink .8s step-end infinite;
+  }
+  @keyframes blink{50%{opacity:0;}}
+
+  /* ── ask_user action ── */
+  .ask-user{
+    margin-top:8px;
+    padding-top:10px;
+    border-top:1px dashed var(--amber-dim);
+  }
+  .ask-user-q{
+    font-size:13px;
+    color:var(--amber-dim);
+    margin-bottom:8px;
+  }
+  .ask-user-opts{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+  }
+  .ask-user-opt{
+    padding:7px 14px;
+    border-radius:999px;
+    border:1px solid var(--amber-dim);
+    background:transparent;
+    color:var(--amber);
+    font:inherit;
+    font-size:13px;
+    cursor:pointer;
+    transition:background .15s, color .15s;
+  }
+  .ask-user-opt:active{background:var(--ink-3);}
+  .ask-user-opt.selected{
+    background:var(--amber);
+    color:var(--ink);
+    border-color:var(--amber);
+  }
+  .ask-user-confirm{
+    display:block;
+    margin-top:10px;
+    padding:8px 16px;
+    border-radius:8px;
+    border:1px solid var(--sage-dim);
+    background:var(--sage-dim);
+    color:var(--ink);
+    font:inherit;
+    font-size:13px;
+    font-weight:600;
+    cursor:pointer;
+  }
+  .ask-user-confirm:disabled{
+    opacity:.4;
+    cursor:not-allowed;
+  }
+
+  /* ── jump-to-bottom button (jab user upar scroll kare tab dikhta hai) ── */
+  .jump-bottom{
+    position:fixed;
+    right:16px;
+    bottom:calc(78px + env(safe-area-inset-bottom));
+    width:38px;height:38px;
+    border-radius:50%;
+    border:1px solid var(--amber-dim);
+    background:var(--ink-2);
+    color:var(--amber);
+    font-size:16px;
+    line-height:1;
+    display:flex;align-items:center;justify-content:center;
+    cursor:pointer;
+    opacity:0;
+    transform:translateY(8px);
+    pointer-events:none;
+    transition:opacity .2s ease, transform .2s ease;
+    box-shadow:0 4px 14px rgba(0,0,0,0.4);
+    z-index:6;
+  }
+  .jump-bottom.show{opacity:1;transform:translateY(0);pointer-events:auto;}
+  .jump-bottom:active{transform:scale(0.92);}
+
+  /* ── input bar ── */
+  form{
+    flex:0 0 auto;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:12px 14px calc(14px + env(safe-area-inset-bottom));
+    background:var(--ink-2);
+    border-top:1px solid var(--line);
+  }
+  .prompt-prefix{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:12px;
+    color:var(--amber-dim);
+    white-space:nowrap;
+    user-select:none;
+  }
+  textarea{
+    flex:1;
+    resize:none;
+    background:var(--ink-3);
+    border:1px solid var(--line);
+    border-radius:10px;
+    color:var(--paper);
+    font-family:'IBM Plex Sans',sans-serif;
+    font-size:15px;
+    padding:11px 12px;
+    max-height:110px;
+    line-height:1.4;
+  }
+  textarea:focus{outline:none;border-color:var(--amber-dim);}
+  textarea::placeholder{color:var(--paper-dim);}
+
+  button{
+    flex:0 0 auto;
+    width:42px;height:42px;
+    border-radius:10px;
+    border:1px solid var(--amber-dim);
+    background:var(--amber);
+    color:var(--ink);
+    font-size:17px;
+    display:flex;align-items:center;justify-content:center;
+    cursor:pointer;
+  }
+  button:disabled{opacity:.4;cursor:not-allowed;}
+  button:active:not(:disabled){transform:scale(0.94);}
+</style>
+</head>
+<body>
+
+<header>
+  <button id="menuBtn" class="icon-btn" aria-label="Menu" type="button">
+    <span class="burger"><span></span><span></span><span></span></span>
+  </button>
+  <div class="chain" id="chain">
+    <div class="dot" data-provider="Groq"></div>
+    <div class="dot" data-provider="OpenRouter"></div>
+    <div class="dot" data-provider="Cerebras"></div>
+    <div class="dot" data-provider="Mistral"></div>
+  </div>
+</header>
+
+<div id="overlay" class="overlay"></div>
+
+<aside id="drawer" class="drawer">
+  <div class="drawer-head">
+    <span class="drawer-title">Chaman AI</span>
+  </div>
+  <button id="newChatBtn" class="new-chat-btn" type="button">+ Naya chat</button>
+  <div class="drawer-label">Sessions</div>
+  <div id="sessionList" class="session-list"></div>
+</aside>
+
+<main id="main">
+  <div class="empty" id="empty">
+    <div class="glyph-big">⟡</div>
+  </div>
+</main>
+
+<button id="jumpBtn" class="jump-bottom" type="button" aria-label="Neeche jao">↓</button>
+
+<form id="form">
+  <span class="prompt-prefix">&gt;</span>
+  <textarea id="input" rows="1" placeholder="Type kar..." autocomplete="off"></textarea>
+  <button id="send" type="submit">↑</button>
+</form>
+
+<script>
+  const $main = document.getElementById('main');
+  const $form = document.getElementById('form');
+  const $input = document.getElementById('input');
+  const $send = document.getElementById('send');
+  const $dots = document.querySelectorAll('.chain .dot');
+  const $menuBtn = document.getElementById('menuBtn');
+  const $overlay = document.getElementById('overlay');
+  const $drawer = document.getElementById('drawer');
+  const $newChatBtn = document.getElementById('newChatBtn');
+  const $sessionList = document.getElementById('sessionList');
+  const $jumpBtn = document.getElementById('jumpBtn');
+
+  let history = []; // {role, content, provider?, model?} — current session ki poori raw chat
+  let busy = false;
+  let activeSessionId = null; // null = abhi tak koi reply nahi aaya, session bana hi nahi
+
+  // "Stick to bottom" — jab tak user khud upar scroll na kare, naya content
+  // aane par hum neeche pin karte rehte hain. Jaise hi user upar scroll karta
+  // hai, hum peeche hat jaate hain aur usse manually padhne dete hain — chahe
+  // AI abhi bhi lamba jawab generate kar raha ho. Jump button se wapas neeche ja sakta hai.
+  let stickToBottom = true;
+
+  const SESSIONS_KEY = 'chamanai_sessions_v1';
+
+  function loadSessions() {
+    try {
+      return JSON.parse(localStorage.getItem(SESSIONS_KEY)) || [];
+    } catch (e) {
+      return [];
+    }
+  }
+
+  function isQuotaError(e) {
+    return !!e && (
+      e.name === 'QuotaExceededError' ||
+      e.name === 'NS_ERROR_DOM_QUOTA_REACHED' ||
+      e.code === 22 ||
+      e.code === 1014
+    );
+  }
+
+  // Sabse purana session hata deta hai — current active session ko (agar possible ho)
+  // bacha ke rakhta hai, kyunki wahi abhi save ho raha hota hai.
+  function dropOldestSession(sessions) {
+    if (sessions.length <= 1) return sessions.slice(0, 0); // ek hi bacha tha, use bhi hata do
+    const sorted = [...sessions].sort((a, b) => a.updatedAt - b.updatedAt);
+    const victim = sorted.find(s => s.id !== activeSessionId) || sorted[0];
+    return sessions.filter(s => s.id !== victim.id);
+  }
+
+  // Storage full hone par purani sessions ko aahiste-aahiste (ek-ek karke) hata ke
+  // retry karta hai, jab tak naya data fit na ho jaaye ya sessions khatam na ho jaayein.
+  function saveSessions(sessions) {
+    let list = sessions;
+    while (true) {
+      try {
+        localStorage.setItem(SESSIONS_KEY, JSON.stringify(list));
+        return;
+      } catch (e) {
+        if (!isQuotaError(e) || list.length === 0) {
+          console.warn('localStorage save fail:', e);
+          return;
+        }
+        list = dropOldestSession(list);
+      }
+    }
+  }
+
+  function sessionTitle(firstUserMsg) {
+    const t = firstUserMsg.trim().replace(/\s+/g, ' ');
+    return t.length > 42 ? t.slice(0, 42) + '…' : t;
+  }
+
+  // Session sirf tab banta hai jab pehla reply successfully aa jaaye — usse pehle
+  // koi entry sidebar mein nahi dikhti, jaisa maanga gaya tha.
+  function persistTurn() {
+    const sessions = loadSessions();
+    if (activeSessionId) {
+      const s = sessions.find(s => s.id === activeSessionId);
+      if (s) {
+        s.messages = history;
+        s.updatedAt = Date.now();
+      }
+    } else {
+      const firstUserMsg = history.find(m => m.role === 'user')?.content || 'New chat';
+      activeSessionId = String(Date.now());
+      sessions.unshift({
+        id: activeSessionId,
+        title: sessionTitle(firstUserMsg),
+        messages: history,
+        updatedAt: Date.now(),
+      });
+    }
+    saveSessions(sessions);
+    renderSessionList();
+  }
+
+  function renderSessionList() {
+    const sessions = loadSessions().sort((a, b) => b.updatedAt - a.updatedAt);
+    $sessionList.innerHTML = '';
+    if (!sessions.length) {
+      $sessionList.innerHTML = '<div class="session-empty">Abhi koi session nahi — pehla message bhejo.</div>';
+      return;
+    }
+    for (const s of sessions) {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'session-item' + (s.id === activeSessionId ? ' active' : '');
+      btn.textContent = s.title;
+      btn.addEventListener('click', () => openSession(s.id));
+      $sessionList.appendChild(btn);
+    }
+  }
+
+  function clearMain() {
+    $main.innerHTML = '<div class="empty" id="empty"><div class="glyph-big">⟡</div></div>';
+  }
+
+  function openSession(id) {
+    const sessions = loadSessions();
+    const s = sessions.find(s => s.id === id);
+    if (!s) return;
+    activeSessionId = id;
+    history = s.messages;
+    stickToBottom = true;
+    clearMain();
+    for (const msg of history) {
+      if (msg.role === 'user') {
+        addUserBubble(msg.content);
+      } else if (msg.role === 'assistant') {
+        addAssistantBubble(msg.content, msg.provider ? `${msg.provider} · ${msg.model || ''}` : null, false, false);
+      }
+    }
+    const last = history[history.length - 1];
+    lightDot(last && last.provider ? last.provider : null);
+    renderSessionList();
+    closeDrawer();
+    scrollBottom(true);
+  }
+
+  function startNewChat() {
+    activeSessionId = null;
+    history = [];
+    stickToBottom = true;
+    clearMain();
+    lightDot(null);
+    renderSessionList();
+    closeDrawer();
+    updateJumpBtn();
+    $input.focus();
+  }
+
+  function openDrawer() {
+    $drawer.classList.add('open');
+    $overlay.classList.add('open');
+  }
+  function closeDrawer() {
+    $drawer.classList.remove('open');
+    $overlay.classList.remove('open');
+  }
+
+  $menuBtn.addEventListener('click', openDrawer);
+  $overlay.addEventListener('click', closeDrawer);
+  $newChatBtn.addEventListener('click', startNewChat);
+
+  // App load pe: hamesha ek fresh/naya session shuru hota hai. Purani sessions
+  // localStorage mein save rehti hain aur drawer mein dikhti hain — bas auto-resume
+  // nahi hoti, user manually tap karke khol sakta hai.
+  (function init() {
+    renderSessionList();
+    history = [];
+    activeSessionId = null;
+    lightDot(null);
+  })();
+
+  $input.addEventListener('input', () => {
+    $input.style.height = 'auto';
+    $input.style.height = Math.min($input.scrollHeight, 110) + 'px';
+  });
+
+  $input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      $form.requestSubmit();
+    }
+  });
+
+  // Keyboard khulne pe kuch Android browsers `interactive-widget=resizes-content`
+  // ko ignore karke poore page ko scroll kar dete hain (isse messages "upar" chale
+  // jaate hain jab tak khud scroll na karo). visualViewport API se hum body ki
+  // height ko keyboard ke hisaab se manually sync karte hain, aur input focus hote
+  // hi neeche pin kar dete hain — taaki chat aur input box hamesha visible rahein.
+  if (window.visualViewport) {
+    const vv = window.visualViewport;
+    function syncViewportHeight() {
+      document.body.style.height = vv.height + 'px';
+      window.scrollTo(0, 0);
+      scrollBottom(true);
+    }
+    vv.addEventListener('resize', syncViewportHeight);
+    vv.addEventListener('scroll', () => window.scrollTo(0, 0));
+  }
+  $input.addEventListener('focus', () => {
+    // Keyboard animate hote hue thoda time leta hai — chhota delay ke baad pin karo.
+    setTimeout(() => scrollBottom(true), 60);
+    setTimeout(() => scrollBottom(true), 300);
+  });
+
+  function isNearBottom(px) {
+    return $main.scrollHeight - $main.scrollTop - $main.clientHeight <= (px == null ? 64 : px);
+  }
+
+  function updateJumpBtn() {
+    $jumpBtn.classList.toggle('show', !stickToBottom);
+  }
+
+  // force=true wale calls hamesha neeche pin karte hain (jaise user ka apna
+  // message bhejna, session kholna, keyboard khulna). Baaki sab (typing/streaming
+  // ke dauraan) sirf tab scroll karte hain jab user khud neeche par hi ho —
+  // isse agar wo upar scroll kar ke padh raha ho to beech mein rukawat nahi aati.
+  function scrollBottom(force) {
+    if (!force && !stickToBottom) return;
+    $main.scrollTop = $main.scrollHeight;
+    stickToBottom = true;
+    updateJumpBtn();
+  }
+
+  let scrollTick = null;
+  $main.addEventListener('scroll', () => {
+    if (scrollTick) return;
+    scrollTick = requestAnimationFrame(() => {
+      stickToBottom = isNearBottom();
+      updateJumpBtn();
+      scrollTick = null;
+    });
+  });
+
+  $jumpBtn.addEventListener('click', () => {
+    stickToBottom = true;
+    $main.scrollTo({ top: $main.scrollHeight, behavior: 'smooth' });
+    updateJumpBtn();
+  });
+
+  function addUserBubble(text) {
+    const emptyEl = $main.querySelector('.empty');
+    if (emptyEl) emptyEl.remove();
+    const row = document.createElement('div');
+    row.className = 'row user';
+    row.innerHTML = `<div class="bubble"></div>`;
+    row.querySelector('.bubble').textContent = text;
+    $main.appendChild(row);
+    scrollBottom(true);
+  }
+
+  function addThinking() {
+    const row = document.createElement('div');
+    row.className = 'row assistant';
+    row.id = 'thinkingRow';
+    row.innerHTML = `<div class="thinking">
+      <svg class="rs-mark" viewBox="0 0 380 384" width="24" height="24" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="rsGold" x1="0%25" y1="0%25" x2="100%25" y2="100%25">
+            <stop offset="0%25" stop-color="#f6d38a"/>
+            <stop offset="45%25" stop-color="#e8a33d"/>
+            <stop offset="100%25" stop-color="#a5691f"/>
+          </linearGradient>
+        </defs>
+        <path d="M250.01 83.64C251.96 86.39 259.64 89.89 262.8 91.92C270.6 96.92 278.49 101.8 286.33 106.74C291.44 109.96 297.23 112.61 301.36 117.16C307.96 124.42 305.52 142.68 305.53 152.17C305.54 155.2 304.47 160.12 305.94 162.8C307.34 165.36 311.4 166.79 313.75 168.23C318.68 171.26 323.39 174.68 328.33 177.69C330.71 179.14 334.47 180.74 335.9 183.17C335.61 183.39 335.32 183.61 335.03 183.83C332.73 183.53 330.32 181.36 328.31 180.16C322.33 176.59 316.68 172.48 310.6 169.07C308.78 168.05 303.47 165.89 302.99 163.69C301.6 157.38 302.76 141.7 302.71 134.39C302.68 129.16 302.86 123.53 299.17 119.37C292.4 111.76 279.66 106.38 271.02 100.85C252.48 89 233.63 77.8 215.08 66.01C207.32 61.07 193.62 49.64 184.07 51.6C178.72 52.7 173.63 56.95 169.09 59.87C158.82 66.46 148.39 72.79 138.12 79.38C133.37 82.42 128.07 87.24 122.72 88.97C119.87 90.33 117.02 91.69 114.17 93.04C116.73 89.7 127.98 83.35 132.15 80.72C145.11 72.54 157.85 64.06 170.92 56.04C177.31 52.12 183.9 46.42 192.02 49.03C200.42 51.74 208.19 57.71 215.44 62.57C220.51 65.98 226.06 68.62 231.17 71.97C234.23 73.97 243.68 81.09 246.83 81.06C247.89 81.92 248.95 82.78 250.01 83.64ZM255.37 52.64C254.26 51.89 253.16 51.13 252.06 50.38C253.44 50.11 255.63 51.23 255.37 52.64ZM155.1 268.78C155.22 268.92 155.34 269.07 155.46 269.22C157.56 270.47 159.66 271.71 161.76 272.96C162.86 273.37 163.95 273.78 165.04 274.19C164.15 273.26 163.26 272.33 162.36 271.4C161.93 271.48 161.5 271.55 161.06 271.63C160.43 271.32 159.79 271.01 159.15 270.71C159.13 270.54 159.12 270.37 159.1 270.21C159.93 270.43 160.76 270.66 161.59 270.88C161.59 269.22 161.59 267.56 161.59 265.9C160.93 266.22 160.28 266.55 159.62 266.87C157.73 265.82 156.96 267.04 154.96 267.22C155.72 266.64 156.48 266.06 157.24 265.48C156.02 264.74 154.79 264 153.57 263.26C153.23 263.65 152.89 264.04 152.55 264.43C152.25 264.35 151.95 264.26 151.65 264.17C151.01 264.3 150.37 264.42 149.73 264.55C148.72 263.31 146.62 262.61 146.6 261.01C147.87 261.79 149.15 262.56 150.43 263.34C150.78 262.3 151.13 261.26 151.48 260.22C150.67 261.21 150.22 261.98 149.12 260.94C148.87 259.09 152.14 257.36 152.44 255.36C152.73 253.48 152.46 249.79 152.87 249.79C154.33 249.92 154.55 247.79 154.55 246.3C156.23 246.11 156.3 245.37 156.36 243.86C156.94 243.84 157.52 243.82 158.1 243.79C158.5 242.41 158.88 240.42 157.36 239.68C157.99 238.36 159.69 237.6 159.5 236.23C157.52 237.52 155.54 238.81 153.57 240.1C153.25 238.68 155.42 236.53 156.47 235.5C155.97 235.02 155.47 234.55 154.96 234.08C156.59 233.05 161.33 236.01 162.57 237.49C163.18 238.22 162.9 239.2 163.84 239.68C164.14 239.16 164.43 238.63 164.72 238.11C164.56 239.89 171.26 243.37 173.44 243.34C177.56 246.04 181.67 248.74 185.79 251.44C185.62 251.76 185.46 252.08 185.29 252.4C184.1 251.01 174.39 248.26 173.79 246.94C172.39 246.87 171 246.8 169.61 246.72C169.26 245.88 168.91 245.05 168.56 244.21C167.92 243.98 167.28 243.75 166.64 243.51C166.64 242.82 166.64 242.12 166.64 241.42C164.82 240.49 162.93 240.6 161.59 239.5C161.84 239.1 162.1 238.69 162.36 238.28C160.81 237.02 160.44 239.16 160.37 240.38C161.95 241.95 163.07 243.69 165.42 243.69C165.77 245.02 166.12 246.36 166.47 247.7C167.28 247.5 168.09 247.31 168.91 247.12C168.96 247.49 168.74 248.39 168.85 248.67C169.19 249.52 171.27 249.83 171.75 250.97C172.3 252.29 171.17 251.96 172.25 253.28C170.9 253.81 169.56 254.34 168.21 254.87C167.55 253.79 167.56 253.87 166.15 254.32C166.6 254.83 167.06 255.34 167.51 255.84C169.46 255.69 171.13 255.3 172.46 256.76C173.38 254.95 175.69 252.46 177.62 251.66C178.32 252.08 179.01 252.5 179.71 252.93C179.46 254.6 179.85 256.06 181.85 256.41C181.83 258.75 181.82 261.09 181.81 263.42C181.23 263.66 180.65 263.89 180.06 264.13C179.63 266.69 178.89 271.54 181.88 272.45C181.96 273.03 182.05 273.61 182.13 274.19C181.6 274.77 181.06 275.35 180.53 275.94C179.56 276 178.59 276.06 177.62 276.12C177.32 276.75 177.01 277.39 176.7 278.03C175.26 278.38 173.82 278.72 172.38 279.07C173.84 280.93 178.29 283.6 180.73 283.61C179.62 282.79 178.51 281.98 177.4 281.17C178.43 280.7 179.47 280.24 180.5 279.77C180.47 280.32 180.44 280.88 180.41 281.43C181.79 281.14 182.01 283.14 184.25 283.67C184.94 283.32 185.64 282.97 186.34 282.63C187.73 283.36 189.13 284.09 190.52 284.82C191.13 286.11 192.46 288.6 190.48 287.79C190.5 288.49 190.51 289.18 190.53 289.88C189.6 289.2 188.66 288.53 187.73 287.85C188.03 290.03 194.39 293.74 196.45 293.8C196.64 292.72 196.22 292.2 196.08 291.26C195.77 289.06 196.61 285.94 196.62 283.61C196.66 275.83 196.57 268.04 196.47 260.25C196.44 257.84 197.53 250.94 195.84 249.36C194.71 246.4 195.05 243.09 193.47 240.23C190.65 235.12 185.41 230.92 181.28 226.77C173.96 219.42 166.57 211.99 159.61 204.33C153.71 197.84 145.65 191.79 142.18 183.55C137.78 173.13 139.79 156.93 139.76 145.55C139.75 138.33 138.09 126.28 141.05 119.86C141.44 119.71 141.84 119.55 142.24 119.4C141.22 131.62 141.38 143.95 141.51 156.36C141.62 166.24 141.14 175.52 145.32 184.64C147.74 189.94 152.82 193.84 156.76 197.97C164.78 206.4 174.1 214.32 181.3 223.45C184.96 228.89 191.62 232.23 194.71 238.08C196.72 241.89 196.1 250.19 197.5 252.17C201.29 246.74 197.01 240.62 196.1 235.35C197.69 236.17 197.71 237.09 198.54 238.63C198.89 238.07 199.24 237.51 199.59 236.94C201.3 239.04 203.11 236.47 205.17 236.1C207.57 235.67 209.92 233.8 211.88 232.3C212.63 231.73 219.39 230.4 220.62 230.27C221.17 229.69 221.72 229.1 222.26 228.52C222.07 225.74 220.1 223.51 219.46 221.16C221.47 219.93 221.87 223.92 222.25 225.24C224.22 226.44 225.56 229.24 224.05 231.31C226.91 234.27 226.79 238.55 226.92 242.47C227.15 249.64 227.2 256.79 227.82 263.94C228.02 266.3 227.25 271.29 228.82 272.97C230.28 284.24 218.57 288.45 210.74 293.2C205.71 296.24 201.42 299.33 195.39 296.73C183.12 291.45 172.52 282.34 160.72 276.1C151.1 271.02 142.13 264.57 132.8 259.01C115.37 248.62 98.29 237.5 80.78 227.22C70.94 221.44 60.7 215.75 51.32 209.29C46.35 205.87 41.26 203.1 38.18 197.65C30.97 184.88 33.8 168.09 33.75 153.92C33.72 145.67 33.66 137.41 33.56 129.17C33.39 113.89 33.54 102.89 47.15 93.68C49.36 92.19 51.88 90.04 54.39 89.22C58.74 89.21 62.3 82.8 66.41 83.54C65.62 81.14 69.9 83 69.55 80.54C73.9 81.54 83.6 73.87 87.91 71.99C89.27 71.39 91.45 69.33 92.91 69.59C92.28 70.28 91.64 70.96 91.01 71.64C91.32 72.8 91.63 73.97 91.94 75.13C91.57 76.22 91.19 77.3 90.82 78.39C89.58 78.02 89.06 78.38 88.17 79.31C90.25 80.64 95.17 77.67 95.94 79.66C95.03 79.89 94.12 80.13 93.2 80.36C94.49 82.8 95.77 85.24 97.06 87.68C96.24 87.8 95.43 87.91 94.62 88.03C94.5 88.84 94.38 89.65 94.27 90.47C91.75 92.57 93.72 94.69 95.52 96.05C94.58 97.99 92.4 97.79 91.77 100.23C92.5 100.51 93.23 100.78 93.95 101.06C93.26 104.42 87.87 106.21 85.3 108.12C78.1 113.49 68.2 117.33 64.92 126.41C62.52 133.04 63.89 141.74 63.87 148.69C63.84 156.09 64.19 163.35 64.71 170.66C65.49 181.6 64.93 191.93 67.74 202.67C69.15 208.07 70.09 215.39 74.16 219.56C76.9 222.37 81.21 224.19 84.48 226.31C95.71 233.58 107.83 239.5 118.91 246.98C126.8 252.31 135.22 257.11 143.52 261.74C147.2 263.8 151.01 267.81 155.1 268.78ZM215.32 176.7C220.9 181.69 228.65 185.1 234.97 189.14C250.05 198.8 265.19 208.25 280.56 217.45C288.39 222.13 300.78 226.83 304.88 235.65C307.25 240.74 306.31 246.78 306.51 252.23C306.72 257.82 308.01 264.1 307.11 269.66C306.73 271.94 303.11 275.21 303.48 277.09C306.14 275.51 306.39 273.8 307.66 271.2C311.27 274.18 309.27 273.51 310.1 277.38C312.14 276.47 310.18 270.76 310.4 268.96C310.54 269.54 310.68 270.13 310.82 270.71C312.28 271.85 314.17 272.67 315.92 271.75C316.19 271.07 316.46 270.38 316.72 269.7C317.32 270.15 317.91 270.6 318.5 271.06C317.99 271.52 317.47 271.98 316.96 272.45C317.46 272.95 317.97 273.45 318.47 273.96C320.94 273.96 321.5 275.66 323.51 275.94C323.75 276.52 323.98 277.1 324.21 277.68C324.74 277.74 325.26 277.8 325.79 277.86C327.19 279.2 328.6 280.53 330 281.86C330.11 282.36 330.21 282.85 330.32 283.35C330.79 282.29 331.25 281.22 331.72 280.16C332.21 281.8 331.58 283.58 333.81 283.75C334.04 282.57 334.27 281.4 334.5 280.23C334.74 283.49 334.71 285.8 332.28 288.14C333.01 289.48 333.02 290.42 332.41 291.88C328.13 293.48 330.17 293.11 329.62 295.82C329.27 295.58 328.91 295.35 328.56 295.11C328.56 295.83 328.57 296.56 328.58 297.28C328.42 297.82 328.26 298.35 328.1 298.89C326.49 301.88 315.9 307.29 312.54 309.24C300.43 316.26 288.51 323.76 276.6 331.13C258.81 342.17 240.6 352.68 222.99 364.05C212.2 371.02 201.01 379.3 187.73 379.73C176.5 380.09 165.16 372.53 156.15 366.44C138.69 354.63 118.97 345.88 101.47 334.08C87.97 324.98 73.28 317.06 59.25 308.86C51.08 304.09 42.11 300.08 38.13 290.85C33.49 280.08 35.56 264.36 35.48 252.58C35.44 246.05 35.72 239.39 35.27 232.88C35.04 229.65 34.21 226.01 36.3 223.29C39.37 222.64 41.39 225.08 43.89 226.45C48.23 228.84 63.12 236.58 65.66 239.85C66.14 240.43 66.63 241.02 67.11 241.6C57.11 235.96 47.12 230.32 37.12 224.69C38.17 227.11 42.28 228.73 44.51 230.03C49.25 232.79 53.82 235.89 58.6 238.62C60.35 239.62 63.8 241.04 64.87 242.79C66.07 244.76 65.48 249.25 65.46 251.53C65.42 259.48 62.81 272.17 68.95 278.38C68.05 279.46 67.66 280.18 66.41 279.23C66.08 280.22 65.76 281.22 65.43 282.21C67.15 282.88 68.87 283.54 70.6 284.21C71.18 285.34 71.76 286.47 72.34 287.6C73.59 287.2 74.06 287.15 74.43 285.82C74.66 286.73 74.9 287.64 75.13 288.55C77.03 289.57 78.94 290.6 80.84 291.62C80.67 290.93 80.49 290.23 80.31 289.53C81.25 289.88 82.18 290.23 83.12 290.58C83.36 290.08 83.6 289.59 83.84 289.1C86.87 290.46 89.89 291.83 92.91 293.19C92.92 294.9 102.6 299.24 104.55 300.4C113.38 305.66 122.7 310.7 131.62 316.17C134.81 318.13 137.95 320.53 141.54 321.61C142.41 322.13 143.28 322.65 144.16 323.17C145.78 324.24 147.41 325.31 149.04 326.37C149.73 326.58 150.43 326.8 151.13 327.01C157.14 332.07 164.6 335.13 171.29 339.02C176.55 342.08 181.57 346.22 188.08 346.31C194.55 346.4 199.91 342.21 205.21 339.24C212.09 335.39 218.6 330.76 225.46 326.76C231.01 323.53 237.45 320.45 242.39 316.33C262.06 304.49 281.72 292.66 301.39 280.82C302.32 281.58 302.78 282.3 303.97 281.51C303.98 279.47 301.51 280.05 302.84 277.33C302.24 277.48 301.64 277.62 301.04 277.77C300.93 277.4 300.83 277.03 300.72 276.66C301.64 274.55 303.21 272.97 303.7 270.53C304.96 264.21 303.51 256.23 303.32 249.79C303.16 244.71 303.4 239.82 300.59 235.4C295.73 227.74 278.2 219.61 270.19 214.62C248.31 200.96 225.61 188.3 204.17 173.89C197.24 169.24 190.06 164.75 182.87 160.7C180.4 159.31 178.18 156.12 175.53 155.39C175.03 156.93 174.52 158.47 174.02 160.02C174.06 158.39 174.1 156.76 174.14 155.14C177.4 152.01 182.27 156.62 185.22 158.33C195.31 164.17 205.93 170.19 215.32 176.7ZM172.24 259.9C172.24 262.12 172.24 264.34 172.24 266.56C172.77 265.85 173.29 265.14 173.82 264.43C173.29 262.92 172.77 261.41 172.24 259.9ZM166.47 261.99C165.48 263.37 165.2 263.38 163.86 264.43C164.37 267.03 166.44 265.07 168.16 264.78C167.97 263.24 168.17 262.2 166.47 261.99ZM319.83 275.84C319.27 275.84 318.72 275.84 318.17 275.84C318.17 276.44 318.17 277.03 318.17 277.63C318.72 277.63 319.27 277.63 319.83 277.63C319.83 277.03 319.83 276.44 319.83 275.84ZM83.84 291.09C83.45 291.73 83.06 292.37 82.67 293.02C83.77 292.55 84.87 292.09 85.97 291.62C85.26 291.44 84.55 291.27 83.84 291.09Z" fill="url(#rsGold)"/>
+      </svg>
+    </div>`;
+    $main.appendChild(row);
+    scrollBottom(true);
+    return row;
+  }
+
+  // Live web-search status row — backend jab bhi ek [ACTION:web_search] phase
+  // stream karta hai ('searching' -> 'found'/'search_failed' -> 'answering'),
+  // yahi row us waqt real-time mein update hoti hai.
+  function addSearchStatus() {
+    const row = document.createElement('div');
+    row.className = 'row assistant';
+    row.innerHTML = `
+      <div class="search-status">
+        <span class="glass">🔍</span>
+        <span class="status-text"></span>
+        <span class="scan-bar"></span>
+      </div>`;
+    $main.appendChild(row);
+    scrollBottom();
+    return row;
+  }
+
+  function updateSearchStatus(row, phase, query, count) {
+    if (!row) return;
+    const box = row.querySelector('.search-status');
+    const glass = row.querySelector('.glass');
+    const textEl = row.querySelector('.status-text');
+    if (!box) return;
+
+    if (phase === 'searching') {
+      box.className = 'search-status';
+      glass.textContent = '🔍';
+      textEl.innerHTML = `"${escapeHtml(query || '')}" search kar raha hoon<span class="dots"></span>`;
+    } else if (phase === 'found') {
+      box.className = 'search-status found';
+      glass.textContent = '✅';
+      textEl.textContent = `${count} results mile — jawab bana raha hoon`;
+    } else if (phase === 'search_failed') {
+      box.className = 'search-status failed';
+      glass.textContent = '⚠️';
+      textEl.textContent = 'Live search fail ho gaya — apni knowledge se jawab de raha hoon';
+    } else if (phase === 'answering') {
+      box.className = 'search-status found';
+      glass.textContent = '✍️';
+      textEl.innerHTML = `Jawab likh raha hoon<span class="dots"></span>`;
+    }
+    scrollBottom();
+  }
+
+  // ── markdown renderer: headings, tables, lists, bold/italic/inline-code, fenced code blocks ──
+  let cbCounter = 0;
+  const codeStore = {}; // id -> {lang, code} (copy button ke liye, escaped HTML se alag rakha)
+
+  function escapeHtml(str) {
+    return str
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
+  }
+
+  // sirf inline patterns (bold/italic/inline-code) — block-level text ke andar use hota hai
+  function inlineFormat(str) {
+    let text = escapeHtml(str);
+    text = text.replace(/`([^`\n]+)`/g, (_, c) => `<code class="inline-code">${c}</code>`);
+    text = text.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+    text = text.replace(/(^|[^*])\*([^*\n]+)\*(?!\*)/g, '$1<em>$2</em>');
+    text = text.replace(/_([^_\n]+)_/g, '<em>$1</em>');
+    return text;
+  }
+
+  function isSeparatorRow(line) {
+    return line != null && line.includes('-') && /^\s*\|?[\s:\-|]+\|?\s*$/.test(line);
+  }
+
+  function splitTableRow(line) {
+    let l = line.trim();
+    if (l.startsWith('|')) l = l.slice(1);
+    if (l.endsWith('|')) l = l.slice(0, -1);
+    return l.split('|').map(c => c.trim());
+  }
+
+  function tableHtml(headerCells, rows) {
+    const thead = `<tr>${headerCells.map(c => `<th>${inlineFormat(c)}</th>`).join('')}</tr>`;
+    const tbody = rows
+      .map(r => `<tr>${r.map(c => `<td>${inlineFormat(c)}</td>`).join('')}</tr>`)
+      .join('');
+    return `<div class="md-table-wrap"><table class="md-table"><thead>${thead}</thead><tbody>${tbody}</tbody></table></div>`;
+  }
+
+  function codeBlockHtml(id) {
+    const { lang, code } = codeStore[id];
+    return `<div class="codeblock" data-id="${id}">
+      <div class="codeblock-head">
+        <span class="lang">${escapeHtml(lang || 'text')}</span>
+        <button type="button" class="copy-btn" onclick="copyCode('${id}')">Copy</button>
+      </div>
+      <pre><code>${escapeHtml(code)}</code></pre>
+    </div>`;
+  }
+
+  function renderMarkdown(raw) {
+    // step 1: fenced code blocks nikaal ke placeholder line daal do (raw text par, escape se pehle)
+    const withPlaceholders = raw.replace(/```(\w*)\n?([\s\S]*?)```/g, (_, lang, code) => {
+      const id = 'cb' + (cbCounter++);
+      codeStore[id] = { lang: lang || '', code: code.replace(/\n$/, '') };
+      return `\u0000${id}\u0000`;
+    });
+
+    const lines = withPlaceholders.split('\n');
+    let html = '';
+    let i = 0;
+
+    while (i < lines.length) {
+      const line = lines[i];
+
+      if (line.trim() === '') { i++; continue; }
+
+      // fenced code placeholder
+      if (/^\u0000cb\d+\u0000$/.test(line.trim())) {
+        html += line.trim();
+        i++;
+        continue;
+      }
+
+      // heading
+      const h = line.match(/^(#{1,6})\s+(.*)$/);
+      if (h) {
+        const level = h[1].length;
+        html += `<h${level} class="md-h">${inlineFormat(h[2])}</h${level}>`;
+        i++;
+        continue;
+      }
+
+      // table (current line has |, next line is the ---|--- separator)
+      if (line.includes('|') && isSeparatorRow(lines[i + 1])) {
+        const headerCells = splitTableRow(line);
+        i += 2;
+        const rows = [];
+        while (i < lines.length && lines[i].trim() !== '' && lines[i].includes('|')) {
+          rows.push(splitTableRow(lines[i]));
+          i++;
+        }
+        html += tableHtml(headerCells, rows);
+        continue;
+      }
+
+      // unordered list
+      if (/^\s*[-*]\s+/.test(line)) {
+        let items = '';
+        while (i < lines.length && /^\s*[-*]\s+/.test(lines[i])) {
+          items += `<li>${inlineFormat(lines[i].replace(/^\s*[-*]\s+/, ''))}</li>`;
+          i++;
+        }
+        html += `<ul class="md-list">${items}</ul>`;
+        continue;
+      }
+
+      // ordered list
+      if (/^\s*\d+\.\s+/.test(line)) {
+        let items = '';
+        while (i < lines.length && /^\s*\d+\.\s+/.test(lines[i])) {
+          items += `<li>${inlineFormat(lines[i].replace(/^\s*\d+\.\s+/, ''))}</li>`;
+          i++;
+        }
+        html += `<ol class="md-list">${items}</ol>`;
+        continue;
+      }
+
+      // paragraph: consecutive plain lines until something else starts
+      const paraLines = [];
+      while (
+        i < lines.length &&
+        lines[i].trim() !== '' &&
+        !/^#{1,6}\s+/.test(lines[i]) &&
+        !/^\s*[-*]\s+/.test(lines[i]) &&
+        !/^\s*\d+\.\s+/.test(lines[i]) &&
+        !/^\u0000cb\d+\u0000$/.test(lines[i].trim()) &&
+        !(lines[i].includes('|') && isSeparatorRow(lines[i + 1]))
+      ) {
+        paraLines.push(lines[i]);
+        i++;
+      }
+      if (paraLines.length) {
+        html += `<p class="md-p">${paraLines.map(inlineFormat).join('<br>')}</p>`;
+      } else {
+        i++; // safety net, avoid infinite loop
+      }
+    }
+
+    // step 2: code block placeholders ko asli block se replace karo
+    html = html.replace(/\u0000(cb\d+)\u0000/g, (_, id) => codeBlockHtml(id));
+
+    return html;
+  }
+
+  window.copyCode = function (id) {
+    const entry = codeStore[id];
+    if (!entry) return;
+    navigator.clipboard.writeText(entry.code).then(() => {
+      const btn = document.querySelector(`.codeblock[data-id="${id}"] .copy-btn`);
+      if (!btn) return;
+      const original = btn.textContent;
+      btn.textContent = 'Copied!';
+      btn.classList.add('copied');
+      setTimeout(() => {
+        btn.textContent = original;
+        btn.classList.remove('copied');
+      }, 1500);
+    });
+  };
+
+  // Bubble already has final rendered HTML (tags intact) — hum sirf text nodes ko
+  // khaali karke, order mein thoda-thoda reveal karte hain. Isse tags kabhi beech
+  // mein toot-te nahi (jaise markdown ka `**` ya code block).
+  function typewriterReveal(bubble, onDone) {
+    const walker = document.createTreeWalker(bubble, NodeFilter.SHOW_TEXT);
+    const nodes = [];
+    let n;
+    while ((n = walker.nextNode())) {
+      nodes.push({ node: n, full: n.textContent });
+      n.textContent = '';
+    }
+    if (!nodes.length) { if (onDone) onDone(); return; }
+
+    bubble.classList.add('typing');
+    const CHARS_PER_TICK = 2;
+    const TICK_MS = 14;
+    let ni = 0, ci = 0;
+
+    function step() {
+      if (ni >= nodes.length) {
+        bubble.classList.remove('typing');
+        if (onDone) onDone();
+        return;
+      }
+      const entry = nodes[ni];
+      ci += CHARS_PER_TICK;
+      if (ci >= entry.full.length) {
+        entry.node.textContent = entry.full;
+        ni++;
+        ci = 0;
+      } else {
+        entry.node.textContent = entry.full.slice(0, ci);
+      }
+      scrollBottom();
+      setTimeout(step, TICK_MS);
+    }
+    step();
+  }
+
+  // ── Action Registry (frontend) ─────────────────────────────────────
+  // Backend jab bhi [ACTION:name]{...} bhejta hai, uska matching handler yahan
+  // se milta hai. Naya action-type add karna ho toh bas ek naya key daal do.
+  const ACTION_HANDLERS = {
+    ask_user: renderAskUser,
+  };
+
+  function renderAction(action, wrap) {
+    if (!action || !action.name) return;
+    const handler = ACTION_HANDLERS[action.name];
+    if (handler) handler(action.payload || {}, wrap);
+  }
+
+  function renderAskUser(payload, wrap) {
+    const { type, question, options } = payload;
+    if (!question || !Array.isArray(options) || !options.length) return;
+
+    const box = document.createElement('div');
+    box.className = 'ask-user';
+
+    const q = document.createElement('div');
+    q.className = 'ask-user-q';
+    q.textContent = question;
+    box.appendChild(q);
+
+    const optsWrap = document.createElement('div');
+    optsWrap.className = 'ask-user-opts';
+    box.appendChild(optsWrap);
+
+    if (type === 'multi') {
+      const selected = new Set();
+      const confirmBtn = document.createElement('button');
+      confirmBtn.type = 'button';
+      confirmBtn.className = 'ask-user-confirm';
+      confirmBtn.textContent = 'Confirm';
+      confirmBtn.disabled = true;
+
+      options.slice(0, 4).forEach((opt) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'ask-user-opt';
+        btn.textContent = opt;
+        btn.addEventListener('click', () => {
+          if (selected.has(opt)) {
+            selected.delete(opt);
+            btn.classList.remove('selected');
+          } else {
+            selected.add(opt);
+            btn.classList.add('selected');
+          }
+          confirmBtn.disabled = selected.size === 0;
+        });
+        optsWrap.appendChild(btn);
+      });
+
+      confirmBtn.addEventListener('click', () => {
+        const answer = Array.from(selected).join(', ');
+        box.remove();
+        if (!busy && answer) send(answer);
+      });
+      box.appendChild(confirmBtn);
+    } else {
+      options.slice(0, 4).forEach((opt) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'ask-user-opt';
+        btn.textContent = opt;
+        btn.addEventListener('click', () => {
+          box.remove();
+          if (!busy) send(opt);
+        });
+        optsWrap.appendChild(btn);
+      });
+    }
+
+    wrap.appendChild(box);
+    scrollBottom();
+  }
+
+  function addAssistantBubble(text, meta, isError, animate, action) {
+    const row = document.createElement('div');
+    row.className = 'row assistant';
+    const wrap = document.createElement('div');
+    wrap.className = 'wrap';
+    const bubble = document.createElement('div');
+    bubble.className = 'bubble' + (isError ? ' err' : '');
+    if (isError) {
+      bubble.textContent = text;
+    } else {
+      bubble.innerHTML = renderMarkdown(text);
+    }
+    wrap.appendChild(bubble);
+    row.appendChild(wrap);
+    $main.appendChild(row);
+
+    function attachMeta() {
+      if (meta) {
+        const metaEl = document.createElement('div');
+        metaEl.className = 'meta';
+        metaEl.textContent = meta;
+        wrap.appendChild(metaEl);
+      }
+      if (action) renderAction(action, wrap);
+      scrollBottom();
+    }
+
+    if (!isError && animate) {
+      // meta (provider · model) sirf typing khatam hone ke baad dikhta hai
+      typewriterReveal(bubble, attachMeta);
+    } else {
+      attachMeta();
+    }
+    scrollBottom();
+  }
+
+  function lightDot(providerName) {
+    $dots.forEach(d => d.classList.toggle('live', d.dataset.provider === providerName));
+  }
+
+  async function send(text) {
+    history.push({ role: 'user', content: text });
+    addUserBubble(text);
+    $input.value = '';
+    $input.style.height = 'auto';
+
+    busy = true;
+    $send.disabled = true;
+    const thinkingRow = addThinking();
+    let searchRow = null; // pehli 'status' event aane pe hi banti hai
+
+    try {
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          messages: history.map(m => ({ role: m.role, content: m.content })),
+        }),
+      });
+
+      // Backend ab NDJSON stream bhejta hai (ek line = ek JSON event), taaki
+      // web_search ke live phases turant animate ho sakein. Reader se chunk-by-
+      // chunk padh ke, poori lines milte hi parse karte hain.
+      let finalEvent = null;
+      let errorEvent = null;
+
+      if (res.body && res.body.getReader) {
+        const reader = res.body.getReader();
+        const decoder = new TextDecoder();
+        let buffer = '';
+
+        while (true) {
+          const { value, done } = await reader.read();
+          if (done) break;
+          buffer += decoder.decode(value, { stream: true });
+
+          let nlIndex;
+          while ((nlIndex = buffer.indexOf('\n')) !== -1) {
+            const line = buffer.slice(0, nlIndex).trim();
+            buffer = buffer.slice(nlIndex + 1);
+            if (!line) continue;
+
+            let event;
+            try { event = JSON.parse(line); } catch { continue; }
+
+            if (event.type === 'status') {
+              if (!searchRow) {
+                thinkingRow.remove();
+                searchRow = addSearchStatus();
+              }
+              updateSearchStatus(searchRow, event.phase, event.query, event.count);
+            } else if (event.type === 'final') {
+              finalEvent = event;
+            } else if (event.type === 'error') {
+              errorEvent = event;
+            }
+          }
+        }
+      } else {
+        // Fallback: streaming reader available nahi hai (bahut purana browser) —
+        // seedha JSON ki tarah parse karo (naya backend NDJSON bhejta hai, isliye
+        // ye path sirf ek safety net hai).
+        const raw = await res.text();
+        for (const line of raw.split('\n')) {
+          const trimmed = line.trim();
+          if (!trimmed) continue;
+          try {
+            const event = JSON.parse(trimmed);
+            if (event.type === 'final') finalEvent = event;
+            else if (event.type === 'error') errorEvent = event;
+          } catch { /* ignore malformed line */ }
+        }
+      }
+
+      thinkingRow.remove();
+      if (searchRow) searchRow.remove();
+
+      if (errorEvent) {
+        lightDot(null);
+        let errText = errorEvent.error || 'Kuch gadbad ho gayi.';
+        if (Array.isArray(errorEvent.details) && errorEvent.details.length) {
+          errText += '\n\n— Details —\n' + errorEvent.details.join('\n');
+        }
+        addAssistantBubble(errText, null, true);
+        return;
+      }
+
+      if (!finalEvent) {
+        addAssistantBubble('Kuch gadbad ho gayi — response incomplete tha.', null, true);
+        return;
+      }
+
+      history.push({ role: 'assistant', content: finalEvent.reply, provider: finalEvent.provider, model: finalEvent.model });
+      persistTurn(); // pehla successful reply aate hi session (agar naya hai) auto-ban jaata hai
+      lightDot(finalEvent.provider);
+      addAssistantBubble(finalEvent.reply, `${finalEvent.provider} · ${finalEvent.model || ''}`, false, true, finalEvent.action);
+    } catch (err) {
+      thinkingRow.remove();
+      if (searchRow) searchRow.remove();
+      lightDot(null);
+      addAssistantBubble('Network error — connection check kar.', null, true);
+    } finally {
+      busy = false;
+      $send.disabled = false;
+      $input.focus();
+    }
+  }
+
+  $form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const text = $input.value.trim();
+    if (!text || busy) return;
+    send(text);
+  });
+</script>
+</body>
+</html>
