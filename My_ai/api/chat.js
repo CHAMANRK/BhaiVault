@@ -78,6 +78,8 @@ function extractAction(text) {
   }
 }
 
+const TIMEOUT_MS = 12000;
+
 async function withTimeout(promise, ms) {
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), ms);
