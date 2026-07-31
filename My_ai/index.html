@@ -341,6 +341,70 @@
 
   .err{color:var(--rust);}
 
+  /* ── typewriter cursor ── */
+  .bubble.typing::after{
+    content:'';
+    display:inline-block;
+    width:2px;
+    height:1em;
+    margin-left:2px;
+    background:var(--amber);
+    vertical-align:text-bottom;
+    animation:blink .8s step-end infinite;
+  }
+  @keyframes blink{50%{opacity:0;}}
+
+  /* ── ask_user action ── */
+  .ask-user{
+    margin-top:8px;
+    padding-top:10px;
+    border-top:1px dashed var(--amber-dim);
+  }
+  .ask-user-q{
+    font-size:13px;
+    color:var(--amber-dim);
+    margin-bottom:8px;
+  }
+  .ask-user-opts{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+  }
+  .ask-user-opt{
+    padding:7px 14px;
+    border-radius:999px;
+    border:1px solid var(--amber-dim);
+    background:transparent;
+    color:var(--amber);
+    font:inherit;
+    font-size:13px;
+    cursor:pointer;
+    transition:background .15s, color .15s;
+  }
+  .ask-user-opt:active{background:var(--ink-3);}
+  .ask-user-opt.selected{
+    background:var(--amber);
+    color:var(--ink);
+    border-color:var(--amber);
+  }
+  .ask-user-confirm{
+    display:block;
+    margin-top:10px;
+    padding:8px 16px;
+    border-radius:8px;
+    border:1px solid var(--sage-dim);
+    background:var(--sage-dim);
+    color:var(--ink);
+    font:inherit;
+    font-size:13px;
+    font-weight:600;
+    cursor:pointer;
+  }
+  .ask-user-confirm:disabled{
+    opacity:.4;
+    cursor:not-allowed;
+  }
+
   /* ── input bar ── */
   form{
     flex:0 0 auto;
@@ -522,7 +586,7 @@
       if (msg.role === 'user') {
         addUserBubble(msg.content);
       } else if (msg.role === 'assistant') {
-        addAssistantBubble(msg.content, msg.provider ? `${msg.provider} · ${msg.model || ''}` : null);
+        addAssistantBubble(msg.content, msg.provider ? `${msg.provider} · ${msg.model || ''}` : null, false, false);
       }
     }
     const last = history[history.length - 1];
@@ -760,7 +824,125 @@
     });
   };
 
-  function addAssistantBubble(text, meta, isError) {
+  // Bubble already has final rendered HTML (tags intact) — hum sirf text nodes ko
+  // khaali karke, order mein thoda-thoda reveal karte hain. Isse tags kabhi beech
+  // mein toot-te nahi (jaise markdown ka `**` ya code block).
+  function typewriterReveal(bubble, onDone) {
+    const walker = document.createTreeWalker(bubble, NodeFilter.SHOW_TEXT);
+    const nodes = [];
+    let n;
+    while ((n = walker.nextNode())) {
+      nodes.push({ node: n, full: n.textContent });
+      n.textContent = '';
+    }
+    if (!nodes.length) { if (onDone) onDone(); return; }
+
+    bubble.classList.add('typing');
+    const CHARS_PER_TICK = 2;
+    const TICK_MS = 14;
+    let ni = 0, ci = 0;
+
+    function step() {
+      if (ni >= nodes.length) {
+        bubble.classList.remove('typing');
+        if (onDone) onDone();
+        return;
+      }
+      const entry = nodes[ni];
+      ci += CHARS_PER_TICK;
+      if (ci >= entry.full.length) {
+        entry.node.textContent = entry.full;
+        ni++;
+        ci = 0;
+      } else {
+        entry.node.textContent = entry.full.slice(0, ci);
+      }
+      scrollBottom();
+      setTimeout(step, TICK_MS);
+    }
+    step();
+  }
+
+  // ── Action Registry (frontend) ─────────────────────────────────────
+  // Backend jab bhi [ACTION:name]{...} bhejta hai, uska matching handler yahan
+  // se milta hai. Naya action-type add karna ho toh bas ek naya key daal do.
+  const ACTION_HANDLERS = {
+    ask_user: renderAskUser,
+  };
+
+  function renderAction(action, wrap) {
+    if (!action || !action.name) return;
+    const handler = ACTION_HANDLERS[action.name];
+    if (handler) handler(action.payload || {}, wrap);
+  }
+
+  function renderAskUser(payload, wrap) {
+    const { type, question, options } = payload;
+    if (!question || !Array.isArray(options) || !options.length) return;
+
+    const box = document.createElement('div');
+    box.className = 'ask-user';
+
+    const q = document.createElement('div');
+    q.className = 'ask-user-q';
+    q.textContent = question;
+    box.appendChild(q);
+
+    const optsWrap = document.createElement('div');
+    optsWrap.className = 'ask-user-opts';
+    box.appendChild(optsWrap);
+
+    if (type === 'multi') {
+      const selected = new Set();
+      const confirmBtn = document.createElement('button');
+      confirmBtn.type = 'button';
+      confirmBtn.className = 'ask-user-confirm';
+      confirmBtn.textContent = 'Confirm';
+      confirmBtn.disabled = true;
+
+      options.slice(0, 4).forEach((opt) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'ask-user-opt';
+        btn.textContent = opt;
+        btn.addEventListener('click', () => {
+          if (selected.has(opt)) {
+            selected.delete(opt);
+            btn.classList.remove('selected');
+          } else {
+            selected.add(opt);
+            btn.classList.add('selected');
+          }
+          confirmBtn.disabled = selected.size === 0;
+        });
+        optsWrap.appendChild(btn);
+      });
+
+      confirmBtn.addEventListener('click', () => {
+        const answer = Array.from(selected).join(', ');
+        box.remove();
+        if (!busy && answer) send(answer);
+      });
+      box.appendChild(confirmBtn);
+    } else {
+      options.slice(0, 4).forEach((opt) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'ask-user-opt';
+        btn.textContent = opt;
+        btn.addEventListener('click', () => {
+          box.remove();
+          if (!busy) send(opt);
+        });
+        optsWrap.appendChild(btn);
+      });
+    }
+
+    wrap.appendChild(box);
+    scrollBottom();
+  }
+
+  function addAssistantBubble(text, meta, isError, animate, action) {
     const row = document.createElement('div');
     row.className = 'row assistant';
     const wrap = document.createElement('div');
@@ -773,14 +955,26 @@
       bubble.innerHTML = renderMarkdown(text);
     }
     wrap.appendChild(bubble);
-    if (meta) {
-      const metaEl = document.createElement('div');
-      metaEl.className = 'meta';
-      metaEl.textContent = meta;
-      wrap.appendChild(metaEl);
-    }
     row.appendChild(wrap);
     $main.appendChild(row);
+
+    function attachMeta() {
+      if (meta) {
+        const metaEl = document.createElement('div');
+        metaEl.className = 'meta';
+        metaEl.textContent = meta;
+        wrap.appendChild(metaEl);
+      }
+      if (action) renderAction(action, wrap);
+      scrollBottom();
+    }
+
+    if (!isError && animate) {
+      // meta (provider · model) sirf typing khatam hone ke baad dikhta hai
+      typewriterReveal(bubble, attachMeta);
+    } else {
+      attachMeta();
+    }
     scrollBottom();
   }
 
@@ -818,7 +1012,7 @@
       history.push({ role: 'assistant', content: data.reply, provider: data.provider, model: data.model });
       persistTurn(); // pehla successful reply aate hi session (agar naya hai) auto-ban jaata hai
       lightDot(data.provider);
-      addAssistantBubble(data.reply, `${data.provider} · ${data.model || ''}`);
+      addAssistantBubble(data.reply, `${data.provider} · ${data.model || ''}`, false, true, data.action);
     } catch (err) {
       thinkingRow.remove();
       lightDot(null);
